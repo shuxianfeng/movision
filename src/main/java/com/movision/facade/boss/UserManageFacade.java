@@ -135,7 +135,7 @@ public class UserManageFacade {
             map.put("phone", phone);
         }
         if (StringUtil.isNotEmpty(authstatus)) {
-                map.put("authstatus", authstatus);
+            map.put("authstatus", authstatus);
         }
         Date beg = null;
         Date end = null;
@@ -169,6 +169,7 @@ public class UserManageFacade {
 
     /**
      * 查询投稿说明
+     *
      * @param id
      * @return
      */
@@ -508,6 +509,10 @@ public class UserManageFacade {
         Map map = new HashedMap();
         map.put("userid", userid);
         map.put("type", type);
+        //用户加V操作，发送通知
+        if (type.equals(1) || type.equals("1")) {
+            sysNoticeUtil.sendSysNotice(4, null, Integer.parseInt(userid), null);
+        }
         return userService.deleteUserLevl(map);
     }
 
@@ -534,8 +539,8 @@ public class UserManageFacade {
             userService.updateAuditByUser(map);//更新VIP申请
             //加V申请审核
             Integer is = auditVipDetailService.insertVIPDetail(map);
-            //申请成功发送通知
-            sysNoticeUtil.sendSysNotice(4, null, Integer.parseInt(userid), null);
+            /*//申请成功发送通知
+            sysNoticeUtil.sendSysNotice(4, null, Integer.parseInt(userid), null);*/
             return is;
         } else if (status.equals("1")) {//未通过
             Map map = new HashMap();
