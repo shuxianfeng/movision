@@ -6,6 +6,7 @@ package com.movision.mybatis.post.entity;
  */
 public class PostReturnAll {
 
+    private Integer id;
     private String nickname;
 
     private String photo;
@@ -15,6 +16,14 @@ public class PostReturnAll {
     private String cirlename;
 
     private Integer countview;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getNickname() {
         return nickname;
