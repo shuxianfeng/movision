@@ -23,7 +23,10 @@ public class PostVo implements Serializable {
 
     private Integer circleid;
 
-    private Integer countview;  //帖子浏览量
+    /**
+     * 帖子浏览量
+     */
+    private Integer countview;
 
     private String title;
 

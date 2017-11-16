@@ -1695,10 +1695,10 @@ public class PostService {
         }
     }
 
-    public List<PostVo> queryPostInAll() {
+    public List<PostVo> queryPostInAll(Map map) {
         try {
             log.info("查询所有帖子");
-            return postMapper.queryPostInAll();
+            return postMapper.queryPostInAll(map);
         } catch (Exception e) {
             log.error("查询所有帖子失败", e);
             throw e;

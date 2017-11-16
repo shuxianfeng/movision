@@ -287,7 +287,7 @@ public interface PostMapper {
     List<PostVo> findAllMostCollectInAll(RowBounds rowBounds);
     List<PostVo> findAllMostCollectInCurrentMonth(RowBounds rowBounds);
 
-    List<PostVo> queryPostInAll();
+    List<PostVo> queryPostInAll(Map map);
 
     List<Post> findAllQueryActivitycontributeListById(Integer id, RowBounds rowBounds);
 

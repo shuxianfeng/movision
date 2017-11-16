@@ -285,65 +285,17 @@ public class FacadeDiscover {
      * @param paging
      * @return
      */
-    public List<PostVo> searchMostViewPostInAll(Paging<PostVo> paging) {
-        //查询所有帖子
-        List<PostVo> postVoList = postService.queryPostInAll();
+    public List<PostVo> searchMostViewPost(Paging<PostVo> paging, String isMonthlyFlag) {
+        //查询
+        Map map = new HashMap();
+        map.put("flag", isMonthlyFlag);
+        List<PostVo> postVoList = postService.queryPostInAll(map);
 
-        //查询mongo中的用户浏览帖子记录（已经按照浏览数从大到小排列）
-        List<UserReflushCount> userReflushCountList = userRefreshRecordService.groupByPostid();
-
-        List<PostVo> resultList = new ArrayList<>();
-        int size = userReflushCountList.size();
-        int total = postVoList.size();
-        //生成最后的结果
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < total; j++) {
-                if (userReflushCountList.get(i).getPostid().intValue() == postVoList.get(j).getId().intValue()) {
-                    //统计浏览数
-                    postVoList.get(j).setCountview(userReflushCountList.get(i).getCount());
-
-
-                    resultList.add(postVoList.get(j));
-                }
-            }
-        }
         //计算Paging中的分页参数
-        paging.setTotal(resultList.size());
-
+        paging.setTotal(postVoList.size());
         //代码层分页操作
-        List list = pageFacade.getPageList(resultList, paging.getCurPage(), paging.getPageSize());
-
-        //统计标签
-        facadePost.findPostLabel(list);
-
-        return list;
-    }
-
-    public List<PostVo> searchMostViewPostInCurrentMonth(Paging<PostVo> paging) {
-        //查询所有帖子
-        List<PostVo> postVoList = postService.queryPostInAll();
-        //核心算法
-        List<UserReflushCount> countList = handlePostViewListFromMongoDB();
-
-        List<PostVo> resultList = new ArrayList<>();
-        int size = countList.size();
-        int total = postVoList.size();
-        //生成最后的结果
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < total; j++) {
-                if (countList.get(i).getPostid() == postVoList.get(j).getId().intValue()) {
-                    //统计浏览数
-                    postVoList.get(j).setCountview(countList.get(i).getCount());
-
-                    resultList.add(postVoList.get(j));
-                }
-            }
-        }
-        //计算Paging中的分页参数
-        paging.setTotal(resultList.size());
-        //代码层分页操作
-        List list = pageFacade.getPageList(resultList, paging.getCurPage(), paging.getPageSize());
-        //统计标签
+        List list = pageFacade.getPageList(postVoList, paging.getCurPage(), paging.getPageSize());
+        //统计标签 10条
         facadePost.findPostLabel(list);
 
         return list;
@@ -383,7 +335,7 @@ public class FacadeDiscover {
             } else if (DiscoverConstant.HOT_RANGE_TITLE.post_view_list.getCode() == title) {
 
                 Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-                List<PostVo> list = searchMostViewPostInAll(pager);
+                List<PostVo> list = searchMostViewPost(pager, "year");
                 pager.setRows(list);
                 return pager;
 
@@ -441,7 +393,7 @@ public class FacadeDiscover {
             } else if (DiscoverConstant.HOT_RANGE_TITLE.post_view_list.getCode() == title) {
 
                 Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-                List<PostVo> list = searchMostViewPostInCurrentMonth(pager);
+                List<PostVo> list = searchMostViewPost(pager, "month");
                 pager.setRows(list);
                 return pager;
 

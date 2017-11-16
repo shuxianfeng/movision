@@ -2181,16 +2181,17 @@
         ORDER BY p.collectsum DESC
     </select>
 
-    <select id="queryPostInAll" resultType="com.movision.mybatis.post.entity.PostVo">
+    <select id="queryPostInAll" resultType="com.movision.mybatis.post.entity.PostVo" parameterType="java.util.Map">
         SELECT p.id, p.title, p.coverimg,p.userid, u.nickname, u.photo, p.circleid, p.activeid,
-        ci.name AS circlename
+        ci.name AS circlename, p.countview
         FROM yw_post p
         LEFT JOIN yw_user u ON p.userid = u.id
         LEFT JOIN yw_circle ci ON p.circleid = ci.id
         WHERE p.isdel = 0 and p.isactive = 0
+        <if test="flag == 'month' ">
+            AND DATE_FORMAT( p.intime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
+        </if>
     </select>
-
-
 
     <select id="queryActiveByOrderid" resultType="java.lang.Integer">
         SELECT ishot_order FROM yw_post WHERE isactive = 1 AND circleid IS NULL AND isdel = 0 AND ishot =1 AND ishot_order IS NOT NULL
