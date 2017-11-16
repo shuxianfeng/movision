@@ -1998,7 +1998,7 @@ public class PostFacade {
         Integer cid = postService.queryCircleByIDIsUpdate(post);
         if (cid == null) {
             //查询出圈子名称
-            String circlename = circleService.queryCircleName(cid);
+            String circlename = circleService.queryCircleName(Integer.parseInt(post.getCircleid()));
             sysNoticeUtil.sendSysNotice(0, circlename, uid, null);
         }
     }
