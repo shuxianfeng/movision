@@ -2252,13 +2252,13 @@ public class FacadePost {
         if (lists != null) {
             list = pageFacade.getPageList(lists, 1, 10);
             //findUser(list);
-            findPostLabel(list);
-            findHotComment(list);
+            findPostLabel(list);    //查询帖子的标签
+            findHotComment(list);   //查询刷新出来的帖子的评论
             //countView(list);
             //findAllCircleName(list);
-            insertmongo(list, userid, type, device, labelid);
+            insertmongo(list, userid, type, device, labelid);   //刷新出来的帖子，依次插入mongoDB中
             //zanIsPost(Integer.parseInt(userid), list);
-            findAllReturn(list, Integer.parseInt(userid));
+            findAllReturn(list, Integer.parseInt(userid));  //查询一些必要字段
         }
         return list;
     }
@@ -2339,9 +2339,10 @@ public class FacadePost {
                 int postid = list.get(i).getId();
                 map.put("postid", postid);
                 map.put("userid", userid);
+                //查出展示的一些必要字段，比如作者信息，点赞数，浏览数等
                 List<PostReturnAll> postReturnAlls = postService.postReAll(map);
                 list.get(i).setPostReturnAlls(postReturnAlls);
-                //增加帖子浏览记录
+                //增加帖子热度-浏览记录
                 facadeHeatValue.addHeatValue(list.get(i).getId(), 8, 666666);
             }
         }
@@ -2506,7 +2507,7 @@ public class FacadePost {
     }
 
     /**
-     * 精選評論
+     * 精選評論(找到每个帖子热度最高的评论)
      *
      * @param list
      * @return
