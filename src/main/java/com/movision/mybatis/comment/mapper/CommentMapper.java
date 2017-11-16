@@ -79,7 +79,7 @@ public interface CommentMapper {
 
     int queryCommentPoints(int commentid);
 
-    List<CommentVo> queryCommentByPost(int postid);
+    CommentVo queryCommentByPost(int postid);
 
 
 

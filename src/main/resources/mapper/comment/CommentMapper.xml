@@ -482,8 +482,13 @@
     </select>
     <select id="queryCommentByPost" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.comment.entity.CommentVo">
-      SELECT p.*,u.nickname FROM yw_post_comment p LEFT JOIN yw_user u ON u.id=p.userid WHERE
-      p.postid=#{postid,jdbcType=INTEGER} AND p.isdel=0 ORDER BY p.heat_value DESC LIMIT 1
+        SELECT p.*,u.nickname
+        FROM yw_post_comment p
+        LEFT JOIN yw_user u ON u.id=p.userid
+        WHERE p.postid=#{postid,jdbcType=INTEGER}
+        AND p.isdel=0
+        ORDER BY p.heat_value DESC
+        LIMIT 1
     </select>
 
     <!--查询别人对我的帖子的评论（不能包含自己对自己帖子的评论）

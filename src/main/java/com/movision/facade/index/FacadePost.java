@@ -27,6 +27,7 @@ import com.movision.mybatis.circleCategory.entity.CircleCategory;
 import com.movision.mybatis.circleCategory.service.CircleCategoryService;
 import com.movision.mybatis.city.entity.City;
 import com.movision.mybatis.city.service.CityService;
+import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.compressImg.entity.CompressImg;
@@ -2408,15 +2409,13 @@ public class FacadePost {
                 List<PostLabel> postLabels = new ArrayList<>();
                 //帖子的id
                 int postid = list.get(i).getId();
-                //先获取帖子对应的圈子
+                //获取帖子对应的圈子，加入到标签展示栏
                 addCircleToLabellist(list, i, postLabels);
-                //帖子对应的活动
+                //获取帖子对应的活动，加入到标签展示栏
                 addActiveToLabellist(list, i, postLabels);
-                //根据帖子id查询对应的标签
+                //获取帖子对应的标签
                 List<PostLabel> labelInDB = postService.queryPostLabel(postid);
-
                 postLabels.addAll(labelInDB);
-
                 list.get(i).setPostLabels(postLabels);
             }
         }
@@ -2512,19 +2511,14 @@ public class FacadePost {
      * @param list
      * @return
      */
-    public List findHotComment(List<PostVo> list) {
-        List<CommentVo> comments = null;
+    public List<PostVo> findHotComment(List<PostVo> list) {
+
         if (list != null) {
             for (int i = 0; i < list.size(); i++) {
                 int postid = list.get(i).getId();
-                //根據帖子id去查所有評論
-                comments = commentService.queryCommentByPost(postid);
-                for (int j = 0; j < comments.size(); j++) {
-                    int heatvalue = comments.get(j).getHeatvalue();
-                    if (heatvalue >= 80) {
-                        list.get(i).setComments(comments.get(j));
-                    }
-                }
+                //根據帖子id去查热度最高的評論
+                CommentVo comments = commentService.queryCommentByPost(postid);
+                list.get(i).setComments(comments);
             }
         }
 
