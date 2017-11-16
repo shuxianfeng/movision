@@ -1879,7 +1879,8 @@ public class FacadePost {
         List<UserRefreshRecordVo> result;//查询用户最喜欢的圈子
         List<DBObject> listmongodb;
         //listmongodb = userRefulshListMongodb(Integer.parseInt(userid), 1);//查询用户刷新列表
-        listmongodb = userRefulshListMongodbToDevice(device, 1);//用户有没有看过
+        //查询用户已经看过的帖子
+        listmongodb = userRefulshListMongodbToDevice(device, 1);
         if (listmongodb.size() != 0) {
             //统计用户浏览的帖子所属的每个圈子的数量
             result = opularSearchTermsService.userFlush(device);
@@ -2241,7 +2242,7 @@ public class FacadePost {
 
 
     /**
-     * 返回数据
+     * 登录情况下的返回数据
      *
      * @param lists
      * @param userid
@@ -2264,7 +2265,7 @@ public class FacadePost {
     }
 
     /**
-     * 返回数据
+     * 未登录情况下的返回数据
      *
      * @param lists 最多10条
      * @param

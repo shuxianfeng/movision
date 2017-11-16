@@ -17,7 +17,7 @@ public class ImFacadeTest extends SpringTestCase {
 
     @Test
     public void testQueryImuserInfo() throws Exception {
-        String[] arr = {"80aed026fefba277b74b49068f1acee0"};
+        String[] arr = {"9d8e91b1630874e21695798dbc75b286"};
         Map map = imFacade.queryImuserInfo(arr);
         System.out.println(map.toString());
     }

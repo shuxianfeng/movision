@@ -353,12 +353,18 @@ public class UserFacade {
 
     }
 
-    public void completeImuserInfo() {
+    /**
+     * 1 同步app用户信息到yw_im_user表中
+     * 2 同步修改IM服务器用户信息
+     *
+     * @throws IOException
+     */
+    public void completeImuserInfo() throws IOException {
         List<ImuserAppuser> imuserAppuserList = imUserService.selectRelatedAppuserAndImuser();
         if (ListUtil.isNotEmpty(imuserAppuserList)) {
             //同步app用户信息到yw_im_user表中
             for (ImuserAppuser u : imuserAppuserList) {
-
+                //1 修改db中的im信息
                 ImUser imUser = new ImUser();
                 imUser.setUserid(u.getUserid());
                 imUser.setSign(u.getSign());
@@ -366,6 +372,16 @@ public class UserFacade {
                 imUser.setName(u.getNickname());
 
                 imUserService.updateImUserByUserid(imUser);
+
+
+                //2修改云信服务端的userid对应的im信息
+                Map map = new HashMap();
+                map.put("accid", u.getAccid());
+                map.put("name", u.getNickname());
+                map.put("icon", u.getPhoto());
+                map.put("sign", u.getSign());
+                imFacade.updateImUserInfo(map);
+
             }
         }
     }

@@ -16,15 +16,16 @@ public class UserFacadeTest extends SpringTestCase {
     @Autowired
     private UserFacade userFacade;
 
-    /*@Test
-    public void executecompleteImuserInfo() throws Exception{
-        userFacade.completeImuserInfo();
-    }*/
 
     @Test
+    public void executecompleteImuserInfo() throws Exception{
+        userFacade.completeImuserInfo();
+    }
+
+    /*@Test
     public void executecompleteImdeviceInfo() throws Exception {
         userFacade.completeImdeviceInfo();
-    }
+    }*/
 
     /*@Test
     public void isExistAccount() throws Exception {
