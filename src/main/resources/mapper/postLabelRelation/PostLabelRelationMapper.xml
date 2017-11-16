@@ -50,6 +50,33 @@
             </if>
         </trim>
     </insert>
+
+    <insert id="insertPostLabelRelation"
+            parameterType="com.movision.mybatis.postLabelRelation.entity.PostLabelRelation">
+        insert into yw_post_label_relation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="labelid != null">
+                labelid,
+            </if>
+            <if test="postid != null">
+                postid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="labelid != null">
+                #{labelid,jdbcType=INTEGER},
+            </if>
+            <if test="postid != null">
+                #{postid,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
     <update id="updateByPrimaryKeySelective"
             parameterType="com.movision.mybatis.postLabelRelation.entity.PostLabelRelation">
         update yw_post_label

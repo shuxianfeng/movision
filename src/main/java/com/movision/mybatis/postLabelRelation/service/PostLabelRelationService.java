@@ -140,7 +140,7 @@ public class PostLabelRelationService {
     public void insertPostToLabel(PostLabelRelation relation) {
         try {
             log.info("新增帖子和标签关系");
-            postLabelRelationMapper.insertSelective(relation);
+            postLabelRelationMapper.insertPostLabelRelation(relation);
         } catch (Exception e) {
             log.error("新增帖子和标签关系异常", e);
             throw e;

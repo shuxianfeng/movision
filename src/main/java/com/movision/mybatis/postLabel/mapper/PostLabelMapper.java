@@ -26,7 +26,7 @@ public interface PostLabelMapper {
 
     List<PostLabelVo> findAllMineFollowLabel(Map<String, Object> parammap, RowBounds rowBounds);
 
-
+    Integer insertPostLabel(PostLabel postLabel);
 
     List<PostLabel> queryLabelHeatValue();
 

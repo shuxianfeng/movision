@@ -98,7 +98,7 @@ public class PostLabelService {
     public Integer insertPostLabel(PostLabel label) {
         try {
             log.info("新增标签");
-            return postLabelMapper.insertSelective(label);
+            return postLabelMapper.insertPostLabel(label);
         } catch (Exception e) {
             log.error("新增标签异常", e);
             throw e;

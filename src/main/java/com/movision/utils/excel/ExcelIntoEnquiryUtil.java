@@ -318,8 +318,6 @@ public class ExcelIntoEnquiryUtil {
                                     //标签
                                     if (StringUtil.isNotBlank(cell.getStringCellValue())) {
                                         label = cell.getStringCellValue();
-                                        //标签操作
-                                        updatePostLabel(post, label);
                                     }
                                     continue;
                                 } catch (Exception e) {
@@ -335,7 +333,7 @@ public class ExcelIntoEnquiryUtil {
                                     if (StringUtil.isNotBlank(cell.getStringCellValue())) {
                                         //covimg = cell.getStringCellValue();
                                         user.setId(Integer.parseInt(String.valueOf(cell.getStringCellValue())));
-                                        post.setUserid(Integer.parseInt(String.valueOf(cell.getSheet())));
+                                        post.setUserid(Integer.parseInt(String.valueOf(cell.getStringCellValue())));
                                     }
                                     continue;
                                 } catch (Exception e) {
@@ -385,6 +383,9 @@ public class ExcelIntoEnquiryUtil {
                 if (circleid != null) {
                     post.setCircleid(circleid);
                 }
+
+                //标签操作
+                updatePostLabel(post, label);
 
                 //帖子封面操作
                 if (StringUtil.isNotEmpty(covimg)) {
@@ -458,6 +459,7 @@ public class ExcelIntoEnquiryUtil {
                 label1.setIsdel(0);
                 label1.setIntime(new Date());
                 label1.setType(1);
+                label1.setUserid(post.getUserid());
                 //不存在新增
                 Integer labelid = postLabelService.insertPostLabel(label1);
                 PostLabelRelation relation = new PostLabelRelation();

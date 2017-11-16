@@ -15,6 +15,8 @@ public interface PostLabelRelationMapper {
 
     int insertSelective(PostLabelRelation record);
 
+    int insertPostLabelRelation(PostLabelRelation relation);
+
     PostLabelRelation selectByPrimaryKey(Integer id);
 
     int updateByPrimaryKeySelective(PostLabelRelation record);
