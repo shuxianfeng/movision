@@ -52,13 +52,11 @@ import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
-import com.movision.mybatis.video.service.VideoService;
 import com.movision.utils.*;
 import com.movision.utils.file.FileUtil;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
-import com.wordnik.swagger.annotations.ApiParam;
 import net.sf.json.JSONArray;
 import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
@@ -438,22 +436,23 @@ public class PostFacade {
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map deletePost(String postid, String loginid) {
         Map map = new HashedMap();
-        Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.delete.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), Integer.parseInt(postid));
-        if (res.get("resault").equals(1)) {
+        /*Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.delete.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), Integer.parseInt(postid));
+        if (res.get("resault").equals(1)) {*/
+        //查询发帖人
+        Integer userid = postService.queryPostByUser(postid);
+        //满足条件后执行发送通知
+        if (userid != null && userid != -1) {
+            sysNoticeUtil.sendSysNotice(3, null, userid, null);
+        }
             int resault = postService.deletePost(Integer.parseInt(postid));
-            //查询发帖人
-            Integer userid = postService.queryPostByUser(postid);
-            //满足条件后执行发送通知
-            if (userid != null && userid != -1) {
-                sysNoticeUtil.sendSysNotice(3, null, userid, null);
-            }
+
             map.put("resault", resault);
             return map;
-        } else {
+        /*} else {
             map.put("resault", -1);
             map.put("message", "权限不足");
             return map;
-        }
+        }*/
     }
 
 
