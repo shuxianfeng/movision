@@ -2602,12 +2602,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -2638,12 +2633,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -2674,14 +2664,25 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
+    }
+
+    /**
+     * 公共方法 关闭mongoDB的连接
+     *
+     * @param mongoClient
+     * @param db
+     * @param dbCursor
+     */
+    private void closeMongoDBConnection(MongoClient mongoClient, DB db, DBCursor dbCursor) {
+        if (null != db) {
+            db.requestDone();
+            db = null;
+            dbCursor.close();
+            mongoClient.close();
+        }
     }
 
 
@@ -2711,12 +2712,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3109,12 +3105,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3145,12 +3136,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3181,12 +3167,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3218,12 +3199,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3254,12 +3230,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3291,12 +3262,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3330,12 +3296,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3369,12 +3330,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3408,12 +3364,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3447,12 +3398,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3486,12 +3432,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3525,12 +3466,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3562,12 +3498,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3601,12 +3532,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3639,12 +3565,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3678,12 +3599,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3716,12 +3632,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3754,12 +3665,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }

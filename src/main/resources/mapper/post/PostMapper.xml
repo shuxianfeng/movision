@@ -1947,7 +1947,9 @@
         p.heat_value DESC
     </select>
     <select id="findAllPostListHeat" resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT p.*,c.name as circlename FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid
+        SELECT p.*,c.name as circlename
+        FROM yw_post p
+        LEFT JOIN yw_circle c ON c.id=p.circleid
         WHERE p.isdel=0
         ORDER BY p.heat_value DESC
     </select>
@@ -2371,7 +2373,9 @@
             ,(SELECT COUNT(1) FROM yw_post_zan_record r WHERE r.postid=#{postid,jdbcType=INTEGER} and
             r.userid=#{userid,jdbcType=INTEGER}) AS iszan
         </if>
-        FROM yw_user u left JOIN yw_post p ON p.userid=u.id LEFT JOIN yw_circle c ON c.id=p.circleid
-      WHERE p.id=#{postid,jdbcType=INTEGER}
+        FROM yw_user u
+        left JOIN yw_post p ON p.userid=u.id
+        LEFT JOIN yw_circle c ON c.id=p.circleid
+        WHERE p.id=#{postid,jdbcType=INTEGER}
     </select>
 </mapper>
