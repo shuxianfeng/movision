@@ -104,6 +104,17 @@ public class UserVo implements Serializable {
 
     private Integer badgenum;//当前用户获取到的徽章总数
 
+    private String accid;   //该用户的云信账号，对应yw_im_user表中的accid
+
+    public void setAccid(String accid) {
+        this.accid = accid;
+    }
+
+    public String getAccid() {
+
+        return accid;
+    }
+
     public String getIpcity() {
         return ipcity;
     }

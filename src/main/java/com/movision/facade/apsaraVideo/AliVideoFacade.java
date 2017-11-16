@@ -206,6 +206,7 @@ public class AliVideoFacade {
 
     /**
      * 生成临时AK和Token的函数
+     * 注：authInfo中的ExpireTime是在token中获取
      *
      * @param client
      * @param roleArn

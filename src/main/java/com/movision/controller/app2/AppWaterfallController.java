@@ -198,7 +198,7 @@ public class AppWaterfallController {
         return response;
     }
 
-    @ApiOperation(value = "个人主页上半部分", notes = "个人主页上半部分", response = Response.class)
+    @ApiOperation(value = "别人的个人主页上半部分", notes = "别人的个人主页上半部分", response = Response.class)
     @RequestMapping(value = "queryOtherPersonHomepage", method = RequestMethod.POST)
     public Response queryOtherPersonHomepage(@ApiParam(value = "用户id") @RequestParam String userid) {
         Response response = new Response();

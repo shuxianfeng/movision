@@ -2402,7 +2402,7 @@ public class FacadePost {
      * @param list
      * @return
      */
-    public List findPostLabel(List<PostVo> list) {
+    public List<PostVo> findPostLabel(List<PostVo> list) {
         if (list != null) {
             for (int i = 0; i < list.size(); i++) {
                 List<PostLabel> postLabels = new ArrayList<>();
