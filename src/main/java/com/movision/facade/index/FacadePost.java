@@ -2258,7 +2258,7 @@ public class FacadePost {
             //findAllCircleName(list);
             insertmongo(list, userid, type, device, labelid);   //刷新出来的帖子，依次插入mongoDB中
             //zanIsPost(Integer.parseInt(userid), list);
-            findAllReturn(list, Integer.parseInt(userid));  //查询一些必要字段
+            findAllReturn(list, userid);  //查询一些必要字段
         }
         return list;
     }
@@ -2274,12 +2274,13 @@ public class FacadePost {
         List<PostVo> list = null;
         if (lists != null) {
             list = pageFacade.getPageList(lists, 1, 10);
-            findUser(list); //根据userid查询作者信息
+            //findUser(list); //根据userid查询作者信息
             findPostLabel(list);    //根据postid查询标签信息
             findHotComment(list);   //根据postid查询所有评论
-            countView(list);    //根据postid查询帖子的浏览量
-            findAllCircleName(list);
+            //countView(list);    //根据postid查询帖子的浏览量
+            //findAllCircleName(list);
             insertmongo(list, "", type, device, labelid);
+            findAllReturn(list, null);  //查询一些必要字段
         }
         return list;
     }
@@ -2332,7 +2333,7 @@ public class FacadePost {
      * @param userid
      * @return
      */
-    public List findAllReturn(List<PostVo> list, int userid) {
+    public List findAllReturn(List<PostVo> list, String userid) {
         Map map = new HashMap();
         if (list != null) {
             for (int i = 0; i < list.size(); i++) {

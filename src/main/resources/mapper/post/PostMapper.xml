@@ -2365,9 +2365,9 @@
         UPDATE  yw_post SET  countview=countview+1 WHERE id=#{postid,jdbcType=INTEGER} AND isdel=0
     </update>
     <select id="postReAll" resultType="com.movision.mybatis.post.entity.PostReturnAll" parameterType="java.util.Map">
-        SELECT u.nickname,u.photo,u.isdv,c.name AS cirlename ,p.countview,
+        SELECT u.nickname,u.photo,u.isdv,c.name AS cirlename ,p.countview
         <if test="userid!=null">
-            (SELECT COUNT(1) FROM yw_post_zan_record r WHERE r.postid=#{postid,jdbcType=INTEGER} and
+            ,(SELECT COUNT(1) FROM yw_post_zan_record r WHERE r.postid=#{postid,jdbcType=INTEGER} and
             r.userid=#{userid,jdbcType=INTEGER}) AS iszan
         </if>
         FROM yw_user u left JOIN yw_post p ON p.userid=u.id LEFT JOIN yw_circle c ON c.id=p.circleid
