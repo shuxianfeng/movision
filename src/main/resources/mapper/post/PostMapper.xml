@@ -2039,10 +2039,11 @@
 
     <select id="queryPostLabel" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.postLabel.entity.PostLabel">
-        SELECT yw_post_label.* FROM yw_post_label_relation LEFT JOIN yw_post_label ON
-        yw_post_label.id=yw_post_label_relation.labelid
-        WHERE yw_post_label_relation.postid=#{postid} AND yw_post_label.isdel=0
-        ORDER by yw_post_label.type
+        SELECT l.*
+        FROM yw_post_label_relation r
+        LEFT JOIN yw_post_label l ON l.id=r.labelid
+        WHERE r.postid=#{postid} AND l.isdel=0
+        ORDER by l.type
     </select>
 
     <select id="findAllLabelAllPost" parameterType="java.lang.Integer"
