@@ -41,6 +41,7 @@ import com.movision.mybatis.labelSearchTerms.service.LabelSearchTermsService;
 import com.movision.mybatis.opularSearchTerms.service.OpularSearchTermsService;
 import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.post.entity.PostReturnAll;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postAndUserRecord.entity.PostAndUserRecord;
@@ -2249,13 +2250,14 @@ public class FacadePost {
         List<PostVo> list = null;
         if (lists != null) {
             list = pageFacade.getPageList(lists, 1, 10);
-            findUser(list);
+            //findUser(list);
             findPostLabel(list);
             findHotComment(list);
-            countView(list);
-            findAllCircleName(list);
+            //countView(list);
+            //findAllCircleName(list);
             insertmongo(list, userid, type, device, labelid);
-            zanIsPost(Integer.parseInt(userid), list);
+            //zanIsPost(Integer.parseInt(userid), list);
+            findAllReturn(list, Integer.parseInt(userid));
         }
         return list;
     }
@@ -2315,6 +2317,29 @@ public class FacadePost {
                 int userid = list.get(i).getUserid();
                 userLikes = userService.findUser(userid);
                 list.get(i).setUserlike(userLikes);
+                //增加帖子浏览记录
+                facadeHeatValue.addHeatValue(list.get(i).getId(), 8, 666666);
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 优化
+     *
+     * @param list
+     * @param userid
+     * @return
+     */
+    public List findAllReturn(List<PostVo> list, int userid) {
+        Map map = new HashMap();
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                int postid = list.get(i).getId();
+                map.put("postid", postid);
+                map.put("userid", userid);
+                List<PostReturnAll> postReturnAlls = postService.postReAll(map);
+                list.get(i).setPostReturnAlls(postReturnAlls);
                 //增加帖子浏览记录
                 facadeHeatValue.addHeatValue(list.get(i).getId(), 8, 666666);
             }
@@ -2537,14 +2562,18 @@ public class FacadePost {
      * @param userid
      */
     public void insertmongo(List<PostVo> list, String userid, int type, String device, int labelid) {
-        int crileid = 0;//圈子id
+        //int crileid = 0;//圈子id
         if (list != null && userid != null) {
             for (int i = 0; i < list.size(); i++) {
                 int id = list.get(i).getId();
+                Object circleid = list.get(i).getCircleid();
+                if (circleid == null) {
+                    circleid = 0;
+                }
                 //查询帖子是哪个圈子
-                crileid = postService.queryCrileid(id);
+                //crileid = postService.queryCrileid(id);
                 //刷新记录插入mongodb
-                insertMongoDB(userid, id, crileid, type, device, labelid);
+                insertMongoDB(userid, id, Integer.parseInt(circleid.toString()), type, device, labelid);
             }
         }
     }

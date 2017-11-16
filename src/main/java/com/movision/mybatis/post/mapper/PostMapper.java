@@ -327,4 +327,6 @@ public interface PostMapper {
     List queryPostToLabelById(int id);
 
     int updateCountView(int postid);
+
+    List<PostReturnAll> postReAll(Map map);
 }
