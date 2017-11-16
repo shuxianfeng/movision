@@ -1215,30 +1215,16 @@ public class PostFacade {
 
         Integer ise = null;
         Integer ish = null;
-        //查询用户id
-        Integer uid = postService.queryPostByUser(postid);
         if (StringUtil.isNotEmpty(isessence)) {
             ise = Integer.parseInt(isessence);
-            //帖子首次被设为首页精选时触，发送通知
-            //查询帖子是否被设为首页精选
-            Integer isesenceid = postProcessRecordService.queryPostByIsessence(pid);
-            if (isesenceid != null && isessence == "1") {
-                sysNoticeUtil.sendSysNotice(1, null, uid, null);
-            }
         }
         if (StringUtil.isNotEmpty(ishot)) {
             ish = Integer.parseInt(ishot);
-            //帖子首次被设为首页精选时触，发送通知
-            //查询帖子是否被设为首页精选
-            Integer isesenceid = postProcessRecordService.queryPostByIshot(pid);
-            if (isesenceid != null && ishot == "1") {
-                sysNoticeUtil.sendSysNotice(2, null, uid, null);
-            }
         }
         //查询帖子是否加精
         PostProcessRecord record = postProcessRecordService.queryPostByIsessenceOrIshot(pid);
         //帖子加精操作
-        postSelectedOperation(pid, ise, ish, record);
+        postSelectedOperation(pid, ise, ish, record, postid);
         resault.put("status", 1);
         return resault;
     }
@@ -1304,20 +1290,26 @@ public class PostFacade {
      * @param ish
      * @param record
      */
-    private void postSelectedOperation(Integer pid, Integer ise, Integer ish, PostProcessRecord record) {
+    private void postSelectedOperation(Integer pid, Integer ise, Integer ish, PostProcessRecord record, String postid) {
         Map map = new HashMap();
         PostProcessRecord re = new PostProcessRecord();
         re.setPostid(pid);
         map.put("id", pid);
         map.put("isessence", ise);
         map.put("ishot", ish);
+        //查询用户id
+        Integer uid = postService.queryPostByUser(postid);
         if (record != null) {//------------------有过加精操作
             if (record.getIsesence() != ise && ise != null && record.getIsesence() == 0) {
+                //帖子首次被设为首页精选时触，发送通知
+                sysNoticeUtil.sendSysNotice(1, null, uid, null);
                 re.setIsesence(ise);
             } else {
                 re.setIsesence(record.getIsesence());
             }
             if (record.getIshot() != ish && ish != null && record.getIshot() == 0) {
+                //帖子首次被设为首页精选时触，发送通知
+                sysNoticeUtil.sendSysNotice(2, null, uid, null);
                 re.setIshot(ish);
             } else {
                 re.setIshot(record.getIshot());
@@ -1352,11 +1344,15 @@ public class PostFacade {
             postService.updatePostSelected(map);
             //为帖子增加热度值
             if (ise != null && ise == 1) {
+                //帖子首次被设为首页精选时触，发送通知
+                sysNoticeUtil.sendSysNotice(1, null, uid, null);
                 facadeHeatValue.addHeatValue(pid, 1, 0);
                 //帖子精选积分操作
                 postSelectedIntegralOperation(ise.toString(), ish.toString(), pid);
             }
             if (ish != null && ish == 1) {
+                //帖子首次被设为首页精选时触，发送通知
+                sysNoticeUtil.sendSysNotice(2, null, uid, null);
                 facadeHeatValue.addHeatValue(pid, 2, 0);
                 //帖子精选积分操作
                 postSelectedIntegralOperation(ise.toString(), ish.toString(), pid);
