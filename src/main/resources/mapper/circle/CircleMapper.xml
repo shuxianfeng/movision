@@ -1036,7 +1036,7 @@
         </foreach>
     </update>
     <select id="queryCircleName" parameterType="java.lang.Integer" resultType="java.lang.String">
-        SELECT `name` FROM yw_circle WHERE id = #{circleid,jdbcType=INTEGER}
+        SELECT name FROM yw_circle WHERE id = #{circleid,jdbcType=INTEGER}
     </select>
 
     <select id="queryCircleIdByIsUser" resultType="java.lang.Integer" parameterType="java.util.Map">
