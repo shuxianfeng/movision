@@ -2341,7 +2341,7 @@ public class FacadePost {
                 map.put("postid", postid);
                 map.put("userid", userid);
                 //查出展示的一些必要字段，比如作者信息，点赞数，浏览数等
-                List<PostReturnAll> postReturnAlls = postService.postReAll(map);
+                PostReturnAll postReturnAlls = postService.postReAll(map);
                 list.get(i).setPostReturnAlls(postReturnAlls);
                 //增加帖子热度-浏览记录
                 facadeHeatValue.addHeatValue(list.get(i).getId(), 8, 666666);

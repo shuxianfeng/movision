@@ -1922,7 +1922,7 @@ public class PostService {
         }
     }
 
-    public List<PostReturnAll> postReAll(Map map) {
+    public PostReturnAll postReAll(Map map) {
         try {
             log.info("查询所有返回结果");
             return postMapper.postReAll(map);

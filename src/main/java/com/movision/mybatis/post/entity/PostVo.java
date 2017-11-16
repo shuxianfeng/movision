@@ -134,15 +134,15 @@ public class PostVo implements Serializable {
 
     private String activename;  //活动名称
 
-    private List<PostReturnAll> postReturnAlls;
+    private PostReturnAll postReturnAlls;
 
     private List<CommentVo> commentVos;
 
-    public List<PostReturnAll> getPostReturnAlls() {
+    public PostReturnAll getPostReturnAlls() {
         return postReturnAlls;
     }
 
-    public void setPostReturnAlls(List<PostReturnAll> postReturnAlls) {
+    public void setPostReturnAlls(PostReturnAll postReturnAlls) {
         this.postReturnAlls = postReturnAlls;
     }
 

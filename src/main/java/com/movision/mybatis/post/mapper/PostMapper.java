@@ -328,5 +328,5 @@ public interface PostMapper {
 
     int updateCountView(int postid);
 
-    List<PostReturnAll> postReAll(Map map);
+    PostReturnAll postReAll(Map map);
 }
