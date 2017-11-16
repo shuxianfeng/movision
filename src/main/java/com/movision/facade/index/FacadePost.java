@@ -2253,13 +2253,13 @@ public class FacadePost {
         if (lists != null) {
             list = pageFacade.getPageList(lists, 1, 10);
             //findUser(list);
-            findPostLabel(list);    //查询帖子的标签
-            findHotComment(list);   //查询刷新出来的帖子的评论
+            findPostLabel(list);    //查询帖子的标签（不好合并）
+            findHotComment(list);   //查询帖子的最热评论（不好合并）
             //countView(list);
             //findAllCircleName(list);
             insertmongo(list, userid, type, device, labelid);   //刷新出来的帖子，依次插入mongoDB中
             //zanIsPost(Integer.parseInt(userid), list);
-            findAllReturn(list, userid);  //查询一些必要字段
+            findAllReturn(list, userid);  //查询一些必要字段（可以合并）
         }
         return list;
     }

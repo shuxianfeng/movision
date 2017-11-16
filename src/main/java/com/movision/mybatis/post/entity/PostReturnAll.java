@@ -11,6 +11,11 @@ public class PostReturnAll {
 
     private String photo;
 
+    /**
+     * 查看用户是否对该帖子点过赞
+     * 1：点过赞
+     * 0：未点过
+     */
     private Integer iszan;
 
     private String cirlename;
