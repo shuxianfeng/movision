@@ -2320,8 +2320,6 @@ public class FacadePost {
                 int userid = list.get(i).getUserid();
                 userLikes = userService.findUser(userid);
                 list.get(i).setUserlike(userLikes);
-                //增加帖子浏览记录
-                facadeHeatValue.addHeatValue(list.get(i).getId(), 8, 666666);
             }
         }
         return list;
@@ -2344,8 +2342,6 @@ public class FacadePost {
                 //查出展示的一些必要字段，比如作者信息，点赞数，浏览数等
                 PostReturnAll postReturnAlls = postService.postReAll(map);
                 list.get(i).setPostReturnAlls(postReturnAlls);
-                //增加帖子热度-浏览记录
-                facadeHeatValue.addHeatValue(list.get(i).getId(), 8, 666666);
             }
         }
         return list;
@@ -2571,7 +2567,11 @@ public class FacadePost {
                 //crileid = postService.queryCrileid(id);
                 //刷新记录插入mongodb
                 insertMongoDB(userid, id, Integer.parseInt(circleid.toString()), type, device, labelid);
+                //增加帖子浏览记录
+                facadeHeatValue.addHeatValue(list.get(i).getId(), 8, 666666);
+
             }
+
         }
     }
 

@@ -11,6 +11,7 @@ import com.movision.mybatis.postLabel.service.PostLabelService;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecordVo;
 import com.movision.utils.pagination.model.Paging;
+import com.movision.utils.pagination.model.ServicePaging;
 import org.apache.commons.beanutils.BeanComparator;
 import org.apache.commons.collections.comparators.ComparatorChain;
 import org.slf4j.Logger;
