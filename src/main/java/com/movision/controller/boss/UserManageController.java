@@ -37,7 +37,7 @@ import java.util.Map;
  * @Date 2017/2/24 11:09
  */
 @RestController
-@RequestMapping(value = "boss/userManage")
+@RequestMapping(value = "/boss/userManage")
 public class UserManageController {
 
     @Autowired
