@@ -176,6 +176,37 @@ public class AppWaterfallController {
         return response;
     }
 
+
+    /**
+     * 用户刷新的历史列表_1117
+     *
+     * @param userid
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "用户刷新的历史记录列表_1117", notes = "用户刷新的历史记录列表_1117", response = Response.class)
+    @RequestMapping(value = "userReflushHishtoryRecord_1117", method = RequestMethod.POST)
+    public Response userReflushHishtoryRecord_1117(@ApiParam(value = "用户id") @RequestParam(required = false) String userid,
+                                                   @ApiParam(value = "1：推荐2：关注3：本地 4：圈子 5：标签") @RequestParam int type,
+                                                   @ApiParam(value = "设备号") @RequestParam(required = false) String device,
+                                                   @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                                   @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize,
+                                                   @ApiParam(value = "标签id") @RequestParam(required = false) String labelid,
+                                                   @ApiParam(value = "圈子id") @RequestParam(required = false) String circleid,
+                                                   @ApiParam(value = "帖子id") @RequestParam String postids) {
+        Response response = new Response();
+        Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<PostVo> map = facadePostUpdate.userReflushHishtoryRecord_1117(userid, pager, type, device, labelid, circleid, postids);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(map);
+        response.setData(pager);
+        return response;
+    }
+
+
     /**
      * 所有未读消息
      *

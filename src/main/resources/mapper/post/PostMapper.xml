@@ -2077,7 +2077,10 @@
         DESC
     </select>
     <select id="findAllPostByid" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT p.*,c.name AS circlename FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid WHERE 1=1
+        SELECT p.*,c.name AS circlename,u.nickname,u.photo FROM yw_post p
+        LEFT JOIN yw_circle c ON c.id=p.circleid
+        LEFT JOIN yw_user u ON u.id=yw_post.userid
+        WHERE 1=1
         <if test="list != null and list.size>0">
             AND p.id IN
         <foreach collection="list" index="index" item="item" open="(" separator="," close=")">

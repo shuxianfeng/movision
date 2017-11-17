@@ -3,12 +3,14 @@ package com.movision.facade.index;
 import com.mongodb.*;
 import com.movision.facade.address.AddressFacade;
 import com.movision.facade.paging.PageFacade;
+import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.opularSearchTerms.service.OpularSearchTermsService;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postLabel.service.PostLabelService;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecordVo;
+import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.beanutils.BeanComparator;
 import org.apache.commons.collections.comparators.ComparatorChain;
 import org.slf4j.Logger;
@@ -894,5 +896,441 @@ public class FacadePostUpdate {
         }
         return list;
     }
+
+
+    /**
+     * 用户刷新的历史记录列表
+     *
+     * @param userid
+     * @return
+     */
+    public List<PostVo> userReflushHishtoryRecord_1117(String userid, Paging<PostVo> paging, int type, String device, String labelid, String circleid, String postids) {
+        log.warn("首页历史接口的传参postid=" + postids);
+        log.warn("首页历史接口的传参pageNo=" + paging.getCurPage());
+        List<PostVo> postVo = null;
+        if (userid != null) {
+            //用户登录下
+            postVo = userLoginHistoryRecord(userid, paging, type, labelid, circleid, postids, postVo, device);
+        } else {
+            //未登录下
+            postVo = userNotLoginHistoryRecord(paging, type, device, labelid, circleid, postids, postVo);
+        }
+        return postVo;
+    }
+
+    /**
+     * 用户未登录下历史记录
+     *
+     * @param paging
+     * @param type
+     * @param device
+     * @param labelid
+     * @param circleid
+     * @param postids
+     * @param postVo
+     * @param
+     * @param
+     * @return
+     */
+    private List<PostVo> userNotLoginHistoryRecord(Paging<PostVo> paging, int type, String device, String labelid, String circleid, String postids, List<PostVo> postVo) {
+        if (StringUtil.isEmpty(labelid) && StringUtil.isEmpty(circleid)) {
+            postVo = userNotLoginHistoryRecordThird(paging, type, device, postids);
+        }
+        if (StringUtil.isNotEmpty(labelid)) {
+            postVo = userNotLoginHistoryRecordLabel(paging, type, device, labelid, postids);
+        } else if (StringUtil.isNotEmpty(circleid)) {
+            postVo = userNotLoginHistoryRecordCircle(paging, type, device, circleid, postids);
+        }
+        return postVo;
+    }
+
+    /**
+     * 用户未登录状态下圈子历史
+     *
+     * @param paging
+     * @param type
+     * @param device
+     * @param circleid
+     * @param postids
+     * @return
+     */
+    private List<PostVo> userNotLoginHistoryRecordCircle(Paging<PostVo> paging, int type, String device, String circleid, String postids) {
+        List<PostVo> postVo;
+        List<DBObject> intimePost = null;
+        List<DBObject> us = null;
+        if (!postids.equals("0")) {
+            List<DBObject> onlyPost = facadePost.queryOnlPostNotLoginCircleid(device, type, Integer.parseInt(postids), circleid);
+            String intime = onlyPost.get(0).get("intime").toString();
+            intimePost = facadePost.queryPosyByImtimeDeviceCircle(intime, device, type, circleid);
+        } else {
+            //查询用户有无历史
+            int count = facadePost.userHistoryDeviceCircleCount(device, type, circleid);
+            if (count > 10) {
+                us = facadePost.userRefulshListMongodbToDeviceHistory(device, type, circleid);
+            } else {
+                us = null;
+            }
+        }
+        List<Integer> postVos = new ArrayList<>();
+        //  List<DBObject> list = userRefulshListMongodbToDeviceHistory(device, type, circleid);
+        if (intimePost != null) {
+            for (int i = 0; i < intimePost.size(); i++) {
+                int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
+                postVos.add(postid);
+            }
+        }
+        if (us != null) {
+            for (int i = 0; i < us.size(); i++) {
+                int postid = Integer.parseInt(us.get(i).get("postid").toString());
+                postVos.add(postid);
+            }
+        }
+        //根据postid查询帖子
+        postVo = postService.findAllPostByid(postVos, paging);
+        if (postVo != null) {
+            //facadePost.findUser(postVo);
+            facadePost.findPostLabel(postVo);
+            facadePost.findHotComment(postVo);
+            //facadePost. countView(postVo);
+        }
+        return postVo;
+    }
+
+    /**
+     * 用户未登录状态下标签历史
+     *
+     * @param paging
+     * @param type
+     * @param device
+     * @param labelid
+     * @param postids
+     * @return
+     */
+    private List<PostVo> userNotLoginHistoryRecordLabel(Paging<PostVo> paging, int type, String device, String labelid, String postids) {
+        List<PostVo> postVo;
+        List<DBObject> intimePost = null;
+        List<DBObject> us = null;
+        if (!postids.equals("0")) {
+            List<DBObject> onlyPost = facadePost.queryOnlPostNotLoginLabelid(device, type, Integer.parseInt(postids), Integer.parseInt(labelid));
+            String intime = onlyPost.get(0).get("intime").toString();
+            intimePost = facadePost.queryPosyByImtimeDeviceLabel(intime, device, type, Integer.parseInt(labelid));
+        } else {
+            //查询用户有无历史
+            int count = facadePost.userHistoryDeviceLabelCount(device, type, Integer.parseInt(labelid));
+            if (count > 10) {
+                us = facadePost.userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
+            } else {
+                us = null;
+            }
+        }
+        //List<DBObject> list = userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
+        List<Integer> postVos = new ArrayList<>();
+        if (intimePost != null) {
+            for (int i = 0; i < intimePost.size(); i++) {
+                int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
+                postVos.add(postid);
+            }
+        }
+        if (us != null) {
+            for (int i = 0; i < us.size(); i++) {
+                int postid = Integer.parseInt(us.get(i).get("postid").toString());
+                postVos.add(postid);
+            }
+        }
+        postVo = postService.findAllPostByid(postVos, paging);
+        if (postVo != null) {
+            //facadePost.findUser(postVo);
+            facadePost.findPostLabel(postVo);
+            facadePost.findHotComment(postVo);
+            //facadePost.countView(postVo);
+        }
+        return postVo;
+    }
+
+    /**
+     * 用户未登录下历史（关注 推荐 本地）
+     *
+     * @param paging
+     * @param type
+     * @param device
+     * @param postids
+     * @return
+     */
+    private List<PostVo> userNotLoginHistoryRecordThird(Paging<PostVo> paging, int type, String device, String postids) {
+        List<PostVo> postVo;
+        List<DBObject> intimePost = null;
+        List<DBObject> us = null;
+        if (!postids.equals("0")) {
+            List<DBObject> onlyPost = facadePost.queryOnlPostNotLogin(device, type, Integer.parseInt(postids));
+            String intime = onlyPost.get(0).get("intime").toString();
+            intimePost = facadePost.queryPosyByImtimeDevice(intime, device, type);
+        } else {
+            //查询用户有无历史
+            int count = facadePost.userHistoryDeviceCount(device, type);
+            if (count > 10) {
+                us = facadePost.userRefulshListMongodbToDevice(device, type);
+            } else {
+                us = null;
+            }
+        }
+        //  List<DBObject> list = userRefulshListMongodbToDevice(device, type);
+        List<Integer> postVos = new ArrayList<>();
+        if (intimePost != null) {
+            for (int i = 0; i < intimePost.size(); i++) {
+                int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
+                postVos.add(postid);
+            }
+        }
+        if (us != null) {
+            for (int i = 0; i < us.size(); i++) {
+                int postid = Integer.parseInt(us.get(i).get("postid").toString());
+                postVos.add(postid);
+            }
+        }
+        //根据postid查询帖子
+        postVo = postService.findAllPostByid(postVos, paging);
+        if (postVo != null) {
+            //facadePost.findUser(postVo);
+            facadePost.findPostLabel(postVo);
+            facadePost.findHotComment(postVo);
+            //facadePost.countView(postVo);
+        }
+        return postVo;
+    }
+
+    /**
+     * 用户登录下的历史记录
+     *
+     * @param userid
+     * @param paging
+     * @param type
+     * @param labelid
+     * @param circleid
+     * @param postids
+     * @param postVo
+     * @param device
+     * @return
+     */
+    private List<PostVo> userLoginHistoryRecord(String userid, Paging<PostVo> paging, int type,
+                                                String labelid, String circleid, String postids,
+                                                List<PostVo> postVo, String device) {
+        //推荐、关注、本地
+        if (StringUtil.isEmpty(circleid) && StringUtil.isEmpty(labelid)) {
+            postVo = userLoginHistoryRecordThird(userid, paging, type, postids, device);
+        }
+
+        if (StringUtil.isNotEmpty(labelid)) {
+            //首页标签
+            postVo = userLoginHistoryRecordLabel(userid, paging, type, labelid, postids, device);
+        } else if (StringUtil.isNotEmpty(circleid)) {
+            //首页圈子
+            postVo = userLoginHistoryRecordCircle(userid, paging, type, circleid, postids, device);
+        }
+        return postVo;
+    }
+
+    /**
+     * 用户登录状态下圈子历史
+     *
+     * @param userid
+     * @param paging
+     * @param type
+     * @param circleid
+     * @param postids
+     * @return
+     */
+    private List<PostVo> userLoginHistoryRecordCircle(String userid, Paging<PostVo> paging, int type, String circleid, String postids, String device) {
+        List<PostVo> postVo;
+        List<DBObject> intimePost = null;
+        List<DBObject> us = null;
+        if (!postids.equals("0")) {
+            List<DBObject> onlyPost = facadePost.queryOnlPostNotLoginCircleid(device, type, Integer.parseInt(postids), circleid);
+            String intime = onlyPost.get(0).get("intime").toString();
+            intimePost = facadePost.queryPosyByImtimeDeviceCircle(intime, device, type, circleid);
+        } else {
+            //查询用户有无历史
+            int count = facadePost.userHistoryDeviceCircleCount(device, type, circleid);
+            if (count > 10) {
+                us = facadePost.userRefulshListMongodbToDeviceHistory(device, type, circleid);
+            } else {
+                us = null;
+            }
+        }
+        // List<DBObject> list = userRefulshListMongodbHistoryCircleid(Integer.parseInt(userid), type, circleid);
+        List<DBObject> dontlike = facadePost.queryUserDontLikePost(Integer.parseInt(userid));
+        List<Integer> postVos = new ArrayList<>();
+        List<Integer> dontlikes = new ArrayList<>();
+        if (intimePost != null) {
+            for (int i = 0; i < intimePost.size(); i++) {
+                int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
+                postVos.add(postid);
+            }
+        }
+        if (us != null) {
+            for (int i = 0; i < us.size(); i++) {
+                int postid = Integer.parseInt(us.get(i).get("postid").toString());
+                postVos.add(postid);
+            }
+        }
+        log.info(postVos + "");
+        if (dontlike.size() != 0) {
+            for (int i = 0; i < dontlike.size(); i++) {
+                int p = Integer.parseInt(dontlike.get(i).get("postid").toString());
+                dontlikes.add(p);
+            }
+        }
+        postVos.removeAll(dontlikes);
+        log.info(postVos + "***/***///////////////////////////////////////");
+        //根据postid查询帖子
+        postVo = postService.findAllPostByid(postVos, paging);
+        if (postVo != null) {
+            //facadePost.findUser(postVo);
+            facadePost.findPostLabel(postVo);
+            facadePost.findHotComment(postVo);
+            //facadePost.countView(postVo);
+            facadePost.zanIsPost(Integer.parseInt(userid), postVo);
+        }
+        return postVo;
+    }
+
+    /**
+     * 用户登录状态下标签历史
+     *
+     * @param userid
+     * @param paging
+     * @param type
+     * @param labelid
+     * @param postids
+     * @return
+     */
+    private List<PostVo> userLoginHistoryRecordLabel(String userid, Paging<PostVo> paging, int type, String labelid, String postids, String device) {
+        List<PostVo> postVo;
+        List<DBObject> intimePost = null;
+        List<DBObject> us = null;
+        if (!postids.equals("0")) {
+            List<DBObject> onlyPost = facadePost.queryOnlPostNotLoginLabelid(device, type, Integer.parseInt(postids), Integer.parseInt(labelid));
+            String intime = onlyPost.get(0).get("intime").toString();
+            intimePost = facadePost.queryPosyByImtimeDeviceLabel(intime, device, type, Integer.parseInt(labelid));
+        } else {
+            //查询用户有无历史
+            int count = facadePost.userHistoryDeviceLabelCount(device, type, Integer.parseInt(labelid));
+            if (count > 10) {
+                us = facadePost.userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
+            } else {
+                us = null;
+            }
+        }
+        //List<DBObject> list = userRefulshListMongodbHistory(Integer.parseInt(userid), type, Integer.parseInt(labelid));
+        List<DBObject> dontlike = facadePost.queryUserDontLikePost(Integer.parseInt(userid));
+        List<Integer> postVos = new ArrayList<>();
+        List<Integer> dontlikes = new ArrayList<>();
+        if (intimePost != null) {
+            for (int i = 0; i < intimePost.size(); i++) {
+                int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
+                postVos.add(postid);
+            }
+        }
+        if (us != null) {
+            for (int i = 0; i < us.size(); i++) {
+                int postid = Integer.parseInt(us.get(i).get("postid").toString());
+                postVos.add(postid);
+            }
+        }
+        if (dontlike.size() != 0) {
+            for (int i = 0; i < dontlike.size(); i++) {
+                int p = Integer.parseInt(dontlike.get(i).get("postid").toString());
+                dontlikes.add(p);
+            }
+        }
+        postVos.removeAll(dontlikes);
+        log.info("***********************************************" + postVos.size());
+        //根据postid查询帖子
+        postVo = postService.findAllPostByid(postVos, paging);
+        if (postVo != null) {
+            //facadePost.findUser(postVo);
+            facadePost.findPostLabel(postVo);
+            facadePost.findHotComment(postVo);
+            //facadePost.countView(postVo);
+            facadePost.zanIsPost(Integer.parseInt(userid), postVo);
+        }
+        return postVo;
+    }
+
+    /**
+     * 登录状态下历史记录（推荐  本地  关注）
+     *
+     * @param userid
+     * @param paging
+     * @param type
+     * @param postids 刚刚刷新过后的最后一条postid，即10条中热度值最小的一条，也是10条中插入mongoDB时间最晚的一条
+     * @param device
+     * @return
+     */
+    private List<PostVo> userLoginHistoryRecordThird(String userid, Paging<PostVo> paging, int type, String postids, String device) {
+        List<PostVo> postVo;
+        List<DBObject> intimePost = null;
+        List<DBObject> us = null;
+        if (!postids.equals("0")) {
+            //【该分支正确】
+            //postid传值的情况下
+            List<DBObject> onlyPost = facadePost.queryOnlPostNotLogin(device, type, Integer.parseInt(postids));
+            String intime = onlyPost.get(0).get("intime").toString();
+            //查出在这个时间之前的用户浏览历史
+            intimePost = facadePost.queryPosyByImtimeDevice(intime, device, type);
+        } else {
+            //如果用户刷完了帖子，退出再进来 调用历史记录
+            //。这种情况下，用户手机无缓存，所以传0
+            //先查询用户有无历史
+            int count = facadePost.userHistoryDeviceCount(device, type);
+            if (count > 10) {
+                //情况一：用户刷新之后再卸载APP,再重装APP，本地缓存被清除. 这时候查询出刚刚刷新的帖子。
+                //【有问题，查刚刚刷新的数据中热度最大的那个postid】
+                // 解决方法：从第11条开始查询。
+                us = facadePost.userRefulshListMongodbToDevice(device, type);
+            } else {
+                //情况二：新用户，只是展示第一批刷新的数据，无历史记录。用户浏览小于等于10条。
+                us = null;
+            }
+        }
+        // List<DBObject> list = userRefulshListMongodb(Integer.parseInt(userid), type);
+        List<DBObject> dontlike = facadePost.queryUserDontLikePost(Integer.parseInt(userid));
+        List<Integer> postVos = new ArrayList<>();
+        List<Integer> dontlikes = new ArrayList<>();
+        //处理的是postid != 0的情况
+        if (intimePost != null) {
+            for (int i = 0; i < intimePost.size(); i++) {
+                int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
+                postVos.add(postid);
+            }
+        }
+        //处理的是postid == 0的情况
+        if (us != null) {
+            for (int i = 0; i < us.size(); i++) {
+                int postid = Integer.parseInt(us.get(i).get("postid").toString());  //2618
+                postVos.add(postid);
+            }
+        }
+        //封装了不喜欢帖子id集合
+        if (dontlike.size() != 0) {
+            for (int i = 0; i < dontlike.size(); i++) {
+                int p = Integer.parseInt(dontlike.get(i).get("postid").toString());
+                dontlikes.add(p);
+            }
+        }
+        //从浏览历史中过滤掉用户不喜欢的帖子id
+        postVos.removeAll(dontlikes);
+        //根据postid查询帖子
+        postVo = postService.findAllPostByid(postVos, paging);
+        log.info(postVos.size() + ";;;;;;;;;;;;;;;;;;;;;;;;;;");
+        if (postVo != null) {
+            //facadePost.findUser(postVo);
+            facadePost.findPostLabel(postVo);
+            facadePost.findHotComment(postVo);
+            //facadePost.countView(postVo);
+            facadePost.zanIsPost(Integer.parseInt(userid), postVo);
+        }
+        return postVo;
+    }
+
 
 }
