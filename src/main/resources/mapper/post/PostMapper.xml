@@ -1909,7 +1909,12 @@
 
 
     <select id="queryPostByUser" parameterType="java.lang.String" resultType="java.lang.Integer">
-        select userid from yw_post WHERE id=#{postid,jdbcType=INTEGER} AND circleid IS NOT NULL
+        select userid from yw_post WHERE id=#{postid,jdbcType=INTEGER} AND isactive = 0 AND isdel = 0
+    </select>
+
+    <select id="queryCircleByIDIsUpdate" parameterType="com.movision.mybatis.post.entity.PostTo"
+            resultType="java.lang.Integer">
+        SELECT circleid FROM yw_post WHERE circleid = #{circleid,jdbcType=INTEGER} AND id = #{id,jdbcType=INTEGER} AND isdel = 0
     </select>
 
     <update id="updatePostIsdel" parameterType="java.lang.String">
@@ -1924,7 +1929,7 @@
     </select>
 
     <select id="queryCrileid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT circleid FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
+        SELECT circleid FROM yw_post WHERE id=#{postid,jdbcType=INTEGER} AND isdel=0
     </select>
 
     <select id="selectAllPost" resultType="com.movision.mybatis.post.entity.Post">
@@ -1942,17 +1947,25 @@
         p.heat_value DESC
     </select>
     <select id="findAllPostListHeat" resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT p.*,c.name as circlename FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid
+        SELECT p.*,c.name as circlename
+        FROM yw_post p
+        LEFT JOIN yw_circle c ON c.id=p.circleid
         WHERE p.isdel=0
         ORDER BY p.heat_value DESC
     </select>
     <select id="queryPostCricle" resultType="com.movision.mybatis.post.entity.PostVo" parameterType="java.lang.Integer">
-        SELECT p.*, c.name as circlename FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid WHERE p.isdel=0 AND
-        p.circleid=#{crileid,jdbcType=INTEGER} ORDER BY p.heat_value DESC
+        SELECT p.*, c.name as circlename
+        FROM yw_post p
+        LEFT JOIN yw_circle c ON c.id=p.circleid
+        WHERE p.isdel=0 AND p.circleid=#{crileid,jdbcType=INTEGER}
+        ORDER BY p.heat_value DESC
     </select>
     <select id="queryoverPost" resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT p.*,c.name as circlename from yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid WHERE p.isdel=0 AND
-        p.circleid!=#{crileid,jdbcType=INTEGER} OR (p.circleid IS NULL AND p.isdel=0) ORDER BY p.heat_value DESC
+        SELECT p.*,c.name as circlename
+        from yw_post p
+        LEFT JOIN yw_circle c ON c.id=p.circleid
+        WHERE p.isdel=0 AND p.circleid!=#{crileid,jdbcType=INTEGER} OR (p.circleid IS NULL AND p.isdel=0)
+        ORDER BY p.heat_value DESC
     </select>
     <select id="queryPostDetailById" resultType="com.movision.mybatis.post.entity.Post"
             parameterType="java.lang.Integer">
@@ -2026,10 +2039,11 @@
 
     <select id="queryPostLabel" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.postLabel.entity.PostLabel">
-        SELECT yw_post_label.* FROM yw_post_label_relation LEFT JOIN yw_post_label ON
-        yw_post_label.id=yw_post_label_relation.labelid
-        WHERE yw_post_label_relation.postid=#{postid} AND yw_post_label.isdel=0
-        ORDER by yw_post_label.type
+        SELECT l.*
+        FROM yw_post_label_relation r
+        LEFT JOIN yw_post_label l ON l.id=r.labelid
+        WHERE r.postid=#{postid} AND l.isdel=0
+        ORDER by l.type
     </select>
 
     <select id="findAllLabelAllPost" parameterType="java.lang.Integer"
@@ -2170,16 +2184,17 @@
         ORDER BY p.collectsum DESC
     </select>
 
-    <select id="queryPostInAll" resultType="com.movision.mybatis.post.entity.PostVo">
+    <select id="queryPostInAll" resultType="com.movision.mybatis.post.entity.PostVo" parameterType="java.util.Map">
         SELECT p.id, p.title, p.coverimg,p.userid, u.nickname, u.photo, p.circleid, p.activeid,
-        ci.name AS circlename
+        ci.name AS circlename, p.countview
         FROM yw_post p
         LEFT JOIN yw_user u ON p.userid = u.id
         LEFT JOIN yw_circle ci ON p.circleid = ci.id
         WHERE p.isdel = 0 and p.isactive = 0
+        <if test="flag == 'month' ">
+            AND DATE_FORMAT( p.intime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
+        </if>
     </select>
-
-
 
     <select id="queryActiveByOrderid" resultType="java.lang.Integer">
         SELECT ishot_order FROM yw_post WHERE isactive = 1 AND circleid IS NULL AND isdel = 0 AND ishot =1 AND ishot_order IS NOT NULL
@@ -2342,6 +2357,27 @@
         ORDER BY p.heat_value DESC
     </select>
     <select id="queryPostCountView" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT countview FROM  yw_post WHERE id=#{id,jdbcType=INTEGER}
+        SELECT countview FROM yw_post WHERE id=#{id,jdbcType=INTEGER} AND isdel=0
+    </select>
+
+    <select id="queryPostToLabelById" resultType="java.lang.String" parameterType="java.lang.Integer">
+        SELECT pl.name FROM yw_post_label_relation plr
+        LEFT JOIN yw_post_label pl ON pl.id = plr.labelid
+        WHERE postid = #{id,jdbcType=INTEGER}
+    </select>
+    <update id="updateCountView" parameterType="java.lang.Integer">
+        UPDATE  yw_post SET  countview=countview+1 WHERE id=#{postid,jdbcType=INTEGER} AND isdel=0
+    </update>
+    <select id="postReAll" resultType="com.movision.mybatis.post.entity.PostReturnAll" parameterType="java.util.Map">
+        SELECT u.id,u.nickname,u.photo,u.isdv,c.name AS cirlename ,p.countview
+        <if test="userid!=null">
+            ,(SELECT COUNT(1) FROM yw_post_zan_record r
+            WHERE r.postid=#{postid,jdbcType=INTEGER}
+            and r.userid=#{userid,jdbcType=INTEGER}) AS iszan
+        </if>
+        FROM yw_user u
+        left JOIN yw_post p ON p.userid=u.id
+        LEFT JOIN yw_circle c ON c.id=p.circleid
+        WHERE p.id=#{postid,jdbcType=INTEGER}
     </select>
 </mapper>

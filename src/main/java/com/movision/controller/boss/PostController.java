@@ -1045,6 +1045,27 @@ public class PostController {
 
 
     /**
+     * 上传app开屏图
+     *
+     * @param file
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     * @return
+     */
+    @ApiOperation(value = "上传app开屏图", notes = "上传app开屏图", response = Response.class)
+    @RequestMapping(value = {"/updateAppUpimg"}, method = RequestMethod.POST)
+    public Response updateAppUpimg(@RequestParam(value = "file", required = false) MultipartFile file,
+                                   @ApiParam(value = "X坐标") @RequestParam(required = false) String x,
+                                   @ApiParam(value = "Y坐标") @RequestParam(required = false) String y,
+                                   @ApiParam(value = "宽") @RequestParam String w,
+                                   @ApiParam(value = "高") @RequestParam String h) {
+        Map map = facadePost.updateAppUpimg(file, x, y, w, h);
+        return new Response(map);
+    }
+
+    /**
      * 上传帖子相关图片
      *
      * @param file

@@ -800,6 +800,22 @@ public class PostService {
     }
 
     /**
+     * 根据圈子id和帖子id查询帖子的所属圈子是否有改动
+     *
+     * @param post
+     * @return
+     */
+    public Integer queryCircleByIDIsUpdate(PostTo post) {
+        try {
+            log.info("根据圈子id和帖子id查询帖子的所属圈子是否有改动");
+            return postMapper.queryCircleByIDIsUpdate(post);
+        } catch (Exception e) {
+            log.error("根据圈子id和帖子id查询帖子的所属圈子是否有改动异常", e);
+            throw e;
+        }
+    }
+
+    /**
      * 帖子取消加精
      *
      * @param postid
@@ -1187,7 +1203,7 @@ public class PostService {
             log.info("查询帖子属于哪个圈子");
             return postMapper.queryCrileid(postid);
         } catch (Exception e) {
-            log.error("查询帖子属于哪个圈子失败");
+            log.error("查询帖子属于哪个圈子失败", e);
             throw e;
         }
     }
@@ -1679,10 +1695,10 @@ public class PostService {
         }
     }
 
-    public List<PostVo> queryPostInAll() {
+    public List<PostVo> queryPostInAll(Map map) {
         try {
             log.info("查询所有帖子");
-            return postMapper.queryPostInAll();
+            return postMapper.queryPostInAll(map);
         } catch (Exception e) {
             log.error("查询所有帖子失败", e);
             throw e;
@@ -1876,6 +1892,42 @@ public class PostService {
             return postMapper.queryPostCountView(id);
         } catch (Exception e) {
             log.error("查询帖子浏览量失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 根据帖子id查询标签列表
+     *
+     * @param id
+     * @return
+     */
+    public List queryPostToLabelById(int id) {
+        try {
+            log.info("根据帖子id查询标签列表");
+            return postMapper.queryPostToLabelById(id);
+        } catch (Exception e) {
+            log.error("根据帖子id查询标签列表异常", e);
+            throw e;
+        }
+    }
+
+    public int updateCountView(int postid) {
+        try {
+            log.info("修改帖子浏览");
+            return postMapper.updateCountView(postid);
+        } catch (Exception e) {
+            log.error("修改帖子浏览失败", e);
+            throw e;
+        }
+    }
+
+    public PostReturnAll postReAll(Map map) {
+        try {
+            log.info("查询所有返回结果");
+            return postMapper.postReAll(map);
+        } catch (Exception e) {
+            log.error("查询所有返回结果");
             throw e;
         }
     }

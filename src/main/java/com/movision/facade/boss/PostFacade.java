@@ -18,7 +18,6 @@ import com.movision.mybatis.applyVipDetail.entity.ApplyVipDetail;
 import com.movision.mybatis.applyVipDetail.service.ApplyVipDetailService;
 import com.movision.mybatis.auditVipDetail.entity.AuditVipDetail;
 import com.movision.mybatis.auditVipDetail.service.AuditVipDetailService;
-import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.bossUser.service.BossUserService;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.comment.entity.Comment;
@@ -53,7 +52,6 @@ import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
-import com.movision.mybatis.video.service.VideoService;
 import com.movision.utils.*;
 import com.movision.utils.file.FileUtil;
 import com.movision.utils.oss.MovisionOssClient;
@@ -83,8 +81,7 @@ import java.util.*;
  */
 @Service
 public class PostFacade {
-    @Autowired
-    private VideoUploadUtil videoUploadUtil;
+
     @Autowired
     private PostService postService;
 
@@ -111,9 +108,6 @@ public class PostFacade {
 
     @Autowired
     private PeriodService periodService;
-
-    @Autowired
-    private VideoService videoService;
 
     @Autowired
     private GoodsService goodsService;
@@ -160,6 +154,10 @@ public class PostFacade {
     private PostLabelRelationService postLabelRelationService;
     @Autowired
     private PostHeatvalueRecordService postHeatvalueRecordService;
+
+    @Autowired
+    private SysNoticeUtil sysNoticeUtil;
+
 
     private static Logger log = LoggerFactory.getLogger(PostFacade.class);
 
@@ -438,16 +436,23 @@ public class PostFacade {
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map deletePost(String postid, String loginid) {
         Map map = new HashedMap();
-        Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.delete.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), Integer.parseInt(postid));
-        if (res.get("resault").equals(1)) {
+        /*Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.delete.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), Integer.parseInt(postid));
+        if (res.get("resault").equals(1)) {*/
+        //查询发帖人
+        Integer userid = postService.queryPostByUser(postid);
+        //满足条件后执行发送通知
+        if (userid != null && userid != -1) {
+            sysNoticeUtil.sendSysNotice(3, null, userid, null);
+        }
             int resault = postService.deletePost(Integer.parseInt(postid));
+
             map.put("resault", resault);
             return map;
-        } else {
+        /*} else {
             map.put("resault", -1);
             map.put("message", "权限不足");
             return map;
-        }
+        }*/
     }
 
 
@@ -1219,7 +1224,7 @@ public class PostFacade {
         //查询帖子是否加精
         PostProcessRecord record = postProcessRecordService.queryPostByIsessenceOrIshot(pid);
         //帖子加精操作
-        postSelectedOperation(pid, ise, ish, record);
+        postSelectedOperation(pid, ise, ish, record, postid);
         resault.put("status", 1);
         return resault;
     }
@@ -1285,20 +1290,26 @@ public class PostFacade {
      * @param ish
      * @param record
      */
-    private void postSelectedOperation(Integer pid, Integer ise, Integer ish, PostProcessRecord record) {
+    private void postSelectedOperation(Integer pid, Integer ise, Integer ish, PostProcessRecord record, String postid) {
         Map map = new HashMap();
         PostProcessRecord re = new PostProcessRecord();
         re.setPostid(pid);
         map.put("id", pid);
         map.put("isessence", ise);
         map.put("ishot", ish);
+        //查询用户id
+        Integer uid = postService.queryPostByUser(postid);
         if (record != null) {//------------------有过加精操作
             if (record.getIsesence() != ise && ise != null && record.getIsesence() == 0) {
+                //帖子首次被设为首页精选时触，发送通知
+                sysNoticeUtil.sendSysNotice(1, null, uid, null);
                 re.setIsesence(ise);
             } else {
                 re.setIsesence(record.getIsesence());
             }
             if (record.getIshot() != ish && ish != null && record.getIshot() == 0) {
+                //帖子首次被设为首页精选时触，发送通知
+                sysNoticeUtil.sendSysNotice(2, null, uid, null);
                 re.setIshot(ish);
             } else {
                 re.setIshot(record.getIshot());
@@ -1333,11 +1344,15 @@ public class PostFacade {
             postService.updatePostSelected(map);
             //为帖子增加热度值
             if (ise != null && ise == 1) {
+                //帖子首次被设为首页精选时触，发送通知
+                sysNoticeUtil.sendSysNotice(1, null, uid, null);
                 facadeHeatValue.addHeatValue(pid, 1, 0);
                 //帖子精选积分操作
                 postSelectedIntegralOperation(ise.toString(), ish.toString(), pid);
             }
             if (ish != null && ish == 1) {
+                //帖子首次被设为首页精选时触，发送通知
+                sysNoticeUtil.sendSysNotice(2, null, uid, null);
                 facadeHeatValue.addHeatValue(pid, 2, 0);
                 //帖子精选积分操作
                 postSelectedIntegralOperation(ise.toString(), ish.toString(), pid);
@@ -1907,6 +1922,10 @@ public class PostFacade {
                         post.setPostcontent(postcontent);
                     }
                 }
+                //查询用户id
+                Integer uid = postService.queryPostByUser(post.getId().toString());
+                //当编辑帖子时,所属圈子变更时，发送通知
+                sendSystemInfromByUpdatePost(uid, post);
 
                 post.setUserid(userid);
                 if ((int) con.get("flag") != 0) {
@@ -1952,54 +1971,7 @@ public class PostFacade {
                         goodsService.deletePostyByGoods(postid);//删除帖子分享的商品
                     }
                 }
-                //PostProcessRecord postProcessRecord = postProcessRecordService.queryPostByIsessenceOrIshot(Integer.parseInt(id));
-                    /*if (postProcessRecord != null) {//已经加精过活精选
-                        //积分操作
-                        if (postProcessRecord.getIshot() == 0 && Integer.parseInt(ishot) == 1) {
-                            pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.circle_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
-                            //增加热度
-                            facadeHeatValue.addHeatValue(Integer.parseInt(id), 2, null);
-                        }
-                        if (postProcessRecord.getIsesence() == 0 && Integer.parseInt(isessence) == 1) {
-                            pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.index_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
-                            //增加热度
-                            facadeHeatValue.addHeatValue(Integer.parseInt(id), 1, null);
-                        }
-                        //修改
-                        PostProcessRecord pprd = new PostProcessRecord();
-                        if (StringUtil.isNotEmpty(ishot)) {
-                            pprd.setIshot(Integer.parseInt(ishot));
-                        }
-                        pprd.setPostid(post.getId());
-                        if (StringUtil.isNotEmpty(isessence)) {
-                            pprd.setIsesence(Integer.parseInt(isessence));
-                        }
-                        postProcessRecordService.updateProcessRecord(pprd);
-                    } else {
-                        //新增帖子精选操作记录表
-                        PostProcessRecord pprd = new PostProcessRecord();
-                        pprd.setPostid(Integer.parseInt(id));
-                        if (StringUtil.isNotEmpty(isessence)) {
-                            pprd.setIsesence(Integer.parseInt(isessence));
-                        }
-                        if (StringUtil.isNotEmpty(ishot)) {
-                            pprd.setIshot(Integer.parseInt(ishot));
-                        }
-                        postProcessRecordService.insertProcessRecord(pprd);
 
-                        postProcessRecord = postProcessRecordService.queryPostByIsessenceOrIshot(Integer.parseInt(id));//查询出帖子是否被设为精选
-                        //积分操作
-                        if (postProcessRecord.getIshot() == 1) {
-                            pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.circle_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
-                            //增加热度
-                            facadeHeatValue.addHeatValue(Integer.parseInt(id), 2, null);
-                        }
-                        if (postProcessRecord.getIsesence() == 1) {
-                            pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.index_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
-                            //增加热度
-                            facadeHeatValue.addHeatValue(Integer.parseInt(id), 1, null);
-                        }
-                    }*/
             } catch (Exception e) {
                 log.error("帖子编辑异常", e);
             }
@@ -2008,6 +1980,21 @@ public class PostFacade {
             map.put("resault", -1);
             map.put("message", "权限不足");
             return map;
+        }
+    }
+
+    /**
+     * 当编辑帖子时,所属圈子变更时，发送通知
+     *
+     * @param post
+     */
+    private void sendSystemInfromByUpdatePost(Integer uid, PostTo post) {
+        //查询所属圈子是否有改动
+        Integer cid = postService.queryCircleByIDIsUpdate(post);
+        if (cid == null) {
+            //查询出圈子名称
+            String circlename = circleService.queryCircleName(Integer.parseInt(post.getCircleid()));
+            sysNoticeUtil.sendSysNotice(0, circlename, uid, null);
         }
     }
 
@@ -2678,12 +2665,10 @@ public class PostFacade {
      * @return
      */
     public Map<String, Object> updatePostImgTest(MultipartFile file) {
-        Map m = new HashMap();
-        Map<String, Object> map = null;
+        Map<String, Object> map = new HashMap<>();
         try {
-            m = movisionOssClient.uploadObject(file, "img", "post");
+            Map m = movisionOssClient.uploadObject(file, "img", "post");
             String url = String.valueOf(m.get("url"));
-            map = new HashMap<>();
             map.put("url", url);
             map.put("name", FileUtil.getFileNameByUrl(url));
             map.put("width", m.get("width"));

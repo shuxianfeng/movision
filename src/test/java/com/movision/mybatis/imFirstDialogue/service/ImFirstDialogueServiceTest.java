@@ -1,8 +1,6 @@
 package com.movision.mybatis.imFirstDialogue.service;
 
-import com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogue;
 import com.movision.test.SpringTestCase;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

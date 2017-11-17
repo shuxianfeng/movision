@@ -36,6 +36,38 @@ public class PostProcessRecordService {
     }
 
     /**
+     * 查询帖子是否被设为首页精选
+     *
+     * @param postid
+     * @return
+     */
+    public Integer queryPostByIsessence(Integer postid) {
+        try {
+            log.info("查询帖子是否被设为首页精选");
+            return postProcessRecordMapper.queryPostByIsessence(postid);
+        } catch (Exception e) {
+            log.error("查询帖子是否被设为首页精选异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 查询帖子是否被设为圈子精选
+     *
+     * @param postid
+     * @return
+     */
+    public Integer queryPostByIshot(Integer postid) {
+        try {
+            log.info("查询帖子是否被设为圈子精选");
+            return postProcessRecordMapper.queryPostByIshot(postid);
+        } catch (Exception e) {
+            log.error("查询帖子是否被设为圈子精选异常", e);
+            throw e;
+        }
+    }
+
+    /**
      * 更新帖子加精和热门记录
      *
      * @param postProcessRecord

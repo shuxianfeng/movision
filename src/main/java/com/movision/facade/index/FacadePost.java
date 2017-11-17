@@ -27,6 +27,7 @@ import com.movision.mybatis.circleCategory.entity.CircleCategory;
 import com.movision.mybatis.circleCategory.service.CircleCategoryService;
 import com.movision.mybatis.city.entity.City;
 import com.movision.mybatis.city.service.CityService;
+import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.compressImg.entity.CompressImg;
@@ -41,6 +42,7 @@ import com.movision.mybatis.labelSearchTerms.service.LabelSearchTermsService;
 import com.movision.mybatis.opularSearchTerms.service.OpularSearchTermsService;
 import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.post.entity.PostReturnAll;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postAndUserRecord.entity.PostAndUserRecord;
@@ -59,7 +61,6 @@ import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
 import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
-import com.movision.mybatis.userRefreshRecord.entity.UserReflushCount;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecord;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecordVo;
 import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
@@ -297,6 +298,8 @@ public class FacadePost {
                     postAndUserRecord.setUserid(Integer.parseInt(userid));
                     postAndUserRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
                     postAndUserRecordService.insert(postAndUserRecord);
+                    //同步mysql的浏览量
+                    postService.updateCountView(Integer.parseInt(postid));
                 }
             }
         }
@@ -390,6 +393,9 @@ public class FacadePost {
                 postAndUserRecord.setCrileid(null);
                 postAndUserRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
                 postAndUserRecordService.insert(postAndUserRecord);
+                //同步mysql的浏览量
+                postService.updateCountView(Integer.parseInt(postid));
+
             }
         }
         return active;
@@ -1265,6 +1271,35 @@ public class FacadePost {
     }
 
     /**
+     * @param file
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     * @return
+     */
+    public Map updateAppUpimg(MultipartFile file, String x, String y, String w, String h) {
+
+        //1上传到服务器
+        Map m = movisionOssClient.uploadMultipartFileObject(file, "img");
+        String url = String.valueOf(m.get("url"));//获取上传到服务器上的原图
+        System.out.println("上传封面的原图url==" + url);
+
+        Map compressmap = new HashMap();
+        //2从服务器获取文件并剪切,上传剪切后图片上传阿里云
+        //Map map = movisionOssClient.uploadImgerAndIncision(url, x, y, w, h);
+        //切割图片上传到阿里云
+        Map whs = new HashMap();
+        whs.put("w", w);
+        whs.put("h", h);
+        whs.put("x", x);
+        whs.put("y", y);
+        Map tmpurl = xmlParseFacade.imgCuttingUpload(url, whs);
+        compressmap.put("url", tmpurl.get("new"));
+        return compressmap;
+    }
+
+    /**
      * 上传帖子封面图片
      *
      * @param file 上传文件
@@ -1844,7 +1879,8 @@ public class FacadePost {
         List<UserRefreshRecordVo> result;//查询用户最喜欢的圈子
         List<DBObject> listmongodb;
         //listmongodb = userRefulshListMongodb(Integer.parseInt(userid), 1);//查询用户刷新列表
-        listmongodb = userRefulshListMongodbToDevice(device, 1);//用户有没有看过
+        //查询用户已经看过的帖子
+        listmongodb = userRefulshListMongodbToDevice(device, 1);
         if (listmongodb.size() != 0) {
             //统计用户浏览的帖子所属的每个圈子的数量
             result = opularSearchTermsService.userFlush(device);
@@ -1955,10 +1991,10 @@ public class FacadePost {
                     }
                     list.removeAll(posts);
                     /**Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(list);
-                    list = new ArrayList<PostVo>(linkedHashSet);
-                    ComparatorChain chain = new ComparatorChain();
-                    chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
-                    Collections.sort(list, chain);
+                     list = new ArrayList<PostVo>(linkedHashSet);
+                     ComparatorChain chain = new ComparatorChain();
+                     chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
+                     Collections.sort(list, chain);
                      list = NotLoginretuenList(list, 3, device, -1);*/
                 }
                 Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(list);
@@ -2206,7 +2242,7 @@ public class FacadePost {
 
 
     /**
-     * 返回数据
+     * 登录情况下的返回数据
      *
      * @param lists
      * @param userid
@@ -2216,21 +2252,22 @@ public class FacadePost {
         List<PostVo> list = null;
         if (lists != null) {
             list = pageFacade.getPageList(lists, 1, 10);
-            findUser(list);
-            findPostLabel(list);
-            findHotComment(list);
-            countView(list);
-            findAllCircleName(list);
-            insertmongo(list, userid, type, device, labelid);
-            zanIsPost(Integer.parseInt(userid), list);
+            //findUser(list);
+            findPostLabel(list);    //查询帖子的标签（不好合并）
+            findHotComment(list);   //查询帖子的最热评论（不好合并）
+            //countView(list);
+            //findAllCircleName(list);
+            insertmongo(list, userid, type, device, labelid);   //刷新出来的帖子，依次插入mongoDB中
+            //zanIsPost(Integer.parseInt(userid), list);
+            findAllReturn(list, userid);  //查询一些必要字段（可以合并）
         }
         return list;
     }
 
     /**
-     * 返回数据
+     * 未登录情况下的返回数据
      *
-     * @param lists
+     * @param lists 最多10条
      * @param
      * @return
      */
@@ -2238,12 +2275,13 @@ public class FacadePost {
         List<PostVo> list = null;
         if (lists != null) {
             list = pageFacade.getPageList(lists, 1, 10);
-            findUser(list);
-            findPostLabel(list);
-            findHotComment(list);
-            countView(list);
-            findAllCircleName(list);
+            //findUser(list); //根据userid查询作者信息
+            findPostLabel(list);    //根据postid查询标签信息
+            findHotComment(list);   //根据postid查询所有评论
+            //countView(list);    //根据postid查询帖子的浏览量
+            //findAllCircleName(list);
             insertmongo(list, "", type, device, labelid);
+            findAllReturn(list, null);  //查询一些必要字段
         }
         return list;
     }
@@ -2289,6 +2327,30 @@ public class FacadePost {
         return list;
     }
 
+    /**
+     * 优化
+     *
+     * @param list
+     * @param userid
+     * @return
+     */
+    public List findAllReturn(List<PostVo> list, String userid) {
+        Map map = new HashMap();
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                int postid = list.get(i).getId();
+                map.put("postid", postid);
+                map.put("userid", userid);
+                //查出展示的一些必要字段，比如作者信息，点赞数，浏览数等
+                PostReturnAll postReturnAlls = postService.postReAll(map);
+                list.get(i).setPostReturnAlls(postReturnAlls);
+                //增加帖子热度-浏览记录
+                facadeHeatValue.addHeatValue(list.get(i).getId(), 8, 666666);
+            }
+        }
+        return list;
+    }
+
 
     /**
      * 帖子浏览量 (公共方法)
@@ -2308,7 +2370,6 @@ public class FacadePost {
     }
 
 /*
-
         if (list != null) {
             List<Integer> iList = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
@@ -2326,15 +2387,17 @@ public class FacadePost {
                     }
                 }
             }
-           for (int i = 0; i < list.size(); i++) {
-             int postid = list.get(i).getId();
-             int uesrreflushCounts = userRefreshRecordService.postcount(postid);
-             int poscount = postAndUserRecordService.postcount(postid);
-             int count = uesrreflushCounts + poscount;
-             list.get(i).setCountview(count);
-             }
+          *//*  for (int i = 0; i < list.size(); i++) {
+                int postid = list.get(i).getId();
+                int uesrreflushCounts = userRefreshRecordService.postcount(postid);
+                int poscount = postAndUserRecordService.postcount(postid);
+                int count = uesrreflushCounts + poscount;
+                list.get(i).setCountview(count);
+            }*//*
+
         }
-*/
+        return list;
+    }*/
 
 
     /**
@@ -2343,21 +2406,19 @@ public class FacadePost {
      * @param list
      * @return
      */
-    public List findPostLabel(List<PostVo> list) {
+    public List<PostVo> findPostLabel(List<PostVo> list) {
         if (list != null) {
             for (int i = 0; i < list.size(); i++) {
                 List<PostLabel> postLabels = new ArrayList<>();
                 //帖子的id
                 int postid = list.get(i).getId();
-                //先获取帖子对应的圈子
+                //获取帖子对应的圈子，加入到标签展示栏
                 addCircleToLabellist(list, i, postLabels);
-                //帖子对应的活动
+                //获取帖子对应的活动，加入到标签展示栏
                 addActiveToLabellist(list, i, postLabels);
-                //根据帖子id查询对应的标签
+                //获取帖子对应的标签
                 List<PostLabel> labelInDB = postService.queryPostLabel(postid);
-
                 postLabels.addAll(labelInDB);
-
                 list.get(i).setPostLabels(postLabels);
             }
         }
@@ -2448,24 +2509,19 @@ public class FacadePost {
     }
 
     /**
-     * 精選評論
+     * 精選評論(找到每个帖子热度最高的评论)
      *
      * @param list
      * @return
      */
-    public List findHotComment(List<PostVo> list) {
-        List<CommentVo> comments = null;
+    public List<PostVo> findHotComment(List<PostVo> list) {
+
         if (list != null) {
             for (int i = 0; i < list.size(); i++) {
                 int postid = list.get(i).getId();
-                //根據帖子id去查所有評論
-                comments = commentService.queryCommentByPost(postid);
-                for (int j = 0; j < comments.size(); j++) {
-                    int heatvalue = comments.get(j).getHeatvalue();
-                    if (heatvalue >= 80) {
-                        list.get(i).setComments(comments.get(j));
-                    }
-                }
+                //根據帖子id去查热度最高的評論
+                CommentVo comments = commentService.queryCommentByPost(postid);
+                list.get(i).setComments(comments);
             }
         }
 
@@ -2503,18 +2559,18 @@ public class FacadePost {
      * @param userid
      */
     public void insertmongo(List<PostVo> list, String userid, int type, String device, int labelid) {
-        int crileid = 0;//圈子id
+        //int crileid = 0;//圈子id
         if (list != null && userid != null) {
             for (int i = 0; i < list.size(); i++) {
                 int id = list.get(i).getId();
-                //查询帖子是哪个圈子
-                try {
-                    crileid = postService.queryCrileid(id);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                Object circleid = list.get(i).getCircleid();
+                if (circleid == null) {
+                    circleid = 0;
                 }
+                //查询帖子是哪个圈子
+                //crileid = postService.queryCrileid(id);
                 //刷新记录插入mongodb
-                insertMongoDB(userid, id, crileid, type, device, labelid);
+                insertMongoDB(userid, id, Integer.parseInt(circleid.toString()), type, device, labelid);
             }
         }
     }
@@ -2546,12 +2602,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -2582,12 +2633,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -2618,14 +2664,25 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
+    }
+
+    /**
+     * 公共方法 关闭mongoDB的连接
+     *
+     * @param mongoClient
+     * @param db
+     * @param dbCursor
+     */
+    private void closeMongoDBConnection(MongoClient mongoClient, DB db, DBCursor dbCursor) {
+        if (null != db) {
+            db.requestDone();
+            db = null;
+            dbCursor.close();
+            mongoClient.close();
+        }
     }
 
 
@@ -2655,12 +2712,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -2902,6 +2954,10 @@ public class FacadePost {
             userRefreshRecord.setLabelid(labelid);
         }
         userRefreshRecordService.insert(userRefreshRecord);
+        //同步到mysql中帖子浏览量加1
+        postService.updateCountView(postid);
+
+
     }
 
     public List<Map> queryPostImgById(String postid) {
@@ -3049,12 +3105,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3085,12 +3136,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3121,12 +3167,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3158,12 +3199,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3194,12 +3230,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3231,12 +3262,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3270,12 +3296,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3309,12 +3330,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3348,12 +3364,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3387,12 +3398,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3426,12 +3432,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3465,12 +3466,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3502,12 +3498,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3541,12 +3532,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3579,12 +3565,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3618,12 +3599,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3656,12 +3632,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3694,12 +3665,7 @@ public class FacadePost {
         } catch (Exception e) {
             log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
-            if (null != db) {
-                db.requestDone();
-                db = null;
-                dbCursor.close();
-                mongoClient.close();
-            }
+            closeMongoDBConnection(mongoClient, db, dbCursor);
         }
         return list;
     }
@@ -3770,12 +3736,12 @@ public class FacadePost {
             intimePost = queryPosyByImtimeDeviceCircle(intime, device, type, circleid);
         } else {
             //查询用户有无历史
-                int count = userHistoryDeviceCircleCount(device, type, circleid);
-                if (count > 10) {
-                    us = userRefulshListMongodbToDeviceHistory(device, type, circleid);
-                } else {
-                    us = null;
-                }
+            int count = userHistoryDeviceCircleCount(device, type, circleid);
+            if (count > 10) {
+                us = userRefulshListMongodbToDeviceHistory(device, type, circleid);
+            } else {
+                us = null;
+            }
         }
         List<Integer> postVos = new ArrayList<>();
         //  List<DBObject> list = userRefulshListMongodbToDeviceHistory(device, type, circleid);
@@ -3821,13 +3787,13 @@ public class FacadePost {
             String intime = onlyPost.get(0).get("intime").toString();
             intimePost = queryPosyByImtimeDeviceLabel(intime, device, type, Integer.parseInt(labelid));
         } else {
-                //查询用户有无历史
-                int count = userHistoryDeviceLabelCount(device, type, Integer.parseInt(labelid));
-                if (count > 10) {
-                    us = userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
-                } else {
-                    us = null;
-                }
+            //查询用户有无历史
+            int count = userHistoryDeviceLabelCount(device, type, Integer.parseInt(labelid));
+            if (count > 10) {
+                us = userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
+            } else {
+                us = null;
+            }
         }
         //List<DBObject> list = userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
         List<Integer> postVos = new ArrayList<>();
@@ -3871,13 +3837,13 @@ public class FacadePost {
             String intime = onlyPost.get(0).get("intime").toString();
             intimePost = queryPosyByImtimeDevice(intime, device, type);
         } else {
-                //查询用户有无历史
-                int count = userHistoryDeviceCount(device, type);
-                if (count > 10) {
-                    us = userRefulshListMongodbToDevice(device, type);
-                } else {
-                    us = null;
-                }
+            //查询用户有无历史
+            int count = userHistoryDeviceCount(device, type);
+            if (count > 10) {
+                us = userRefulshListMongodbToDevice(device, type);
+            } else {
+                us = null;
+            }
         }
         //  List<DBObject> list = userRefulshListMongodbToDevice(device, type);
         List<Integer> postVos = new ArrayList<>();
@@ -3955,12 +3921,12 @@ public class FacadePost {
             intimePost = queryPosyByImtimeDeviceCircle(intime, device, type, circleid);
         } else {
             //查询用户有无历史
-                int count = userHistoryDeviceCircleCount(device, type, circleid);
-                if (count > 10) {
-                    us = userRefulshListMongodbToDeviceHistory(device, type, circleid);
-                } else {
-                    us = null;
-                }
+            int count = userHistoryDeviceCircleCount(device, type, circleid);
+            if (count > 10) {
+                us = userRefulshListMongodbToDeviceHistory(device, type, circleid);
+            } else {
+                us = null;
+            }
         }
         // List<DBObject> list = userRefulshListMongodbHistoryCircleid(Integer.parseInt(userid), type, circleid);
         List<DBObject> dontlike = queryUserDontLikePost(Integer.parseInt(userid));
@@ -4018,13 +3984,13 @@ public class FacadePost {
             String intime = onlyPost.get(0).get("intime").toString();
             intimePost = queryPosyByImtimeDeviceLabel(intime, device, type, Integer.parseInt(labelid));
         } else {
-                //查询用户有无历史
-                int count = userHistoryDeviceLabelCount(device, type, Integer.parseInt(labelid));
-                if (count > 10) {
-                    us = userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
-                } else {
-                    us = null;
-                }
+            //查询用户有无历史
+            int count = userHistoryDeviceLabelCount(device, type, Integer.parseInt(labelid));
+            if (count > 10) {
+                us = userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
+            } else {
+                us = null;
+            }
         }
         //List<DBObject> list = userRefulshListMongodbHistory(Integer.parseInt(userid), type, Integer.parseInt(labelid));
         List<DBObject> dontlike = queryUserDontLikePost(Integer.parseInt(userid));
@@ -4085,18 +4051,18 @@ public class FacadePost {
             intimePost = queryPosyByImtimeDevice(intime, device, type);
         } else {
             //如果用户刷完了帖子，退出再进来 调用历史记录
-                //。这种情况下，用户手机无缓存，所以传0
-                //先查询用户有无历史
-                int count = userHistoryDeviceCount(device, type);
-                if (count > 10) {
-                    //情况一：用户刷新之后再卸载APP,再重装APP，本地缓存被清除. 这时候查询出刚刚刷新的帖子。
-                    //【有问题，查刚刚刷新的数据中热度最大的那个postid】
-                    // 解决方法：从第11条开始查询。
-                    us = userRefulshListMongodbToDevice(device, type);
-                } else {
-                    //情况二：新用户，只是展示第一批刷新的数据，无历史记录。用户浏览小于等于10条。
-                    us = null;
-                }
+            //。这种情况下，用户手机无缓存，所以传0
+            //先查询用户有无历史
+            int count = userHistoryDeviceCount(device, type);
+            if (count > 10) {
+                //情况一：用户刷新之后再卸载APP,再重装APP，本地缓存被清除. 这时候查询出刚刚刷新的帖子。
+                //【有问题，查刚刚刷新的数据中热度最大的那个postid】
+                // 解决方法：从第11条开始查询。
+                us = userRefulshListMongodbToDevice(device, type);
+            } else {
+                //情况二：新用户，只是展示第一批刷新的数据，无历史记录。用户浏览小于等于10条。
+                us = null;
+            }
         }
         // List<DBObject> list = userRefulshListMongodb(Integer.parseInt(userid), type);
         List<DBObject> dontlike = queryUserDontLikePost(Integer.parseInt(userid));
@@ -4495,9 +4461,10 @@ public class FacadePost {
 
     /**
      * 商城首页——性价比推荐的两篇商品推荐贴
+     *
      * @return
      */
-    public List<Post> getCostRecommendPost(){
+    public List<Post> getCostRecommendPost() {
         List<Post> costRecommendPostList = postService.getCostRecommendPost();
 
         return costRecommendPostList;
@@ -4505,9 +4472,10 @@ public class FacadePost {
 
     /**
      * 点击商城性价比推荐进入性价比推荐帖子列表接口
+     *
      * @return
      */
-    public List<Post> findAllCostRecommendPostList(Paging<Post> pager){
+    public List<Post> findAllCostRecommendPostList(Paging<Post> pager) {
         List<Post> allCostRecommendPostList = postService.findAllCostRecommendPostList(pager);
 
         return allCostRecommendPostList;

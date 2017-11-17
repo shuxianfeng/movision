@@ -1,6 +1,7 @@
 package com.movision.mybatis.imuser.service;
 
 import com.movision.mybatis.imuser.entity.ImUser;
+import com.movision.mybatis.imuser.entity.ImuserAppuser;
 import com.movision.mybatis.imuser.mapper.ImUserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,5 +75,24 @@ public class ImUserService {
         }
     }
 
+    public int updateImUserByUserid(ImUser imUser) {
+        try {
+            log.info("更新DBim用户信息");
+            return imUserMapper.updateImUser(imUser);
+        } catch (Exception e) {
+            log.error("更新DBim用户信息失败", e);
+            throw e;
+        }
+    }
+
+    public List<ImuserAppuser> selectRelatedAppuserAndImuser() {
+        try {
+            log.info("查询相关联的app用户和im用户");
+            return imUserMapper.selectRelatedAppuserAndImuser();
+        } catch (Exception e) {
+            log.error("查询相关联的app用户和im用户失败", e);
+            throw e;
+        }
+    }
 
 }

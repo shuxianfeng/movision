@@ -16,6 +16,7 @@ import com.movision.mybatis.user.entity.UserAll;
 import com.movision.mybatis.user.entity.UserParticulars;
 import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.user.service.UserService;
+import com.movision.utils.SysNoticeUtil;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,9 @@ public class UserManageFacade {
 
     @Autowired
     private commonalityFacade commonalityFacade;
+
+    @Autowired
+    private SysNoticeUtil sysNoticeUtil;
 
 
     //用于返回用户登录状态
@@ -131,7 +135,7 @@ public class UserManageFacade {
             map.put("phone", phone);
         }
         if (StringUtil.isNotEmpty(authstatus)) {
-                map.put("authstatus", authstatus);
+            map.put("authstatus", authstatus);
         }
         Date beg = null;
         Date end = null;
@@ -165,6 +169,7 @@ public class UserManageFacade {
 
     /**
      * 查询投稿说明
+     *
      * @param id
      * @return
      */
@@ -504,6 +509,10 @@ public class UserManageFacade {
         Map map = new HashedMap();
         map.put("userid", userid);
         map.put("type", type);
+        //用户加V操作，发送通知
+        if (type.equals(1) || type.equals("1")) {
+            sysNoticeUtil.sendSysNotice(4, null, Integer.parseInt(userid), null);
+        }
         return userService.deleteUserLevl(map);
     }
 
@@ -528,7 +537,11 @@ public class UserManageFacade {
             userService.deleteUserLevl(map);//更新用户加V状态
             map.put("isdel", 1);
             userService.updateAuditByUser(map);//更新VIP申请
-            return auditVipDetailService.insertVIPDetail(map);//加V申请审核
+            //加V申请审核
+            Integer is = auditVipDetailService.insertVIPDetail(map);
+            /*//申请成功发送通知
+            sysNoticeUtil.sendSysNotice(4, null, Integer.parseInt(userid), null);*/
+            return is;
         } else if (status.equals("1")) {//未通过
             Map map = new HashMap();
             map.put("userid", userid);
@@ -573,6 +586,8 @@ public class UserManageFacade {
                 user.setIsrecommend(1);
                 Integer i = userService.updateUserByIsrecommend(user);
                 map.put("resault", i);
+                //当用户被设为推荐发送通知
+                sysNoticeUtil.sendSysNotice(5, null, Integer.parseInt(id), null);
             }
         } else {
             user.setIsrecommend(1);

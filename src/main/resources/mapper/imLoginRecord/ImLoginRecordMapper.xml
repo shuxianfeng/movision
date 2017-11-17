@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.imLoginRecord.mapper.ImLoginRecordMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.imLoginRecord.entity.ImLoginRecord">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="eventType" property="eventType" jdbcType="VARCHAR"/>
+        <result column="accid" property="accid" jdbcType="VARCHAR"/>
+        <result column="clientIp" property="clientIp" jdbcType="VARCHAR"/>
+        <result column="clientType" property="clientType" jdbcType="VARCHAR"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
+        <result column="sdkVersion" property="sdkVersion" jdbcType="VARCHAR"/>
+        <result column="timestamp" property="timestamp" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, eventType, accid, clientIp, clientType, code, sdkVersion, timestamp
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_im_login
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from yw_im_login
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.imLoginRecord.entity.ImLoginRecord">
+        insert into yw_im_login (id, eventType, accid,
+        clientIp, clientType, code,
+        sdkVersion, timestamp)
+        values (#{id,jdbcType=INTEGER}, #{eventType,jdbcType=VARCHAR}, #{accid,jdbcType=VARCHAR},
+        #{clientIp,jdbcType=VARCHAR}, #{clientType,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR},
+        #{sdkVersion,jdbcType=VARCHAR}, #{timestamp})
+    </insert>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.imLoginRecord.entity.ImLoginRecord">
+        insert into yw_im_login
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="eventType != null">
+                eventType,
+            </if>
+            <if test="accid != null">
+                accid,
+            </if>
+            <if test="clientIp != null">
+                clientIp,
+            </if>
+            <if test="clientType != null">
+                clientType,
+            </if>
+            <if test="code != null">
+                code,
+            </if>
+            <if test="sdkVersion != null">
+                sdkVersion,
+            </if>
+            <if test="timestamp != null">
+                timestamp,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="eventType != null">
+                #{eventType,jdbcType=VARCHAR},
+            </if>
+            <if test="accid != null">
+                #{accid,jdbcType=VARCHAR},
+            </if>
+            <if test="clientIp != null">
+                #{clientIp,jdbcType=VARCHAR},
+            </if>
+            <if test="clientType != null">
+                #{clientType,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null">
+                #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="sdkVersion != null">
+                #{sdkVersion,jdbcType=VARCHAR},
+            </if>
+            <if test="timestamp != null">
+                #{timestamp},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.imLoginRecord.entity.ImLoginRecord">
+        update yw_im_login
+        <set>
+            <if test="eventType != null">
+                eventType = #{eventType,jdbcType=VARCHAR},
+            </if>
+            <if test="accid != null">
+                accid = #{accid,jdbcType=VARCHAR},
+            </if>
+            <if test="clientIp != null">
+                clientIp = #{clientIp,jdbcType=VARCHAR},
+            </if>
+            <if test="clientType != null">
+                clientType = #{clientType,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null">
+                code = #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="sdkVersion != null">
+                sdkVersion = #{sdkVersion,jdbcType=VARCHAR},
+            </if>
+            <if test="timestamp != null">
+                timestamp = #{timestamp},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.imLoginRecord.entity.ImLoginRecord">
+        update yw_im_login
+        set eventType = #{eventType,jdbcType=VARCHAR},
+        accid = #{accid,jdbcType=VARCHAR},
+        clientIp = #{clientIp,jdbcType=VARCHAR},
+        clientType = #{clientType,jdbcType=VARCHAR},
+        code = #{code,jdbcType=VARCHAR},
+        sdkVersion = #{sdkVersion,jdbcType=VARCHAR},
+        timestamp = #{timestamp}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="queryRecordByaccidAndTimestamp" parameterType="com.movision.mybatis.imLoginRecord.entity.ImLoginRecord"
+            resultType="com.movision.mybatis.imLoginRecord.entity.ImLoginRecord">
+        SELECT *
+        FROM yw_im_login
+        where accid = #{accid} and timestamp = #{timestamp}
+    </select>
+</mapper>

@@ -1,143 +1,206 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.movision.mybatis.postLabel.mapper.PostLabelMapper">
-  <resultMap id="BaseResultMap" type="com.movision.mybatis.postLabel.entity.PostLabel">
-    <id column="id" property="id" jdbcType="INTEGER"/>
-    <result column="name" property="name" jdbcType="VARCHAR"/>
-      <result column="heat_value" property="heatvalue" jdbcType="INTEGER"/>
-    <result column="userid" property="userid" jdbcType="INTEGER"/>
-    <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
-    <result column="type" property="type" jdbcType="INTEGER"/>
-    <result column="photo" property="photo" jdbcType="VARCHAR"/>
-    <result column="citycode" property="citycode" jdbcType="VARCHAR"/>
-      <result column="isdel" property="isdel" jdbcType="INTEGER"/>
-      <result column="postid" property="postid" jdbcType="INTEGER"/>
-      <result column="circleid" property="circleid" jdbcType="INTEGER"/>
-      <result column="isrecommend" property="isrecommend" javaType="INTEGER"/>
-      <result column="use_count" property="useCount" javaType="INTEGER"/>
-      <result column="fans" property="fans" javaType="INTEGER"/>
-  </resultMap>
-  <sql id="Base_Column_List">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.postLabel.entity.PostLabel">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="heat_value" property="heatvalue" jdbcType="INTEGER"/>
+        <result column="userid" property="userid" jdbcType="INTEGER"/>
+        <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="photo" property="photo" jdbcType="VARCHAR"/>
+        <result column="citycode" property="citycode" jdbcType="VARCHAR"/>
+        <result column="isdel" property="isdel" jdbcType="INTEGER"/>
+        <result column="postid" property="postid" jdbcType="INTEGER"/>
+        <result column="circleid" property="circleid" jdbcType="INTEGER"/>
+        <result column="isrecommend" property="isrecommend" javaType="INTEGER"/>
+        <result column="use_count" property="useCount" javaType="INTEGER"/>
+        <result column="fans" property="fans" javaType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
       id, name, heat_value, userid, intime, type, photo, citycode, isrecommend, isdel, use_count, fans
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-    select
-    <include refid="Base_Column_List"/>
-    from yw_post_label
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_post_label
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yw_post_label
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.movision.mybatis.postLabel.entity.PostLabel">
+    <insert id="insert" parameterType="com.movision.mybatis.postLabel.entity.PostLabel">
       insert into yw_post_label (id, NAME, heat_value,
       userid, intime,isdel)
       values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{heatvalue,jdbcType=INTEGER},
       #{userid,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.movision.mybatis.postLabel.entity.PostLabel">
-      <selectKey keyProperty="id" order="AFTER" resultType="Integer">
-          select LAST_INSERT_ID()
-      </selectKey>
-    insert into yw_post_label
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="name != null">
-        name,
-      </if>
-        heat_value,
-      <if test="userid != null">
-        userid,
-      </if>
-        intime,
-      <if test="type != null">
-        type,
-      </if>
-      <if test="photo != null">
-        photo,
-      </if>
-      <if test="citycode != null">
-        citycode,
-      </if>
-        <if test="isrecommend != null">
-            isrecommend,
-        </if>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.postLabel.entity.PostLabel">
+        <selectKey keyProperty="id" order="AFTER" resultType="Integer">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into yw_post_label
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            heat_value,
+            <if test="userid != null">
+                userid,
+            </if>
+            intime,
+            <if test="type != null">
+                type,
+            </if>
+            <if test="photo != null">
+                photo,
+            </if>
+            <if test="citycode != null">
+                citycode,
+            </if>
+            <if test="isrecommend != null">
+                isrecommend,
+            </if>
             isdel,
-        use_count,
-        fans,
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
-      </if>
-        1,
-      <if test="userid != null">
-        #{userid,jdbcType=INTEGER},
-      </if>
-        now(),
-      <if test="type != null">
-        #{type},
-      </if>
-      <if test="photo != null">
-        #{photo},
-      </if>
-      <if test="citycode != null">
-        #{citycode},
-      </if>
-        <if test="isrecommend != null">
-            #{isrecommend,jdbcType=INTEGER},
-        </if>
-        0,
-        1,
-        0,
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.postLabel.entity.PostLabel">
-    update yw_post_label
-    <set>
-      <if test="name != null">
-        name = #{name,jdbcType=VARCHAR},
-      </if>
-        <if test="heatvalue != null">
-            heat_value = #{heatvalue,jdbcType=INTEGER},
-      </if>
-      <if test="userid != null">
-        userid = #{userid,jdbcType=INTEGER},
-      </if>
-      <if test="intime != null">
-        intime = #{intime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="type != null">
-        type = #{type},
-      </if>
-      <if test="photo != null">
-        photo = #{photo},
-      </if>
-      <if test="citycode != null">
-        citycode = #{citycode},
-      </if>
-        <if test="isrecommend != null">
-            isrecommend = #{isrecommend,jdbcType=INTEGER},
-        </if>
-        <if test="isdel != null">
-            isdel = #{isdel,jdbcType=INTEGER},
-        </if>
-        <if test="useCount != null">
-            #{useCount},
-        </if>
-        <if test="fans != null">
-            #{fans},
-        </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.postLabel.entity.PostLabel">
+            use_count,
+            fans,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            1,
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            now(),
+            <if test="type != null">
+                #{type},
+            </if>
+            <if test="photo != null">
+                #{photo},
+            </if>
+            <if test="citycode != null">
+                #{citycode},
+            </if>
+            <if test="isrecommend != null">
+                #{isrecommend,jdbcType=INTEGER},
+            </if>
+            0,
+            1,
+            0,
+        </trim>
+    </insert>
+
+    <insert id="insertPostLabel" parameterType="com.movision.mybatis.postLabel.entity.PostLabel">
+        <selectKey keyProperty="id" order="AFTER" resultType="Integer">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into yw_post_label
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            heat_value,
+            <if test="userid != null">
+                userid,
+            </if>
+            intime,
+            <if test="type != null">
+                type,
+            </if>
+            <if test="photo != null">
+                photo,
+            </if>
+            <if test="citycode != null">
+                citycode,
+            </if>
+            <if test="isrecommend != null">
+                isrecommend,
+            </if>
+            isdel,
+            use_count,
+            fans,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            1,
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            now(),
+            <if test="type != null">
+                #{type},
+            </if>
+            <if test="photo != null">
+                #{photo},
+            </if>
+            <if test="citycode != null">
+                #{citycode},
+            </if>
+            <if test="isrecommend != null">
+                #{isrecommend,jdbcType=INTEGER},
+            </if>
+            0,
+            1,
+            0,
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.postLabel.entity.PostLabel">
+        update yw_post_label
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="heatvalue != null">
+                heat_value = #{heatvalue,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                userid = #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="photo != null">
+                photo = #{photo},
+            </if>
+            <if test="citycode != null">
+                citycode = #{citycode},
+            </if>
+            <if test="isrecommend != null">
+                isrecommend = #{isrecommend,jdbcType=INTEGER},
+            </if>
+            <if test="isdel != null">
+                isdel = #{isdel,jdbcType=INTEGER},
+            </if>
+            <if test="useCount != null">
+                #{useCount},
+            </if>
+            <if test="fans != null">
+                #{fans},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.postLabel.entity.PostLabel">
     update yw_post_label
     set name = #{name,jdbcType=VARCHAR},
       heat_value = #{heatvalue,jdbcType=INTEGER},
@@ -181,7 +244,7 @@
     </select>
 
     <!--查询我的.关注.关注的标签列表-->
-    <select id="findAllMineFollowLabel" resultType="com.movision.mybatis.postLabel.entity.PostLabelVo" >
+    <select id="findAllMineFollowLabel" resultType="com.movision.mybatis.postLabel.entity.PostLabelVo">
         SELECT t1.id AS labelid, t1.name, t1.photo, t1.use_count AS useCount, t1.fans FROM yw_post_label t1
         LEFT JOIN yw_follow_label t2 ON t1.id = t2.labelid
         WHERE t2.userid = #{userid}
@@ -242,7 +305,7 @@
     </select>
 
     <select id="queryCountLabelName" parameterType="java.lang.Integer"
-          resultType="com.movision.mybatis.postLabel.entity.PostLabelCount">
+            resultType="com.movision.mybatis.postLabel.entity.PostLabelCount">
       SELECT COUNT(1) AS count,p.userid,p.id,u.nickname FROM yw_post_label_relation r LEFT JOIN yw_post p ON
       p.id=r.postid LEFT JOIN yw_post_label l ON l.id=r.labelid LEFT JOIN yw_user u ON u.id=p.userid
       WHERE l.id=#{labelid,jdbcType=INTEGER} AND isdel=0 GROUP BY p.userid ORDER BY count DESC
@@ -368,7 +431,8 @@
     </select>
 
     <!--通过userid查询该用户发帖使用的所有地理标签-->
-    <select id="getfootmap" parameterType="java.lang.Integer" resultType="com.movision.mybatis.postLabel.entity.GeographicLabel" >
+    <select id="getfootmap" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.postLabel.entity.GeographicLabel">
         SELECT * FROM yw_post_label
         WHERE type = '0' AND isdel = '0'
         AND id IN (

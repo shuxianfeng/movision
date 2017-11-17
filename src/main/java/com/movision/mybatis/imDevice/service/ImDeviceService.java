@@ -2,12 +2,16 @@ package com.movision.mybatis.imDevice.service;
 
 import com.movision.mybatis.imDevice.entity.ImDevice;
 import com.movision.mybatis.imDevice.mapper.ImDeviceMapper;
+import com.movision.mybatis.imuser.entity.ImdeviceAppuser;
+import com.movision.utils.ListUtil;
 import org.apache.xpath.operations.Bool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @Author zhuangyuhao
@@ -63,5 +67,26 @@ public class ImDeviceService {
             throw e;
         }
     }
+
+    public int updateImDevice(ImDevice imDevice) {
+        try {
+            log.info("更新im和设备号的关系");
+            return imDeviceMapper.updateImDevice(imDevice);
+        } catch (Exception e) {
+            log.error("更新im和设备号的关系失败", e);
+            throw e;
+        }
+    }
+
+    public List<ImdeviceAppuser> selectRelatedAppuserAndImdevice() {
+        try {
+            log.info("查询相关联的app用户和设备im账号");
+            return imDeviceMapper.selectRelatedAppuserAndImdevice();
+        } catch (Exception e) {
+            log.error("查询相关联的app用户和设备im账号失败", e);
+            throw e;
+        }
+    }
+
 
 }

@@ -568,6 +568,12 @@
             <version>2.6</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-sts</artifactId>
+            <version>2.1.6</version>
+        </dependency>
+
     </dependencies>
 
     <!--<build>-->
@@ -650,7 +656,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.1</version>
+                <version>2.3.2</version>
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target>

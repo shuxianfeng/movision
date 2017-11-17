@@ -63,6 +63,16 @@ public class CommentVo implements Serializable {
 
     private Integer ispid;//是不是
 
+    private Integer isdv;//是不是大V 1是 0否
+
+    public Integer getIsdv() {
+        return isdv;
+    }
+
+    public void setIsdv(Integer isdv) {
+        this.isdv = isdv;
+    }
+
     public Integer getIspid() {
         return ispid;
     }

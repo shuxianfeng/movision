@@ -1349,7 +1349,9 @@
     </select>
     <select id="queryUserInfoHompage" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.user.entity.UserVo">
-        SELECT * FROM yw_user WHERE id=#{userid,jdbcType=INTEGER}
+        SELECT u.*, i.accid FROM yw_user u
+        LEFT JOIN yw_im_user i on u.id = i.userid
+        where u.id = #{userid,jdbcType=INTEGER}
     </select>
 
     <!--2.0查询当前用户关注的所有作者列表-->

@@ -6,7 +6,6 @@ import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circle.entity.MyCircle;
 import com.movision.mybatis.circle.service.CircleService;
-import com.movision.mybatis.followCircle.entity.FollowCircle;
 import com.movision.mybatis.homepageManage.service.HomepageManageService;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;

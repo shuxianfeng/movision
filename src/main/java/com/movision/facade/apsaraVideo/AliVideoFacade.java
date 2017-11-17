@@ -1,17 +1,23 @@
 package com.movision.facade.apsaraVideo;
 
+
+import com.aliyuncs.DefaultAcsClient;
+import com.aliyuncs.exceptions.ClientException;
+import com.aliyuncs.http.MethodType;
+import com.aliyuncs.http.ProtocolType;
+import com.aliyuncs.profile.DefaultProfile;
+import com.aliyuncs.profile.IClientProfile;
+import com.aliyuncs.sts.model.v20150401.AssumeRoleRequest;
+import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +48,8 @@ public class AliVideoFacade {
     private static final String AccessKeyId = PropertiesLoader.getValue("access.key.id");
 
     private static final String AccessKeySecret = PropertiesLoader.getValue("access.key.secret");
+
+    private static final String Arn = PropertiesLoader.getValue("teststs.arn");
 
     private final String ALGORITHM = "HmacSHA1";
 
@@ -181,8 +189,44 @@ public class AliVideoFacade {
         }
     }
 
+    /**
+     * 【阿里视频播放-安卓播放】获取安全证书
+     * 目的是获取android播放视频的新版sdk中的一个关键参数：mStsToken
+     *
+     * @return
+     */
+    public AssumeRoleResponse.Credentials getCredentials() throws Exception {
+        //第一个参数需要填 "cn-shanghai",视频点播的服务器在上海的
+        //相关文档：https://help.aliyun.com/document_detail/52858.html?spm=5176.doc55627.6.659.2ENj5h
+        IClientProfile profile = DefaultProfile.getProfile("cn-shanghai", AccessKeyId, AccessKeySecret);
+        DefaultAcsClient client = new DefaultAcsClient(profile);
+        AssumeRoleResponse response = assumeRole(client, Arn);
+        return response.getCredentials();
+    }
 
+    /**
+     * 生成临时AK和Token的函数
+     * 注：authInfo中的ExpireTime是在token中获取
+     *
+     * @param client
+     * @param roleArn
+     * @return
+     * @throws ClientException
+     */
+    private static AssumeRoleResponse assumeRole(
+            DefaultAcsClient client,
+            String roleArn)
+            throws ClientException {
 
+        final AssumeRoleRequest request = new AssumeRoleRequest();
+        request.setVersion("2015-04-01");
+        request.setMethod(MethodType.POST);
+        request.setProtocol(ProtocolType.HTTPS);
+        request.setDurationSeconds(900L);
+        request.setRoleArn(roleArn);
+        request.setRoleSessionName("test-token");
+        return client.getAcsResponse(request);
 
+    }
 
 }

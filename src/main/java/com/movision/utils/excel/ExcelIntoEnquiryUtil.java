@@ -9,6 +9,10 @@ import com.movision.mybatis.compressImg.service.CompressImgService;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostTo;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.mybatis.postLabel.entity.PostLabel;
+import com.movision.mybatis.postLabel.service.PostLabelService;
+import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
+import com.movision.mybatis.postLabelRelation.service.PostLabelRelationService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.utils.JsoupCompressImg;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -27,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,6 +58,12 @@ public class ExcelIntoEnquiryUtil {
 
     @Autowired
     private CompressImgService compressImgService;
+
+    @Autowired
+    private PostLabelRelationService postLabelRelationService;
+
+    @Autowired
+    private PostLabelService postLabelService;
 
 
     //总行数
@@ -188,6 +199,7 @@ public class ExcelIntoEnquiryUtil {
                 String postid = "";
                 //用户id
                 String uid = "";
+                String label = "";
                 Circle circle = new Circle();
                 User user = new User();
 
@@ -203,7 +215,7 @@ public class ExcelIntoEnquiryUtil {
                                     if (StringUtil.isNotBlank(cell.getStringCellValue())) {
                                         //postid = cell.getStringCellValue();
                                         post.setId(Integer.parseInt(String.valueOf(cell.getStringCellValue())));
-                                        }
+                                    }
                                 } catch (Exception e) {
                                     if (resault.length() > 0) {
                                         resault += "," + ir + 1;
@@ -217,7 +229,7 @@ public class ExcelIntoEnquiryUtil {
                                     if (StringUtil.isNotBlank(cell.getStringCellValue())) {
                                         //uid = cell.getStringCellValue();
                                         post.setTitle(String.valueOf(cell.getStringCellValue()));
-                                        }
+                                    }
                                     continue;
                                 } catch (Exception e) {
                                     if (resault.length() > 0) {
@@ -303,11 +315,9 @@ public class ExcelIntoEnquiryUtil {
                                 }
                             case 7:
                                 try {
-                                    //用户id
+                                    //标签
                                     if (StringUtil.isNotBlank(cell.getStringCellValue())) {
-                                        //covimg = cell.getStringCellValue();
-                                        user.setId(Integer.parseInt(String.valueOf(cell.getStringCellValue())));
-                                        post.setUserid(Integer.parseInt(String.valueOf(cell.getSheet())));
+                                        label = cell.getStringCellValue();
                                     }
                                     continue;
                                 } catch (Exception e) {
@@ -318,6 +328,22 @@ public class ExcelIntoEnquiryUtil {
                                     continue;
                                 }
                             case 8:
+                                try {
+                                    //用户id
+                                    if (StringUtil.isNotBlank(cell.getStringCellValue())) {
+                                        //covimg = cell.getStringCellValue();
+                                        user.setId(Integer.parseInt(String.valueOf(cell.getStringCellValue())));
+                                        post.setUserid(Integer.parseInt(String.valueOf(cell.getStringCellValue())));
+                                    }
+                                    continue;
+                                } catch (Exception e) {
+                                    if (resault.length() > 0) {
+                                        resault += "," + ir + 1;
+                                    }
+                                    map.put("messager", "错误行：" + resault);
+                                    continue;
+                                }
+                            case 9:
                                 try {
                                     //用户昵称
                                     if (StringUtil.isNotBlank(cell.getStringCellValue())) {
@@ -332,7 +358,7 @@ public class ExcelIntoEnquiryUtil {
                                     map.put("messager", "错误行：" + resault);
                                     continue;
                                 }
-                            case 9:
+                            case 10:
                                 try {
                                     //手机号
                                     if (StringUtil.isNotBlank(cell.getStringCellValue())) {
@@ -357,6 +383,9 @@ public class ExcelIntoEnquiryUtil {
                 if (circleid != null) {
                     post.setCircleid(circleid);
                 }
+
+                //标签操作
+                updatePostLabel(post, label);
 
                 //帖子封面操作
                 if (StringUtil.isNotEmpty(covimg)) {
@@ -387,6 +416,7 @@ public class ExcelIntoEnquiryUtil {
                         post.setPostcontent(content);
                     }
                 }
+
                 //执行帖子编辑操作
                 postService.updateActivePostById(post);
 
@@ -401,6 +431,43 @@ public class ExcelIntoEnquiryUtil {
             return map;
         }
         return map;
+    }
+
+    /**
+     * 标签操作
+     *
+     * @param post
+     * @param label
+     */
+    private void updatePostLabel(Post post, String label) {
+        String[] labels = label.split(",");
+        //清空帖子标签
+        postLabelRelationService.deletePostLabelRelaton(post.getId());
+        //帖子标签增加操作
+        for (int i = 0; i < labels.length; i++) {
+            //查询标签是否存在
+            Integer lid = postLabelService.queryPostLabelByNameCompletely(labels[i]);
+            if (lid != null) {
+                PostLabelRelation relation = new PostLabelRelation();
+                relation.setPostid(post.getId());
+                relation.setLabelid(lid);
+                //存在使用,新增标签帖子关系
+                postLabelRelationService.insertPostToLabel(relation);
+            } else {
+                PostLabel label1 = new PostLabel();
+                label1.setName(labels[i]);
+                label1.setIsdel(0);
+                label1.setIntime(new Date());
+                label1.setType(1);
+                label1.setUserid(post.getUserid());
+                //不存在新增
+                Integer labelid = postLabelService.insertPostLabel(label1);
+                PostLabelRelation relation = new PostLabelRelation();
+                relation.setLabelid(labelid);
+                relation.setPostid(post.getId());
+                postLabelRelationService.insertPostToLabel(relation);
+            }
+        }
     }
 
 }

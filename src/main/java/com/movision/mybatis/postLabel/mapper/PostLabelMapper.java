@@ -4,9 +4,7 @@ import com.movision.mybatis.circle.entity.CircleCount;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.postLabel.entity.*;
-import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
 import com.movision.mybatis.user.entity.User;
-import javafx.geometry.Pos;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
 
@@ -28,7 +26,7 @@ public interface PostLabelMapper {
 
     List<PostLabelVo> findAllMineFollowLabel(Map<String, Object> parammap, RowBounds rowBounds);
 
-
+    Integer insertPostLabel(PostLabel postLabel);
 
     List<PostLabel> queryLabelHeatValue();
 

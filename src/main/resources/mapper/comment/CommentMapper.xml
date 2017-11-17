@@ -173,7 +173,7 @@
 
     <select id="findAllqueryCommentsByLsit" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.comment.entity.CommentVo">
-        SELECT c.*,u.phone,u.photo,u.nickname,u.level
+        SELECT c.*,u.phone,u.photo,u.nickname,u.level,u.isdv
         FROM yw_post_comment c
         LEFT JOIN yw_user u
         ON c.userid=u.id
@@ -482,8 +482,13 @@
     </select>
     <select id="queryCommentByPost" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.comment.entity.CommentVo">
-      SELECT p.*,u.nickname FROM yw_post_comment p LEFT JOIN yw_user u ON u.id=p.userid WHERE
-      p.postid=#{postid,jdbcType=INTEGER} AND p.isdel=0 ORDER BY p.heat_value DESC LIMIT 1
+        SELECT p.*,u.nickname
+        FROM yw_post_comment p
+        LEFT JOIN yw_user u ON u.id=p.userid
+        WHERE p.postid=#{postid,jdbcType=INTEGER}
+        AND p.isdel=0
+        ORDER BY p.heat_value DESC
+        LIMIT 1
     </select>
 
     <!--查询别人对我的帖子的评论（不能包含自己对自己帖子的评论）
@@ -527,14 +532,14 @@
 
     <select id="queryTwoComment" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.comment.entity.CommentVo">
-    SELECT c.*,u.photo,u.nickname FROM yw_post_comment c LEFT JOIN yw_user u ON u.id=c.userid WHERE
+        SELECT c.*,u.photo,u.nickname,u.isdv FROM yw_post_comment c LEFT JOIN yw_user u ON u.id=c.userid WHERE
         c.pid=#{pid,jdbcType=INTEGER} ORDER BY c.intime ASC
   </select>
 
     <!--增加一个isZan的字段输出，用于判断当前登录的用户是否点赞过这三条热门评论-->
     <select id="queryThreeComment" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.comment.entity.CommentVo">
-        SELECT c.*,u.photo,u.nickname,
+        SELECT c.*,u.photo,u.nickname,u.isdv,
         <if test="userid != null">
             (SELECT count(*) FROM yw_post_comment_zan_record WHERE userid = #{userid,jdbcType=INTEGER} AND commentid =
             c.id) AS isZan

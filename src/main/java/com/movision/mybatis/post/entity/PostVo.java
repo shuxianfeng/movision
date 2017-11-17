@@ -23,7 +23,10 @@ public class PostVo implements Serializable {
 
     private Integer circleid;
 
-    private Integer countview;  //帖子浏览量
+    /**
+     * 帖子浏览量
+     */
+    private Integer countview;
 
     private String title;
 
@@ -131,7 +134,18 @@ public class PostVo implements Serializable {
 
     private String activename;  //活动名称
 
+    private PostReturnAll postReturnAlls;
+
     private List<CommentVo> commentVos;
+
+    public PostReturnAll getPostReturnAlls() {
+        return postReturnAlls;
+    }
+
+    public void setPostReturnAlls(PostReturnAll postReturnAlls) {
+        this.postReturnAlls = postReturnAlls;
+    }
+
     public List<CommentVo> getCommentVos() {
         return commentVos;
     }

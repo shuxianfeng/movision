@@ -138,6 +138,8 @@ public interface PostMapper {
 
     Integer queryPostByUser(String postid);
 
+    Integer queryCircleByIDIsUpdate(PostTo post);
+
     int queryPostByIsessence(String id);
 
     int updatePostChoiceness(Map map);
@@ -285,7 +287,7 @@ public interface PostMapper {
     List<PostVo> findAllMostCollectInAll(RowBounds rowBounds);
     List<PostVo> findAllMostCollectInCurrentMonth(RowBounds rowBounds);
 
-    List<PostVo> queryPostInAll();
+    List<PostVo> queryPostInAll(Map map);
 
     List<Post> findAllQueryActivitycontributeListById(Integer id, RowBounds rowBounds);
 
@@ -321,4 +323,10 @@ public interface PostMapper {
     List<PostList> findAllqueryXmlAnalysisAndPost(RowBounds rowBounds, Post post);
 
     int queryPostCountView(int id);
+
+    List queryPostToLabelById(int id);
+
+    int updateCountView(int postid);
+
+    PostReturnAll postReAll(Map map);
 }
