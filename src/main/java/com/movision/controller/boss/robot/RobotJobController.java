@@ -37,4 +37,19 @@ public class RobotJobController {
         response.setData(pager);
         return response;
     }
+
+    @ApiOperation(value = "改变任务为立即执行", notes = "改变任务为立即执行", response = Response.class)
+    @RequestMapping(value = "execute_job_nexttime", method = RequestMethod.POST)
+    public Response executeJobNexttime(@ApiParam(value = "任务id") @RequestParam(required = false) Integer jobid) {
+        Response response = new Response();
+        int result = robotFacade.changeJobexecuteImmediately(jobid);
+        if (result == 1) {
+            response.setCode(200);
+            response.setMessage("执行成功");
+        } else {
+            response.setCode(400);
+            response.setMessage("执行失败");
+        }
+        return response;
+    }
 }

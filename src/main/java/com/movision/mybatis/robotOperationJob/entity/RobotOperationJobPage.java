@@ -3,7 +3,7 @@ package com.movision.mybatis.robotOperationJob.entity;
 import java.util.Date;
 
 /**
- * 分页使用
+ * 机器人任务列表   分页使用
  *
  * @Author zhuangyuhao
  * @Date 2017/11/1 11:42
@@ -51,6 +51,22 @@ public class RobotOperationJobPage {
      * 被操作的帖子的作者
      */
     private String author;
+
+
+    /**
+     * 是否立即执行（0：否， 1：是）
+     */
+    private Integer immediate;
+
+
+    public void setImmediate(Integer immediate) {
+        this.immediate = immediate;
+    }
+
+    public Integer getImmediate() {
+
+        return immediate;
+    }
 
     public void setCommentType(Integer commentType) {
         this.commentType = commentType;
@@ -193,6 +209,7 @@ public class RobotOperationJobPage {
                 ", followedUser='" + followedUser + '\'' +
                 ", title='" + title + '\'' +
                 ", author='" + author + '\'' +
+                ", immediate=" + immediate +
                 '}';
     }
 }

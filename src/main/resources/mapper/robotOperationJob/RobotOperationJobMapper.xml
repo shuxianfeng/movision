@@ -14,9 +14,10 @@
         <result column="number" property="number" jdbcType="INTEGER"/>
         <result column="theme" property="theme" jdbcType="INTEGER"/>
         <result column="comment_type" property="commentType" jdbcType="INTEGER"/>
+        <result column="immediate" property="immediate" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, userid, postid, type, status, count, intime, endtime, batch, number, theme, comment_type
+        id, userid, postid, type, status, count, intime, endtime, batch, number, theme, comment_type, immediate
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -32,11 +33,11 @@
         insert into yw_robot_operation_job (id, userid, postid,
         type, status, count,
         intime, endtime, batch,
-        number, theme, comment_type)
+        number, theme, comment_type, immediate)
         values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{postid,jdbcType=INTEGER},
         #{type,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{count,jdbcType=INTEGER},
         #{intime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP}, #{batch,jdbcType=INTEGER},
-        #{number,jdbcType=INTEGER}, #{theme,jdbcType=INTEGER}, #{commentType} )
+        #{number,jdbcType=INTEGER}, #{theme,jdbcType=INTEGER}, #{commentType}, #{immediate} )
     </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.robotOperationJob.entity.RobotOperationJob">
         insert into yw_robot_operation_job
@@ -77,6 +78,7 @@
             <if test="commentType!=null">
                 comment_type,
             </if>
+            immediate,
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -115,6 +117,7 @@
             <if test="commentType!=null">
                 #{commentType},
             </if>
+            0,
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective"
@@ -154,6 +157,9 @@
             <if test="commentType != null">
                 comment_type = #{commentType},
             </if>
+            <if test="immediate != null">
+                immediate = #{immediate},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -169,7 +175,8 @@
         batch = #{batch,jdbcType=INTEGER},
         number = #{number,jdbcType=INTEGER},
         theme = #{theme,jdbcType=INTEGER},
-        comment_type = #{commentType}
+        comment_type = #{commentType},
+        immediate = #{immediate}
         where id = #{id,jdbcType=INTEGER}
     </update>
 

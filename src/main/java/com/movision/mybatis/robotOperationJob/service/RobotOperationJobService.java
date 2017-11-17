@@ -63,4 +63,24 @@ public class RobotOperationJobService {
         }
     }
 
+    public Integer updateSelective(RobotOperationJob job) {
+        try {
+            log.info("有选择的更新机器人任务数据");
+            return robotOperationJobMapper.updateByPrimaryKeySelective(job);
+        } catch (Exception e) {
+            log.error("有选择的更新机器人任务数据失败", e);
+            throw e;
+        }
+    }
+
+    public RobotOperationJob selectByPrimaryKey(Integer jobid) {
+        try {
+            log.info("根据主键id查询机器人任务");
+            return robotOperationJobMapper.selectByPrimaryKey(jobid);
+        } catch (Exception e) {
+            log.error("根据主键id查询机器人任务失败", e);
+            throw e;
+        }
+    }
+
 }

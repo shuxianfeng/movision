@@ -996,4 +996,23 @@ public class RobotFacade {
         return pageList;
     }
 
+    /**
+     * 改变任务为立即执行
+     *
+     * @param jobid
+     * @return
+     */
+    public int changeJobexecuteImmediately(Integer jobid) {
+
+        RobotOperationJob job = robotOperationJobService.selectByPrimaryKey(jobid);
+        int status = job.getStatus();
+        if (status == 0) {    //状态是处理中的任务才出来
+            job.setImmediate(1);    //立即执行
+            return robotOperationJobService.updateSelective(job);   //返回1
+        }
+        return 0;
+    }
+
+
+
 }

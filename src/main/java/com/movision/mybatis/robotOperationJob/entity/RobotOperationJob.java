@@ -27,6 +27,20 @@ public class RobotOperationJob {
 
     private Integer commentType;
 
+    /**
+     * 是否立即执行（0：否， 1：是）
+     */
+    private Integer immediate;
+
+    public void setImmediate(Integer immediate) {
+        this.immediate = immediate;
+    }
+
+    public Integer getImmediate() {
+
+        return immediate;
+    }
+
     public void setCommentType(Integer commentType) {
         this.commentType = commentType;
     }
