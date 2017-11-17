@@ -801,6 +801,7 @@ public class RobotFacade {
         job.setType(type);
         job.setUserid(userid);
         job.setCommentType(commentType);
+        job.setImmediate(0);    //非立即执行状态
 
         robotOperationJobService.add(job);
     }

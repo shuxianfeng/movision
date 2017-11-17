@@ -78,7 +78,9 @@
             <if test="commentType!=null">
                 comment_type,
             </if>
-            immediate,
+            <if test="immediate != null">
+                immediate,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -117,7 +119,9 @@
             <if test="commentType!=null">
                 #{commentType},
             </if>
-            0,
+            <if test="immediate!=null">
+                #{immediate},
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective"
