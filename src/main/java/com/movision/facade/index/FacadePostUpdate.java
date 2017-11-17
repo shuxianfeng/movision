@@ -9,7 +9,6 @@ import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postLabel.service.PostLabelService;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecordVo;
-import com.movision.utils.propertiesLoader.MongoDbPropertiesLoader;
 import org.apache.commons.beanutils.BeanComparator;
 import org.apache.commons.collections.comparators.ComparatorChain;
 import org.slf4j.Logger;
@@ -22,6 +21,7 @@ import java.util.*;
 /**
  * @Author zhanglei
  * @Date 2017/11/17 10:28
+ * 修改的新接口
  */
 @Service
 public class FacadePostUpdate {
