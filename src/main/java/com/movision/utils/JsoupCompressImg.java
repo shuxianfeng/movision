@@ -178,7 +178,7 @@ public class JsoupCompressImg {
                         //压缩上传存储完成后，删除ECS下载的原图和压缩图的临时文件 compress_file_path 和 PATH
                         //实际原图的路径和文件名与压缩后的图片路径和文件名一模一样，所以会被覆盖，因此下面方法执行一个即可
                         //compressfile.delete();//删除压缩图
-                        file.delete();//删除原图
+                        //file.delete();//删除原图
                     }
                 } else if (sum != 0) {
                     //虽然图片大于800kb，但是图片压缩过，存在映射关系
@@ -200,6 +200,9 @@ public class JsoupCompressImg {
                         log.info("原图:" + imgurl + "已进行过压缩，且已存在映射关系");
                     }
                 }
+
+                //删除该img循环中下载的临时图片文件--------应该放在if判断外，不管有没有被压缩，下载下来的原图垃圾文件使用后都应被清理  2017.11.17 shuxf
+                file.delete();
             }
             String a = doc.html().replaceAll("\\n", "").replaceAll("\\\\", "").replaceAll("<html>", "").replaceAll("<head>", "").replaceAll("<body>", "").replaceAll("</html>", "").replaceAll("</head>", "").replaceAll("</body>", "");
             log.info("测试返回的content字符串:::::::::>" + a);
@@ -359,7 +362,7 @@ public class JsoupCompressImg {
                             //压缩上传存储完成后，删除ECS下载的原图和压缩图的临时文件 compress_file_path 和 PATH
                             //实际原图的路径和文件名与压缩后的图片路径和文件名一模一样，所以会被覆盖，因此下面方法执行一个即可
                             //compressfile.delete();//删除压缩图
-                            file.delete();//删除原图
+                            //file.delete();//删除原图
                         }
                     } else if (sum != 0) {
                         //虽然图片大于800kb，但是图片压缩过，存在映射关系
@@ -382,6 +385,10 @@ public class JsoupCompressImg {
                             log.info("原图:" + imgurl + "已进行过压缩，且已存在映射关系");
                         }
                     }
+
+                    //删除该img循环中下载的临时图片文件--------应该放在if判断外，不管有没有被压缩，下载下来的原图垃圾文件使用后都应被清理  2017.11.17 shuxf
+                    file.delete();
+
                 }else if (type == 2){
                     flag = flag + 1;
                 }
