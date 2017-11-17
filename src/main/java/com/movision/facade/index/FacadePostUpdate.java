@@ -15,6 +15,7 @@ import org.apache.commons.collections.comparators.ComparatorChain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
@@ -22,6 +23,7 @@ import java.util.*;
  * @Author zhanglei
  * @Date 2017/11/17 10:28
  */
+@Service
 public class FacadePostUpdate {
     private static Logger log = LoggerFactory.getLogger(FacadePostUpdate.class);
 
