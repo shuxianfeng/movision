@@ -419,7 +419,7 @@ public class UserManageFacade {
             map.put("authentication", authentication);//实名认证
         }
         if (StringUtil.isNotEmpty(vip)) {
-            map.put("level", vip);//是否是VIP
+            map.put("isdv", vip);//是否是VIP
         }
         if (StringUtil.isNotEmpty(seal)) {
             map.put("status", seal);//是否封号
