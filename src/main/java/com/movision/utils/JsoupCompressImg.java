@@ -9,12 +9,10 @@ import java.util.Map;
 
 import com.movision.facade.boss.PostFacade;
 import com.movision.facade.upload.UploadFacade;
-import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.compressImg.entity.CompressImg;
 import com.movision.utils.file.FileUtil;
 import com.movision.utils.oss.AliOSSClient;
 import com.movision.utils.oss.MovisionOssClient;
-import com.movision.utils.oss.UploadUtil;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import net.sf.json.JSONArray;
 import org.apache.commons.collections.CollectionUtils;
