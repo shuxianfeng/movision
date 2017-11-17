@@ -4,6 +4,7 @@ import com.movision.common.Response;
 import com.movision.facade.circle.CircleAppFacade;
 import com.movision.facade.comment.FacadeComments;
 import com.movision.facade.index.FacadePost;
+import com.movision.facade.index.FacadePostUpdate;
 import com.movision.facade.label.LabelFacade;
 import com.movision.facade.msgCenter.MsgCenterFacade;
 import com.movision.facade.user.UserFacade;
@@ -51,6 +52,9 @@ public class AppWaterfallController {
     @Autowired
     private CircleAppFacade circleAppFacade;
 
+    @Autowired
+    private FacadePostUpdate facadePostUpdate;
+
     /**
      * 下拉刷新
      *
@@ -74,6 +78,32 @@ public class AppWaterfallController {
         return response;
 
     }
+
+
+    /**
+     * 下拉刷新
+     *
+     * @return
+     */
+    @ApiOperation(value = "下拉刷新_1117", notes = "下拉刷新_1117", response = Response.class)
+    @RequestMapping(value = "userRefreshListNew_1117", method = RequestMethod.POST)
+    public Response userRefreshListNew_1117(@ApiParam(value = "用户id ") @RequestParam(required = false) String userid,
+                                            @ApiParam(value = "类型 1：推荐2：关注3：本地 4：圈子 5：标签") @RequestParam(required = false) int type,
+                                            @ApiParam(value = "纬度") @RequestParam(required = false) String lat,
+                                            @ApiParam(value = "圈子id") @RequestParam(required = false) String circleid,
+                                            @ApiParam(value = "标签id") @RequestParam(required = false) String labelid,
+                                            @ApiParam(value = "设备号") @RequestParam(required = false) String device,
+                                            @ApiParam(value = "经度") @RequestParam(required = false) String lng) {
+        Response response = new Response();
+        List map = facadePostUpdate.userRefreshListNew_1117(userid, device, type, lat, circleid, labelid, lng);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(map);
+        return response;
+
+    }
+
     /**
      * 下拉刷新
      *
