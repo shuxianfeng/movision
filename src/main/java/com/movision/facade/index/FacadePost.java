@@ -2103,54 +2103,58 @@ public class FacadePost {
     /**
      * 关注
      *
+     * @param userid 登录人id
+     * @param device 登录设备号
      * @return
      */
     public List followPost(String userid, String device) {
         List<PostVo> list = null;
         if (userid != null) {
-            List<DBObject> listmongodba = null;
             List<PostVo> posts = new ArrayList<>();
-            List<PostVo> crileidPost = new ArrayList<>();
-            List<PostVo> userPost = new ArrayList<>();
-            List<PostVo> labelPost = new ArrayList<>();
-            listmongodba = userRefulshListMongodbToDevice(device, 2);//用户有没有看过
+            List<PostVo> allList = new ArrayList<>();
+
             List<Integer> followCricle = postService.queryFollowCricle(Integer.parseInt(userid));//查询用户关注的圈子
             List<Integer> followUsers = postService.queryFollowUser(Integer.parseInt(userid));//用户关注的作者
             List<Integer> followLabel = postLabelService.labelId(Integer.parseInt(userid));//用户关注标签
+
             if (followCricle.size() != 0 || followUsers.size() != 0 || followLabel.size() != 0) {
                 //根据圈子查询所有帖子
                 if (followCricle.size() != 0) {
-                    crileidPost = postService.queryPostListByIds(followCricle);
+                    allList = postService.queryPostListByIds(followCricle);
                 }
                 //根据作者查询所有帖子
                 if (followUsers.size() != 0) {
-                    userPost = postService.queryUserListByIds(followUsers);
-                    if (crileidPost != null) {
-                        crileidPost.addAll(userPost);
+                    List<PostVo> userPost = postService.queryUserListByIds(followUsers);
+                    if (allList != null) {
+                        allList.addAll(userPost);
                     }
                 }
+                //根据标签查询所有的帖子
                 if (followLabel.size() != 0) {
-                    labelPost = postService.queryLabelListByIds(followLabel);
+                    List<PostVo> labelPost = postService.queryLabelListByIds(followLabel);
                     if (labelPost.size() != 0) {
-                        crileidPost.addAll(labelPost);
+                        allList.addAll(labelPost);
                     }
                 }
-                Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(crileidPost);
-                crileidPost = new ArrayList<PostVo>(linkedHashSet);
+
+                Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(allList);
+                allList = new ArrayList<PostVo>(linkedHashSet);
                 ComparatorChain chain = new ComparatorChain();
-                chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
-                Collections.sort(crileidPost, chain);
+                //true,fase正序反序,true表示逆序（默认排序是从小到大）
+                chain.addComparator(new BeanComparator("heatvalue"), true);
+                Collections.sort(allList, chain);
+
+                List<DBObject> listmongodba = userRefulshListMongodbToDevice(device, 2);   //用户有没有看过
                 if (listmongodba.size() != 0) {//刷新有记录
                     for (int j = 0; j < listmongodba.size(); j++) {
                         PostVo post = new PostVo();
                         post.setId(Integer.parseInt(listmongodba.get(j).get("postid").toString()));
                         posts.add(post);//把mongodb转为post实体
                     }
-                    crileidPost.removeAll(posts);//过滤掉看过的帖子crileidPost就是剩下的帖子
-                    list = retuenList(crileidPost, userid, 2, device, -1);
+                    allList.removeAll(posts);//过滤掉看过的帖子crileidPost就是剩下的帖子
+                    list = retuenList(allList, userid, 2, device, -1);
                 } else {
-                    //list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
-                    list = retuenList(crileidPost, userid, 2, device, -1);
+                    list = retuenList(allList, userid, 2, device, -1);
                     return list;
                 }
             }
