@@ -27,7 +27,6 @@ import com.movision.mybatis.circleCategory.entity.CircleCategory;
 import com.movision.mybatis.circleCategory.service.CircleCategoryService;
 import com.movision.mybatis.city.entity.City;
 import com.movision.mybatis.city.service.CityService;
-import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.compressImg.entity.CompressImg;
@@ -2108,58 +2107,77 @@ public class FacadePost {
      * @return
      */
     public List followPost(String userid, String device) {
-        List<PostVo> list = null;
+        List<PostVo> list = null;   //返回值
         if (userid != null) {
-            List<PostVo> posts = new ArrayList<>();
             List<PostVo> allList = new ArrayList<>();
+            //封装所有关注的帖子
+            wrapAllFollowPost(userid, allList);
 
-            List<Integer> followCricle = postService.queryFollowCricle(Integer.parseInt(userid));//查询用户关注的圈子
-            List<Integer> followUsers = postService.queryFollowUser(Integer.parseInt(userid));//用户关注的作者
-            List<Integer> followLabel = postLabelService.labelId(Integer.parseInt(userid));//用户关注标签
+            if (ListUtil.isEmpty(allList)) {
+                return list;
+            }
+            //通过使用LinkedHashSet来去除掉allList中重复的帖子，并且保证帖子的顺序不会发生变化
+            Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(allList);
+            allList = new ArrayList<PostVo>(linkedHashSet);
+            //使用ComparatorChain来指定字段排序
+            ComparatorChain chain = new ComparatorChain();
+            chain.addComparator(new BeanComparator("intime"), true); //true,fase正序反序,true表示逆序（默认排序是从小到大）
+            Collections.sort(allList, chain);
 
-            if (followCricle.size() != 0 || followUsers.size() != 0 || followLabel.size() != 0) {
-                //根据圈子查询所有帖子
-                if (followCricle.size() != 0) {
-                    allList = postService.queryPostListByIds(followCricle);
+            List<DBObject> listmongodba = userRefulshListMongodbToDevice(device, 2);   //用户有没有看过
+            if (listmongodba.size() != 0) {//刷新有记录
+                List<PostVo> posts = new ArrayList<>();
+                for (int j = 0; j < listmongodba.size(); j++) {
+                    PostVo post = new PostVo();
+                    post.setId(Integer.parseInt(listmongodba.get(j).get("postid").toString()));
+                    posts.add(post);//把mongodb转为post实体
                 }
-                //根据作者查询所有帖子
-                if (followUsers.size() != 0) {
-                    List<PostVo> userPost = postService.queryUserListByIds(followUsers);
-                    if (allList != null) {
-                        allList.addAll(userPost);
-                    }
-                }
-                //根据标签查询所有的帖子
-                if (followLabel.size() != 0) {
-                    List<PostVo> labelPost = postService.queryLabelListByIds(followLabel);
-                    if (labelPost.size() != 0) {
-                        allList.addAll(labelPost);
-                    }
-                }
-
-                Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(allList);
-                allList = new ArrayList<PostVo>(linkedHashSet);
-                ComparatorChain chain = new ComparatorChain();
-                //true,fase正序反序,true表示逆序（默认排序是从小到大）
-                chain.addComparator(new BeanComparator("heatvalue"), true);
-                Collections.sort(allList, chain);
-
-                List<DBObject> listmongodba = userRefulshListMongodbToDevice(device, 2);   //用户有没有看过
-                if (listmongodba.size() != 0) {//刷新有记录
-                    for (int j = 0; j < listmongodba.size(); j++) {
-                        PostVo post = new PostVo();
-                        post.setId(Integer.parseInt(listmongodba.get(j).get("postid").toString()));
-                        posts.add(post);//把mongodb转为post实体
-                    }
-                    allList.removeAll(posts);//过滤掉看过的帖子crileidPost就是剩下的帖子
-                    list = retuenList(allList, userid, 2, device, -1);
-                } else {
-                    list = retuenList(allList, userid, 2, device, -1);
-                    return list;
-                }
+                allList.removeAll(posts);//过滤掉看过的帖子crileidPost就是剩下的帖子
+                list = retuenList(allList, userid, 2, device, -1);
+            } else {
+                list = retuenList(allList, userid, 2, device, -1);
+                return list;
             }
         }
         return list;
+    }
+
+    /**
+     * 封装所有关注的帖子
+     *
+     * @param userid
+     * @param allList
+     */
+    private void wrapAllFollowPost(String userid, List<PostVo> allList) {
+        List<Integer> followCricle = postService.queryFollowCricle(Integer.parseInt(userid));//查询用户关注的圈子
+        List<Integer> followUsers = postService.queryFollowUser(Integer.parseInt(userid));//用户关注的作者
+        List<Integer> followLabel = postLabelService.labelId(Integer.parseInt(userid));//用户关注标签
+
+        //先查询该用户自己的帖子
+        List<PostVo> selfPost = postService.findUserPost(Integer.valueOf(userid));
+        if (ListUtil.isNotEmpty(selfPost)) {
+            allList.addAll(selfPost);
+        }
+
+        //根据圈子查询所有帖子
+        if (followCricle.size() != 0) {
+            List<PostVo> circleList = postService.queryPostListByIds(followCricle);
+            allList.addAll(circleList);
+        }
+        //根据作者查询所有帖子
+        if (followUsers.size() != 0) {
+            List<PostVo> userPost = postService.queryUserListByIds(followUsers);
+            if (allList != null) {
+                allList.addAll(userPost);
+            }
+        }
+        //根据标签查询所有的帖子
+        if (followLabel.size() != 0) {
+            List<PostVo> labelPost = postService.queryLabelListByIds(followLabel);
+            if (labelPost.size() != 0) {
+                allList.addAll(labelPost);
+            }
+        }
     }
 
     /**
