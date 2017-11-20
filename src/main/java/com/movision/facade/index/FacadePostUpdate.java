@@ -1,17 +1,15 @@
 package com.movision.facade.index;
 
-import com.mongodb.*;
+import com.mongodb.DBObject;
 import com.movision.facade.address.AddressFacade;
 import com.movision.facade.paging.PageFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.opularSearchTerms.service.OpularSearchTermsService;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
-import com.movision.mybatis.postLabel.service.PostLabelService;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecordVo;
 import com.movision.utils.pagination.model.Paging;
-import com.movision.utils.pagination.model.ServicePaging;
 import org.apache.commons.beanutils.BeanComparator;
 import org.apache.commons.collections.comparators.ComparatorChain;
 import org.slf4j.Logger;
@@ -44,8 +42,7 @@ public class FacadePostUpdate {
 
     @Autowired
     private OpularSearchTermsService opularSearchTermsService;
-    @Autowired
-    private PostLabelService postLabelService;
+
 
     /**
      * 推荐
@@ -723,63 +720,6 @@ public class FacadePostUpdate {
         return list;
     }
 
-    /**
-     * 关注
-     *
-     * @return
-     */
-    public List followPost(String userid, String device) {
-        List<PostVo> list = null;
-        if (userid != null) {
-            List<DBObject> listmongodba = null;
-            List<PostVo> posts = new ArrayList<>();
-            List<PostVo> crileidPost = new ArrayList<>();
-            List<PostVo> userPost = new ArrayList<>();
-            List<PostVo> labelPost = new ArrayList<>();
-            listmongodba = facadePost.userRefulshListMongodbToDevice(device, 2);//用户有没有看过
-            List<Integer> followCricle = postService.queryFollowCricle(Integer.parseInt(userid));//查询用户关注的圈子
-            List<Integer> followUsers = postService.queryFollowUser(Integer.parseInt(userid));//用户关注的作者
-            List<Integer> followLabel = postLabelService.labelId(Integer.parseInt(userid));//用户关注标签
-            if (followCricle.size() != 0 || followUsers.size() != 0 || followLabel.size() != 0) {
-                //根据圈子查询所有帖子
-                if (followCricle.size() != 0) {
-                    crileidPost = postService.queryPostListByIds(followCricle);
-                }
-                //根据作者查询所有帖子
-                if (followUsers.size() != 0) {
-                    userPost = postService.queryUserListByIds(followUsers);
-                    if (crileidPost != null) {
-                        crileidPost.addAll(userPost);
-                    }
-                }
-                if (followLabel.size() != 0) {
-                    labelPost = postService.queryLabelListByIds(followLabel);
-                    if (labelPost.size() != 0) {
-                        crileidPost.addAll(labelPost);
-                    }
-                }
-                Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(crileidPost);
-                crileidPost = new ArrayList<PostVo>(linkedHashSet);
-                ComparatorChain chain = new ComparatorChain();
-                chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
-                Collections.sort(crileidPost, chain);
-                if (listmongodba.size() != 0) {//刷新有记录
-                    for (int j = 0; j < listmongodba.size(); j++) {
-                        PostVo post = new PostVo();
-                        post.setId(Integer.parseInt(listmongodba.get(j).get("postid").toString()));
-                        posts.add(post);//把mongodb转为post实体
-                    }
-                    crileidPost.removeAll(posts);//过滤掉看过的帖子crileidPost就是剩下的帖子
-                    list = retuenList(crileidPost, userid, 2, device, -1);
-                } else {
-                    //list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
-                    list = retuenList(crileidPost, userid, 2, device, -1);
-                    return list;
-                }
-            }
-        }
-        return list;
-    }
 
     /**
      * 标签帖子
@@ -887,7 +827,7 @@ public class FacadePostUpdate {
         if (type == 1) {//推荐
             list = recommendPost(userid, device);
         } else if (type == 2) {//关注
-            list = followPost(userid, device);
+            list = facadePost.followPost(userid, device);
         } else if (type == 3) {//本地
             list = localhostPost(userid, lat, device, lng);
         } else if (type == 4) {//圈子c
