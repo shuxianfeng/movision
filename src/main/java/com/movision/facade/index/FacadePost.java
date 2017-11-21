@@ -315,7 +315,8 @@ public class FacadePost {
         int postuserid = postService.postUserId(Integer.parseInt(postid));
         //根据帖子id查询圈子
         int circleid = postService.queryCrileid(Integer.parseInt(postid));
-        List<PostVo> ps = postService.findAllPostCrile(circleid);//圈子中的帖子
+
+        List<PostVo> ps = postService.findAllPostCrile(circleid);   //圈子中的帖子
         //这个用户发的帖子
         List<PostVo> userPost = postService.findUserPost(postuserid);
         //这个帖子的标签id

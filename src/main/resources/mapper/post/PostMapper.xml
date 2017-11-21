@@ -1929,7 +1929,7 @@
     </select>
 
     <select id="queryCrileid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT circleid FROM yw_post WHERE id=#{postid,jdbcType=INTEGER} AND isdel=0
+        SELECT circleid FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
     </select>
 
     <select id="selectAllPost" resultType="com.movision.mybatis.post.entity.Post">

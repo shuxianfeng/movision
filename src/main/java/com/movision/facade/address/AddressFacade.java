@@ -284,7 +284,7 @@ public class AddressFacade {
                     if (null == city) {
 //                    throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "根据城市名称无法获取到城市编码");
                         log.warn("根据城市名称无法获取到城市编码");
-                        flag = -2;
+                        flag = -2;  //无相关结果
                     } else {
                         citycode = city.getCode();
                         flag = 1;   //设置成功
