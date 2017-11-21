@@ -425,19 +425,6 @@ public class AppPostController {
         return response;
     }
 
-    /**
-     * 模块式发布帖子
-     *
-     * @param request
-     * @param userid
-     * @param circleid
-     * @param title
-     * @param postcontent
-     * @param isactive
-     * @param coverimg
-     * @param proids
-     * @return
-     */
     @ApiOperation(value = "模块式发布帖子", notes = "模块式发布帖子", response = Response.class)
     @RequestMapping(value = "releaseModularPost", method = RequestMethod.POST)
     public Response releaseModularPost(HttpServletRequest request,
