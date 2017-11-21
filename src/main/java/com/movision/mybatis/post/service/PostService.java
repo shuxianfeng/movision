@@ -1932,7 +1932,7 @@ public class PostService {
         }
     }
 
-    public List<PostVo> querySelectedSortedPosts(int[] ids) {
+    public List<PostVo> querySelectedSortedPosts(Integer[] ids) {
         try {
             log.info("按照传入的帖子顺序查询出指定帖子");
             return postMapper.querySelectedSortedPosts(ids);

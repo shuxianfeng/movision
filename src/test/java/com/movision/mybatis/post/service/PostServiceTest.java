@@ -20,7 +20,7 @@ public class PostServiceTest extends SpringTestCase {
 
     @Test
     public void querySelectedSortedPosts() throws Exception {
-        int[] ids = new int[]{2419, 2418, 2420};
+        Integer[] ids = new Integer[]{2419, 2418, 2420};
         List<PostVo> list = postService.querySelectedSortedPosts(ids);
         for (PostVo p : list) {
             System.out.println(p.getId());

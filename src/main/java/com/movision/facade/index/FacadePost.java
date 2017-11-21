@@ -4509,8 +4509,16 @@ public class FacadePost {
      * @param ids
      * @return
      */
-    public List<PostVo> querySelectedSortedPosts(int[] ids) {
-        return postService.querySelectedSortedPosts(ids);
+    public List<PostVo> querySelectedSortedPosts(String ids) {
+        if (StringUtils.isEmpty(ids)) {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "传入的帖子id字符串不能为空");
+        }
+        String[] strArr = ids.split(",");
+        Integer[] intArr = new Integer[strArr.length];
+        for (int i = 0; i < strArr.length; i++) {
+            intArr[i] = Integer.valueOf(strArr[i]);
+        }
+        return postService.querySelectedSortedPosts(intArr);
     }
 
 }

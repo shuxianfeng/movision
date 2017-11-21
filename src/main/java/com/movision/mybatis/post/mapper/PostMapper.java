@@ -330,5 +330,5 @@ public interface PostMapper {
 
     PostReturnAll postReAll(Map map);
 
-    List<PostVo> querySelectedSortedPosts(int[] ids);
+    List<PostVo> querySelectedSortedPosts(Integer[] ids);
 }
