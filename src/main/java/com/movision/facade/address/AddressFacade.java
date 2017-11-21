@@ -268,27 +268,35 @@ public class AddressFacade {
             JSONObject jsonObject = JSONObject.parseObject(result);
             int status = (int) jsonObject.get("status");
             if (status == 0) {
-                flag = 1;   //设置成功
+
                 JSONObject re = (JSONObject) JSON.toJSON(jsonObject.get("result"));
                 JSONObject addressComponent = (JSONObject) JSON.toJSON(re.get("addressComponent"));
                 String cityname = String.valueOf(addressComponent.get("city")); //获取到城市名称
                 if (StringUtils.isEmpty(cityname)) {
-                    throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "根据经纬度调用百度地图API无法获取到对应城市名称");
+//                    throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "根据经纬度调用百度地图API无法获取到对应城市名称");
+                    log.warn("根据经纬度调用百度地图API无法获取到对应城市名称");
+                    flag = -2;  //无相关结果
+
+                } else {
+                    log.debug("调用百度sdk，根据经纬度获取到的城市名称是：" + cityname);
+                    //城市名称转化为城市编码
+                    City city = cityService.selectCityByName(cityname);
+                    if (null == city) {
+//                    throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "根据城市名称无法获取到城市编码");
+                        log.warn("根据城市名称无法获取到城市编码");
+                        flag = -2;
+                    } else {
+                        citycode = city.getCode();
+                        flag = 1;   //设置成功
+                    }
                 }
-                log.debug("调用百度sdk，根据经纬度获取到的城市名称是：" + cityname);
-                //城市名称转化为城市编码
-                City city = cityService.selectCityByName(cityname);
-                if (null == city) {
-                    throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "根据城市名称无法获取到城市编码");
-                }
-                citycode = city.getCode();
 
             } else if (status == 1) {
-                flag = -2;//无相关结果
+                flag = -2;  //无相关结果
             }
         } catch (Exception e) {
             log.error("调用百度api，根据经纬度查询城市编码失败", e);
-            flag = -1;//设置地址失败
+            flag = -1;  //设置地址失败
         }
         map.put("flag", flag);
         map.put("citycode", citycode);
