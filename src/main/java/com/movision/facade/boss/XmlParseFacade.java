@@ -368,6 +368,7 @@ public class XmlParseFacade {
      */
     private String jsonDeleteChar(String contents) {
         JSONArray jsonArray = JSONArray.fromObject(contents);
+        String str = "";
         for (int j = 0; j < jsonArray.size(); j++) {
             JSONObject moduleobj = JSONObject.parseObject(jsonArray.get(j).toString());
             if ((int) moduleobj.get("type") == 0) {
@@ -382,11 +383,12 @@ public class XmlParseFacade {
                 value = value.replaceAll("[\\pP\\pS\\pZ\\pN]", "");
                 value = value.replaceAll("[a-zA-Z0-9]", " ");
                 if (StringUtil.isNotEmpty(value)) {
-                    contents += value;
+                    //contents += value;
+                    str += value;
                 }
             }
         }
-        return contents;
+        return str;
     }
 
     /**
