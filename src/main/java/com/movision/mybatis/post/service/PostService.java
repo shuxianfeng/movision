@@ -151,6 +151,18 @@ public class PostService {
         }
     }
 
+    /**
+     * BOSS端删除帖子评论时帖子评论数减1
+     */
+    public void updatePostCommentSum(Integer id){
+        try {
+            log.info("BOSS端删除帖子评论时帖子评论数减1");
+            postMapper.updatePostCommentSum(id);
+        }catch (Exception e){
+            log.error("BOSS端删除帖子评论时帖子评论数减1失败", e);
+        }
+    }
+
     public List<PostVo> queryPastPostList(Map<String, Object> parammap) {
         return postMapper.queryPastPostList(parammap);
     }
