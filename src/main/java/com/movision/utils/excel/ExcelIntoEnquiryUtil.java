@@ -273,7 +273,7 @@ public class ExcelIntoEnquiryUtil {
                                     //帖子内容
                                     if (StringUtil.isNotBlank(cell.getStringCellValue())) {
                                         //content = cell.getStringCellValue();
-                                        post.setPostcontent(String.valueOf(cell.getStringCellValue()));
+                                        //post.setPostcontent(String.valueOf(cell.getStringCellValue()));
                                     }
                                     continue;
                                 } catch (Exception e) {
@@ -403,7 +403,7 @@ public class ExcelIntoEnquiryUtil {
                 }
 
                 //内容转换
-                Map con = null;
+                /*Map con = null;
                 if (StringUtil.isNotEmpty(content)) {
                     //内容转换
                     con = jsoupCompressImg.newCompressImg(request, content);
@@ -415,7 +415,7 @@ public class ExcelIntoEnquiryUtil {
                         logger.error("帖子内容转换异常");
                         post.setPostcontent(content);
                     }
-                }
+                }*/
 
                 //执行帖子编辑操作
                 postService.updateActivePostById(post);
