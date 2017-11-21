@@ -724,4 +724,13 @@ public class AppWaterfallController {
         response.setData(imgurl);
         return response;
     }
+
+    @ApiOperation(value = "查询缓存中的帖子的浏览数等属性（修复帖子列表和帖子详情浏览数等属性不对称问题）", notes = "查询缓存中的帖子的浏览数等属性（修复帖子列表和帖子详情浏览数等属性不对称问题）", response = Response.class)
+    @RequestMapping(value = "get_app_cache_post_attribute", method = RequestMethod.GET)
+    public Response getAppCachePostAttr(@ApiParam(value = "帖子id，int数组形式") @RequestParam int[] postIdArr) {
+        Response response = new Response();
+        response.setData(facadePost.querySelectedSortedPosts(postIdArr));
+        response.setMessage("查询成功");
+        return response;
+    }
 }

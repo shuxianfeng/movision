@@ -329,4 +329,6 @@ public interface PostMapper {
     int updateCountView(int postid);
 
     PostReturnAll postReAll(Map map);
+
+    List<PostVo> querySelectedSortedPosts(int[] ids);
 }

@@ -1932,4 +1932,14 @@ public class PostService {
         }
     }
 
+    public List<PostVo> querySelectedSortedPosts(int[] ids) {
+        try {
+            log.info("按照传入的帖子顺序查询出指定帖子");
+            return postMapper.querySelectedSortedPosts(ids);
+        } catch (Exception e) {
+            log.error("按照传入的帖子顺序查询出指定帖子失败", e);
+            throw e;
+        }
+    }
+
 }

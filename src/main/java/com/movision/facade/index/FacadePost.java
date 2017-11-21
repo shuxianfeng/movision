@@ -4502,6 +4502,17 @@ public class FacadePost {
 
         return allCostRecommendPostList;
     }
+
+    /**
+     * 按照传入的帖子顺序查询出指定帖子
+     *
+     * @param ids
+     * @return
+     */
+    public List<PostVo> querySelectedSortedPosts(int[] ids) {
+        return postService.querySelectedSortedPosts(ids);
+    }
+
 }
 
 

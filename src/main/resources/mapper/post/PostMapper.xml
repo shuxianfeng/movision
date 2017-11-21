@@ -2408,4 +2408,20 @@
         LEFT JOIN yw_circle c ON c.id=p.circleid
         WHERE p.id=#{postid,jdbcType=INTEGER}
     </select>
+
+    <select id="querySelectedSortedPosts" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT id, zansum, commentsum, countview
+        FROM yw_post
+        WHERE id in
+        <foreach collection="array" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        ORDER BY field(id,
+        <foreach collection="array" item="item" separator=",">
+            #{item}
+        </foreach>
+        )
+    </select>
+
 </mapper>
