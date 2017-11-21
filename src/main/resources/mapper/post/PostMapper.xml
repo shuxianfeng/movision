@@ -1217,6 +1217,14 @@
         SET isdel=1
         WHERE id=#{postid,jdbcType=INTEGER}
     </update>
+    
+    <update id="updatePostCommentSum" parameterType="java.lang.Integer" >
+        UPDATE yw_post
+        SET commentsum = commentsum -1
+        WHERE id = (
+            SELECT postid FROM yw_post_comment WHERE id = #{id,jdbcType=INTEGER}
+        )
+    </update>
 
     <select id="queryPostParticulars" resultType="com.movision.mybatis.post.entity.PostList"
             parameterType="java.lang.Integer">

@@ -70,6 +70,8 @@ public interface PostMapper {
 
     String queryCompressUrl(String coverimg);
 
+    void updatePostCommentSum(Integer id);
+
     List<PostVo> queryPastPostList(Map<String, Object> parammap);
 
     List<PostVo> findAllPostList(RowBounds rowBounds, int circleid);

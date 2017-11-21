@@ -561,7 +561,8 @@ public class PostFacade {
             Integer cont = commentService.queryCommentContById(cid);
             if (cont > 0) {
                 //符合上面条件：物理删除
-                commentService.deletePostCommentById(cid);
+                postService.updatePostCommentSum(cid);//帖子评论数直接-1
+                commentService.deletePostCommentById(cid);//再无理删除掉该评论
             } else {
                 //不符合条件：逻辑删除
                 commentService.deletePostAppraise(cid);
