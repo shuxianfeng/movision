@@ -140,7 +140,6 @@
                 <!--需要登录的接口-->
                 /app/mine/**=authc
                 /app/post/inAccusation = authc
-                <!--/app/post/partActive = authc-->
                 /app/post/recommendGoodsList=authc
                 /app/post/releasePost=authc
                 /app/post/updateZan=authc
@@ -152,8 +151,7 @@
                 /app/submission/commitSubmission=authc
                 /app/collection/**=authc
 
-                /app/im/send_msg=authc
-                <!--/app/msg_center/**=authc-->
+                /app/im/**=authc
 
                 /app/** = anon
 
