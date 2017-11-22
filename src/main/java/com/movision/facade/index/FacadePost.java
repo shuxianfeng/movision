@@ -209,6 +209,7 @@ public class FacadePost {
             parammap.put("userid", Integer.parseInt(userid));
         }
         PostVo vo = postService.queryPostDetail(parammap);
+        log.info("帖子详情中的pistid:-----------" + postid);
         if (vo != null) {
             Map map = new HashMap();
             int userids = vo.getUserid();
