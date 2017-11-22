@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -168,6 +170,25 @@ public class AppVideoController {
         return response;
     }
 
+
+    /**
+     * 获取用户信息H5
+     *
+     * @param
+     * @return
+     */
+    @ApiOperation(value = " 订阅号获取用户信息H5", notes = " 订阅号获取用户信息H5", response = Response.class)
+    @RequestMapping(value = "getUserInformationH5DY", method = RequestMethod.GET)
+    public Response getUserInformationH5DY(@ApiParam("openid") @RequestParam String openid) {
+        Response response = new Response();
+        Map result = videoUploadUtil.getUserInformationH5DY(openid);
+        if (response.getCode() == 200) {
+            response.setMessage("获取成功");
+            response.setData(result);
+        }
+        return response;
+    }
+
     /**
      * 点击抽奖
      *
@@ -280,6 +301,20 @@ public class AppVideoController {
         }
         return response;
     }
+
+
+    @ApiOperation(value = " dy_openid", notes = " dy_openid", response = Response.class)
+    @RequestMapping(value = "dy_openid", method = RequestMethod.GET)
+    public Response DYOpenid(HttpServletRequest request) {
+        Response response = new Response();
+        String openid = videoUploadUtil.doPost(request);
+        if (response.getCode() == 200) {
+            response.setData(openid);
+        }
+        return response;
+    }
+
+
 
 
 }
