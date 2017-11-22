@@ -3,14 +3,14 @@
 <mapper namespace="com.movision.mybatis.imUserAccusation.mapper.ImUserAccusationMapper">
     <resultMap id="BaseResultMap" type="com.movision.mybatis.imUserAccusation.entity.ImUserAccusation">
         <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="from" property="from" jdbcType="VARCHAR"/>
-        <result column="to" property="to" jdbcType="VARCHAR"/>
+        <result column="fromid" property="fromid" jdbcType="VARCHAR"/>
+        <result column="toid" property="toid" jdbcType="VARCHAR"/>
         <result column="comment" property="comment" jdbcType="VARCHAR"/>
         <result column="type" property="type" jdbcType="INTEGER"/>
         <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, from, to, comment, type, intime
+        id, fromid, toid, comment, type, intime
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -23,10 +23,10 @@
         where id = #{id,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="com.movision.mybatis.imUserAccusation.entity.ImUserAccusation">
-        insert into yw_im_user_accusation (id, from, to,
+        insert into yw_im_user_accusation (id, fromid, toid,
         comment, type, intime
         )
-        values (#{id,jdbcType=INTEGER}, #{from,jdbcType=INTEGER}, #{to,jdbcType=INTEGER},
+        values (#{id,jdbcType=INTEGER}, #{fromid,jdbcType=INTEGER}, #{toid,jdbcType=INTEGER},
         #{comment,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP}
         )
     </insert>
@@ -36,11 +36,11 @@
             <if test="id != null">
                 id,
             </if>
-            <if test="from != null">
-                from,
+            <if test="fromid != null">
+                fromid,
             </if>
-            <if test="to != null">
-                to,
+            <if test="toid != null">
+                toid,
             </if>
             <if test="comment != null">
                 comment,
@@ -56,11 +56,11 @@
             <if test="id != null">
                 #{id,jdbcType=INTEGER},
             </if>
-            <if test="from != null">
-                #{from,jdbcType=VARCHAR},
+            <if test="fromid != null">
+                #{fromid,jdbcType=VARCHAR},
             </if>
-            <if test="to != null">
-                #{to,jdbcType=VARCHAR},
+            <if test="toid != null">
+                #{toid,jdbcType=VARCHAR},
             </if>
             <if test="comment != null">
                 #{comment,jdbcType=VARCHAR},
@@ -77,11 +77,11 @@
             parameterType="com.movision.mybatis.imUserAccusation.entity.ImUserAccusation">
         update yw_im_user_accusation
         <set>
-            <if test="from != null">
-                from = #{from,jdbcType=VARCHAR},
+            <if test="fromid != null">
+                fromid = #{fromid,jdbcType=VARCHAR},
             </if>
-            <if test="to != null">
-                to = #{to,jdbcType=VARCHAR},
+            <if test="toid != null">
+                toid = #{toid,jdbcType=VARCHAR},
             </if>
             <if test="comment != null">
                 comment = #{comment,jdbcType=VARCHAR},
@@ -97,8 +97,8 @@
     </update>
     <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.imUserAccusation.entity.ImUserAccusation">
         update yw_im_user_accusation
-        set from = #{from,jdbcType=VARCHAR},
-        to = #{to,jdbcType=VARCHAR},
+        set fromid = #{fromid,jdbcType=VARCHAR},
+        toid = #{toid,jdbcType=VARCHAR},
         comment = #{comment,jdbcType=VARCHAR},
         type = #{type,jdbcType=INTEGER},
         intime = #{intime,jdbcType=TIMESTAMP}
@@ -110,6 +110,6 @@
             resultType="com.movision.mybatis.imUserAccusation.entity.ImUserAccusation">
         SELECT *
         FROM yw_im_user_accusation
-        WHERE from = #{from} and to=#{to} and type=#{type}
+        WHERE fromid = #{fromid} and toid=#{toid} and type=#{type}
     </select>
 </mapper>

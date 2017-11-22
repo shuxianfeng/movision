@@ -1393,8 +1393,8 @@ public class ImFacade {
     public int addImUserAccusationRecord(String from, String to, String comment) {
 
         ImUserAccusation record = new ImUserAccusation();
-        record.setFrom(from);
-        record.setTo(to);
+        record.setFromid(from);
+        record.setToid(to);
         record.setComment(comment);
         record.setIntime(new Date());
         record.setType(0);  //表示未处理
@@ -1413,8 +1413,8 @@ public class ImFacade {
     public List<ImUserAccusation> queryNotHandleSelectiveRecord(String from, String to, int type) {
         ImUserAccusation imUserAccusation = new ImUserAccusation();
         imUserAccusation.setType(type);
-        imUserAccusation.setFrom(from);
-        imUserAccusation.setTo(to);
+        imUserAccusation.setFromid(from);
+        imUserAccusation.setToid(to);
         return imUserAccusationService.queryNotHandleSelectiveRecord(imUserAccusation);
     }
 

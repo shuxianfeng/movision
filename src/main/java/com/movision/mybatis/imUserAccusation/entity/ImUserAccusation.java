@@ -5,9 +5,9 @@ import java.util.Date;
 public class ImUserAccusation {
     private Integer id;
 
-    private String from;
+    private String fromid;
 
-    private String to;
+    private String toid;
 
     private String comment;
 
@@ -23,20 +23,21 @@ public class ImUserAccusation {
         this.id = id;
     }
 
-    public String getFrom() {
-        return from;
+    public void setFromid(String fromid) {
+        this.fromid = fromid;
     }
 
-    public void setFrom(String from) {
-        this.from = from;
+    public void setToid(String toid) {
+        this.toid = toid;
     }
 
-    public String getTo() {
-        return to;
+    public String getFromid() {
+
+        return fromid;
     }
 
-    public void setTo(String to) {
-        this.to = to;
+    public String getToid() {
+        return toid;
     }
 
     public String getComment() {
