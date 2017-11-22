@@ -1390,7 +1390,7 @@ public class ImFacade {
      * @param comment
      * @return
      */
-    public int addImUserAccusationRecord(int from, int to, String comment) {
+    public int addImUserAccusationRecord(String from, String to, String comment) {
 
         ImUserAccusation record = new ImUserAccusation();
         record.setFrom(from);
@@ -1410,7 +1410,7 @@ public class ImFacade {
      * @param type
      * @return
      */
-    public List<ImUserAccusation> queryNotHandleSelectiveRecord(int from, int to, int type) {
+    public List<ImUserAccusation> queryNotHandleSelectiveRecord(String from, String to, int type) {
         ImUserAccusation imUserAccusation = new ImUserAccusation();
         imUserAccusation.setType(type);
         imUserAccusation.setFrom(from);

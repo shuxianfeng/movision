@@ -38,8 +38,8 @@ public class ImController {
 
     @ApiOperation(value = "举报im用户", notes = "举报im用户", response = Response.class)
     @RequestMapping(value = "/add_im_user_accusation_record", method = RequestMethod.POST)
-    public Response addImUserAccusationRecord(@ApiParam(value = "举报人accid") @RequestParam Integer from,
-                                              @ApiParam(value = "被举报人accid") @RequestParam Integer to,
+    public Response addImUserAccusationRecord(@ApiParam(value = "举报人accid") @RequestParam String from,
+                                              @ApiParam(value = "被举报人accid") @RequestParam String to,
                                               @ApiParam(value = "举报内容") @RequestParam String content) {
         Response response = new Response();
         List<ImUserAccusation> list = imFacade.queryNotHandleSelectiveRecord(from, to, 0);

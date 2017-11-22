@@ -3,8 +3,8 @@
 <mapper namespace="com.movision.mybatis.imUserAccusation.mapper.ImUserAccusationMapper">
     <resultMap id="BaseResultMap" type="com.movision.mybatis.imUserAccusation.entity.ImUserAccusation">
         <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="from" property="from" jdbcType="INTEGER"/>
-        <result column="to" property="to" jdbcType="INTEGER"/>
+        <result column="from" property="from" jdbcType="VARCHAR"/>
+        <result column="to" property="to" jdbcType="VARCHAR"/>
         <result column="comment" property="comment" jdbcType="VARCHAR"/>
         <result column="type" property="type" jdbcType="INTEGER"/>
         <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
@@ -57,10 +57,10 @@
                 #{id,jdbcType=INTEGER},
             </if>
             <if test="from != null">
-                #{from,jdbcType=INTEGER},
+                #{from,jdbcType=VARCHAR},
             </if>
             <if test="to != null">
-                #{to,jdbcType=INTEGER},
+                #{to,jdbcType=VARCHAR},
             </if>
             <if test="comment != null">
                 #{comment,jdbcType=VARCHAR},
@@ -78,10 +78,10 @@
         update yw_im_user_accusation
         <set>
             <if test="from != null">
-                from = #{from,jdbcType=INTEGER},
+                from = #{from,jdbcType=VARCHAR},
             </if>
             <if test="to != null">
-                to = #{to,jdbcType=INTEGER},
+                to = #{to,jdbcType=VARCHAR},
             </if>
             <if test="comment != null">
                 comment = #{comment,jdbcType=VARCHAR},
@@ -97,8 +97,8 @@
     </update>
     <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.imUserAccusation.entity.ImUserAccusation">
         update yw_im_user_accusation
-        set from = #{from,jdbcType=INTEGER},
-        to = #{to,jdbcType=INTEGER},
+        set from = #{from,jdbcType=VARCHAR},
+        to = #{to,jdbcType=VARCHAR},
         comment = #{comment,jdbcType=VARCHAR},
         type = #{type,jdbcType=INTEGER},
         intime = #{intime,jdbcType=TIMESTAMP}
