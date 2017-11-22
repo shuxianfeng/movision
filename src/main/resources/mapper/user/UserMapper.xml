@@ -1186,29 +1186,34 @@
     <select id="queryUserParticulars" parameterType="java.lang.String"
             resultType="com.movision.mybatis.user.entity.UserParticulars">
         SELECT u.*,vd.audit_time as viptime,aut.name,aut.idnumber,
-        (SELECT COUNT(1) FROM yw_post AS p WHERE p.userid=#{userid,jdbcType=INTEGER}) as postsum,
-        (SELECT COUNT(1) FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND isessence=1) AS isessenceid,
-        (SELECT COALESCE(SUM(points),0) FROM yw_post_rewarded WHERE userid=#{userid,jdbcType=INTEGER}) AS reward,
-        (SELECT SUM(points) FROM yw_post_rewarded WHERE postid IN (SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER})) AS byreward,
-        (SELECT COUNT(1) FROM yw_collection WHERE userid=#{userid,jdbcType=INTEGER} AND type=0) AS collectpost,
-        (SELECT COUNT(1) FROM yw_collection WHERE userid=#{userid,jdbcType=INTEGER} AND type=1) AS collectgoods,
-        (SELECT COUNT(1) FROM yw_collection WHERE postid IN ( SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER})) as bycollect,
-        (SELECT COUNT(1) FROM yw_goods_share WHERE userid=#{userid,jdbcType=INTEGER}) as sharegoods,
-        (SELECT COUNT(1) FROM yw_post_share WHERE userid=#{userid,jdbcType=INTEGER}) as sharepost,
-        (SELECT COUNT(1) FROM yw_post_share WHERE postid IN ( SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER})) as byshare,
-        (SELECT COUNT(1) FROM yw_post_comment WHERE userid=#{userid,jdbcType=INTEGER}) as commentpost,
-        (SELECT COUNT(1) FROM yw_goods_assessment WHERE userid=#{userid,jdbcType=INTEGER}) as commentassessment,
-        (SELECT COUNT(1) FROM yw_post_comment WHERE postid IN ( SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER})) as bycomment,
-        (SELECT COUNT(1) FROM yw_post_zan_record WHERE userid=#{userid,jdbcType=INTEGER}) as zansum,
-        (SELECT COUNT(1) FROM yw_post_zan_record WHERE postid IN ( SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER})) as byzansum,
-        (SELECT COUNT(1) FROM yw_follow_circle WHERE userid=#{userid,jdbcType=INTEGER}) as circlefollow,
-        (SELECT COUNT(1) FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND ishot=1 AND isdel=0) as ishot,
-        (SELECT MIN(intime) FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER}) AS oneissuepost,
-        (SELECT MIN(collect_time) FROM yw_collection WHERE userid=#{userid,jdbcType=INTEGER}) AS onecollection
+        (SELECT COUNT(1) FROM yw_post WHERE userid=#{userid,jdbcType=VARCHAR} AND isdel = 0) as postnum,
+        (SELECT COUNT(1) FROM yw_post WHERE userid=#{userid,jdbcType=VARCHAR} AND isessence=1) AS isessenceid,
+        (SELECT COALESCE(SUM(points),0) FROM yw_post_rewarded WHERE userid=#{userid,jdbcType=VARCHAR}) AS reward,
+        (SELECT SUM(points) FROM yw_post_rewarded WHERE postid IN (SELECT id FROM yw_post WHERE
+        userid=#{userid,jdbcType=VARCHAR})) AS byreward,
+        (SELECT COUNT(1) FROM yw_collection WHERE userid=#{userid,jdbcType=VARCHAR} AND type=0) AS collectpost,
+        (SELECT COUNT(1) FROM yw_collection WHERE userid=#{userid,jdbcType=VARCHAR} AND type=1) AS collectgoods,
+        (SELECT COUNT(1) FROM yw_collection WHERE postid IN ( SELECT id FROM yw_post WHERE
+        userid=#{userid,jdbcType=VARCHAR})) as bycollect,
+        (SELECT COUNT(1) FROM yw_goods_share WHERE userid=#{userid,jdbcType=VARCHAR}) as sharegoods,
+        (SELECT COUNT(1) FROM yw_post_share WHERE userid=#{userid,jdbcType=VARCHAR}) as sharepost,
+        (SELECT COUNT(1) FROM yw_post_share WHERE postid IN ( SELECT id FROM yw_post WHERE
+        userid=#{userid,jdbcType=VARCHAR})) as byshare,
+        (SELECT COUNT(1) FROM yw_post_comment WHERE userid=#{userid,jdbcType=VARCHAR}) as commentpost,
+        (SELECT COUNT(1) FROM yw_goods_assessment WHERE userid=#{userid,jdbcType=VARCHAR}) as commentassessment,
+        (SELECT COUNT(1) FROM yw_post_comment WHERE postid IN ( SELECT id FROM yw_post WHERE
+        userid=#{userid,jdbcType=VARCHAR})) as bycomment,
+        (SELECT COUNT(1) FROM yw_post_zan_record WHERE userid=#{userid,jdbcType=VARCHAR}) as zansum,
+        (SELECT COUNT(1) FROM yw_post_zan_record WHERE postid IN ( SELECT id FROM yw_post WHERE
+        userid=#{userid,jdbcType=VARCHAR})) as byzansum,
+        (SELECT COUNT(1) FROM yw_follow_circle WHERE userid=#{userid,jdbcType=VARCHAR}) as circlefollow,
+        (SELECT COUNT(1) FROM yw_post WHERE userid=#{userid,jdbcType=VARCHAR} AND ishot=1 AND isdel=0) as ishot,
+        (SELECT MIN(intime) FROM yw_post WHERE userid=#{userid,jdbcType=VARCHAR}) AS oneissuepost,
+        (SELECT MIN(collect_time) FROM yw_collection WHERE userid=#{userid,jdbcType=VARCHAR}) AS onecollection
         FROM yw_user AS u
-        LEFT JOIN yw_audit_vip_detail AS vd ON vd.apply_userid=#{userid,jdbcType=INTEGER} AND vd.status=0
-        LEFT JOIN yw_autonym_authentication AS aut ON aut.userid=#{userid,jdbcType=INTEGER} AND aut.authstatus=1
-        WHERE u.id=#{userid,jdbcType=INTEGER} AND u.status=0
+        LEFT JOIN yw_audit_vip_detail AS vd ON vd.apply_userid=#{userid,jdbcType=VARCHAR} AND vd.status=0
+        LEFT JOIN yw_autonym_authentication AS aut ON aut.userid=#{userid,jdbcType=VARCHAR} AND aut.authstatus=1
+        WHERE u.id=#{userid,jdbcType=VARCHAR} AND u.status=0
     </select>
 
     <select id="queryProvinces" resultType="com.movision.mybatis.province.entity.ProvinceVo"
