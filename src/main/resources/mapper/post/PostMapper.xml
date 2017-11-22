@@ -2227,6 +2227,7 @@
         <if test="flag == 'month' ">
             AND DATE_FORMAT( p.intime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
         </if>
+        ORDER BY p.countview DESC
     </select>
 
     <select id="queryActiveByOrderid" resultType="java.lang.Integer">
