@@ -16,6 +16,8 @@ import com.movision.mybatis.imSystemInform.entity.ImBatchAttachMsg;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInformVo;
 import com.movision.mybatis.imSystemInform.service.ImSystemInformService;
+import com.movision.mybatis.imUserAccusation.entity.ImUserAccusation;
+import com.movision.mybatis.imUserAccusation.service.ImUserAccusationService;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.imuser.service.ImUserService;
 import com.movision.mybatis.post.service.PostService;
@@ -91,6 +93,9 @@ public class ImFacade {
 
     @Autowired
     private SystemLayoutService systemLayoutService;
+
+    @Autowired
+    private ImUserAccusationService imUserAccusationService;
 
     /**
      * 发起IM请求，获得响应
@@ -1374,6 +1379,43 @@ public class ImFacade {
      */
     public String querySysNoticeTemp(Map<String, Object> parammap){
         return systemLayoutService.querySysNoticeTemp(parammap);
+    }
+
+
+    /**
+     * 增加举报im用户记录
+     *
+     * @param from
+     * @param to
+     * @param comment
+     * @return
+     */
+    public int addImUserAccusationRecord(int from, int to, String comment) {
+
+        ImUserAccusation record = new ImUserAccusation();
+        record.setFrom(from);
+        record.setTo(to);
+        record.setComment(comment);
+        record.setIntime(new Date());
+        record.setType(0);  //表示未处理
+
+        return imUserAccusationService.addRecord(record);
+    }
+
+    /**
+     * 查询未处理的指定举报im记录
+     *
+     * @param from
+     * @param to
+     * @param type
+     * @return
+     */
+    public List<ImUserAccusation> queryNotHandleSelectiveRecord(int from, int to, int type) {
+        ImUserAccusation imUserAccusation = new ImUserAccusation();
+        imUserAccusation.setType(type);
+        imUserAccusation.setFrom(from);
+        imUserAccusation.setTo(to);
+        return imUserAccusationService.queryNotHandleSelectiveRecord(imUserAccusation);
     }
 
 }
