@@ -408,6 +408,8 @@ public class VideoUploadUtil {
             String requestUrl2 = "https://api.weixin.qq.com/sns/userinfo?access_token=" + access_token + "&openid=" + openid + "&lang=zh_CN";
             String userInfoStr = doGet(requestUrl2);
             net.sf.json.JSONObject wxUserInfo = net.sf.json.JSONObject.fromObject(userInfoStr);
+            map.put("openid", openid);
+            map.put("access_token", access_token);
             String subscribe = wxUserInfo.get("subscribe").toString();
             String nickname = wxUserInfo.get("nickname").toString();
             String sex = wxUserInfo.get("sex").toString();
