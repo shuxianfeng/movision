@@ -405,8 +405,11 @@ public class VideoUploadUtil {
             net.sf.json.JSONObject oppidObj = net.sf.json.JSONObject.fromObject(oppid);
             String access_token = (String) oppidObj.get("access_token");
             openid = (String) oppidObj.get("openid");
+            Map m = getUserInformationH5DY(openid);
             map.put("openid", openid);
             map.put("access_token", access_token);
+            String subscribe = m.get("subscribe").toString();
+            map.put("subscribe", subscribe);
         } catch (Exception e) {
             e.printStackTrace();
         }
