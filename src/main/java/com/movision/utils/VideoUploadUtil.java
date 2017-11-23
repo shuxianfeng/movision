@@ -399,7 +399,7 @@ public class VideoUploadUtil {
         String openid = "";
         Map map = new HashMap();
         try {
-            String requestUrl = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + APPIDs + "&secret=" + APPSECRETs + "&code=" + code + "&grant_type=authorization_code";
+            String requestUrl = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + APPID + "&secret=" + APPSECRET + "&code=" + code + "&grant_type=authorization_code";
             //第一次请求 获取access_token 和 openid
             String oppid = doGet(requestUrl);
             net.sf.json.JSONObject oppidObj = net.sf.json.JSONObject.fromObject(oppid);
