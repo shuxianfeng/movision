@@ -2158,6 +2158,7 @@ public class FacadePost {
      * @param allList
      */
     private void wrapAllFollowPost(String userid, List<PostVo> allList) {
+        log.debug("******首页-关注*****的userid:" + userid);
         List<Integer> followCricle = postService.queryFollowCricle(Integer.parseInt(userid));//查询用户关注的圈子
         List<Integer> followUsers = postService.queryFollowUser(Integer.parseInt(userid));//用户关注的作者
         List<Integer> followLabel = postLabelService.labelId(Integer.parseInt(userid));//用户关注标签
