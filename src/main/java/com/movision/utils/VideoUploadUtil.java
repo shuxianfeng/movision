@@ -405,25 +405,8 @@ public class VideoUploadUtil {
             net.sf.json.JSONObject oppidObj = net.sf.json.JSONObject.fromObject(oppid);
             String access_token = (String) oppidObj.get("access_token");
             openid = (String) oppidObj.get("openid");
-            String requestUrl2 = "https://api.weixin.qq.com/sns/userinfo?access_token=" + access_token + "&openid=" + openid + "&lang=zh_CN";
-            String userInfoStr = doGet(requestUrl2);
-            net.sf.json.JSONObject wxUserInfo = net.sf.json.JSONObject.fromObject(userInfoStr);
             map.put("openid", openid);
             map.put("access_token", access_token);
-            String subscribe = wxUserInfo.get("subscribe").toString();
-            String nickname = wxUserInfo.get("nickname").toString();
-            String sex = wxUserInfo.get("sex").toString();
-            long subscribe_time = Long.valueOf(wxUserInfo.get("subscribe_time").toString());
-            String headimgurl = wxUserInfo.get("headimgurl").toString();
-            String openids = wxUserInfo.get("openid").toString();
-            String city = wxUserInfo.get("city").toString();
-            map.put("subscribe", subscribe);
-            map.put("nickname", nickname);
-            map.put("subscribe_time", subscribe_time);
-            map.put("headimgurl", headimgurl);
-            map.put("openids", openids);
-            map.put("city", city);
-            map.put("sex", sex);
         } catch (Exception e) {
             e.printStackTrace();
         }
