@@ -395,10 +395,9 @@ public class VideoUploadUtil {
     }
 
 
-    public String doPost(HttpServletRequest request) {
+    public String doPost(HttpServletRequest request, String code) {
         String openid = "";
         try {
-            String code = request.getParameter("code");
             String requestUrl = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + APPIDs + "&secret=" + APPSECRETs + "&code=" + code + "&grant_type=authorization_code";
             //第一次请求 获取access_token 和 openid
             String oppid = doGet(requestUrl);

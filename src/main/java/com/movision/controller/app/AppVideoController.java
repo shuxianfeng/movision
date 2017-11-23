@@ -305,9 +305,10 @@ public class AppVideoController {
 
     @ApiOperation(value = " dy_openid", notes = " dy_openid", response = Response.class)
     @RequestMapping(value = "dy_openid", method = RequestMethod.GET)
-    public Response DYOpenid(HttpServletRequest request) {
+    public Response DYOpenid(HttpServletRequest request,
+                             @ApiParam("code") @RequestParam String code) {
         Response response = new Response();
-        String openid = videoUploadUtil.doPost(request);
+        String openid = videoUploadUtil.doPost(request, code);
         if (response.getCode() == 200) {
             response.setData(openid);
         }
