@@ -2118,8 +2118,10 @@ public class FacadePost {
             wrapAllFollowPost(userid, allList);
 
             if (ListUtil.isEmpty(allList)) {
+                log.debug("******首页关注的allList是空******");
                 return list;
             }
+            log.debug("******首页关注的allList不是空******");
             //通过使用LinkedHashSet来去除掉allList中重复的帖子，并且保证帖子的顺序不会发生变化
             Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(allList);
             allList = new ArrayList<PostVo>(linkedHashSet);
@@ -2134,6 +2136,7 @@ public class FacadePost {
 
             if (listmongodba.size() != 0) {
                 //用户存在浏览历史
+                log.debug("用户存在浏览历史");
                 List<PostVo> posts = new ArrayList<>();
                 for (int j = 0; j < listmongodba.size(); j++) {
                     PostVo post = new PostVo();
@@ -2143,11 +2146,12 @@ public class FacadePost {
                 allList.removeAll(posts);   //过滤掉浏览过的帖子
                 list = retuenList(allList, userid, 2, device, -1);
             } else {
+                log.debug("该用户无浏览历史");
                 //该用户无浏览历史
                 list = retuenList(allList, userid, 2, device, -1);
-                return list;
             }
         }
+        log.debug("******[followPost]首页关注的list******" + list.toString());
         return list;
     }
 
@@ -2188,6 +2192,7 @@ public class FacadePost {
                 allList.addAll(labelPost);
             }
         }
+        log.debug("**********[wrapAllFollowPost]首页关注的allList**********" + allList.toString());
     }
 
     /**
