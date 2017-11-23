@@ -317,8 +317,8 @@ public class VideoUploadUtil {
 
     //三元佳美公众号
     //服务号
-    //static String APPID = "wx1a8d32888a41fcb2";
-    //static String APPSECRET = "58f2162e7c0253e8486b4d8679e787dd";
+    static String APPIDs = "wx1a8d32888a41fcb2";
+    static String APPSECRETs = "58f2162e7c0253e8486b4d8679e787dd";
 
     //美番（MOFO）公众号
     //订阅号
@@ -327,6 +327,7 @@ public class VideoUploadUtil {
 
     //三元佳美公众号
     //订阅号
+    //static String APPIDs = "wx1a8d32888a41fcb2";
     static String DYAPPID = "wx02f87b0f2283d306";
     static String DYAPPSECRET = "ce7d888e707af276e21464d114995281";
 
@@ -398,7 +399,7 @@ public class VideoUploadUtil {
         String openid = "";
         try {
             String code = request.getParameter("code");
-            String requestUrl = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + DYAPPID + "&secret=" + DYAPPSECRET + "&code=" + code + "&grant_type=authorization_code";
+            String requestUrl = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + APPIDs + "&secret=" + APPSECRETs + "&code=" + code + "&grant_type=authorization_code";
             //第一次请求 获取access_token 和 openid
             String oppid = doGet(requestUrl);
             net.sf.json.JSONObject oppidObj = net.sf.json.JSONObject.fromObject(oppid);
