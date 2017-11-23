@@ -527,7 +527,7 @@
     <select id="findAllOneComment" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.comment.entity.CommentVo">
     SELECT c.*,u.photo,u.nickname FROM yw_post_comment c LEFT JOIN yw_user u ON u.id=c.userid WHERE
-        c.postid=#{postid,jdbcType=INTEGER} AND c.pid IS NULL ORDER BY c.intime DESC
+        c.postid=#{postid,jdbcType=INTEGER} AND c.pid IS NULL ORDER BY c.intime ASC
   </select>
 
     <select id="queryTwoComment" parameterType="java.lang.Integer"
