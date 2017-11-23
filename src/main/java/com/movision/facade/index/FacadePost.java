@@ -2109,8 +2109,10 @@ public class FacadePost {
      * @return
      */
     public List followPost(String userid, String device) {
+
         List<PostVo> list = null;   //返回值
-        if (userid != null) {
+
+        if (userid != null) {   //登录场景下
             List<PostVo> allList = new ArrayList<>();
             //封装所有关注的帖子
             wrapAllFollowPost(userid, allList);
@@ -2123,20 +2125,25 @@ public class FacadePost {
             allList = new ArrayList<PostVo>(linkedHashSet);
             //使用ComparatorChain来指定字段排序
             ComparatorChain chain = new ComparatorChain();
-            chain.addComparator(new BeanComparator("intime"), true); //true,fase正序反序,true表示逆序（默认排序是从小到大）
+            //true,fase正序反序,true表示逆序（默认排序是从小到大）
+            chain.addComparator(new BeanComparator("intime"), true);
             Collections.sort(allList, chain);
 
-            List<DBObject> listmongodba = userRefulshListMongodbToDevice(device, 2);   //用户有没有看过
-            if (listmongodba.size() != 0) {//刷新有记录
+            //用户【关注】的浏览历史记录，根据userid和设备号查询
+            List<DBObject> listmongodba = queryUserViewRecordByUseridTypeDevice(Integer.valueOf(userid), 2, device);
+
+            if (listmongodba.size() != 0) {
+                //用户存在浏览历史
                 List<PostVo> posts = new ArrayList<>();
                 for (int j = 0; j < listmongodba.size(); j++) {
                     PostVo post = new PostVo();
                     post.setId(Integer.parseInt(listmongodba.get(j).get("postid").toString()));
-                    posts.add(post);//把mongodb转为post实体
+                    posts.add(post);    //把mongodb转为post实体
                 }
-                allList.removeAll(posts);//过滤掉看过的帖子crileidPost就是剩下的帖子
+                allList.removeAll(posts);   //过滤掉浏览过的帖子
                 list = retuenList(allList, userid, 2, device, -1);
             } else {
+                //该用户无浏览历史
                 list = retuenList(allList, userid, 2, device, -1);
                 return list;
             }
@@ -2275,14 +2282,16 @@ public class FacadePost {
     public List retuenList(List<PostVo> lists, String userid, int type, String device, int labelid) {
         List<PostVo> list = null;
         if (lists != null) {
+            //代码分页
             list = pageFacade.getPageList(lists, 1, 10);
+
             findUser(list);
             findPostLabel(list);    //查询帖子的标签（不好合并）
             findHotComment(list);   //查询帖子的最热评论（不好合并）
             countView(list);
             findAllCircleName(list);
             insertmongo(list, userid, type, device, labelid);   //刷新出来的帖子，依次插入mongoDB中
-            zanIsPost(Integer.parseInt(userid), list);
+            zanIsPost(Integer.parseInt(userid), list);  //查询用户有没有点赞该帖子
             //findAllReturn(list, userid);  //查询一些必要字段
         }
         return list;
@@ -2485,7 +2494,7 @@ public class FacadePost {
 
 
     /**
-     * 该用户有没有点赞该帖子
+     * 查询用户有没有点赞该帖子
      *
      * @param userid
      * @param list
@@ -2616,6 +2625,39 @@ public class FacadePost {
             db = mongoClient.getDB("searchRecord");
             DBCollection table = db.getCollection("userRefreshRecord");//表名
             BasicDBObject queryObject = new BasicDBObject("userid", userid).append("type", type);
+            //指定需要显示列
+            BasicDBObject keys = new BasicDBObject();
+            keys.put("_id", 0);
+            keys.put("postid", 1);
+            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
+            list = dbCursor.toArray();
+            dbCursor.close();
+        } catch (Exception e) {
+            log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
+        } finally {
+            closeMongoDBConnection(mongoClient, db, dbCursor);
+        }
+        return list;
+    }
+
+    /**
+     * 根据设备号，用户id, 首页类型查询用户的浏览历史记录
+     *
+     * @param userid
+     * @param type
+     * @param device
+     * @return
+     */
+    public List queryUserViewRecordByUseridTypeDevice(int userid, int type, String device) {
+        MongoClient mongoClient = null;
+        List<DBObject> list = null;
+        DB db = null;
+        DBCursor dbCursor = null;
+        try {
+            mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
+            db = mongoClient.getDB("searchRecord");
+            DBCollection table = db.getCollection("userRefreshRecord");//表名
+            BasicDBObject queryObject = new BasicDBObject("userid", userid).append("type", type).append("device", device);
             //指定需要显示列
             BasicDBObject keys = new BasicDBObject();
             keys.put("_id", 0);
@@ -2959,7 +3001,9 @@ public class FacadePost {
     public void insertMongoDB(String userid, int postid, int crileid, int type, String device, int labelid) {
         //把刷新记录插入mongodb
         UserRefreshRecord userRefreshRecord = new UserRefreshRecord();
+
         if (StringUtil.isNotEmpty(userid)) {
+            //用户登录情况下
             userRefreshRecord.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
             userRefreshRecord.setUserid(Integer.parseInt(userid));
             userRefreshRecord.setPostid(postid);
@@ -2969,6 +3013,7 @@ public class FacadePost {
             userRefreshRecord.setDevice(device);
             userRefreshRecord.setLabelid(labelid);
         } else {
+            //未登录
             userRefreshRecord.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
             userRefreshRecord.setPostid(postid);
             userRefreshRecord.setCrileid(String.valueOf(crileid));
@@ -2980,8 +3025,6 @@ public class FacadePost {
         userRefreshRecordService.insert(userRefreshRecord);
         //同步到mysql中帖子浏览量加1
         postService.updateCountView(postid);
-
-
     }
 
     public List<Map> queryPostImgById(String postid) {
@@ -4073,22 +4116,28 @@ public class FacadePost {
             String intime = onlyPost.get(0).get("intime").toString();
             //查出在这个时间之前的用户浏览历史
             intimePost = queryPosyByImtimeDevice(intime, device, type);
-        } else {
-            //如果用户刷完了帖子，退出再进来 调用历史记录
-            //。这种情况下，用户手机无缓存，所以传0
-            //先查询用户有无历史
+        } else {    //传0，是因为app本地无缓存
+
+            /**
+             * 下面两种情况，都是用户手机无缓存，所以客户端传0
+             */
             int count = userHistoryDeviceCount(device, type);
             if (count > 10) {
-                //情况一：用户刷新之后再卸载APP,再重装APP，本地缓存被清除. 这时候查询出刚刚刷新的帖子。
-                //【有问题，查刚刚刷新的数据中热度最大的那个postid】
-                // 解决方法：从第11条开始查询。
+                /**
+                 * 【场景】：老用户卸载重装APP，进入app首页-关注，查看历史
+                 * 解决方法：1 从第11条开始查询。
+                 *          2 正常传入postid, 即刚刚刷新过后的最后一条postid，即10条中热度值最小的一条，也是10条中插入mongoDB时间最晚的一条
+                 *          目前选择第2种方法，客户端调第二页。
+                 */
                 us = userRefulshListMongodbToDevice(device, type);
             } else {
-                //情况二：新用户，只是展示第一批刷新的数据，无历史记录。用户浏览小于等于10条。
+                /**
+                 * 【场景】:新用户刚下载注册APP。
+                 * 用户浏览小于等于10条，无历史记录。
+                 */
                 us = null;
             }
         }
-        // List<DBObject> list = userRefulshListMongodb(Integer.parseInt(userid), type);
         List<DBObject> dontlike = queryUserDontLikePost(Integer.parseInt(userid));
         List<Integer> postVos = new ArrayList<>();
         List<Integer> dontlikes = new ArrayList<>();
