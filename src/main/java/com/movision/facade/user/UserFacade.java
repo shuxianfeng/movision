@@ -697,48 +697,51 @@ public class UserFacade {
             List<PostVo> list = null;
             if (type == 0) {//帖子
                 //查询用户发的帖子
-                List<PostVo> templist = postService.findAllUserPostList(Integer.parseInt(userid), paging);//MYSQL数据库查询出来的帖子列表
-                List<Integer> postidList = new ArrayList<>();
-                for (PostVo postVo : templist) {
-                    postidList.add(postVo.getId());
+                list = postService.findAllUserPostList(Integer.parseInt(userid), paging);//MYSQL数据库查询出来的帖子列表
+//                List<Integer> postidList = new ArrayList<>();
+//                for (PostVo postVo : templist) {
+//                    postidList.add(postVo.getId());
+//                }
+                if (list.size() == 0){
+                    list = null;
                 }
-                List<PostVo> resultList = new ArrayList<>();
-                //查询mongo中的用户浏览帖子记录
-                List<UserReflushCount> userReflushCountList = userRefreshRecordService.countPostViewCountByUserid(postidList);
-
-                for (int j = 0; j < userReflushCountList.size(); j++) {
-                    for (int i = 0; i < templist.size(); i++) {
-                        if (userReflushCountList.get(j).getPostid().intValue() == templist.get(i).getId().intValue()) {
-                            templist.get(i).setCountview(userReflushCountList.get(j).getCount());
-                            resultList.add(templist.get(i));
-                        }
-                    }
-                }
-
-                //最后再把mongodb中没有查询到的帖子添加上
-                List<PostVo> mongoResultList = new ArrayList<>();//----------------1.把 userReflushCountList 转化为 List<PostVo> 类型
-                for (int i = 0; i < userReflushCountList.size(); i++) {
-                    PostVo vo = new PostVo();
-                    vo.setId(userReflushCountList.get(i).getPostid());
-                    vo.setCountview(userReflushCountList.get(i).getCount());
-                    mongoResultList.add(vo);
-                }
-                for (int i = 0; i < mongoResultList.size(); i++) {//----------------2.过滤list中已经从mongodb中查出来的帖子（剩余的就是没查到的记录）
-                    PostVo vo = mongoResultList.get(i);
-                    templist.remove(vo);
-                }
-                for (int i = 0; i < templist.size(); i++) {//-----------------3.然后把剩余没查到浏览数的帖子记录也添加到结果集resultList中
-                    PostVo vo = templist.get(i);
-                    vo.setCountview(0);//没查到的设为0
-                    resultList.add(vo);
-                }
-
-                //最终进行发帖时间排倒叙
-                if (resultList.size() != 0) {
-                    //如果不为空，按照发帖时间排倒叙返回结果
-                    Collections.sort(resultList, PostVo.countComparator);
-                    list = resultList;
-                }
+//                List<PostVo> resultList = new ArrayList<>();
+//                //查询mongo中的用户浏览帖子记录
+//                List<UserReflushCount> userReflushCountList = userRefreshRecordService.countPostViewCountByUserid(postidList);
+//
+//                for (int j = 0; j < userReflushCountList.size(); j++) {
+//                    for (int i = 0; i < templist.size(); i++) {
+//                        if (userReflushCountList.get(j).getPostid().intValue() == templist.get(i).getId().intValue()) {
+//                            templist.get(i).setCountview(userReflushCountList.get(j).getCount());
+//                            resultList.add(templist.get(i));
+//                        }
+//                    }
+//                }
+//
+//                //最后再把mongodb中没有查询到的帖子添加上
+//                List<PostVo> mongoResultList = new ArrayList<>();//----------------1.把 userReflushCountList 转化为 List<PostVo> 类型
+//                for (int i = 0; i < userReflushCountList.size(); i++) {
+//                    PostVo vo = new PostVo();
+//                    vo.setId(userReflushCountList.get(i).getPostid());
+//                    vo.setCountview(userReflushCountList.get(i).getCount());
+//                    mongoResultList.add(vo);
+//                }
+//                for (int i = 0; i < mongoResultList.size(); i++) {//----------------2.过滤list中已经从mongodb中查出来的帖子（剩余的就是没查到的记录）
+//                    PostVo vo = mongoResultList.get(i);
+//                    templist.remove(vo);
+//                }
+//                for (int i = 0; i < templist.size(); i++) {//-----------------3.然后把剩余没查到浏览数的帖子记录也添加到结果集resultList中
+//                    PostVo vo = templist.get(i);
+//                    vo.setCountview(0);//没查到的设为0
+//                    resultList.add(vo);
+//                }
+//
+//                //最终进行发帖时间排倒叙
+//                if (resultList.size() != 0) {
+//                    //如果不为空，按照发帖时间排倒叙返回结果
+//                    Collections.sort(resultList, PostVo.countComparator);
+//                    list = resultList;
+//                }
             } else if (type == 1) {//活动
                 //活动帖子
                 list = postService.findAllUserActive(Integer.parseInt(userid), paging);
