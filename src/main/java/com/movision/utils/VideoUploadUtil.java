@@ -395,8 +395,9 @@ public class VideoUploadUtil {
     }
 
 
-    public String doPost(HttpServletRequest request, String code) {
+    public Map doPost(HttpServletRequest request, String code) {
         String openid = "";
+        Map map = new HashMap();
         try {
             String requestUrl = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + APPIDs + "&secret=" + APPSECRETs + "&code=" + code + "&grant_type=authorization_code";
             //第一次请求 获取access_token 和 openid
@@ -407,10 +408,24 @@ public class VideoUploadUtil {
             String requestUrl2 = "https://api.weixin.qq.com/sns/userinfo?access_token=" + access_token + "&openid=" + openid + "&lang=zh_CN";
             String userInfoStr = doGet(requestUrl2);
             net.sf.json.JSONObject wxUserInfo = net.sf.json.JSONObject.fromObject(userInfoStr);
+            String subscribe = wxUserInfo.get("subscribe").toString();
+            String nickname = wxUserInfo.get("nickname").toString();
+            String sex = wxUserInfo.get("sex").toString();
+            long subscribe_time = Long.valueOf(wxUserInfo.get("subscribe_time").toString());
+            String headimgurl = wxUserInfo.get("headimgurl").toString();
+            String openids = wxUserInfo.get("openid").toString();
+            String city = wxUserInfo.get("city").toString();
+            map.put("subscribe", subscribe);
+            map.put("nickname", nickname);
+            map.put("subscribe_time", subscribe_time);
+            map.put("headimgurl", headimgurl);
+            map.put("openids", openids);
+            map.put("city", city);
+            map.put("sex", sex);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return openid;
+        return map;
     }
 
 
