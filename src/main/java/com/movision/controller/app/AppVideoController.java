@@ -289,7 +289,7 @@ public class AppVideoController {
      * @return
      */
     @ApiOperation(value = " 获取临时acctoken", notes = " 获取临时acctoken", response = Response.class)
-    @RequestMapping(value = "get_weiacctoken", method = RequestMethod.GET)
+    @RequestMapping(value = "get_weiacctoken", method = RequestMethod.POST)
     public Response getUserInfoAccessToken(@ApiParam("code") @RequestParam String code) {
         Response response = new Response();
         Map result = videoUploadUtil.getUserInfoAccessToken(code);
