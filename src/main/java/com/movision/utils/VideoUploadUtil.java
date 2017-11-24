@@ -450,7 +450,7 @@ public class VideoUploadUtil {
             map.put("openid", openid);
             getUserInformationH5(openid);
             //根据openid查询对应的unionid（服务号表）
-            int unionid = fuwuhaoService.openidByUnionid(Integer.parseInt(openid));
+            String unionid = fuwuhaoService.openidByUnionid(openid);
             //根据unionid去订阅表中查有没有该用户的openid
             int have = dinyuehaoService.unionidByOpenid(unionid);
             int count = 0;

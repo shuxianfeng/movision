@@ -16,5 +16,5 @@ public interface DinyuehaoMapper {
     int updateByPrimaryKey(Dinyuehao record);
 
 
-    int unionidByOpenid(int unionid);
+    int unionidByOpenid(String unionid);
 }

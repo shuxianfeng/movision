@@ -28,7 +28,7 @@ public class DinyuehaoService {
     }
 
 
-    public int unionidByOpenid(int unionid) {
+    public int unionidByOpenid(String unionid) {
         try {
             log.info("根据unionid查询存在openid");
             return dinyuehaoMapper.unionidByOpenid(unionid);

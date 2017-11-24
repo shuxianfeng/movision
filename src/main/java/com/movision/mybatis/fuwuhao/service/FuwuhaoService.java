@@ -30,7 +30,7 @@ public class FuwuhaoService {
     }
 
 
-    public int openidByUnionid(int openid) {
+    public String openidByUnionid(String openid) {
         try {
             log.info("根据openid查询unionid");
             return fuwuhaoMapper.openidByUnionid(openid);

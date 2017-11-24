@@ -3,9 +3,9 @@ package com.movision.mybatis.dinyuehao.entity;
 public class Dinyuehao {
     private Integer id;
 
-    private Integer openid;
+    private String openid;
 
-    private Integer unionid;
+    private String unionid;
 
     public Integer getId() {
         return id;
@@ -15,19 +15,19 @@ public class Dinyuehao {
         this.id = id;
     }
 
-    public Integer getOpenid() {
+    public String getOpenid() {
         return openid;
     }
 
-    public void setOpenid(Integer openid) {
+    public void setOpenid(String openid) {
         this.openid = openid;
     }
 
-    public Integer getUnionid() {
+    public String getUnionid() {
         return unionid;
     }
 
-    public void setUnionid(Integer unionid) {
+    public void setUnionid(String unionid) {
         this.unionid = unionid;
     }
 }

@@ -3,8 +3,8 @@
 <mapper namespace="com.movision.mybatis.dinyuehao.mapper.DinyuehaoMapper">
     <resultMap id="BaseResultMap" type="com.movision.mybatis.dinyuehao.entity.Dinyuehao">
         <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="OPENID" property="openid" jdbcType="INTEGER"/>
-        <result column="unionid" property="unionid" jdbcType="INTEGER"/>
+        <result column="OPENID" property="openid" jdbcType="VARCHAR"/>
+        <result column="unionid" property="unionid" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
     id, OPENID, unionid
@@ -22,7 +22,7 @@
     <insert id="insert" parameterType="com.movision.mybatis.dinyuehao.entity.Dinyuehao">
     insert into tp_dinyuehao (id, OPENID, unionid
       )
-    values (#{id,jdbcType=INTEGER}, #{openid,jdbcType=INTEGER}, #{unionid,jdbcType=INTEGER}
+        values (#{id,jdbcType=INTEGER}, #{openid,jdbcType=VARCHAR}, #{unionid,jdbcType=VARCHAR}
       )
   </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.dinyuehao.entity.Dinyuehao">
@@ -43,10 +43,10 @@
                 #{id,jdbcType=INTEGER},
             </if>
             <if test="openid != null">
-                #{openid,jdbcType=INTEGER},
+                #{openid,jdbcType=VARCHAR},
             </if>
             <if test="unionid != null">
-                #{unionid,jdbcType=INTEGER},
+                #{unionid,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -54,21 +54,21 @@
         update tp_dinyuehao
         <set>
             <if test="openid != null">
-                OPENID = #{openid,jdbcType=INTEGER},
+                OPENID = #{openid,jdbcType=VARCHAR},
             </if>
             <if test="unionid != null">
-                unionid = #{unionid,jdbcType=INTEGER},
+                unionid = #{unionid,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.dinyuehao.entity.Dinyuehao">
     update tp_dinyuehao
-    set OPENID = #{openid,jdbcType=INTEGER},
-      unionid = #{unionid,jdbcType=INTEGER}
+        set OPENID = #{openid,jdbcType=VARCHAR},
+        unionid = #{unionid,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
-    <select id="unionidByOpenid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-    SELECT  count(1) FROM  tp_dinyuehao WHERE  unionid=#{unionid,jdbcType=INTEGER}
+    <select id="unionidByOpenid" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT count(1) FROM tp_dinyuehao WHERE unionid=#{unionid,jdbcType=VARCHAR}
   </select>
 </mapper>

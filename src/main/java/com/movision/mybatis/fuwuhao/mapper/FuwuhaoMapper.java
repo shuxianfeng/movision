@@ -15,5 +15,5 @@ public interface FuwuhaoMapper {
 
     int updateByPrimaryKey(Fuwuhao record);
 
-    int openidByUnionid(int openid);
+    String openidByUnionid(String openid);
 }
