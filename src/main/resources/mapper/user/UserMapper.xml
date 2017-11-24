@@ -1186,7 +1186,7 @@
     <select id="queryUserParticulars" parameterType="java.lang.String"
             resultType="com.movision.mybatis.user.entity.UserParticulars">
         SELECT u.*,
-        (SELECT audit_time FROM yw_audit_vip_detail WHERE apply_userid=#{userid,jdbcType=VARCHAR} AND vd.status=0) as
+        (SELECT audit_time FROM yw_audit_vip_detail WHERE apply_userid=#{userid,jdbcType=VARCHAR} AND status=0) as
         viptime,
         aut.name,aut.idnumber,
         (SELECT COUNT(1) FROM yw_post WHERE userid=#{userid,jdbcType=VARCHAR} AND isdel = 0) as postnum,
