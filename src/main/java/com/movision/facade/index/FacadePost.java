@@ -1525,7 +1525,7 @@ public class FacadePost {
                     c3=postService.findAllPostCrile(circle3);
                     //其他圈子
                     other=postService.findAllNotCircle(clist);
-                    listmongodb=userRefulshListMongodbHistoryCircleid(Integer.parseInt(userid),1);
+                    listmongodb=userRefulshListMongodb(Integer.parseInt(userid),1);
                     if (listmongodb.size() != 0) {
                         for (int j = 0; j < listmongodb.size(); j++) {
                             PostVo post = new PostVo();
@@ -1705,7 +1705,7 @@ public class FacadePost {
                     c2=postService.findAllPostCrile(circle2);
                      //其他圈子
                     other=postService.findAllNotCircle(clist);
-                    listmongodb=userRefulshListMongodbHistoryCircleid(Integer.parseInt(userid),1);
+                    listmongodb=userRefulshListMongodb(Integer.parseInt(userid),1);
                     if (listmongodb.size() != 0) {
                         for (int j = 0; j < listmongodb.size(); j++) {
                             PostVo post = new PostVo();
@@ -1797,7 +1797,7 @@ public class FacadePost {
                     c1=postService.findAllPostCrile(circle1);
                      //其他圈子
                     other=postService.findAllNotCircle(clist);
-                    listmongodb=userRefulshListMongodbHistoryCircleid(Integer.parseInt(userid),1);
+                    listmongodb=userRefulshListMongodb(Integer.parseInt(userid),1);
                     if (listmongodb.size() != 0) {
                         for (int j = 0; j < listmongodb.size(); j++) {
                             PostVo post = new PostVo();
@@ -3201,7 +3201,7 @@ public class FacadePost {
      * @param userid
      * @return
      */
-    public List userRefulshListMongodbHistoryCircleid(int userid, int type) {
+    public List userRefulshListMongodbHistoryCircleid(int userid, int type, String circleid) {
         MongoClient mongoClient = null;
         List<DBObject> list = null;
         DB db = null;
@@ -3210,7 +3210,7 @@ public class FacadePost {
             mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
             db = mongoClient.getDB("searchRecord");
             DBCollection table = db.getCollection("userRefreshRecord");//表名
-            BasicDBObject queryObject = new BasicDBObject("userid", userid).append("type", type);
+            BasicDBObject queryObject = new BasicDBObject("userid", userid).append("type", type).append("crileid", circleid);
             //指定需要显示列
             BasicDBObject keys = new BasicDBObject();
             keys.put("_id", 0);
@@ -4013,7 +4013,7 @@ public class FacadePost {
                 us = null;
             }
         }
-        // List<DBObject> list = userRefulshListMongodbHistoryCircleid(Integer.parseInt(userid), type, circleid);
+        //List<DBObject> list = userRefulshListMongodbHistoryCircleid(Integer.parseInt(userid), type, circleid);
         List<DBObject> dontlike = queryUserDontLikePost(Integer.parseInt(userid));
         List<Integer> postVos = new ArrayList<>();
         List<Integer> dontlikes = new ArrayList<>();
