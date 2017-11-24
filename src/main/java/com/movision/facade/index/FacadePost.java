@@ -2269,9 +2269,7 @@ public class FacadePost {
             log.error("查询用户浏览历史失败", e);
         } finally {
             if (null != db) {
-                db.requestDone();
-                cursor.close();
-                mongoClient.close();
+                closeMongoDBConnect(mongoClient, db, cursor);
             }
         }
         return list;
@@ -2608,9 +2606,7 @@ public class FacadePost {
                 insertMongoDB(userid, id, Integer.parseInt(circleid.toString()), type, device, labelid);
                 //增加帖子浏览记录
                 facadeHeatValue.addHeatValue(list.get(i).getId(), 8, 666666);
-
             }
-
         }
     }
 
@@ -2816,9 +2812,7 @@ public class FacadePost {
             log.error("根据设备号，首页类型，圈子id查询帖子浏览量(场景：未登录-圈子)失败", e);
         } finally {
             if (null != db) {
-                db.requestDone();
-                cursor.close();
-                mongoClient.close();
+                closeMongoDBConnect(mongoClient, db, cursor);
             }
         }
         return obj;
@@ -2848,9 +2842,7 @@ public class FacadePost {
             log.error("根据设备号，首页类型，标签id查询帖子浏览量(场景：未登录标签)失败", e);
         } finally {
             if (null != db) {
-                db.requestDone();
-                cursor.close();
-                mongoClient.close();
+                closeMongoDBConnect(mongoClient, db, cursor);
             }
         }
         return obj;
@@ -2879,9 +2871,7 @@ public class FacadePost {
             log.error("根据设备号，首页类型查询帖子浏览量(场景：未登录)失败", e);
         } finally {
             if (null != db) {
-                db.requestDone();
-                cursor.close();
-                mongoClient.close();
+                closeMongoDBConnect(mongoClient, db, cursor);
             }
         }
         return obj;
@@ -2910,12 +2900,23 @@ public class FacadePost {
             log.error("根据userid,type查询帖子浏览量失败", e);
         } finally {
             if (null != db) {
-                db.requestDone();
-                cursor.close();
-                mongoClient.close();
+                closeMongoDBConnect(mongoClient, db, cursor);
             }
         }
         return obj;
+    }
+
+    /**
+     * 关闭与mongoDB的连接
+     *
+     * @param mongoClient
+     * @param db
+     * @param cursor
+     */
+    private void closeMongoDBConnect(MongoClient mongoClient, DB db, DBCursor cursor) {
+        db.requestDone();
+        cursor.close();
+        mongoClient.close();
     }
 
     /**
@@ -2943,17 +2944,18 @@ public class FacadePost {
             log.error("根据userid，type,labelid查询帖子浏览量失败", e);
         } finally {
             if (null != db) {
-                db.requestDone();
-                cursor.close();
-                mongoClient.close();
+                closeMongoDBConnect(mongoClient, db, cursor);
             }
         }
         return obj;
     }
 
     /**
-     * 根据userid的浏览量
+     * 根据userid，type, circleid查询帖子浏览量
      *
+     * @param userid
+     * @param type
+     * @param circleid
      * @return
      */
     public Integer userHistoryCircleCount(int userid, int type, int circleid) {
@@ -2970,19 +2972,17 @@ public class FacadePost {
             obj = cursor.count();
             cursor.close();
         } catch (Exception e) {
-            log.error("根据postid查询帖子的浏览量失败", e);
+            log.error("根据userid，type, circleid查询帖子浏览量失败", e);
         } finally {
             if (null != db) {
-                db.requestDone();
-                cursor.close();
-                mongoClient.close();
+                closeMongoDBConnect(mongoClient, db, cursor);
             }
         }
         return obj;
     }
 
     /**
-     * 查询用户刷新记录表的总记录数
+     * 查询用户浏览记录表的总记录数
      *
      * @return
      */
@@ -3000,7 +3000,6 @@ public class FacadePost {
         } finally {
             if (null != db) {
                 db.requestDone();
-                db = null;
                 mongoClient.close();
             }
         }
@@ -3164,9 +3163,11 @@ public class FacadePost {
     }
 
     /**
-     * 在mongodb中查询用户刷新浏览过的列表(标签)
+     * 根据userid,type,labelid查询浏览记录
      *
      * @param userid
+     * @param type
+     * @param labelid
      * @return
      */
     public List userRefulshListMongodbHistory(int userid, int type, int labelid) {
@@ -3187,7 +3188,7 @@ public class FacadePost {
             list = dbCursor.toArray();
             dbCursor.close();
         } catch (Exception e) {
-            log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
+            log.error("根据userid,type,labelid查询浏览记录失败", e);
         } finally {
             closeMongoDBConnection(mongoClient, db, dbCursor);
         }
