@@ -950,8 +950,8 @@ public class VideoUploadUtil {
         map.put("sex", sex);
         map.put("unionid", unionid);
         Fuwuhao fuwuhao = new Fuwuhao();
-        fuwuhao.setOpenid(Integer.parseInt(openids));
-        fuwuhao.setUnionid(Integer.parseInt(unionid));
+        fuwuhao.setOpenid(openids);
+        fuwuhao.setUnionid(unionid);
         fuwuhaoService.insertSelective(fuwuhao);
         return map;
     }
@@ -1017,8 +1017,8 @@ public class VideoUploadUtil {
         map.put("unionid", unionid);
 
         Dinyuehao dinyuehao = new Dinyuehao();
-        dinyuehao.setOpenid(Integer.parseInt(openids));
-        dinyuehao.setUnionid(Integer.parseInt(unionid));
+        dinyuehao.setOpenid(openids);
+        dinyuehao.setUnionid(unionid);
         dinyuehaoService.insertSelective(dinyuehao);
         return map;
     }
