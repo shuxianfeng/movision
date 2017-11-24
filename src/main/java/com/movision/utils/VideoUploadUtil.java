@@ -10,22 +10,15 @@ import com.aliyuncs.vod.model.v20170321.CreateUploadVideoRequest;
 import com.aliyuncs.vod.model.v20170321.CreateUploadVideoResponse;
 import com.aliyuncs.vod.model.v20170321.RefreshUploadVideoRequest;
 import com.aliyuncs.vod.model.v20170321.RefreshUploadVideoResponse;
-import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.SimpleTimeZone;
-import com.movision.mybatis.weixinguangzhu.entity.WeixinGuangzhu;
-import com.movision.mybatis.weixinguangzhu.service.WeixinGuangzhuService;
-import com.movision.mybatis.weixinlist.entity.WeixinList;
-import com.movision.mybatis.weixinlist.service.WeixinListService;
-import com.movision.utils.pagination.model.Paging;
+import com.movision.mybatis.dinyuehao.entity.Dinyuehao;
+import com.movision.mybatis.dinyuehao.service.DinyuehaoService;
+import com.movision.mybatis.fuwuhao.entity.Fuwuhao;
+import com.movision.mybatis.fuwuhao.service.FuwuhaoService;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.redis.RedisClient;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +27,7 @@ import org.springframework.stereotype.Service;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.xml.crypto.dsig.SignatureMethod;
 import java.io.*;
 import java.net.*;
@@ -57,7 +48,11 @@ public class VideoUploadUtil {
     public static String accessKeySecret = PropertiesLoader.getValue("access.key.secret");
     @Autowired
     private RedisClient redisClient;
+    @Autowired
+    private DinyuehaoService dinyuehaoService;
 
+    @Autowired
+    private FuwuhaoService fuwuhaoService;
     /** @Autowired
     private WeixinGuangzhuService weixinGuangzhuService;
     @Autowired private WeixinListService weixinListService;*/
@@ -322,14 +317,62 @@ public class VideoUploadUtil {
 
     //美番（MOFO）公众号
     //订阅号
-    //static String DYAPPID = "wxd5b48a6ca0c168fa";
-    //static String DYAPPSECRET = "f89ff5a40b7e440a87e9fff74327e52c";
+    static String DYAPPID = "wxd5b48a6ca0c168fa";
+    static String DYAPPSECRET = "f89ff5a40b7e440a87e9fff74327e52c";
 
     //三元佳美公众号
     //订阅号
     //static String APPIDs = "wx1a8d32888a41fcb2";
-    static String DYAPPID = "wx02f87b0f2283d306";
-    static String DYAPPSECRET = "ce7d888e707af276e21464d114995281";
+    //static String DYAPPID = "wx02f87b0f2283d306";
+    //static String DYAPPSECRET = "ce7d888e707af276e21464d114995281";
+
+
+    //https://api.weixin.qq.com/cgi-bin/user/get?access_token=ACCESS_TOKEN&next_openid=NEXT_OPENID
+
+    /**
+     * 服务号拉取用户信息
+     *
+     * @return
+     */
+    public Map GetFUUserList() {
+        Map map = new HashMap();
+        String acc = getaccesstoken();
+        String url = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=" + acc + "";
+        String result = GetHttp(url);
+        net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
+        String total = jsonObject.get("total").toString();
+        String count = jsonObject.get("count").toString();
+        String data = jsonObject.get("data").toString();
+        String next_openid = jsonObject.get("next_openid").toString();
+        map.put("total", total);
+        map.put("count", count);
+        map.put("data", data);
+        map.put("next_openid", next_openid);
+        return map;
+    }
+
+    /**
+     * 订阅号拉取用户信息
+     *
+     * @return
+     */
+    public Map GetDYUserList() {
+        Map map = new HashMap();
+        String acc = getaccesstokenDY();
+        String url = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=" + acc + "";
+        String result = GetHttp(url);
+        net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
+        String total = jsonObject.get("total").toString();
+        String count = jsonObject.get("count").toString();
+        String data = jsonObject.get("data").toString();
+        String next_openid = jsonObject.get("next_openid").toString();
+        map.put("total", total);
+        map.put("count", count);
+        map.put("data", data);
+        map.put("next_openid", next_openid);
+        return map;
+
+    }
 
     private String charset = "utf-8";
     private String proxyHost = null;
@@ -403,13 +446,20 @@ public class VideoUploadUtil {
             //第一次请求 获取access_token 和 openid
             String oppid = doGet(requestUrl);
             net.sf.json.JSONObject oppidObj = net.sf.json.JSONObject.fromObject(oppid);
-            String access_token = (String) oppidObj.get("access_token");
             openid = (String) oppidObj.get("openid");
-            Map m = getUserInformationH5DY(openid);
             map.put("openid", openid);
-            map.put("access_token", access_token);
-            String subscribe = m.get("subscribe").toString();
-            map.put("subscribe", subscribe);
+            getUserInformationH5(openid);
+            //根据openid查询对应的unionid（服务号表）
+            int unionid = fuwuhaoService.openidByUnionid(Integer.parseInt(openid));
+            //根据unionid去订阅表中查有没有该用户的openid
+            int have = dinyuehaoService.unionidByOpenid(unionid);
+            int count = 0;
+            if (have == 0) {
+                count = 0;
+            } else {
+                count = 1;
+            }
+            map.put("count", count);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -889,6 +939,7 @@ public class VideoUploadUtil {
         String headimgurl = jsonObject.get("headimgurl").toString();
         String openids = jsonObject.get("openid").toString();
         String city = jsonObject.get("city").toString();
+        String unionid = jsonObject.get("unionid").toString();
         redisClient.set("openids", openids);
         map.put("subscribe", subscribe);
         map.put("nickname", nickname);
@@ -897,6 +948,11 @@ public class VideoUploadUtil {
         map.put("openids", openids);
         map.put("city", city);
         map.put("sex", sex);
+        map.put("unionid", unionid);
+        Fuwuhao fuwuhao = new Fuwuhao();
+        fuwuhao.setOpenid(Integer.parseInt(openids));
+        fuwuhao.setUnionid(Integer.parseInt(unionid));
+        fuwuhaoService.insertSelective(fuwuhao);
         return map;
     }
 
@@ -949,6 +1005,7 @@ public class VideoUploadUtil {
         String headimgurl = jsonObject.get("headimgurl").toString();
         String openids = jsonObject.get("openid").toString();
         String city = jsonObject.get("city").toString();
+        String unionid = jsonObject.get("unionid").toString();
         redisClient.set("DYopenids", openids);
         map.put("subscribe", subscribe);
         map.put("nickname", nickname);
@@ -957,6 +1014,12 @@ public class VideoUploadUtil {
         map.put("openids", openids);
         map.put("city", city);
         map.put("sex", sex);
+        map.put("unionid", unionid);
+
+        Dinyuehao dinyuehao = new Dinyuehao();
+        dinyuehao.setOpenid(Integer.parseInt(openids));
+        dinyuehao.setUnionid(Integer.parseInt(unionid));
+        dinyuehaoService.insertSelective(dinyuehao);
         return map;
     }
 

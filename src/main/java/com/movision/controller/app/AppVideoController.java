@@ -316,6 +316,27 @@ public class AppVideoController {
     }
 
 
+    @ApiOperation(value = " GetFUUserList", notes = " GetFUUserList", response = Response.class)
+    @RequestMapping(value = "GetFUUserList", method = RequestMethod.GET)
+    public Response GetFUUserList() {
+        Response response = new Response();
+        Map openid = videoUploadUtil.GetFUUserList();
+        if (response.getCode() == 200) {
+            response.setData(openid);
+        }
+        return response;
+    }
+
+    @ApiOperation(value = " GetDYUserList", notes = " GetDYUserList", response = Response.class)
+    @RequestMapping(value = "GetDYUserList", method = RequestMethod.GET)
+    public Response GetDYUserList() {
+        Response response = new Response();
+        Map openid = videoUploadUtil.GetDYUserList();
+        if (response.getCode() == 200) {
+            response.setData(openid);
+        }
+        return response;
+    }
 
 
 }
