@@ -513,6 +513,13 @@ public class UserManageFacade {
         if (type.equals(1) || type.equals("1")) {
             sysNoticeUtil.sendSysNotice(4, null, Integer.parseInt(userid), null);
         }
+        map.put("auditTime", new Date());
+        if (type.equals("1")) {
+            //加V申请审核记录
+            auditVipDetailService.insertVIPDetail(map);
+        } else {
+
+        }
         return userService.deleteUserLevl(map);
     }
 
