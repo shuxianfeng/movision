@@ -2151,7 +2151,12 @@ public class FacadePost {
                 list = retuenList(allList, userid, 2, device, -1);
             }
         }
-        log.debug("******[followPost]首页关注的list******" + list.toString());
+        if (list == null) {
+            log.debug("******[followPost]首页关注的list是null******");
+        } else {
+            log.debug("******[followPost]首页关注的list******" + list.toString());
+        }
+
         return list;
     }
 
