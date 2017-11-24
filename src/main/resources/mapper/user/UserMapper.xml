@@ -1185,7 +1185,10 @@
     
     <select id="queryUserParticulars" parameterType="java.lang.String"
             resultType="com.movision.mybatis.user.entity.UserParticulars">
-        SELECT u.*,vd.audit_time as viptime,aut.name,aut.idnumber,
+        SELECT u.*,
+        (SELECT audit_time FROM yw_audit_vip_detail WHERE apply_userid=#{userid,jdbcType=VARCHAR} AND vd.status=0) as
+        viptime,
+        aut.name,aut.idnumber,
         (SELECT COUNT(1) FROM yw_post WHERE userid=#{userid,jdbcType=VARCHAR} AND isdel = 0) as postnum,
         (SELECT COUNT(1) FROM yw_post WHERE userid=#{userid,jdbcType=VARCHAR} AND isessence=1) AS isessenceid,
         (SELECT COALESCE(SUM(points),0) FROM yw_post_rewarded WHERE userid=#{userid,jdbcType=VARCHAR}) AS reward,
@@ -1211,7 +1214,6 @@
         (SELECT MIN(intime) FROM yw_post WHERE userid=#{userid,jdbcType=VARCHAR}) AS oneissuepost,
         (SELECT MIN(collect_time) FROM yw_collection WHERE userid=#{userid,jdbcType=VARCHAR}) AS onecollection
         FROM yw_user AS u
-        LEFT JOIN yw_audit_vip_detail AS vd ON vd.apply_userid=#{userid,jdbcType=VARCHAR} AND vd.status=0
         LEFT JOIN yw_autonym_authentication AS aut ON aut.userid=#{userid,jdbcType=VARCHAR} AND aut.authstatus=1
         WHERE u.id=#{userid,jdbcType=VARCHAR} AND u.status=0
     </select>
