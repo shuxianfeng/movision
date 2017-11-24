@@ -36,7 +36,7 @@ public class UserParticulars implements Serializable {
 
     private Integer grade;//vip等级
 
-    private String viptime;//成为VIP时间
+    private Date viptime;//成为VIP时间
 
     private String status;//是否封号
 
@@ -248,11 +248,11 @@ public class UserParticulars implements Serializable {
         this.grade = grade;
     }
 
-    public String getViptime() {
+    public Date getViptime() {
         return viptime;
     }
 
-    public void setViptime(String viptime) {
+    public void setViptime(Date viptime) {
         this.viptime = viptime;
     }
 
