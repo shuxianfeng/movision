@@ -606,12 +606,16 @@ public class FacadePostUpdate {
             String intime = onlyPost.get(0).get("intime").toString();
             intimePost = facadePost.queryPosyByImtimeDevice(intime, device, type);
         } else {
-            //查询用户有无历史
-            int count = facadePost.userHistoryDeviceCount(device, type);
-            if (count > 10) {
-                us = facadePost.userRefulshListMongodbToDevice(device, type);
-            } else {
+            if (type == 2) {
+                //未登录下，【关注】下面不展示历史
                 us = null;
+            } else {
+                int count = facadePost.userHistoryDeviceCount(device, type);
+                if (count > 10) {
+                    us = facadePost.userRefulshListMongodbToDevice(device, type);
+                } else {
+                    us = null;
+                }
             }
         }
         //  List<DBObject> list = userRefulshListMongodbToDevice(device, type);
@@ -819,19 +823,39 @@ public class FacadePostUpdate {
             //查出在这个时间之前的用户浏览历史
             intimePost = facadePost.queryPosyByImtimeDevice(intime, device, type);
         } else {
-            //如果用户刷完了帖子，退出再进来 调用历史记录
-            //。这种情况下，用户手机无缓存，所以传0
-            //先查询用户有无历史
-            int count = facadePost.userHistoryDeviceCount(device, type);
-            if (count > 10) {
-                //情况一：用户刷新之后再卸载APP,再重装APP，本地缓存被清除. 这时候查询出刚刚刷新的帖子。
-                //【有问题，查刚刚刷新的数据中热度最大的那个postid】
-                // 解决方法：从第11条开始查询。
-                us = facadePost.userRefulshListMongodbToDevice(device, type);
+
+            if (type == 2) {
+                //【关注】下面的历史
+                int count = facadePost.userHistoryCount(Integer.valueOf(userid), type);
+                if (count > 0) {
+                    //如果是老用户，则查询关注-用户浏览记录
+                    us = facadePost.queryUserViewRecordByUseridTypeDevice(Integer.valueOf(userid), type, device);
+                } else {
+                    us = null;
+                }
             } else {
-                //情况二：新用户，只是展示第一批刷新的数据，无历史记录。用户浏览小于等于10条。
-                us = null;
+                /**
+                 * 【推荐】和【本地】的历史
+                 * 下面两种情况，都是用户手机无缓存，所以客户端传0
+                 */
+                int count = facadePost.userHistoryDeviceCount(device, type);
+                if (count > 10) {
+                    /**
+                     * 【场景】：老用户卸载重装APP，进入app首页-关注，查看历史
+                     * 解决方法：1 从第11条开始查询。
+                     *          2 正常传入postid, 即刚刚刷新过后的最后一条postid，即10条中热度值最小的一条，也是10条中插入mongoDB时间最晚的一条
+                     *          目前选择第2种方法，客户端调第二页。
+                     */
+                    us = facadePost.userRefulshListMongodbToDevice(device, type);
+                } else {
+                    /**
+                     * 【场景】:新用户刚下载注册APP。
+                     * 用户浏览小于等于10条，无历史记录。
+                     */
+                    us = null;
+                }
             }
+
         }
         // List<DBObject> list = userRefulshListMongodb(Integer.parseInt(userid), type);
         List<DBObject> dontlike = facadePost.queryUserDontLikePost(Integer.parseInt(userid));

@@ -2668,7 +2668,7 @@ public class FacadePost {
             list = dbCursor.toArray();
             dbCursor.close();
         } catch (Exception e) {
-            log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
+            log.error("根据设备号，用户id, 首页类型查询用户的浏览历史记录失败", e);
         } finally {
             closeMongoDBConnection(mongoClient, db, dbCursor);
         }
@@ -2676,7 +2676,7 @@ public class FacadePost {
     }
 
     /**
-     * 在mongodb中查询用户刷新浏览过的列表
+     * 根据用户id查询帖子浏览历史
      *
      * @param userid
      * @return
@@ -2699,7 +2699,7 @@ public class FacadePost {
             list = dbCursor.toArray();
             dbCursor.close();
         } catch (Exception e) {
-            log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
+            log.error("根据用户id查询帖子浏览历史失败", e);
         } finally {
             closeMongoDBConnection(mongoClient, db, dbCursor);
         }
@@ -2709,7 +2709,8 @@ public class FacadePost {
     /**
      * 在mongodb中查询用户刷新浏览过的列表
      *
-     * @param
+     * @param device
+     * @param type
      * @return
      */
     public List userRefulshListMongodbToDevice(String device, int type) {
@@ -2820,6 +2821,7 @@ public class FacadePost {
 
     /**
      * 根据设备号，首页类型，标签id查询帖子浏览量(场景：未登录标签)
+     *
      * @param device
      * @param type
      * @param labelid
@@ -2850,6 +2852,7 @@ public class FacadePost {
 
     /**
      * 根据设备号，首页类型查询帖子浏览量(场景：未登录)
+     *
      * @param device
      * @param type
      * @return
@@ -2879,6 +2882,7 @@ public class FacadePost {
 
     /**
      * 根据userid,type查询帖子浏览量
+     *
      * @param userid
      * @param type
      * @return
@@ -3922,12 +3926,18 @@ public class FacadePost {
             String intime = onlyPost.get(0).get("intime").toString();
             intimePost = queryPosyByImtimeDevice(intime, device, type);
         } else {
-            //查询用户有无历史
-            int count = userHistoryDeviceCount(device, type);
-            if (count > 10) {
-                us = userRefulshListMongodbToDevice(device, type);
-            } else {
+
+            if (type == 2) {
+                //未登录下，【关注】下面不展示历史
                 us = null;
+            } else {
+
+                int count = userHistoryDeviceCount(device, type);
+                if (count > 10) {
+                    us = userRefulshListMongodbToDevice(device, type);
+                } else {
+                    us = null;
+                }
             }
         }
         //  List<DBObject> list = userRefulshListMongodbToDevice(device, type);
@@ -4136,25 +4146,38 @@ public class FacadePost {
             intimePost = queryPosyByImtimeDevice(intime, device, type);
         } else {    //传0，是因为app本地无缓存
 
-            /**
-             * 下面两种情况，都是用户手机无缓存，所以客户端传0
-             */
-            int count = userHistoryDeviceCount(device, type);
-            if (count > 10) {
-                /**
-                 * 【场景】：老用户卸载重装APP，进入app首页-关注，查看历史
-                 * 解决方法：1 从第11条开始查询。
-                 *          2 正常传入postid, 即刚刚刷新过后的最后一条postid，即10条中热度值最小的一条，也是10条中插入mongoDB时间最晚的一条
-                 *          目前选择第2种方法，客户端调第二页。
-                 */
-                us = userRefulshListMongodbToDevice(device, type);
+            if (type == 2) {
+                //【关注】下面的历史
+                int count = userHistoryCount(Integer.valueOf(userid), type);
+                if (count > 0) {
+                    //如果是老用户，则查询关注-用户浏览记录
+                    us = queryUserViewRecordByUseridTypeDevice(Integer.valueOf(userid), type, device);
+                } else {
+                    us = null;
+                }
             } else {
                 /**
-                 * 【场景】:新用户刚下载注册APP。
-                 * 用户浏览小于等于10条，无历史记录。
+                 *  【推荐】和【本地】 的历史
+                 * 下面两种情况，都是用户手机无缓存，所以客户端传0
                  */
-                us = null;
+                int count = userHistoryDeviceCount(device, type);
+                if (count > 10) {
+                    /**
+                     * 【场景】：老用户卸载重装APP，进入app首页-关注，查看历史
+                     * 解决方法：1 从第11条开始查询。
+                     *          2 正常传入postid, 即刚刚刷新过后的最后一条postid，即10条中热度值最小的一条，也是10条中插入mongoDB时间最晚的一条
+                     *          目前选择第2种方法，客户端调第二页。
+                     */
+                    us = userRefulshListMongodbToDevice(device, type);
+                } else {
+                    /**
+                     * 【场景】:新用户刚下载注册APP。
+                     * 用户浏览小于等于10条，无历史记录。
+                     */
+                    us = null;
+                }
             }
+
         }
         List<DBObject> dontlike = queryUserDontLikePost(Integer.parseInt(userid));
         List<Integer> postVos = new ArrayList<>();
