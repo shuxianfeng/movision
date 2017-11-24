@@ -2102,7 +2102,7 @@ public class FacadePost {
     }
 
     /**
-     * 关注
+     * 关注(新老接口共用)
      *
      * @param userid 登录人id
      * @param device 登录设备号
@@ -2759,9 +2759,10 @@ public class FacadePost {
 
 
     /**
-     * 在mongodb中查询用户刷新浏览过的列表(历史记录用)
+     * 根据设备号和首页类型查询浏览记录，从第11条开始返回数据(历史记录用)
      *
-     * @param
+     * @param device
+     * @param type
      * @return
      */
     public List userRefulshListMongodbToDeviceSkip(String device, int type) {
@@ -2782,7 +2783,7 @@ public class FacadePost {
             list = dbCursor.toArray();
             dbCursor.close();
         } catch (Exception e) {
-            log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
+            log.error("根据设备号和首页类型查询浏览记录，从第11条开始返回数据(历史记录用)失败", e);
         } finally {
             closeMongoDBConnection(mongoClient, db, dbCursor);
         }
@@ -2791,8 +2792,11 @@ public class FacadePost {
 
 
     /**
-     * 根据userid的浏览量(未登录圈子)
+     * 根据设备号，首页类型，圈子id查询帖子浏览量(场景：未登录-圈子)
      *
+     * @param device
+     * @param type
+     * @param circleid
      * @return
      */
     public Integer userHistoryDeviceCircleCount(String device, int type, String circleid) {
@@ -2809,7 +2813,7 @@ public class FacadePost {
             obj = cursor.count();
             cursor.close();
         } catch (Exception e) {
-            log.error("根据postid查询帖子的浏览量失败", e);
+            log.error("根据设备号，首页类型，圈子id查询帖子浏览量(场景：未登录-圈子)失败", e);
         } finally {
             if (null != db) {
                 db.requestDone();
@@ -2821,8 +2825,10 @@ public class FacadePost {
     }
 
     /**
-     * 根据userid的浏览量(未登录标签)
-     *
+     * 根据设备号，首页类型，标签id查询帖子浏览量(场景：未登录标签)
+     * @param device
+     * @param type
+     * @param labelid
      * @return
      */
     public Integer userHistoryDeviceLabelCount(String device, int type, int labelid) {
@@ -2839,7 +2845,7 @@ public class FacadePost {
             obj = cursor.count();
             cursor.close();
         } catch (Exception e) {
-            log.error("根据postid查询帖子的浏览量失败", e);
+            log.error("根据设备号，首页类型，标签id查询帖子浏览量(场景：未登录标签)失败", e);
         } finally {
             if (null != db) {
                 db.requestDone();
@@ -2851,8 +2857,9 @@ public class FacadePost {
     }
 
     /**
-     * 根据userid的浏览量(未登录)
-     *
+     * 根据设备号，首页类型查询帖子浏览量(场景：未登录)
+     * @param device
+     * @param type
      * @return
      */
     public Integer userHistoryDeviceCount(String device, int type) {
@@ -2869,7 +2876,7 @@ public class FacadePost {
             obj = cursor.count();
             cursor.close();
         } catch (Exception e) {
-            log.error("根据postid查询帖子的浏览量失败", e);
+            log.error("根据设备号，首页类型查询帖子浏览量(场景：未登录)失败", e);
         } finally {
             if (null != db) {
                 db.requestDone();
@@ -2881,8 +2888,9 @@ public class FacadePost {
     }
 
     /**
-     * 根据userid的浏览量
-     *
+     * 根据userid,type查询帖子浏览量
+     * @param userid
+     * @param type
      * @return
      */
     public Integer userHistoryCount(int userid, int type) {
@@ -2899,7 +2907,7 @@ public class FacadePost {
             obj = cursor.count();
             cursor.close();
         } catch (Exception e) {
-            log.error("根据postid查询帖子的浏览量失败", e);
+            log.error("根据userid,type查询帖子浏览量失败", e);
         } finally {
             if (null != db) {
                 db.requestDone();
@@ -2911,8 +2919,11 @@ public class FacadePost {
     }
 
     /**
-     * 根据userid的浏览量
+     * 根据userid，type,labelid查询帖子浏览量
      *
+     * @param userid
+     * @param type
+     * @param labelid
      * @return
      */
     public Integer userHistoryLabelCount(int userid, int type, int labelid) {
@@ -2929,7 +2940,7 @@ public class FacadePost {
             obj = cursor.count();
             cursor.close();
         } catch (Exception e) {
-            log.error("根据postid查询帖子的浏览量失败", e);
+            log.error("根据userid，type,labelid查询帖子浏览量失败", e);
         } finally {
             if (null != db) {
                 db.requestDone();
