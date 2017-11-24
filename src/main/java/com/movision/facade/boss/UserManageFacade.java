@@ -522,7 +522,7 @@ public class UserManageFacade {
         if (type.equals("1")) {
             ApplyVipDetail applyVipDetail = new ApplyVipDetail();
             applyVipDetail.setUserid(Integer.parseInt(userid));
-            applyVipDetail.setIsdel(0);
+            applyVipDetail.setIsdel(1);
             applyVipDetail.setApplyLevel(1);
             applyVipDetail.setApplyTime(new Date());
             int id = applyVipDetailService.addVipApplyRecord(applyVipDetail);
