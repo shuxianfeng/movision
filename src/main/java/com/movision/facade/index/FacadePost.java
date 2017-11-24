@@ -2301,7 +2301,6 @@ public class FacadePost {
             findAllCircleName(list);
             insertmongo(list, userid, type, device, labelid);   //刷新出来的帖子，依次插入mongoDB中
             zanIsPost(Integer.parseInt(userid), list);  //查询用户有没有点赞该帖子
-            //findAllReturn(list, userid);  //查询一些必要字段
         }
         return list;
     }

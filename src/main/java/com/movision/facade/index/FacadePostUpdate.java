@@ -68,7 +68,6 @@ public class FacadePostUpdate {
                     posts.add(post);//把mongodb转为post实体
                 }
                 list.removeAll(posts);
-                //list = NotLoginretuenList(list, 1, device, -1);
             }
             list = NotLoginretuenList(list, 1, device, -1);
             return list;
@@ -98,7 +97,6 @@ public class FacadePostUpdate {
         List<PostVo> list = null;
         List<UserRefreshRecordVo> result;//查询用户最喜欢的圈子
         List<DBObject> listmongodb;
-        //listmongodb = userRefulshListMongodb(Integer.parseInt(userid), 1);//查询用户刷新列表
         //查询用户已经看过的帖子
         listmongodb = facadePost.userRefulshListMongodbToDevice(device, 1);
         if (listmongodb.size() != 0) {
@@ -136,7 +134,6 @@ public class FacadePostUpdate {
     private List userAnalysisSmall(String userid, List<PostVo> alllist, List<PostVo> posts, String device) {
         List<DBObject> listmongodba;
         List<PostVo> list = null;
-        //listmongodba = userRefulshListMongodb(Integer.parseInt(userid), 1);//查询用户刷新列表
         listmongodba = facadePost.userRefulshListMongodbToDevice(device, 1);//用户有没有看过
         if (listmongodba.size() != 0) {
             for (int j = 0; j < listmongodba.size(); j++) {
@@ -293,12 +290,10 @@ public class FacadePostUpdate {
 
                 }
                 list.removeAll(posts);
-                //  list = NotLoginretuenList(list, 4, device, -1);
             }
             list = NotLoginretuenList(list, 4, device, -1);
             return list;
         } else {
-            // listmongodba = userRefulshListMongodbHistoryCircleid(Integer.parseInt(userid), 4, String.valueOf(circleid));//用户有没有看过
             listmongodba = facadePost.userRefulshListMongodbToDeviceHistory(device, 4, String.valueOf(circleid));//用户有没有看过
             if (listmongodba.size() != 0) {
                 for (int j = 0; j < listmongodba.size(); j++) {
@@ -340,12 +335,10 @@ public class FacadePostUpdate {
                     posts.add(post);//把mongodb转为post实体
                 }
                 list.removeAll(posts);
-                //list = NotLoginretuenList(list, 5, device, labelid);
             }
             list = NotLoginretuenList(list, 5, device, labelid);
             return list;
         } else {
-            // listmongodba = userRefulshListMongodb(Integer.parseInt(userid), 5);//用户有没有看过
             listmongodba = facadePost.userRefulshListMongodbToDeviceHistoryLabelid(device, 5, labelid);//用户有没有看过
             if (listmongodba.size() != 0) {
                 for (int j = 0; j < listmongodba.size(); j++) {
@@ -379,14 +372,10 @@ public class FacadePostUpdate {
         List<PostVo> list = null;
         if (lists != null) {
             list = pageFacade.getPageList(lists, 1, 10);
-            //facadePost.findUser(list);
             facadePost.findPostLabel(list);    //查询帖子的标签（不好合并）
             facadePost.findHotComment(list);   //查询帖子的最热评论（不好合并）
-            //facadePost.countView(list);
-            // facadePost.findAllCircleName(list);
             facadePost.insertmongo(list, userid, type, device, labelid);   //刷新出来的帖子，依次插入mongoDB中
             facadePost.zanIsPost(Integer.parseInt(userid), list);
-            //findAllReturn(list, userid);  //查询一些必要字段
         }
         return list;
     }
@@ -402,13 +391,9 @@ public class FacadePostUpdate {
         List<PostVo> list = null;
         if (lists != null) {
             list = pageFacade.getPageList(lists, 1, 10);
-            //facadePost.findUser(list); //根据userid查询作者信息
             facadePost.findPostLabel(list);    //根据postid查询标签信息
             facadePost.findHotComment(list);   //根据postid查询所有评论
-            //facadePost.countView(list);    //根据postid查询帖子的浏览量
-            //facadePost.findAllCircleName(list);
             facadePost.insertmongo(list, "", type, device, labelid);
-            //findAllReturn(list, null);  //查询一些必要字段
         }
         return list;
     }
@@ -513,7 +498,6 @@ public class FacadePostUpdate {
             }
         }
         List<Integer> postVos = new ArrayList<>();
-        //  List<DBObject> list = userRefulshListMongodbToDeviceHistory(device, type, circleid);
         if (intimePost != null) {
             for (int i = 0; i < intimePost.size(); i++) {
                 int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
@@ -529,10 +513,8 @@ public class FacadePostUpdate {
         //根据postid查询帖子
         postVo = postService.findAllPostByid(postVos, paging);
         if (postVo != null) {
-            //facadePost.findUser(postVo);
             facadePost.findPostLabel(postVo);
             facadePost.findHotComment(postVo);
-            //facadePost. countView(postVo);
         }
         return postVo;
     }
@@ -564,7 +546,6 @@ public class FacadePostUpdate {
                 us = null;
             }
         }
-        //List<DBObject> list = userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
         List<Integer> postVos = new ArrayList<>();
         if (intimePost != null) {
             for (int i = 0; i < intimePost.size(); i++) {
@@ -580,10 +561,8 @@ public class FacadePostUpdate {
         }
         postVo = postService.findAllPostByid(postVos, paging);
         if (postVo != null) {
-            //facadePost.findUser(postVo);
             facadePost.findPostLabel(postVo);
             facadePost.findHotComment(postVo);
-            //facadePost.countView(postVo);
         }
         return postVo;
     }
@@ -618,7 +597,6 @@ public class FacadePostUpdate {
                 }
             }
         }
-        //  List<DBObject> list = userRefulshListMongodbToDevice(device, type);
         List<Integer> postVos = new ArrayList<>();
         if (intimePost != null) {
             for (int i = 0; i < intimePost.size(); i++) {
@@ -635,10 +613,8 @@ public class FacadePostUpdate {
         //根据postid查询帖子
         postVo = postService.findAllPostByid(postVos, paging);
         if (postVo != null) {
-            //facadePost.findUser(postVo);
             facadePost.findPostLabel(postVo);
             facadePost.findHotComment(postVo);
-            //facadePost.countView(postVo);
         }
         return postVo;
     }
@@ -729,10 +705,8 @@ public class FacadePostUpdate {
         //根据postid查询帖子
         postVo = postService.findAllPostByid(postVos, paging);
         if (postVo != null) {
-            //facadePost.findUser(postVo);
             facadePost.findPostLabel(postVo);
             facadePost.findHotComment(postVo);
-            //facadePost.countView(postVo);
             facadePost.zanIsPost(Integer.parseInt(userid), postVo);
         }
         return postVo;
@@ -792,10 +766,8 @@ public class FacadePostUpdate {
         //根据postid查询帖子
         postVo = postService.findAllPostByid(postVos, paging);
         if (postVo != null) {
-            //facadePost.findUser(postVo);
             facadePost.findPostLabel(postVo);
             facadePost.findHotComment(postVo);
-            //facadePost.countView(postVo);
             facadePost.zanIsPost(Integer.parseInt(userid), postVo);
         }
         return postVo;
@@ -857,7 +829,6 @@ public class FacadePostUpdate {
             }
 
         }
-        // List<DBObject> list = userRefulshListMongodb(Integer.parseInt(userid), type);
         List<DBObject> dontlike = facadePost.queryUserDontLikePost(Integer.parseInt(userid));
         List<Integer> postVos = new ArrayList<>();
         List<Integer> dontlikes = new ArrayList<>();
@@ -888,10 +859,8 @@ public class FacadePostUpdate {
         postVo = postService.findAllPostByid(postVos, paging);
         log.info(postVos.size() + ";;;;;;;;;;;;;;;;;;;;;;;;;;");
         if (postVo != null) {
-            //facadePost.findUser(postVo);
             facadePost.findPostLabel(postVo);
             facadePost.findHotComment(postVo);
-            //facadePost.countView(postVo);
             facadePost.zanIsPost(Integer.parseInt(userid), postVo);
         }
         return postVo;
