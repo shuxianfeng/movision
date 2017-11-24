@@ -88,54 +88,6 @@ public class UserParticulars implements Serializable {
 
     private Integer isrecommend;//是否作为发现页必推作者：0 否 1 是'
 
-    public Integer getIsrecommend() {
-        return isrecommend;
-    }
-
-    public void setIsrecommend(Integer isrecommend) {
-        this.isrecommend = isrecommend;
-    }
-
-    public Integer getHeatValue() {
-        return heatValue;
-    }
-
-    public void setHeatValue(Integer heatValue) {
-        this.heatValue = heatValue;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getIdnumber() {
-        return idnumber;
-    }
-
-    public void setIdnumber(String idnumber) {
-        this.idnumber = idnumber;
-    }
-
-    public Date getOnecollection() {
-        return onecollection;
-    }
-
-    public void setOnecollection(Date onecollection) {
-        this.onecollection = onecollection;
-    }
-
-    public Date getOneissuepost() {
-        return oneissuepost;
-    }
-
-    public void setOneissuepost(Date oneissuepost) {
-        this.oneissuepost = oneissuepost;
-    }
-
     public Integer getId() {
         return id;
     }
@@ -406,5 +358,53 @@ public class UserParticulars implements Serializable {
 
     public void setIshot(String ishot) {
         this.ishot = ishot;
+    }
+
+    public Date getOneissuepost() {
+        return oneissuepost;
+    }
+
+    public void setOneissuepost(Date oneissuepost) {
+        this.oneissuepost = oneissuepost;
+    }
+
+    public Date getOnecollection() {
+        return onecollection;
+    }
+
+    public void setOnecollection(Date onecollection) {
+        this.onecollection = onecollection;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getIdnumber() {
+        return idnumber;
+    }
+
+    public void setIdnumber(String idnumber) {
+        this.idnumber = idnumber;
+    }
+
+    public Integer getHeatValue() {
+        return heatValue;
+    }
+
+    public void setHeatValue(Integer heatValue) {
+        this.heatValue = heatValue;
+    }
+
+    public Integer getIsrecommend() {
+        return isrecommend;
+    }
+
+    public void setIsrecommend(Integer isrecommend) {
+        this.isrecommend = isrecommend;
     }
 }
