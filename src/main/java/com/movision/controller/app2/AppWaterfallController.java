@@ -4,7 +4,7 @@ import com.movision.common.Response;
 import com.movision.facade.circle.CircleAppFacade;
 import com.movision.facade.comment.FacadeComments;
 import com.movision.facade.index.FacadePost;
-import com.movision.facade.index.FacadePostUpdate;
+import com.movision.facade.index.FacadePost1117;
 import com.movision.facade.label.LabelFacade;
 import com.movision.facade.msgCenter.MsgCenterFacade;
 import com.movision.facade.user.UserFacade;
@@ -53,7 +53,7 @@ public class AppWaterfallController {
     private CircleAppFacade circleAppFacade;
 
     @Autowired
-    private FacadePostUpdate facadePostUpdate;
+    private FacadePost1117 facadePost1117;
 
     /**
      * 下拉刷新
@@ -95,7 +95,7 @@ public class AppWaterfallController {
                                             @ApiParam(value = "设备号") @RequestParam(required = false) String device,
                                             @ApiParam(value = "经度") @RequestParam(required = false) String lng) {
         Response response = new Response();
-        List map = facadePostUpdate.userRefreshListNew_1117(userid, device, type, lat, circleid, labelid, lng);
+        List map = facadePost1117.userRefreshListNew_1117(userid, device, type, lat, circleid, labelid, lng);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
@@ -197,7 +197,7 @@ public class AppWaterfallController {
                                                    @ApiParam(value = "帖子id") @RequestParam String postids) {
         Response response = new Response();
         Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List<PostVo> map = facadePostUpdate.userReflushHishtoryRecord_1117(userid, pager, type, device, labelid, circleid, postids);
+        List<PostVo> map = facadePost1117.userReflushHishtoryRecord_1117(userid, pager, type, device, labelid, circleid, postids);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

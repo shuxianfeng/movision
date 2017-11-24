@@ -28,8 +28,8 @@ import java.util.*;
  *
  */
 @Service
-public class FacadePostUpdate {
-    private static Logger log = LoggerFactory.getLogger(FacadePostUpdate.class);
+public class FacadePost1117 {
+    private static Logger log = LoggerFactory.getLogger(FacadePost1117.class);
 
     @Autowired
     private FacadePost facadePost;
