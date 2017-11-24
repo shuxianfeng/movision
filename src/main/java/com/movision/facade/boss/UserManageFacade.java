@@ -2,6 +2,8 @@ package com.movision.facade.boss;
 
 import com.movision.common.constant.JurisdictionConstants;
 import com.movision.fsearch.utils.StringUtil;
+import com.movision.mybatis.applyVipDetail.entity.ApplyVipDetail;
+import com.movision.mybatis.applyVipDetail.service.ApplyVipDetailService;
 import com.movision.mybatis.auditVipDetail.service.AuditVipDetailService;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
@@ -53,6 +55,9 @@ public class UserManageFacade {
 
     @Autowired
     private SysNoticeUtil sysNoticeUtil;
+
+    @Autowired
+    private ApplyVipDetailService applyVipDetailService;
 
 
     //用于返回用户登录状态
@@ -515,6 +520,13 @@ public class UserManageFacade {
         }
         map.put("auditTime", new Date());
         if (type.equals("1")) {
+            ApplyVipDetail applyVipDetail = new ApplyVipDetail();
+            applyVipDetail.setUserid(Integer.parseInt(userid));
+            applyVipDetail.setIsdel(0);
+            applyVipDetail.setApplyTime(new Date());
+            int id = applyVipDetailService.addVipApplyRecord(applyVipDetail);
+            map.put("appyid", applyVipDetail.getId());
+            map.put("loginid", -1);
             //加V申请审核记录
             auditVipDetailService.insertVIPDetail(map);
         } else {

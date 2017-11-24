@@ -28,6 +28,9 @@
         #{applyLevel,jdbcType=INTEGER},#{isdel,jdbcType=INTEGER})
     </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.applyVipDetail.entity.ApplyVipDetail">
+        <selectKey keyProperty="id" order="AFTER" resultType="Integer">
+            select LAST_INSERT_ID()
+        </selectKey>
         insert into yw_apply_vip_detail
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
