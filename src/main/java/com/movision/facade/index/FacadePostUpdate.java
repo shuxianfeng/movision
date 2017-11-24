@@ -43,12 +43,11 @@ public class FacadePostUpdate {
     @Autowired
     private OpularSearchTermsService opularSearchTermsService;
 
-
     /**
-     * 推荐
+     * 首页-推荐 刷新接口
      *
      * @param userid
-     * @param
+     * @param device
      * @return
      */
     public List recommendPost(String userid, String device) {
@@ -70,14 +69,12 @@ public class FacadePostUpdate {
                 list.removeAll(posts);
             }
             list = NotLoginretuenList(list, 1, device, -1);
-            return list;
         } else {
             //已登录
             if (alllist != null) {
                 if (count < 1000) {
                     //mongodb的里面的刷新记录小于1000条记录的时候进行用户分析
                     list = userAnalysisSmall(userid, alllist, posts, device);
-                    if (list != null) return list;
                 } else if (count >= 1000) {
                     //mongodb的里面的刷新记录大于等于1000条记录的时候进行用户分析
                     list = userAnalysisBig(userid, posts, device);
@@ -154,10 +151,12 @@ public class FacadePostUpdate {
     }
 
     /**
-     * 本地
+     * 首页-本地 刷新接口
      *
      * @param userid
-     * @param
+     * @param lat
+     * @param device
+     * @param lng
      * @return
      */
     public List localhostPost(String userid, String lat, String device, String lng) {
@@ -268,10 +267,11 @@ public class FacadePostUpdate {
     }
 
     /**
-     * 圈子
+     * 首页-圈子 刷新接口
      *
      * @param userid
-     * @param
+     * @param circleid
+     * @param device
      * @return
      */
     public List circleRefulsh(String userid, int circleid, String device) {
@@ -317,8 +317,11 @@ public class FacadePostUpdate {
 
 
     /**
-     * 标签帖子
+     * 首页-标签 刷新接口
      *
+     * @param userid
+     * @param labelid
+     * @param device
      * @return
      */
     public List labelPost(String userid, int labelid, String device) {

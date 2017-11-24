@@ -2079,7 +2079,6 @@ public class FacadePost {
             list = NotLoginretuenList(list, 4, device, -1);
             return list;
         } else {
-            // listmongodba = userRefulshListMongodbHistoryCircleid(Integer.parseInt(userid), 4, String.valueOf(circleid));//用户有没有看过
             listmongodba = userRefulshListMongodbToDeviceHistory(device, 4, String.valueOf(circleid));//用户有没有看过
             if (listmongodba.size() != 0) {
                 for (int j = 0; j < listmongodba.size(); j++) {
@@ -2224,7 +2223,6 @@ public class FacadePost {
             list = NotLoginretuenList(list, 5, device, labelid);
             return list;
         } else {
-            // listmongodba = userRefulshListMongodb(Integer.parseInt(userid), 5);//用户有没有看过
             listmongodba = userRefulshListMongodbToDeviceHistoryLabelid(device, 5, labelid);//用户有没有看过
             if (listmongodba.size() != 0) {
                 for (int j = 0; j < listmongodba.size(); j++) {
