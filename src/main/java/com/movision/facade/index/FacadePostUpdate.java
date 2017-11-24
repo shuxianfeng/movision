@@ -9,6 +9,7 @@ import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecordVo;
+import com.movision.utils.ListUtil;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.beanutils.BeanComparator;
 import org.apache.commons.collections.comparators.ComparatorChain;
@@ -20,9 +21,11 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 /**
+ * 该类的方法对应1117版本的接口
+ *
  * @Author zhanglei
  * @Date 2017/11/17 10:28
- * 修改的新接口
+ *
  */
 @Service
 public class FacadePostUpdate {
@@ -415,7 +418,7 @@ public class FacadePostUpdate {
         if (type == 1) {//推荐
             list = recommendPost(userid, device);
         } else if (type == 2) {//关注
-            list = facadePost.followPost(userid, device);
+            list = followPost(userid, device);
         } else if (type == 3) {//本地
             list = localhostPost(userid, lat, device, lng);
         } else if (type == 4) {//圈子c
@@ -423,6 +426,65 @@ public class FacadePostUpdate {
         } else if (type == 5) {//标签
             list = labelPost(userid, Integer.parseInt(labelid), device);
         }
+        return list;
+    }
+
+    /**
+     * 首页-关注 刷新接口
+     *
+     * @param userid 登录人id
+     * @param device 登录设备号
+     * @return
+     */
+    public List followPost(String userid, String device) {
+
+        List<PostVo> list = null;   //返回值
+
+        if (userid != null) {   //登录场景下
+            List<PostVo> allList = new ArrayList<>();
+            //封装所有关注的帖子
+            facadePost.wrapAllFollowPost(userid, allList);
+
+            if (ListUtil.isEmpty(allList)) {
+                log.debug("******首页关注的allList是空******");
+                return list;
+            }
+            log.debug("******首页关注的allList不是空******");
+            //通过使用LinkedHashSet来去除掉allList中重复的帖子，并且保证帖子的顺序不会发生变化
+            Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(allList);
+            allList = new ArrayList<PostVo>(linkedHashSet);
+            //使用ComparatorChain来指定字段排序
+            ComparatorChain chain = new ComparatorChain();
+            //true,fase正序反序,true表示逆序（默认排序是从小到大）
+            chain.addComparator(new BeanComparator("intime"), true);
+            Collections.sort(allList, chain);
+
+            //用户【关注】的浏览历史记录，根据userid和设备号查询
+            List<DBObject> listmongodba = facadePost.queryUserViewRecordByUseridTypeDevice(Integer.valueOf(userid), 2, device);
+
+            if (listmongodba.size() != 0) {
+                //用户存在浏览历史
+                log.debug("用户存在浏览历史");
+                List<PostVo> posts = new ArrayList<>();
+                for (int j = 0; j < listmongodba.size(); j++) {
+                    PostVo post = new PostVo();
+                    post.setId(Integer.parseInt(listmongodba.get(j).get("postid").toString()));
+                    posts.add(post);    //把mongodb转为post实体
+                }
+                allList.removeAll(posts);   //过滤掉浏览过的帖子
+                list = retuenList(allList, userid, 2, device, -1);
+            } else {
+                log.debug("该用户无浏览历史");
+                //该用户无浏览历史
+                list = retuenList(allList, userid, 2, device, -1);
+            }
+        }
+        if (list == null) {
+            log.debug("******[followPost]首页关注的list是null******");
+        } else {
+            log.debug("******[followPost]首页关注的list******" + list.toString());
+        }
+
         return list;
     }
 

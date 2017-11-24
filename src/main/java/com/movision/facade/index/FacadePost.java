@@ -2101,7 +2101,7 @@ public class FacadePost {
     }
 
     /**
-     * 关注(新老接口共用)
+     * 关注
      *
      * @param userid 登录人id
      * @param device 登录设备号
@@ -2165,7 +2165,7 @@ public class FacadePost {
      * @param userid
      * @param allList
      */
-    private void wrapAllFollowPost(String userid, List<PostVo> allList) {
+    public void wrapAllFollowPost(String userid, List<PostVo> allList) {
         log.debug("******首页-关注*****的userid:" + userid);
         List<Integer> followCricle = postService.queryFollowCricle(Integer.parseInt(userid));//查询用户关注的圈子
         List<Integer> followUsers = postService.queryFollowUser(Integer.parseInt(userid));//用户关注的作者
@@ -2320,7 +2320,6 @@ public class FacadePost {
             countView(list);    //根据postid查询帖子的浏览量
             findAllCircleName(list);
             insertmongo(list, "", type, device, labelid);
-            //findAllReturn(list, null);  //查询一些必要字段
         }
         return list;
     }
