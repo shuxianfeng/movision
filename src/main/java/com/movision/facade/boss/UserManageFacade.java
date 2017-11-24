@@ -528,6 +528,7 @@ public class UserManageFacade {
             int id = applyVipDetailService.addVipApplyRecord(applyVipDetail);
             map.put("appyid", applyVipDetail.getId());
             map.put("loginid", -1);
+            map.put("status", 0);
             //加V申请审核记录
             auditVipDetailService.insertVIPDetail(map);
         } else {
