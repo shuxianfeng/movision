@@ -1023,8 +1023,6 @@ public class VideoUploadUtil {
         return map;
     }
 
-
-
     /**public List findAllList(Paging<WeixinList> paging) {
         return weixinListService.findAllList(paging);
      }*/
@@ -1045,6 +1043,6 @@ public class VideoUploadUtil {
         // VideoUploadUtil.getrefulshtoken();
         VideoUploadUtil videoUploadUtil = new VideoUploadUtil();
         //   videoUploadUtil.getticket("bCANmBh3eg9XtfRZ75Wy6ko3sn8KXajggGzxUfpGoyME82ON5umkP-hm8cZbw2JvZYnNUWNyg6VdtQi6r-UyF7Dr10w3a4z5xWyslJVeyvc");
-        videoUploadUtil.getaccesstoken();
+        //videoUploadUtil.getaccesstoken();
      }
 }
