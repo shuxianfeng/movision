@@ -1,8 +1,6 @@
 package com.movision.utils.sms;
 
 import com.google.gson.Gson;
-import com.movision.facade.im.ImFacade;
-import com.movision.mybatis.systemPush.service.SystemPushService;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 
 import java.io.IOException;
