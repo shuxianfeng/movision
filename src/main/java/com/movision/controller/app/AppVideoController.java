@@ -189,6 +189,19 @@ public class AppVideoController {
         return response;
     }
 
+
+    @ApiOperation(value = " sssss", notes = " sssss", response = Response.class)
+    @RequestMapping(value = "sssss", method = RequestMethod.GET)
+    public Response sssss() {
+        Response response = new Response();
+        String result = videoUploadUtil.sssss();
+        if (response.getCode() == 200) {
+            response.setMessage("获取成功");
+            response.setData(result);
+        }
+        return response;
+    }
+
     /**
      * 点击抽奖
      *
