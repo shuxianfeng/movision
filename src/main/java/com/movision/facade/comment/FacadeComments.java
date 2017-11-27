@@ -8,12 +8,15 @@ import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
+import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postCommentAccusation.entity.PostCommentAccusation;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
 import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
 import com.movision.utils.pagination.model.Paging;
+import org.apache.commons.beanutils.BeanComparator;
+import org.apache.commons.collections.comparators.ComparatorChain;
 import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -259,6 +262,14 @@ public class FacadeComments {
                     listWithoutDup.get(j).setIsZan(0);
                 }
             }
+            Set<CommentVo> linkedHashSet = new LinkedHashSet<CommentVo>(listWithoutDup);
+            listWithoutDup = new ArrayList<CommentVo>(linkedHashSet);
+            //使用ComparatorChain来指定字段排序
+            ComparatorChain chain = new ComparatorChain();
+            //true,fase正序反序,true表示逆序（默认排序是从小到大）
+            chain.addComparator(new BeanComparator("intime"), false);
+            Collections.sort(listWithoutDup, chain);
+
             commentVoList.get(i).setCommentVos(listWithoutDup);
         }
         return commentVoList;
