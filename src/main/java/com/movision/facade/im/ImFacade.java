@@ -11,6 +11,7 @@ import com.movision.mybatis.imDevice.entity.ImDevice;
 import com.movision.mybatis.imDevice.service.ImDeviceService;
 import com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogue;
 import com.movision.mybatis.imFirstDialogue.entity.ImMsg;
+import com.movision.mybatis.imFirstDialogue.entity.PayLoad;
 import com.movision.mybatis.imFirstDialogue.service.ImFirstDialogueService;
 import com.movision.mybatis.imSystemInform.entity.ImBatchAttachMsg;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
@@ -414,9 +415,18 @@ public class ImFacade {
      * @throws IOException
      */
     public Map sendMsg(ImMsg imMsg) throws IOException {
+        //封装payload字段
+        PayLoad payLoad = new PayLoad();
+        payLoad.setType(ImConstant.PUSH_MESSAGE.im_msg.getCode());
+        payLoad.setMsg(imMsg.getPushcontent());
+        payLoad.setBody(imMsg.getBody());
+        Gson gson = new Gson();
+        imMsg.setPayload(gson.toJson(payLoad));
 
+        //解析ImMsg成map类型
         Map<String, Object> params = BeanUtil.ImBeanToMap(imMsg);
 
+        //调用云信服务端api接口
         return this.sendImHttpPost(ImConstant.SEND_MSG, params);
     }
 
@@ -696,13 +706,13 @@ public class ImFacade {
     /**
      * 准备toAccids参数,发送系统通知，并且记录 （推送/通知 公共方法）
      *
-     * @param body
+     * @param body 值和pushcontent一样
      * @param imUser
      * @param imAppUserList
      * @param size
      * @param multiple
      * @param title
-     * @param pushcontent
+     * @param pushcontent 值和body一样
      * @param informidentity
      * @param type           推送类型
      * @param coverimg       运营通知的封面图
@@ -715,7 +725,7 @@ public class ImFacade {
         //记录流水(运营消息/推送/系统消息/推送)
         Integer pushid = this.recordSysInforms(body, imUser.getAccid(), toAccids, title, pushcontent, informidentity, coverimg);
         //封装payload
-        String payload = wrapPushcontent(type, pushcontent, pushid, coverimg, body);
+        String payload = wrapPushcontent(ImConstant.PUSH_MESSAGE.system_msg.getCode(), pushcontent, pushid, coverimg, body);
         log.debug("封装的 payload:" + payload);
         //调用云信接口发送通知
         Map result = this.sendSystemInform(body, imUser.getAccid(), toAccids, pushcontent, payload);
@@ -750,20 +760,24 @@ public class ImFacade {
     /**
      * 封装pushcontent
      *
+     * @param type 推送类型
      * @param pushcontent
-     * @param pushid
+     * @param pushid yw_system_push的id
+     * @param img 运营通知的封面图
+     * @param body
      * @return
      */
     private String wrapPushcontent(Integer type, String pushcontent, Integer pushid, String img, String body) {
-        Map map = new HashMap();
-        map.put("type", ImConstant.PUSH_MESSAGE.system_msg.getCode());
-        map.put("id", pushid);
-        map.put("msg", pushcontent);
-        map.put("img", img);
-        map.put("body", body);
+
+        PayLoad payLoad = new PayLoad();
+        payLoad.setType(type);
+        payLoad.setBody(body);
+        payLoad.setId(pushid);
+        payLoad.setImg(img);
+        payLoad.setMsg(pushcontent);
 
         Gson gson = new Gson();
-        return gson.toJson(map);
+        return gson.toJson(payLoad);
     }
 
     /**
@@ -794,12 +808,9 @@ public class ImFacade {
      */
     public Map sendSystemInform(String body, String fromaccid, String toAccids, String pushcontent, String payload) throws IOException {
         //发系统通知
-        Gson gson = new Gson();
-        Map map = new HashMap();
-        map.put("badge", false);
-        map.put("needPushNick", false);
-        map.put("route", false);
-        String option = gson.toJson(map);
+        //准备option字段
+        String option = prepareOption();
+
         ImBatchAttachMsg imBatchAttachMsg = new ImBatchAttachMsg();
         imBatchAttachMsg.setFromAccid(fromaccid);
         imBatchAttachMsg.setAttach(body);
@@ -813,14 +824,32 @@ public class ImFacade {
         return this.sendImHttpPost(ImConstant.SEND_BATCH_ATTACH_MSG, BeanUtil.ImBeanToMap(imBatchAttachMsg));
     }
 
-    public Map sendSystemInformTo(String body, String fromaccid, String toAccids) throws IOException {
-        //发系统通知
+    /**
+     * 准备option字段
+     *
+     * @return
+     */
+    private String prepareOption() {
         Gson gson = new Gson();
         Map map = new HashMap();
-        map.put("badge", false);
-        map.put("needPushNick", false);
-        map.put("route", false);
-        String option = gson.toJson(map);
+        map.put("badge", false);    //1. badge:该消息是否需要计入到未读计数中，默认true;
+        map.put("needPushNick", false); //2. needPushNick: 推送文案是否需要带上昵称，不设置该参数时默认false(ps:注意与sendBatchMsg.action接口有别)。
+        map.put("route", false);    //3. route: 该消息是否需要抄送第三方；默认true (需要app开通消息抄送功能)
+        return gson.toJson(map);
+    }
+
+    /**
+     * 发系统通知
+     *
+     * @param body
+     * @param fromaccid
+     * @param toAccids
+     * @return
+     * @throws IOException
+     */
+    public Map sendSystemInformTo(String body, String fromaccid, String toAccids) throws IOException {
+
+        String option = prepareOption();
         ImBatchAttachMsg imBatchAttachMsg = new ImBatchAttachMsg();
         imBatchAttachMsg.setFromAccid(fromaccid);
         imBatchAttachMsg.setAttach(body);
