@@ -520,15 +520,16 @@ public class ImFacade {
 
         String from = ShiroUtil.getAccid();    //当前用户的accid
         String to = imMsg.getTo();
-        Map situation = getCommunicationSituation(from, to);
-        Boolean isSayHi = (Boolean) situation.get("is_say_hi");
-        Boolean isReply = (Boolean) situation.get("is_reply");
 
-        //查看from是否在to的黑名单列表中
+        //1 查看from是否在to的黑名单列表中
         if (isInBlackList(to, from)) {
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "你已经被对方加入黑名单");
         }
 
+        //2 业务判断，四种情况
+        Map situation = getCommunicationSituation(from, to);
+        Boolean isSayHi = (Boolean) situation.get("is_say_hi");
+        Boolean isReply = (Boolean) situation.get("is_reply");
         if (isSayHi) {
             if (isReply) {
                 //is_say_hi=true, is_reply=true, 表示两人已经是好友，并且可以对话 (对话调IM接口)
