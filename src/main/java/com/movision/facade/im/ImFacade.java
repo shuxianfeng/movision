@@ -859,25 +859,38 @@ public class ImFacade {
     }
 
     /**
-     * 发送系统通知
-     * 打赏  评论  点赞
+     * 发送系统通知 （打赏 评论 点赞 关注）
      *
+     * @param body 自定义通知内容，json串，对应attach字段
      * @param fromaccid
-     * @param body
      * @param to
-     * @param pushcontent 不为空，则是手机推送
+     * @param pushcontent iOS推送内容，第三方自己组装的推送内容
      * @return
      * @throws IOException
      */
-    public Map sendMsgInform(String body, String fromaccid, String to, String pushcontent) throws IOException {
+    public Map sendMsgInform(String body, String fromaccid, String to, String pushcontent, Integer pushType) throws IOException {
         //发系统通知打赏评论点赞
         ImBatchAttachMsg imBatchAttachMsg = new ImBatchAttachMsg();
         imBatchAttachMsg.setFromAccid(fromaccid);
         imBatchAttachMsg.setAttach(body);
         imBatchAttachMsg.setPushcontent(pushcontent);
         imBatchAttachMsg.setTo(to);
-        imBatchAttachMsg.setMsgtype(0);
+        imBatchAttachMsg.setMsgtype(0); //0：点对点自定义通知
+        //封装payload入参
+        String payloadJsonStr = wrapPayload(body, pushcontent);
+        log.debug("[发送系统通知 （打赏 评论 点赞 关注）]的入参payload：" + payloadJsonStr);
+        imBatchAttachMsg.setPayload(payloadJsonStr);
+
         return this.sendImHttpPost(ImConstant.SEND_MSG_BATCH, BeanUtil.ImBeanToMap(imBatchAttachMsg));
+    }
+
+    private String wrapPayload(String body, String pushcontent) {
+        PayLoad payLoad = new PayLoad();
+        payLoad.setBody(body);
+        payLoad.setMsg(pushcontent);
+        payLoad.setType(ImConstant.PUSH_MESSAGE.instantinfo_msg.getCode());
+        Gson gson = new Gson();
+        return gson.toJson(payLoad);
     }
 
 
@@ -1365,7 +1378,7 @@ public class ImFacade {
      * @param pushType     推送的类型：评论，点赞，打赏，关注
      * @param followedUser 被关注的用户id
      */
-    public void sendPushByCommonWay(String userid, String postid, String pushType, String followedUser) {
+    public void sendPushByCommonWay(String userid, String postid, Integer pushType, String followedUser) {
         try {
             Map map = new HashMap();
             map.put("userid", userid);
@@ -1375,32 +1388,61 @@ public class ImFacade {
             String fromaccid = String.valueOf(reMap.get("accid"));
             //获取推送人的昵称
             String nickname = String.valueOf(reMap.get("nickname"));
-
             //获取被推送者的accid
-            Map map2 = new HashMap();
-            map2.put("type", ImConstant.TYPE_APP);
-            String toAccid = null;
-            if (StringUtils.isEmpty(postid)) {
-                map2.put("userid", followedUser);
-                Map reMap2 = imUserService.queryAccidAndNickname(map2);
-                toAccid = String.valueOf(reMap2.get("accid"));
-            } else {
-                map2.put("postid", postid);
-                toAccid = postService.selectAccid(map2);
-            }
-
-            //组合推送信息--显示在手机上
-            String body = nickname + pushType + "了你";
-
-            Map map3 = new HashMap();
-            map3.put("body", body);
-            Gson gson = new Gson();
-            String json = gson.toJson(map3);
-
-            sendMsgInform(json, fromaccid, toAccid, body);
+            String toAccid = getToAccid(postid, followedUser);
+            //获取推送的类型中文
+            String pushTypeStr = getPushTypeName(pushType);
+            //组合推送信息--显示在手机上 ,如：小鸡鸡点赞了你
+            String body = nickname + pushTypeStr + "了你";
+            //把body封装成json字符串
+            String bodyJson = getBodyJson(body);
+            //发送系统通知 （打赏  评论  点赞 关注）
+            sendMsgInform(bodyJson, fromaccid, toAccid, body, pushType);
         } catch (Exception e) {
             log.error("推送评论通知失败", e);
         }
+    }
+
+    private String getToAccid(String postid, String followedUser) {
+        Map map2 = new HashMap();
+        map2.put("type", ImConstant.TYPE_APP);
+        String toAccid;
+        if (StringUtils.isEmpty(postid)) {
+            map2.put("userid", followedUser);
+            Map reMap2 = imUserService.queryAccidAndNickname(map2);
+            toAccid = String.valueOf(reMap2.get("accid"));
+        } else {
+            map2.put("postid", postid);
+            toAccid = postService.selectAccid(map2);
+        }
+        return toAccid;
+    }
+
+    private String getBodyJson(String body) {
+        Map map3 = new HashMap();
+        map3.put("body", body);
+        Gson gson = new Gson();
+        return gson.toJson(map3);
+    }
+
+    /**
+     * 获取推送类型的名称
+     *
+     * @param pushType
+     * @return
+     */
+    private String getPushTypeName(Integer pushType) {
+        String pushTypeStr;
+        if (pushType == 2) {
+            pushTypeStr = "评论";
+        } else if (pushType == 4) {
+            pushTypeStr = "关注";
+        } else if (pushType == 5) {
+            pushTypeStr = "打赏";
+        } else {
+            pushTypeStr = "点赞";
+        }
+        return pushTypeStr;
     }
 
     /**

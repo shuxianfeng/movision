@@ -3,6 +3,7 @@ package com.movision.facade.index;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mongodb.*;
+import com.movision.common.constant.ImConstant;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.PointConstant;
 import com.movision.common.constant.PostLabelConstants;
@@ -738,7 +739,7 @@ public class FacadePost {
      */
     private boolean sendPushInfoByZan(String postid, String userid, int type) {
         if (type == 1) {
-            imFacade.sendPushByCommonWay(userid, postid, "点赞", null);
+            imFacade.sendPushByCommonWay(userid, postid, ImConstant.PUSH_TYPE.zan.getCode(), null);
             return true;
         }
         return false;
@@ -4412,7 +4413,7 @@ public class FacadePost {
                 //4 被关注人增加热度
                 facadeHeatValue.addUserHeatValue(1, interestedusers);
                 //5 给被关注人推送消息
-                imFacade.sendPushByCommonWay(String.valueOf(userid), null, "关注", String.valueOf(interestedusers));
+                imFacade.sendPushByCommonWay(String.valueOf(userid), null, ImConstant.PUSH_TYPE.focus.getCode(), String.valueOf(interestedusers));
 
                 return 0;
             } else {

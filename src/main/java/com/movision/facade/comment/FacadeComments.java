@@ -1,5 +1,6 @@
 package com.movision.facade.comment;
 
+import com.movision.common.constant.ImConstant;
 import com.movision.common.constant.PointConstant;
 import com.movision.facade.im.ImFacade;
 import com.movision.facade.index.FacadeHeatValue;
@@ -142,7 +143,7 @@ public class FacadeComments {
             //积分业务
             pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.comment.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
             //推送业务
-            imFacade.sendPushByCommonWay(userid, postid, "评论", null);
+            imFacade.sendPushByCommonWay(userid, postid, ImConstant.PUSH_TYPE.comment.getCode(), null);
 
             return type;
         }

@@ -2,6 +2,7 @@ package com.movision.facade.rewarded;
 
 
 import com.google.gson.Gson;
+import com.movision.common.constant.ImConstant;
 import com.movision.common.constant.PointConstant;
 import com.movision.common.util.ShiroUtil;
 import com.movision.facade.im.ImFacade;
@@ -132,7 +133,7 @@ public class FacadeRewarded {
                 facadeHeatValue.addHeatValue(Integer.parseInt(postid), 7, u);
 
                 //推送业务
-                imFacade.sendPushByCommonWay(userid, postid, "打赏", null);
+                imFacade.sendPushByCommonWay(userid, postid, ImConstant.PUSH_TYPE.reward.getCode(), null);
 
                 return map;
             } else {

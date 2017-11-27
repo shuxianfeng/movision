@@ -65,6 +65,36 @@ public class ImConstant {
 
     public static final String SEND_MSG_BATCH = ImPropertiesLoader.getPropertyValue("send_msg_attach");
 
+    /**
+     * 帖子操作类型，用于推送分类
+     */
+    public enum PUSH_TYPE {
+        zan(1), //点赞
+        comment(2),    //评论
+        //        collect(3), //收藏
+        focus(4),  //关注
+        reward(5);  //打赏
+
+        public final int code;
+
+        PUSH_TYPE(int code) {
+            this.code = code;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
+        }
+    }
+
+
+    /**
+     * 推送跳转页面分类
+     */
     public enum PUSH_MESSAGE {
         instantinfo_msg(1), //动态通知
         system_msg(2),    //系统通知
