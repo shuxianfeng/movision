@@ -2,7 +2,7 @@ package com.movision.common.constant;
 
 /**
  * 消息定义接口常量
- * @author penglong
+ * @author zhuangyuhao
  *
  */
 public interface MsgCodeConstant {
@@ -12,35 +12,9 @@ public interface MsgCodeConstant {
 	int response_status_400 = 400;
 
 	/**
-	 * 统一定义成功返回1000
-	 */
-	int mcode_common_success = 1000;
-
-	/**
-	 * 通用错误
-	 */
-	int mcode_common_failure = 1001;
-
-	/**
-	 * 会员错误信息码：100开头
-	 * 账户名已经存在
-	 */
-	int member_mcode_account_exist = 10001;
-
-	/**
 	 * 手机验证码不正确
 	 */
 	int member_mcode_mobile_validate_error = 10002;
-
-	/**
-	 * 激活码已过期
-	 */
-	int member_mcode_active_code_expire = 10004;
-
-	/**
-	 * 验证身份已过期
-	 */
-	int member_mcode_mail_validate_expire = 10008;
 
 	/**
 	 * 用户名不存在
@@ -57,7 +31,6 @@ public interface MsgCodeConstant {
      */
 	int app_account_name_error = 10012;
 
-
 	/**
 	 * 短信验证码超时
 	 */
@@ -72,7 +45,6 @@ public interface MsgCodeConstant {
 	 * 服务器存储的token丢失
 	 */
 	int server_token_missing = 10015;
-
 
     /**
      * apptoken和服务器token不相等
@@ -89,12 +61,6 @@ public interface MsgCodeConstant {
 	 */
 	int app_nickname_already_exist = 10018;
 
-
-	/**
-     * 文件不存在
-	 */
-	int file_not_exist = 10210;
-
 	/**
 	 * 文件名下载异常
 	 */
@@ -106,89 +72,9 @@ public interface MsgCodeConstant {
 	int un_login = 10212;
 
 	/**
-	 * 充值失败
-	 */
-	int ZHB_PERPAID_FAILED = 10302;
-
-	/**
-	 * 支付宝异常错误码 9000~9999
-	 */
-	int ALIPAY_JSON_ERROR = 9000;
-
-	/**
-	 * 支付参数错误
-	 */
-	int ALIPAY_PARAM_ERROR = 9001;
-
-	/**
-	 * 支付宝校验异常
-	 */
-	int ALIPAY_VERIFY_ERROR = 9002;
-
-	/**
-	 * 支付宝支付失败
-	 */
-	int ALIPAY_PAY_FAIL = 9003;
-
-	/**
-	 * 支付异常
-	 */
-	int PAY_ERROR = 9004;
-
-
-	/**
-	 * 支付宝支付成功
-	 */
-	int ALIPAY_PAY_SUCCESS = 9999;
-
-
-	/**
-	 * 解析错误 8000~8999
-	 * JSON格式解析错误
-	 */
-	int JSON_PARSE_ERROR = 8000;
-
-	/**
-	 * 数据操作异常 2000~2999
-	 * 插入失败
-	 */
-	int DB_INSERT_FAIL = 2000;
-	/**
-	 * 数据操作异常 2000~2999
-	 * 更新失败
-	 */
-	int DB_UPDATE_FAIL = 2001;
-
-
-	int DB_SELECT_FAIL = 2002;
-	/**
-	 * 参数校验错误
-	 */
-	int PARAMS_VALIDATE_ERROR = 4000;
-
-	/**
 	 * 系统异常
 	 */
 	int SYSTEM_ERROR = 4001;
-
-	/**
-	 * 数据存在警告 3000~3099
-	 * 该合同编号已存在
-	 */
-	int EXIST_CONTRACTNO_WARN = 3000;
-	/**
-	 * 不存在该商品信息
-	 */
-	int NOT_EXIST_GOODS_ERROR = 3001;
-
-
-	
-	/**
-	 * 时间异常 3100~3199
-	 * 日期转换异常
-	 */
-	int DATE_CONVERT_WARN = 3100;
-
 
 	/**
 	 * 微信支付结果通用通知接口参数错误
@@ -257,44 +143,11 @@ public interface MsgCodeConstant {
             return String.valueOf(this.code);
         }
 	}
-	
-	
-	/**
-	 * 微信支付回调接口调用时，微信端的请求参数中不存在该订单
-	 */
-	int NOT_EXIST_ORDER_FOR_WXPAY = 8017;
-	
-	/**
-	 * 不存在该订单
-	 */
-	int NOT_EXIST_ORDER = 3005;
 
-
-	/**
-	 * 手机号是空
-	 */
-	int MOBILE_IS_EMPTY = 3007;
-	
-	/**
-	 * 手机短信验证码是空
-	 */
-	int SMS_VERIFY_CODE_IS_EMPTY = 3008;
-	
-	/**
-	 * 手机格式不正确
-	 */
-	int MOBILE_PATTERN_ERROR = 3009;
-	
-	/**
+    /**
 	 * 不存在该会员信息
 	 */
 	int NOT_EXIST_APP_ACCOUNT = 3010;
-	
-	/**
-	 * 该订单不存在购买的商品
-	 */
-	int NOT_EXIST_ORDER_GOODS = 3011;
-
 
 	/**
 	 * boss用户不存在
@@ -326,17 +179,6 @@ public interface MsgCodeConstant {
      */
     int app_account_by_qq_not_exist = 10305;
 
-
-    /**
-     * boss用户已经冻结
-     */
-    int boss_account_is_frozen = 10306;
-
-	/**
-     * boss用户已经被删除（逻辑删）
-     */
-    int boss_account_is_del = 10307;
-
     /**
      * app用户编辑我的地址失败
 	 */
@@ -357,13 +199,4 @@ public interface MsgCodeConstant {
 	 */
 	int send_system_msg_fail = 30101;
 
-	/**
-	 * 新增搜索帖子记录失败
-	 */
-	int add_search_post_record_fail = 30102;
-
-	/**
-	 * 新增搜索商品记录失败
-	 */
-	int add_search_good_record_fail = 30102;
 }
