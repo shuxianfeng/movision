@@ -66,6 +66,11 @@ public class ImConstant {
     public static final String SEND_MSG_BATCH = ImPropertiesLoader.getPropertyValue("send_msg_attach");
 
     /**
+     * 查看指定用户的黑名单和静音列表
+     */
+    public static final String LIST_BLACK_AND_MUTE_LIST = ImPropertiesLoader.getPropertyValue("list_black_and_mute_list");
+
+    /**
      * 帖子操作类型，用于推送分类
      */
     public enum PUSH_TYPE {

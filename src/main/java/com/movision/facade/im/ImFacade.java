@@ -518,10 +518,16 @@ public class ImFacade {
      */
     public void sendImMsg(ImMsg imMsg) throws IOException {
 
-        String accid = ShiroUtil.getAccid();    //当前用户的accid
-        Map situation = getCommunicationSituation(accid, imMsg.getTo());
+        String from = ShiroUtil.getAccid();    //当前用户的accid
+        String to = imMsg.getTo();
+        Map situation = getCommunicationSituation(from, to);
         Boolean isSayHi = (Boolean) situation.get("is_say_hi");
         Boolean isReply = (Boolean) situation.get("is_reply");
+
+        //查看from是否在to的黑名单列表中
+        if (isInBlackList(to, from)) {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "你已经被对方加入黑名单");
+        }
 
         if (isSayHi) {
             if (isReply) {
@@ -536,18 +542,19 @@ public class ImFacade {
                 // isSayHi=false, isReply=true , 表示对方向我打招呼，但，我还没有回复 （可以回复打招呼）
                 this.sendMsg(imMsg);
                 // 接受对方的加好友请求
-                this.addFriend(ShiroUtil.getAccid(), imMsg.getTo(), 3, imMsg.getBody());
+                this.addFriend(from, to, 3, imMsg.getBody());
                 // 只有是第一次对话，才会记录发送的消息
-                this.addFirstDialogue(imMsg.getTo(), imMsg.getBody());
+                this.addFirstDialogue(to, imMsg.getBody());
             } else {
                 //is_say_hi=false, is_reply=false, 表示两人都没有打招呼 （可以打招呼）
                 this.sendMsg(imMsg);
                 // 向对方请求加好友
-                this.addFriend(ShiroUtil.getAccid(), imMsg.getTo(), 2, imMsg.getBody());
+                this.addFriend(from, to, 2, imMsg.getBody());
                 // 只有是第一次对话，才会记录发送的消息
-                this.addFirstDialogue(imMsg.getTo(), imMsg.getBody());
+                this.addFirstDialogue(to, imMsg.getBody());
             }
         }
+
     }
 
     /**
@@ -1487,6 +1494,40 @@ public class ImFacade {
         imUserAccusation.setFromid(from);
         imUserAccusation.setToid(to);
         return imUserAccusationService.queryNotHandleSelectiveRecord(imUserAccusation);
+    }
+
+    /**
+     * 判断指定someone是否在指定accid的黑名单中
+     *
+     * @param accid
+     * @param someone
+     * @return true:在黑名单中
+     * false:不在
+     * @throws IOException
+     */
+    public Boolean isInBlackList(String accid, String someone) throws IOException {
+        Map params = new HashMap();
+        params.put("accid", accid);
+        Map<String, Object> res = this.sendImHttpPost(ImConstant.LIST_BLACK_AND_MUTE_LIST, params);
+
+        if (res.get("code").equals(200)) {
+            //返回值
+            String blacklistStr = JsonUtils.getJsonStringFromObj(res.get("blacklist"));
+            Gson gson = new Gson();
+            List<String> blacklist = gson.fromJson(blacklistStr, List.class);
+
+            if (ListUtil.isNotEmpty(blacklist)) {
+                log.info("黑名单的列表是：" + blacklist.toString());
+                //在黑名单中
+//不在
+                return blacklist.contains(someone);
+            } else {
+                //黑名单为空，返回false
+                return false;
+            }
+        } else {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查看用户的黑名单和静音列表失败");
+        }
     }
 
 }

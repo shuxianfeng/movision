@@ -16,13 +16,19 @@ public class ImFacadeTest extends SpringTestCase {
     private ImFacade imFacade;
 
     @Test
+    public void testIsInBlackList() throws Exception {
+//        System.out.println(imFacade.isInBlackList("0e37febaefd39b95f514cf82b5487ae2", "22356e36fb009573c79ff93858d23919"));
+        System.out.println(imFacade.isInBlackList("22356e36fb009573c79ff93858d23919", "0e37febaefd39b95f514cf82b5487ae2"));
+    }
+
+
+
+    /*@Test
     public void testQueryImuserInfo() throws Exception {
         String[] arr = {"9d8e91b1630874e21695798dbc75b286"};
         Map map = imFacade.queryImuserInfo(arr);
         System.out.println(map.toString());
-    }
-
-
+    }*/
 
     /*@Test
     public void testsendMsg() throws Exception {
