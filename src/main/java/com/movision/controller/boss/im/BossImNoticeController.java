@@ -290,10 +290,9 @@ public class BossImNoticeController {
 
     @ApiOperation(value = "发送消息有链接的", notes = "发送消息", response = Response.class)
     @RequestMapping(value = "find_allpush_link", method = RequestMethod.POST)
-    public Response AddPushMovementAndLink(@ApiParam(value = "短信内容") @RequestParam String body,
-                                           @ApiParam(value = "链接") @RequestParam String code) {
+    public Response AddPushMovementAndLink(@ApiParam(value = "短信内容") @RequestParam String body) {
         Response response = new Response();
-        imFacade.AddPushMovementAndLink(body, code);
+        imFacade.AddPushMovementAndLink(body);
         if (response.getCode() == 200) {
             response.setMessage("发送成功");
         }

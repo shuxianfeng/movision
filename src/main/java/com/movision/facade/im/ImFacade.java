@@ -1157,7 +1157,7 @@ public class ImFacade {
      * @param body
      * @return
      */
-    public void AddPushMovementAndLink(String body, String code) {
+    public void AddPushMovementAndLink(String body) {
         Map<String, String> map = new LinkedHashMap<>();
         SystemPush systemPush = new SystemPush();
         systemPush.setUserid(ShiroUtil.getBossUserID());
@@ -1173,7 +1173,6 @@ public class ImFacade {
                 mobile += list.get(i) + ",";
                 mobile = mobile.substring(0, mobile.length() - 1);
                 map.put("body", body);
-                map.put("code", code);
                 Gson gson = new Gson();
                 String json = gson.toJson(map);
                 SDKSendSms.sendSMS(mobile, json, PropertiesLoader.getValue("propelling_movement_infomation_link"));
@@ -1191,7 +1190,6 @@ public class ImFacade {
                 mobile = mobile.substring(0, mobile.length() - 1);
                 pageNo += 1;
                 map.put("body", body);
-                map.put("code", code);
                 Gson gson = new Gson();
                 String json = gson.toJson(map);
                 SDKSendSms.sendSMS(mobile, json, PropertiesLoader.getValue("propelling_movement_infomation_link"));
