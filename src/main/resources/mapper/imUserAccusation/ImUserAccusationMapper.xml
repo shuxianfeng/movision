@@ -112,4 +112,18 @@
         FROM yw_im_user_accusation
         WHERE fromid = #{fromid} and toid=#{toid} and type=#{type}
     </select>
+
+    <select id="findAllImuserAccusation" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.imUserAccusation.entity.ImUserAccPage">
+        SELECT a.*, u1.name as fromName, u2.name as toName
+        FROM yw_im_user_accusation a
+        LEFT JOIN yw_im_user u1 ON a.fromid = u1.accid
+        LEFT JOIN yw_im_user u2 ON a.toid = u2.accid
+        <where>
+            <if test="type != null">
+                AND a.type = #{type}
+            </if>
+        </where>
+        ORDER BY type, intime DESC
+    </select>
 </mapper>

@@ -17,6 +17,7 @@ import com.movision.mybatis.imSystemInform.entity.ImBatchAttachMsg;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInformVo;
 import com.movision.mybatis.imSystemInform.service.ImSystemInformService;
+import com.movision.mybatis.imUserAccusation.entity.ImUserAccPage;
 import com.movision.mybatis.imUserAccusation.entity.ImUserAccusation;
 import com.movision.mybatis.imUserAccusation.service.ImUserAccusationService;
 import com.movision.mybatis.imuser.entity.ImUser;
@@ -1519,8 +1520,7 @@ public class ImFacade {
 
             if (ListUtil.isNotEmpty(blacklist)) {
                 log.info("黑名单的列表是：" + blacklist.toString());
-                //在黑名单中
-//不在
+
                 return blacklist.contains(someone);
             } else {
                 //黑名单为空，返回false
@@ -1529,6 +1529,14 @@ public class ImFacade {
         } else {
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查看用户的黑名单和静音列表失败");
         }
+    }
+
+    public List<ImUserAccPage> queryImAccusationForPage(Paging<ImUserAccPage> paging, String type) {
+        Map map = new HashMap();
+        if (StringUtils.isNotEmpty(type)) {
+            map.put("type", type);
+        }
+        return imUserAccusationService.findAllImuserAccusation(paging, map);
     }
 
 }

@@ -1,8 +1,11 @@
 package com.movision.mybatis.imUserAccusation.mapper;
 
+import com.movision.mybatis.imUserAccusation.entity.ImUserAccPage;
 import com.movision.mybatis.imUserAccusation.entity.ImUserAccusation;
+import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ImUserAccusationMapper {
     int deleteByPrimaryKey(Integer id);
@@ -18,4 +21,6 @@ public interface ImUserAccusationMapper {
     int updateByPrimaryKey(ImUserAccusation record);
 
     List<ImUserAccusation> queryNotHandleSelectiveRecord(ImUserAccusation imUserAccusation);
+
+    List<ImUserAccPage> findAllImuserAccusation(RowBounds rowBounds, Map map);
 }
