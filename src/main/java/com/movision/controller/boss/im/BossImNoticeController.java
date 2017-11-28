@@ -27,7 +27,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("boss/notice")
-public class BossImController {
+public class BossImNoticeController {
 
     @Autowired
     private ImFacade imFacade;
