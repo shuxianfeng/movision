@@ -938,6 +938,12 @@ public class FacadePost {
         int mark = getMarkIsCircleAdmin(userid, manageList);
         int lev = ShiroUtil.getUserLevel();     //用户等级
 
+        log.debug("发帖用户的id是：" + uid);
+        log.debug("发帖的圈子的所有者的id是：" + owner.getId());
+        log.debug("发帖的圈子的scope是：" + scope);
+        log.debug("发帖用户的mark是：" + mark);
+        log.debug("发帖用户的等级level是：" + lev);
+
         //拥有权限的：1.该圈所有人均可发帖 2.该用户是该圈所有者 3.该用户是圈子管理员  4.所有者和大V可发时，发帖用户即为大V
         if (scope == 2
                 || uid == owner.getId()
