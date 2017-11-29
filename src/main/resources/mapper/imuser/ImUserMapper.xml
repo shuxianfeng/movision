@@ -119,5 +119,11 @@
         JOIN yw_user u on i.userid = u.id
     </select>
 
+    <select id="queryNotExistImUser" resultType="com.movision.mybatis.user.entity.User">
+        SELECT u.id, u.nickname, u.photo, u.sign
+        FROM yw_user u
+        where not EXISTS (SELECT 1 FROM yw_im_user i where i.userid = u.id and i.type = 1)
+    </select>
+
 
 </mapper>

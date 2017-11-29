@@ -3,6 +3,7 @@ package com.movision.mybatis.imuser.mapper;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.imuser.entity.ImdeviceAppuser;
 import com.movision.mybatis.imuser.entity.ImuserAppuser;
+import com.movision.mybatis.user.entity.User;
 import com.movision.utils.ListUtil;
 import org.apache.ibatis.annotations.Param;
 
@@ -25,6 +26,8 @@ public interface ImUserMapper {
     int updateImUser(ImUser imUser);
 
     List<ImuserAppuser> selectRelatedAppuserAndImuser();
+
+    List<User> queryNotExistImUser();
 
 
 }

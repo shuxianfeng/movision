@@ -3,6 +3,7 @@ package com.movision.mybatis.imuser.service;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.imuser.entity.ImuserAppuser;
 import com.movision.mybatis.imuser.mapper.ImUserMapper;
+import com.movision.mybatis.user.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,6 +92,16 @@ public class ImUserService {
             return imUserMapper.selectRelatedAppuserAndImuser();
         } catch (Exception e) {
             log.error("查询相关联的app用户和im用户失败", e);
+            throw e;
+        }
+    }
+
+    public List<User> queryNotExistImUser() {
+        try {
+            log.info("查询本地数据库中没有yw_im_user数据的app用户信息");
+            return imUserMapper.queryNotExistImUser();
+        } catch (Exception e) {
+            log.error("查询本地数据库中没有yw_im_user数据的app用户信息失败", e);
             throw e;
         }
     }

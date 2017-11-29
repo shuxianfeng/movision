@@ -1359,6 +1359,7 @@
         SELECT u.*, i.accid FROM yw_user u
         LEFT JOIN yw_im_user i on u.id = i.userid
         where u.id = #{userid,jdbcType=INTEGER}
+        and i.type = 1
     </select>
 
     <!--2.0查询当前用户关注的所有作者列表-->

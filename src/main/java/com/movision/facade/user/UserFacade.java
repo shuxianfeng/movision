@@ -1,6 +1,7 @@
 package com.movision.facade.user;
 
 import com.movision.aop.UserSaveCache;
+import com.movision.common.constant.ImConstant;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.PointConstant;
 import com.movision.common.util.ShiroUtil;
@@ -33,6 +34,7 @@ import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
 import com.movision.utils.DateUtils;
 import com.movision.utils.ListUtil;
 import com.movision.utils.UserBadgeUtil;
+import com.movision.utils.im.CheckSumBuilder;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import org.apache.commons.collections.map.HashedMap;
@@ -351,6 +353,28 @@ public class UserFacade {
             log.debug("不需要进行【完善个人资料】积分操作");
         }
 
+    }
+
+    /**
+     * 处理yw_im_user表中不存在的yw_user用户，并重新注册云信im用户，使这两个表的数据对应。
+     *
+     * @throws IOException
+     */
+    public void queryNotExistImUser() throws IOException {
+        List<User> list = imUserService.queryNotExistImUser();
+        if (ListUtil.isNotEmpty(list)) {
+            //循环重新注册云信IM用户
+            for (User user : list) {
+                ImUser imUser = new ImUser();
+                imUser.setName(user.getNickname());
+                imUser.setIcon(user.getPhoto());
+                imUser.setSign(user.getSign());
+                imUser.setUserid(user.getId());
+                imUser.setAccid(CheckSumBuilder.getAccid(String.valueOf(user.getId())));  //根据userid生成accid
+
+                imFacade.registerImUserAndSave(imUser, imUser.getUserid(), ImConstant.TYPE_APP);
+            }
+        }
     }
 
     /**
