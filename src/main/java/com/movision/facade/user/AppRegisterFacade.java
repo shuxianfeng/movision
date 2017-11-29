@@ -18,6 +18,7 @@ import com.movision.mybatis.couponTemp.entity.CouponTemp;
 import com.movision.mybatis.imDevice.entity.ImDevice;
 import com.movision.mybatis.imDevice.service.ImDeviceService;
 import com.movision.mybatis.imuser.entity.ImUser;
+import com.movision.mybatis.imuser.service.ImUserService;
 import com.movision.mybatis.user.entity.LoginUser;
 import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
@@ -88,6 +89,9 @@ public class AppRegisterFacade {
 
     @Autowired
     private AddressFacade addressFacade;
+
+    @Autowired
+    private ImUserService imUserService;
 
     /**
      * 1 校验登录用户信息：手机号+短信验证码
@@ -345,7 +349,7 @@ public class AppRegisterFacade {
             result.put("imuser", newImUser);
         } else {
             //若存在，则查询im用户
-            result.put("imuser", imFacade.getImuserByCurrentAppuser(userid));
+            result.put("imuser", imUserService.selectByUserid(userid, ImConstant.TYPE_APP));
         }
     }
 
@@ -528,7 +532,7 @@ public class AppRegisterFacade {
             //3.1 更新原来的token
             updateUserInfo(deviceno, tokenJson, originUser);
             //3.2 返回已存在的im账户信息
-            result.put("imuser", imFacade.getImuserByCurrentAppuser(originUser.getId()));
+            result.put("imuser", imFacade.getImuser(originUser.getId()));
         }
 
         return result;

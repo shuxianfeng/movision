@@ -28,6 +28,8 @@ import com.movision.mybatis.systemPush.entity.SystemPush;
 import com.movision.mybatis.systemPush.service.SystemPushService;
 import com.movision.mybatis.systemToPush.entity.SystemToPush;
 import com.movision.mybatis.systemToPush.service.SystemToPushService;
+import com.movision.mybatis.user.entity.User;
+import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.JsonUtils;
 import com.movision.utils.JsoupCompressImg;
 import com.movision.utils.ListUtil;
@@ -98,6 +100,9 @@ public class ImFacade {
 
     @Autowired
     private ImUserAccusationService imUserAccusationService;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * 发起IM请求，获得响应
@@ -292,14 +297,23 @@ public class ImFacade {
     }
 
 
-    /**
-     * 根据userid查找当前APP用户的IM信息
-     *
-     * @param userid
-     * @return
-     */
-    public ImUser getImuserByCurrentAppuser(int userid) {
-        return imUserService.selectByUserid(userid, ImConstant.TYPE_APP);
+    public ImUser getImuser(int userid) throws IOException {
+        Boolean isExistImUser = isExistAPPImuser(userid);
+        if (!isExistImUser) {
+            //若不存在，则注册im用户
+            User user = userService.selectByPrimaryKey(userid);
+
+            ImUser imUser = new ImUser();
+            imUser.setUserid(userid);
+            imUser.setAccid(CheckSumBuilder.getAccid(String.valueOf(userid)));  //根据userid生成accid
+            imUser.setName(user.getNickname()); //同步app用户的昵称
+            imUser.setIcon(user.getPhoto());    //同步app用户的头像
+
+            return AddImUser(imUser);
+        } else {
+            //若存在，则查询im用户
+            return imUserService.selectByUserid(userid, ImConstant.TYPE_APP);
+        }
     }
 
 
