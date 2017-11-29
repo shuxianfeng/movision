@@ -1212,6 +1212,19 @@ public class ImFacade {
         }
     }
 
+    /**
+     * 带不带链接发送消息
+     * @param body
+     * @param flag
+     */
+    public void  HavePushLink(String body,int flag){
+        if(flag==1){//不带链接
+            AddPushMovement(body);
+        }else if (flag==2){//带链接
+            AddPushMovementAndLink(body);
+        }
+    }
+
 
     public List<SystemToPush> findAllSystemToPush(Paging<SystemToPush> pager) {
         return systemToPushService.findAllSystemToPush(pager);
