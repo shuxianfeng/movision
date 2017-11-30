@@ -122,7 +122,7 @@ public class FacadeComments {
         if (content.length() > 500) {
             return 2;
         } else {
-            int type = 0;
+            int type;
             if (fuid == null) {
                 //父id为空 表示此评论是父评论
                 CommentVo vo = wrapParentCommentVo(userid, content, postid);
