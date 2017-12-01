@@ -76,7 +76,7 @@
     </select>
 
     <select id="unionidByOpenids" parameterType="java.lang.String" resultType="java.lang.String">
-        SELECT openid FROM  tp_dinyuehao WHERE unionid=#{unionid,jdbcType=VARCHAR}
+        SELECT OPENID FROM  tp_dinyuehao WHERE unionid=#{unionid,jdbcType=VARCHAR}
     </select>
     <select id="selectO" parameterType="java.lang.String" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM tp_dinyuehao WHERE openid=#{openid,jdbcType=VARCHAR}
