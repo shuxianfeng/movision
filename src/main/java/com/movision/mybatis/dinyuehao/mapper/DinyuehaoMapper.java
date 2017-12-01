@@ -1,6 +1,9 @@
 package com.movision.mybatis.dinyuehao.mapper;
 
 import com.movision.mybatis.dinyuehao.entity.Dinyuehao;
+import com.movision.mybatis.fuwuhao.entity.Fuwuhao;
+
+import java.util.Map;
 
 public interface DinyuehaoMapper {
     int deleteByPrimaryKey(Integer id);
@@ -17,4 +20,9 @@ public interface DinyuehaoMapper {
 
 
     int unionidByOpenid(String unionid);
+    String unionidByOpenids(String unionid);
+
+    int updateFU(Map map);
+
+    Fuwuhao selectOc(String code);
 }

@@ -5,9 +5,11 @@
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="OPENID" property="openid" jdbcType="VARCHAR"/>
         <result column="unionid" property="unionid" jdbcType="VARCHAR"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
+        <result column="count" property="count" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, OPENID, unionid
+    id, OPENID, unionid,code,count
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -74,4 +76,7 @@
     <select id="haveFuwu" parameterType="java.lang.String" resultType="java.lang.Integer">
         SELECT  COUNT(1) FROM  tp_fuwuhao WHERE openid=#{openid,jdbcType=VARCHAR}
     </select>
+    <update id="updateFU" parameterType="java.lang.String">
+        UPDATE  tp_fuwuhao SET code=#{code,jdbcType=VARCHAR},count=#{count,jdbcType=INTEGER} WHERE  openid=#{openid,jdbcType=VARCHAR}
+    </update>
 </mapper>

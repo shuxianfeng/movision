@@ -457,13 +457,27 @@ public class VideoUploadUtil {
             if (have == 0) {
                 count = 0;
             } else {
-                count = 1;
+                String DYopenid = dinyuehaoService.unionidByOpenids(unionid);
+                Map map1=getUserInformationH5DY(DYopenid);
+                count=Integer.parseInt(map1.get("subscribe").toString());
             }
             map.put("count", count);
+            //把用户的信息存入表中code  count
+            Map hashmap = new HashMap();
+            hashmap.put("openid",openid);
+            hashmap.put("count",count);
+            hashmap.put("code",code);
+            int update=dinyuehaoService.updateFU(hashmap);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return map;
+    }
+
+    public Fuwuhao selectOc(String code){
+         Fuwuhao fuwuhao=dinyuehaoService.selectOc(code);
+
+        return fuwuhao;
     }
 
 

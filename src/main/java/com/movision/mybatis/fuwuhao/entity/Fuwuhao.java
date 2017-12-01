@@ -7,6 +7,26 @@ public class Fuwuhao {
 
     private String unionid;
 
+    private String code;
+
+    private Integer count;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
     public Integer getId() {
         return id;
     }

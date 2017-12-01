@@ -71,4 +71,7 @@
     <select id="unionidByOpenid" parameterType="java.lang.String" resultType="java.lang.Integer">
         SELECT count(1) FROM tp_dinyuehao WHERE unionid=#{unionid,jdbcType=VARCHAR}
   </select>
+    <select id="selectOc" parameterType="java.lang.String" resultType="com.movision.mybatis.fuwuhao.entity.Fuwuhao">
+        SELECT  * FROM  tp_fuwuhao WHERE  code=#{code,jdbcType=VARCHAR}
+    </select>
 </mapper>
