@@ -26,4 +26,5 @@ public interface DinyuehaoMapper {
     int selectO(String openid);
 
     Fuwuhao selectOc(String code);
+
 }

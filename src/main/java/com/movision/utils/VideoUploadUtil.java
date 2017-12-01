@@ -474,10 +474,15 @@ public class VideoUploadUtil {
         return map;
     }
 
-    public Fuwuhao selectOc(String code){
+    public Map selectOc(String code){
+        Map map = new HashMap();
          Fuwuhao fuwuhao=dinyuehaoService.selectOc(code);
-
-        return fuwuhao;
+        int count=fuwuhao.getCount();
+        String unionid=fuwuhao.getUnionid();
+        String DYopenid = dinyuehaoService.unionidByOpenids(unionid);
+        map.put("DYopenid",DYopenid);
+        map.put("count",count);
+        return map;
     }
 
 

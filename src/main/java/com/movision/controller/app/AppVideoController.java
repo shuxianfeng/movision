@@ -336,7 +336,7 @@ public class AppVideoController {
     public Response selectOc(
                              @ApiParam("code") @RequestParam String code) {
         Response response = new Response();
-        Fuwuhao openid = videoUploadUtil.selectOc(code);
+        Map openid = videoUploadUtil.selectOc(code);
         if (response.getCode() == 200) {
             response.setData(openid);
         }
