@@ -447,22 +447,23 @@ public class VideoUploadUtil {
             String oppid = doGet(requestUrl);
             net.sf.json.JSONObject oppidObj = net.sf.json.JSONObject.fromObject(oppid);
             openid = (String) oppidObj.get("openid");
-
             getUserInformationH5(openid);
             //根据openid查询对应的unionid（服务号表）
             String unionid = fuwuhaoService.openidByUnionid(openid);
             //根据unionid去订阅表中查有没有该用户的openid
             int have = dinyuehaoService.unionidByOpenid(unionid);
-            String DYopenid = dinyuehaoService.unionidByOpenids(unionid);
+            String DYopenid="";
             int count = 0;
             if (have == 0) {
                 count = 0;
+                map.put("DYopenid", DYopenid);
             } else {
+                DYopenid= dinyuehaoService.unionidByOpenids(unionid);
+                map.put("DYopenid", DYopenid);
                 Map map1=getUserInformationH5DY(DYopenid);
                 count=Integer.parseInt(map1.get("subscribe").toString());
             }
-            map.put("DYopenid", DYopenid);
-            map.put("count", count);
+             map.put("count", count);
             //把用户的信息存入表中code  count
             Fuwuhao fuwuhao = new Fuwuhao();
             fuwuhao.setCode(code);
