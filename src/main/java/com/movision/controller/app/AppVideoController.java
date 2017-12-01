@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.movision.common.Response;
 import com.movision.common.constant.AliVideoConstant;
 import com.movision.facade.apsaraVideo.AliVideoFacade;
+import com.movision.mybatis.fuwuhao.entity.Fuwuhao;
 import com.movision.utils.VideoUploadUtil;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -322,6 +323,20 @@ public class AppVideoController {
                              @ApiParam("code") @RequestParam String code) {
         Response response = new Response();
         Map openid = videoUploadUtil.doPost(request, code);
+        if (response.getCode() == 200) {
+            response.setData(openid);
+        }
+        return response;
+    }
+
+
+
+    @ApiOperation(value = " selectOc", notes = " selectOc", response = Response.class)
+    @RequestMapping(value = "selectOc", method = RequestMethod.POST)
+    public Response selectOc(
+                             @ApiParam("code") @RequestParam String code) {
+        Response response = new Response();
+        Fuwuhao openid = videoUploadUtil.selectOc(code);
         if (response.getCode() == 200) {
             response.setData(openid);
         }
