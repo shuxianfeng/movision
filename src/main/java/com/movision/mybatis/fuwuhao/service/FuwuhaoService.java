@@ -39,5 +39,18 @@ public class FuwuhaoService {
             throw e;
         }
     }
+
+
+    public int haveFuwu(String openid) {
+        try {
+            log.info("查询表中有没有存在");
+            return fuwuhaoMapper.haveFuwu(openid);
+        } catch (Exception e) {
+            log.error("查询表中有没有存在失败");
+            throw e;
+        }
+    }
+
 }
+
 

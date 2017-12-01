@@ -71,4 +71,7 @@
     <select id="openidByUnionid" parameterType="java.lang.String" resultType="java.lang.String">
         SELECT unionid FROM tp_fuwuhao WHERE openid=#{openid,jdbcType=VARCHAR}
   </select>
+    <select id="haveFuwu" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT  COUNT(1) FROM  tp_fuwuhao WHERE openid=#{openid,jdbcType=VARCHAR}
+    </select>
 </mapper>
