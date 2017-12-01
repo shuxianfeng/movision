@@ -11,6 +11,7 @@ import com.movision.mybatis.postHeatvalueEverydayRecord.entity.PostHeatvalueEver
 import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import com.movision.utils.pagination.model.Paging;
+import javafx.geometry.Pos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -946,6 +947,21 @@ public class PostService {
             return postMapper.updateByPrimaryKeySelective(postActiveList);
         } catch (Exception e) {
             log.error("编辑活动异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 删除运营不要的报废帖子
+     *
+     * @param post
+     */
+    public void deletePostByIDAndCircleid(Post post) {
+        try {
+            log.info("删除报废帖子");
+            postMapper.deletePostByIDAndCircleid(post);
+        } catch (Exception e) {
+            log.error("删除报废帖子异常", e);
             throw e;
         }
     }

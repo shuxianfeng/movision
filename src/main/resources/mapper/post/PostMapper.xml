@@ -2433,4 +2433,8 @@
         )
     </select>
 
+    <delete id="deletePostByIDAndCircleid" parameterType="com.movision.mybatis.post.entity.Post">
+        DELETE FROM yw_post WHERE circleid = #{circleid,jdbcType=INTGER} AND title IS NULL
+    </delete>
+
 </mapper>

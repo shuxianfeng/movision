@@ -420,6 +420,8 @@ public class ExcelIntoEnquiryUtil {
                 //执行帖子编辑操作
                 postService.updateActivePostById(post);
 
+                //删除没有title帖子（运营不要的报废帖子）
+                postService.deletePostByIDAndCircleid(post);
 
             }
             //返回值

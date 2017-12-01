@@ -333,4 +333,6 @@ public interface PostMapper {
     PostReturnAll postReAll(Map map);
 
     List<PostVo> querySelectedSortedPosts(Integer[] ids);
+
+    void deletePostByIDAndCircleid(Post post);
 }
