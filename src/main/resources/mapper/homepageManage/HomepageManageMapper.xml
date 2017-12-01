@@ -180,14 +180,6 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
-    <select id="findAllqueryAdvertisementList" resultType="com.movision.mybatis.homepageManage.entity.HomepageManageVo">
-        select m.*,t.name,
-        (SELECT p.title FROM yw_post p WHERE p.id = m.postid) AS postTitle
-        from yw_homepage_manage m LEFT JOIN yw_homepage_manage_type t ON m.topictype=t.type
-        WHERE m.isdel=0
-        ORDER BY m.intime DESC
-    </select>
-
     <select id="queryAvertisementById" parameterType="java.lang.String"
             resultType="com.movision.mybatis.homepageManage.entity.HomepageManageVo">
         select
@@ -345,12 +337,12 @@
             ORDER BY m.intime ASC
         </if>
         <if test="type==null">
-            ORDER BY m.intime DESC
+            ORDER BY name ASC
         </if>
     </select>
 
     <select id="queryAdvertisementLocation" resultType="java.lang.Integer" parameterType="java.lang.String">
-        SELECT orderid FROM yw_homepage_manage WHERE topictype=#{type=jdbcType=INTEGER} AND isdel=0
+        SELECT orderid FROM yw_homepage_manage WHERE topictype=#{type=jdbcType=INTEGER} AND isdel=0 ORDER BY orderid ASC
     </select>
 
     <update id="deleteAdvertisementOrderid" parameterType="java.util.Map">

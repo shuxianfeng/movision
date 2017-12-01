@@ -44,29 +44,6 @@ public class GuangGaoController {
 
 
     /**
-     * 查询广告列表
-     *
-     * @param pageNo
-     * @param pageSize
-     * @return
-     */
-    @ApiOperation(value = "查询广告列表", notes = "用于查询广告列表接口", response = Response.class)
-    @RequestMapping(value = "query_guang_gao_list", method = RequestMethod.POST)
-    public Response queryAdvertisementList(@ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                           @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "10") String pageSize) {
-        Response response = new Response();
-        Paging<HomepageManageVo> pager = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<HomepageManageVo> list = homepageManageFacade.queryAdvertisementList(pager);
-        if (response.getCode() == 200) {
-            response.setMessage("查询成功");
-        }
-        pager.result(list);
-        response.setData(pager);
-        return response;
-    }
-
-
-    /**
      * 根据条件查询广告列表
      *
      * @param name

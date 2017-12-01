@@ -29,16 +29,6 @@ public class HomepageManageFacade {
     ManageTypeService manageTypeService;
 
     /**
-     * 查询广告列表
-     *
-     * @param pager
-     * @return
-     */
-    public List<HomepageManageVo> queryAdvertisementList(Paging<HomepageManageVo> pager) {
-        return homepageManageService.queryAdvertisementList(pager);
-    }
-
-    /**
      * 用于查看广告详情
      *
      * @param id

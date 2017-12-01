@@ -417,35 +417,27 @@ public class XmlParseFacade {
         while (k < p.length) {
             if (k == 0) {
                 sheet.addCell(new Label(k, i + 1, pid.toString()));
-                k++;
             }
             if (k == 1) {
                 sheet.addCell(new Label(k, i + 1, title));
-                k++;
             }
             if (k == 2) {
                 sheet.addCell(new Label(k, i + 1, subtitle));
-                k++;
             }
             if (k == 3) {
                 sheet.addCell(new Label(k, i + 1, covimg));
-                k++;
             }
             if (k == 4) {
                 sheet.addCell(new Label(k, i + 1, contents));
-                k++;
             }
             if (k == 5) {
                 sheet.addCell(new Label(k, i + 1, circleid));
-                k++;
             }
             if (k == 6) {
                 sheet.addCell(new Label(k, i + 1, circlename));
-                k++;
             }
             if (k == 7) {
                 sheet.addCell(new Label(k, i + 1, labels));
-                k++;
             }
             if (k == 8) {
                 sheet.addCell(new Label(k, i + 1, userid));
@@ -453,13 +445,11 @@ public class XmlParseFacade {
             }
             if (k == 9) {
                 sheet.addCell(new Label(k, i + 1, nickname));
-                k++;
             }
             if (k == 10) {
                 sheet.addCell(new Label(k, i + 1, phone));
-                k++;
             }
-
+            k++;
         }
     }
 

@@ -29,8 +29,6 @@ public interface HomepageManageMapper {
 
     int updateByPrimaryKey(HomepageManage record);
 
-    List<HomepageManageVo> findAllqueryAdvertisementList(RowBounds rowBounds);
-
     HomepageManageVo queryAvertisementById(String id);
 
     int addAdvertisement(HomepageManage manage);

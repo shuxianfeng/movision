@@ -47,22 +47,6 @@ public class HomepageManageService {
     }
 
     /**
-     * 查询广告列表
-     *
-     * @param pager
-     * @return
-     */
-    public List<HomepageManageVo> queryAdvertisementList(Paging<HomepageManageVo> pager) {
-        try {
-            log.info("查询广告列表");
-            return homepageManageMapper.findAllqueryAdvertisementList(pager.getRowBounds());
-        } catch (Exception e) {
-            log.error("查询广告列表");
-            throw e;
-        }
-    }
-
-    /**
      * 用于查看广告详情
      *
      * @param id
