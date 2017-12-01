@@ -952,7 +952,7 @@ public class VideoUploadUtil {
         Fuwuhao fuwuhao = new Fuwuhao();
         //查询表中服务号有没有
         int have=fuwuhaoService.haveFuwu(openid);
-        if(have==1) {
+        if(have==0) {
             fuwuhao.setOpenid(openids);
             fuwuhao.setUnionid(unionid);
             fuwuhaoService.insertSelective(fuwuhao);
