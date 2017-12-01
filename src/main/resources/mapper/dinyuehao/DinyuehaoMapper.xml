@@ -74,4 +74,14 @@
     <select id="selectOc" parameterType="java.lang.String" resultType="com.movision.mybatis.fuwuhao.entity.Fuwuhao">
         SELECT  * FROM  tp_fuwuhao WHERE  code=#{code,jdbcType=VARCHAR}
     </select>
+
+    <select id="unionidByOpenids" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT openid FROM  tp_dinyuehao WHERE unionid=#{unionid,jdbcType=VARCHAR}
+    </select>
+    <select id="selectO" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM tp_dinyuehao WHERE openid=#{openid,jdbcType=VARCHAR}
+    </select>
+    <update id="updateFU" parameterType="com.movision.mybatis.fuwuhao.entity.Fuwuhao">
+        UPDATE  tp_fuwuhao SET code=#{code,jdbcType=VARCHAR},count=#{count,jdbcType=INTEGER} WHERE  openid=#{openid,jdbcType=VARCHAR}
+    </update>
 </mapper>

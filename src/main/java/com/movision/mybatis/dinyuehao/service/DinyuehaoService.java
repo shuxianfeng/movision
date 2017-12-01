@@ -53,16 +53,25 @@ public class DinyuehaoService {
 
 
 
-    public int updateFU(Map map) {
+    public int updateFU(Fuwuhao fuwuhao) {
         try {
             log.info("根据openid修改");
-            return dinyuehaoMapper.updateFU(map);
+            return dinyuehaoMapper.updateFU(fuwuhao);
         } catch (Exception e) {
             log.error("根据openid修改失败");
             throw e;
         }
     }
 
+    public int selectO(String map) {
+        try {
+            log.info("根据openid修改");
+            return dinyuehaoMapper.selectO(map);
+        } catch (Exception e) {
+            log.error("根据openid修改失败");
+            throw e;
+        }
+    }
 
     public Fuwuhao selectOc(String code) {
         try {

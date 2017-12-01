@@ -76,7 +76,4 @@
     <select id="haveFuwu" parameterType="java.lang.String" resultType="java.lang.Integer">
         SELECT  COUNT(1) FROM  tp_fuwuhao WHERE openid=#{openid,jdbcType=VARCHAR}
     </select>
-    <update id="updateFU" parameterType="java.lang.String">
-        UPDATE  tp_fuwuhao SET code=#{code,jdbcType=VARCHAR},count=#{count,jdbcType=INTEGER} WHERE  openid=#{openid,jdbcType=VARCHAR}
-    </update>
 </mapper>

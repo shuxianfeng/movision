@@ -463,11 +463,11 @@ public class VideoUploadUtil {
             }
             map.put("count", count);
             //把用户的信息存入表中code  count
-            Map hashmap = new HashMap();
-            hashmap.put("openid",openid);
-            hashmap.put("count",count);
-            hashmap.put("code",code);
-            int update=dinyuehaoService.updateFU(hashmap);
+            Fuwuhao fuwuhao = new Fuwuhao();
+            fuwuhao.setCode(code);
+            fuwuhao.setCount(count);
+            fuwuhao.setOpenid(openid);
+            int update=dinyuehaoService.updateFU(fuwuhao);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -946,13 +946,21 @@ public class VideoUploadUtil {
         String result = GetHttp(url);
         Map map = new HashMap();
         net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
-        String subscribe = jsonObject.get("subscribe").toString();
-        String nickname = jsonObject.get("nickname").toString();
-        String sex = jsonObject.get("sex").toString();
-        long subscribe_time = Long.valueOf(jsonObject.get("subscribe_time").toString());
-        String headimgurl = jsonObject.get("headimgurl").toString();
-        String openids = jsonObject.get("openid").toString();
-        String city = jsonObject.get("city").toString();
+        int subscribe = Integer.parseInt(jsonObject.get("subscribe").toString());
+        String nickname="";
+        String sex="";
+        long subscribe_time=0;
+        String headimgurl="";
+        String openids="";
+        String city="";
+        if(subscribe==1) {
+              nickname = jsonObject.get("nickname").toString();
+              sex = jsonObject.get("sex").toString();
+              subscribe_time = Long.valueOf(jsonObject.get("subscribe_time").toString());
+              headimgurl = jsonObject.get("headimgurl").toString();
+              openids = jsonObject.get("openid").toString();
+              city = jsonObject.get("city").toString();
+        }
         String unionid = jsonObject.get("unionid").toString();
         redisClient.set("openids", openids);
         map.put("subscribe", subscribe);
@@ -1028,13 +1036,21 @@ public class VideoUploadUtil {
         String result = GetHttp(url);
         Map map = new HashMap();
         net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
-        String subscribe = jsonObject.get("subscribe").toString();
-        String nickname = jsonObject.get("nickname").toString();
-        String sex = jsonObject.get("sex").toString();
-        long subscribe_time = Long.valueOf(jsonObject.get("subscribe_time").toString());
-        String headimgurl = jsonObject.get("headimgurl").toString();
-        String openids = jsonObject.get("openid").toString();
-        String city = jsonObject.get("city").toString();
+        int subscribe = Integer.parseInt(jsonObject.get("subscribe").toString());
+        String nickname="";
+        String sex="";
+        long subscribe_time=0;
+        String headimgurl="";
+        String openids="";
+        String city="";
+        if(subscribe==1) {
+              nickname = jsonObject.get("nickname").toString();
+              sex = jsonObject.get("sex").toString();
+              subscribe_time = Long.valueOf(jsonObject.get("subscribe_time").toString());
+              headimgurl = jsonObject.get("headimgurl").toString();
+              openids = jsonObject.get("openid").toString();
+              city = jsonObject.get("city").toString();
+        }
         String unionid = jsonObject.get("unionid").toString();
         redisClient.set("DYopenids", openids);
         map.put("subscribe", subscribe);
@@ -1045,11 +1061,14 @@ public class VideoUploadUtil {
         map.put("city", city);
         map.put("sex", sex);
         map.put("unionid", unionid);
-
-        Dinyuehao dinyuehao = new Dinyuehao();
-        dinyuehao.setOpenid(openids);
-        dinyuehao.setUnionid(unionid);
-        dinyuehaoService.insertSelective(dinyuehao);
+        //查询有没有
+        int c=dinyuehaoService.selectO(openid);
+        if(c==0) {
+            Dinyuehao dinyuehao = new Dinyuehao();
+            dinyuehao.setOpenid(openids);
+            dinyuehao.setUnionid(unionid);
+            dinyuehaoService.insertSelective(dinyuehao);
+        }
         return map;
     }
 
