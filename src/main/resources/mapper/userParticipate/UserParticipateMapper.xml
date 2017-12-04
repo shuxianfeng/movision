@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.userParticipate.mapper.UserParticipateMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.userParticipate.entity.UserParticipate">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="date" property="date" jdbcType="DATE"/>
+        <result column="newpost" property="newpost" jdbcType="INTEGER"/>
+        <result column="activepost" property="activepost" jdbcType="INTEGER"/>
+        <result column="replynum" property="replynum" jdbcType="INTEGER"/>
+        <result column="zannum" property="zannum" jdbcType="INTEGER"/>
+        <result column="forwardnum" property="forwardnum" jdbcType="INTEGER"/>
+        <result column="follownum" property="follownum" jdbcType="INTEGER"/>
+        <result column="followdnum" property="followdnum" jdbcType="INTEGER"/>
+        <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, date, newpost, activepost, replynum, zannum, forwardnum, follownum, followdnum, 
+    intime
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_user_participate
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yw_user_participate
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.userParticipate.entity.UserParticipate">
+    insert into yw_user_participate (id, date, newpost, 
+      activepost, replynum, zannum, 
+      forwardnum, follownum, followdnum, 
+      intime)
+    values (#{id,jdbcType=INTEGER}, #{date,jdbcType=DATE}, #{newpost,jdbcType=INTEGER}, 
+      #{activepost,jdbcType=INTEGER}, #{replynum,jdbcType=INTEGER}, #{zannum,jdbcType=INTEGER}, 
+      #{forwardnum,jdbcType=INTEGER}, #{follownum,jdbcType=INTEGER}, #{followdnum,jdbcType=INTEGER}, 
+      #{intime,jdbcType=TIMESTAMP})
+  </insert>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.userParticipate.entity.UserParticipate">
+        insert into yw_user_participate
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="date != null">
+                date,
+            </if>
+            <if test="newpost != null">
+                newpost,
+            </if>
+            <if test="activepost != null">
+                activepost,
+            </if>
+            <if test="replynum != null">
+                replynum,
+            </if>
+            <if test="zannum != null">
+                zannum,
+            </if>
+            <if test="forwardnum != null">
+                forwardnum,
+            </if>
+            <if test="follownum != null">
+                follownum,
+            </if>
+            <if test="followdnum != null">
+                followdnum,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="date != null">
+                #{date,jdbcType=DATE},
+            </if>
+            <if test="newpost != null">
+                #{newpost,jdbcType=INTEGER},
+            </if>
+            <if test="activepost != null">
+                #{activepost,jdbcType=INTEGER},
+            </if>
+            <if test="replynum != null">
+                #{replynum,jdbcType=INTEGER},
+            </if>
+            <if test="zannum != null">
+                #{zannum,jdbcType=INTEGER},
+            </if>
+            <if test="forwardnum != null">
+                #{forwardnum,jdbcType=INTEGER},
+            </if>
+            <if test="follownum != null">
+                #{follownum,jdbcType=INTEGER},
+            </if>
+            <if test="followdnum != null">
+                #{followdnum,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.movision.mybatis.userParticipate.entity.UserParticipate">
+        update yw_user_participate
+        <set>
+            <if test="date != null">
+                date = #{date,jdbcType=DATE},
+            </if>
+            <if test="newpost != null">
+                newpost = #{newpost,jdbcType=INTEGER},
+            </if>
+            <if test="activepost != null">
+                activepost = #{activepost,jdbcType=INTEGER},
+            </if>
+            <if test="replynum != null">
+                replynum = #{replynum,jdbcType=INTEGER},
+            </if>
+            <if test="zannum != null">
+                zannum = #{zannum,jdbcType=INTEGER},
+            </if>
+            <if test="forwardnum != null">
+                forwardnum = #{forwardnum,jdbcType=INTEGER},
+            </if>
+            <if test="follownum != null">
+                follownum = #{follownum,jdbcType=INTEGER},
+            </if>
+            <if test="followdnum != null">
+                followdnum = #{followdnum,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.userParticipate.entity.UserParticipate">
+    update yw_user_participate
+    set date = #{date,jdbcType=DATE},
+      newpost = #{newpost,jdbcType=INTEGER},
+      activepost = #{activepost,jdbcType=INTEGER},
+      replynum = #{replynum,jdbcType=INTEGER},
+      zannum = #{zannum,jdbcType=INTEGER},
+      forwardnum = #{forwardnum,jdbcType=INTEGER},
+      follownum = #{follownum,jdbcType=INTEGER},
+      followdnum = #{followdnum,jdbcType=INTEGER},
+      intime = #{intime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="queryPostStatistics" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.userParticipate.entity.UserParticipateVo">
+        SELECT * FROM yw_user_participate
+        <where>
+            <if test="begin != null and end != null">
+                <![CDATA[intime >= #{begin,jdbcType=TIMESTAMP} AND intime <= DATE_ADD(#{end,jdbcType=TIMESTAMP},INTERVAL 1 DAY)]]>
+            </if>
+        </where>
+    </select>
+    <select id="queryPostStatisticsGather" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.userParticipate.entity.UserParticipateVo">
+        SELECT SUM(p.newpost) AS newpGather,sum(p.activepost) AS activeGather,sum(p.replynum) AS replyGather
+        ,SUM(p.zannum) AS zanGather,
+        sum(p.forwardnum) AS forwardGather,sum(p.follownum) AS followGather , sum(p.followdnum) AS followdGather
+        FROM yw_user_participate u
+        LEFT JOIN (SELECT * FROM yw_user_participate) p ON p.id = u.id
+        <where>
+            <if test="begin != null and end != null">
+                <![CDATA[u.intime >= #{begin,jdbcType=TIMESTAMP} AND u.intime <= DATE_ADD(#{end,jdbcType=TIMESTAMP},INTERVAL 1 DAY)]]>
+            </if>
+        </where>
+    </select>
+</mapper>

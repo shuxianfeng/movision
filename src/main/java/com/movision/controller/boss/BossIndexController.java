@@ -10,6 +10,7 @@ import com.movision.mybatis.userDauStatistics.entity.UserDauStatisticsVo;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -94,6 +95,22 @@ public class BossIndexController {
         Map statistics = indexFacade.queryUserStatistics(time);
         response.setMessage("查询成功");
         response.setData(statistics);
+        return response;
+    }
+
+    /**
+     * 查询平台统计数据
+     *
+     * @param time
+     * @return
+     */
+    @RequestMapping(value = "query_post_statistics", method = RequestMethod.POST)
+    @ApiOperation(value = "查询平台数据统计", notes = "查询平台数据统计", response = Response.class)
+    public Response queryPostStatistics(@ApiParam(value = "时间范围") @RequestParam String time) {
+        Response response = new Response();
+        Map map = indexFacade.queryPostStatistics(time);
+        response.setMessage("查询成功");
+        response.setData(map);
         return response;
     }
 }

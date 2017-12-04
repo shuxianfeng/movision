@@ -121,7 +121,7 @@
         SELECT * FROM yw_user_dau_statistics
         <where>
             <if test="begin != null and end != null">
-                <![CDATA[intime >= #{begin,jdbcType=TIMESTAMP} AND intime <= #{end,jdbcType=TIMESTAMP}]]>
+                <![CDATA[intime >= #{begin,jdbcType=TIMESTAMP} AND intime <= DATE_ADD(#{end,jdbcType=TIMESTAMP},INTERVAL 1 DAY)]]>
             </if>
         </where>
     </select>
@@ -133,7 +133,7 @@
         LEFT JOIN (SELECT * FROM yw_user_dau_statistics) a ON a.id = ds.id
         <where>
             <if test="begin != null and end != null">
-                <![CDATA[ds.intime >= #{begin,jdbcType=TIMESTAMP} AND ds.intime <= #{end,jdbcType=TIMESTAMP}]]>
+                <![CDATA[ds.intime >= #{begin,jdbcType=TIMESTAMP} AND ds.intime <= DATE_ADD(#{end,jdbcType=TIMESTAMP},INTERVAL 1 DAY)]]>
             </if>
         </where>
     </select>
