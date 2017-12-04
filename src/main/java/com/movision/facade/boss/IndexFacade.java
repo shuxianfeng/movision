@@ -4,8 +4,18 @@ import com.movision.mybatis.bossIndex.entity.AboveStatistics;
 import com.movision.mybatis.bossIndex.entity.IndexTodayDetails;
 import com.movision.mybatis.bossIndex.entity.ProcessedGoodsOrders;
 import com.movision.mybatis.bossIndex.service.IndexService;
+import com.movision.mybatis.userDauStatistics.entity.UserDauStatistics;
+import com.movision.mybatis.userDauStatistics.entity.UserDauStatisticsVo;
+import com.movision.mybatis.userDauStatistics.service.UserDauStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhurui
@@ -16,6 +26,9 @@ public class IndexFacade {
 
     @Autowired
     private IndexService indexService;
+
+    @Autowired
+    private UserDauStatisticsService userDauStatisticeService;
 
     /**
      * 查询后台首页今日详情
@@ -46,5 +59,27 @@ public class IndexFacade {
      */
     public AboveStatistics queryAboveStatistics() {
         return indexService.queryAboveStatistics();
+    }
+
+    public Map queryUserStatistics(String time) {
+        Map resault = new HashMap();
+        String[] dates = time.split(",");
+        Date begin = null;
+        Date end = null;
+        Map map = new HashMap();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            begin = format.parse(dates[0]);
+            end = format.parse(dates[1]);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        map.put("begin", begin);
+        map.put("end", end);
+        List<UserDauStatisticsVo> list = userDauStatisticeService.queryUserStatistics(map);
+        resault.put("lists", list);
+        UserDauStatisticsVo vo = userDauStatisticeService.queryUserStatisticsGather(map);
+        resault.put("gather", vo);
+        return resault;
     }
 }

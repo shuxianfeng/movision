@@ -5,11 +5,17 @@ import com.movision.facade.boss.IndexFacade;
 import com.movision.mybatis.bossIndex.entity.AboveStatistics;
 import com.movision.mybatis.bossIndex.entity.IndexTodayDetails;
 import com.movision.mybatis.bossIndex.entity.ProcessedGoodsOrders;
+import com.movision.mybatis.userDauStatistics.entity.UserDauStatistics;
+import com.movision.mybatis.userDauStatistics.entity.UserDauStatisticsVo;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 /**
  * @Author zhurui
@@ -71,6 +77,23 @@ public class BossIndexController {
             response.setMessage("查询成功");
         }
         response.setData(aboveStatistics);
+        return response;
+    }
+
+
+    /**
+     * 首页用户统计
+     *
+     * @param time
+     * @return
+     */
+    @RequestMapping(value = "query_user_statistics", method = RequestMethod.POST)
+    @ApiOperation(value = "用户统计", notes = "用户统计", response = Response.class)
+    public Response queryUserStatistics(@ApiParam(value = "时间范围") @RequestParam String time) {
+        Response response = new Response();
+        Map statistics = indexFacade.queryUserStatistics(time);
+        response.setMessage("查询成功");
+        response.setData(statistics);
         return response;
     }
 }
