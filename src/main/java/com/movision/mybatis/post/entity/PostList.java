@@ -120,6 +120,16 @@ public class PostList implements Serializable {
 
     private List<PostLabel> postLabels;//帖子标签
 
+    private Integer countview;//点击量
+
+    public Integer getCountview() {
+        return countview;
+    }
+
+    public void setCountview(Integer countview) {
+        this.countview = countview;
+    }
+
     public String getActiveName() {
         return activeName;
     }
