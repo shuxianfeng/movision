@@ -1985,4 +1985,19 @@ public class PostService {
         }
     }
 
+    /**
+     * 根据帖子标题查询id
+     *
+     * @param post
+     * @return
+     */
+    public List<Integer> queryPostIdByTitle(Post post) {
+        try {
+            log.info("根据帖子标题查询id");
+            return postMapper.queryPostIdByTitle(post);
+        } catch (Exception e) {
+            log.error("根据帖子标题查询id异常", e);
+            throw e;
+        }
+    }
 }

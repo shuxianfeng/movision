@@ -127,4 +127,27 @@ public class XmlParseController {
     }
 
 
+    /**
+     * 修改Excel文件导入后未能修改的帖子标签
+     *
+     * @param file
+     * @return
+     */
+    @ApiOperation(value = "修改帖子标签", notes = "修改帖子标签", response = Response.class)
+    @RequestMapping(value = "input_post_lable", method = RequestMethod.POST)
+    public Response inputExcelToPostByLable(HttpServletRequest request,
+                                            @ApiParam(value = "Excel文件") @RequestParam MultipartFile file) {
+        Response response = new Response();
+        Map map = xmlParseFacade.inputExcelToPostByLable(request, file);
+        if (map.get("code").equals("200")) {
+            response.setMessage("操作成功");
+            response.setData(map);
+        } else {
+            response.setMessage("操作失败");
+            response.setData(map);
+        }
+        return response;
+    }
+
+
 }

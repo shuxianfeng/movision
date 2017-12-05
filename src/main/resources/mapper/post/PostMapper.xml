@@ -2441,4 +2441,11 @@
         DELETE FROM yw_post WHERE circleid = #{circleid,jdbcType=INTEGER} AND title IS NULL
     </delete>
 
+    <select id="queryPostIdByTitle" parameterType="com.movision.mybatis.post.entity.Post"
+            resultType="java.lang.Integer">
+        <![CDATA[
+        SELECT id FROM yw_post WHERE title = #{title,jdbcType=VARCHAR} AND isdel <> 1
+        ]]>
+    </select>
+
 </mapper>

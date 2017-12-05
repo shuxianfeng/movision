@@ -27,6 +27,7 @@ import com.movision.utils.CoverImgCompressUtil;
 import com.movision.utils.ImgCompressUtil;
 import com.movision.utils.StrUtil;
 import com.movision.utils.excel.ExcelIntoEnquiryUtil;
+import com.movision.utils.excel.ExcelUpdatePostByLable;
 import com.movision.utils.excel.InsertExcelToPost;
 import com.movision.utils.im.CheckSumBuilder;
 import com.movision.utils.oss.AliOSSClient;
@@ -99,6 +100,9 @@ public class XmlParseFacade {
 
     @Autowired
     private ExcelIntoEnquiryUtil excelIntoEnquiryUtil;
+
+    @Autowired
+    private ExcelUpdatePostByLable excelUpdatePostByLable;
 
     @Autowired
     private InsertExcelToPost insertExcelToPost;
@@ -1103,5 +1107,9 @@ public class XmlParseFacade {
         float size = (float) l / 1024 / 1024;
         DecimalFormat df = new DecimalFormat("0.00");//格式化小数，不足的补0
         return df.format(size);
+    }
+
+    public Map inputExcelToPostByLable(HttpServletRequest request, MultipartFile file) {
+        return excelUpdatePostByLable.queryExcelIntoEnquiry(request, file);
     }
 }
