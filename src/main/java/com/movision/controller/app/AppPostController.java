@@ -73,7 +73,7 @@ public class AppPostController {
         return response;
     }
 
-    @ApiOperation(value = "数据库物理分页demo接口", notes = "物理分页样例接口", response = Response.class)
+    @ApiOperation(value = "数据库物理分页demo接口", notes = "物理分页样例接口（集成PageHelper5.1.2）", response = Response.class)
     @RequestMapping(value = "pageHelper", method = RequestMethod.POST)
     public Response queryAllPageHelper(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                        @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize){
