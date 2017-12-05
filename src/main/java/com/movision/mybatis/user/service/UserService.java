@@ -1,7 +1,11 @@
 package com.movision.mybatis.user.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.movision.mybatis.bossUser.entity.BossUser;
+import com.movision.mybatis.pageHelper.entity.Datagrid;
 import com.movision.mybatis.post.entity.ActiveVo;
+import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.mapper.PostMapper;
 import com.movision.mybatis.province.entity.ProvinceVo;
@@ -506,12 +510,29 @@ public class UserService {
      * @param
      * @return
      */
-    public List<UserAll> queryAllUserList(Map map) {
+    public Datagrid queryAllUserList(Map map, String pageNo, String pageSize) {
         try {
             log.info("查询所有用户列表");
-            return userMapper.queryAllUserList(map);
+            PageHelper.startPage(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+            PageHelper.orderBy("intime desc");
+
+            List<UserAll> list = userMapper.queryAllUserList(map);
+
+            PageInfo<UserAll> pageInfo = new PageInfo<>(list);
+            Datagrid datagrid = new Datagrid(pageInfo.getTotal(), pageInfo.getList());
+            return datagrid;
         } catch (Exception e) {
             log.error("查询所有用户列表异常", e);
+            throw e;
+        }
+    }
+
+    public UserAll queryUserStatistics(Integer id) {
+        try {
+            log.info("统计用户");
+            return userMapper.queryUserStatistics(id);
+        } catch (Exception e) {
+            log.error("统计用户信息异常", e);
             throw e;
         }
     }

@@ -10,6 +10,7 @@ import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.coupon.entity.Coupon;
 import com.movision.mybatis.coupon.entity.CouponVo;
 import com.movision.mybatis.goods.entity.GoodsVo;
+import com.movision.mybatis.pageHelper.entity.Datagrid;
 import com.movision.mybatis.post.entity.PostList;
 import com.movision.mybatis.record.entity.RecordVo;
 import com.movision.mybatis.share.entity.Shares;
@@ -314,13 +315,11 @@ public class UserManageController {
                                      @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                      @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
-        //Paging<UserAll> pager = new Paging<UserAll>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        Map list = userManageFacade.queryAllUserList(nickname, phone, authentication, vip, seal, begintime, endtime, pointsSort,
+        Datagrid list = userManageFacade.queryAllUserList(nickname, phone, authentication, vip, seal, begintime, endtime, pointsSort,
                 postsumSort, isessenceSort, fansSort, conditionon, conditiontwo, price, login, pai, pageNo, pageSize);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        //pager.result(list);
         response.setData(list);
         return response;
     }

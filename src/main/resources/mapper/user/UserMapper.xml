@@ -876,12 +876,9 @@
     <select id="queryAllUserList" parameterType="java.util.Map"
             resultType="com.movision.mybatis.user.entity.UserAll">
         SELECT u.id,u.nickname,u.phone,u.level,u.status,u.points,u.fans,u.intime,u.qq,u.sina,
-        u.openid,aut.authstatus,u.heat_value,u.isrecommend,u.attention,u.isdv,
-        (SELECT COUNT(1) FROM yw_coupon WHERE isdel=0 AND userid=u.id) AS coupon,
-        (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isactive=0) AS postsum,
-        (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isessence=1 AND isactive=0) AS isessencesum
+        u.openid,aut.authstatus,u.heat_value,u.isrecommend,u.attention,u.isdv
         FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE
-        <![CDATA[ (u.id > 20000 OR u.id < 10000)]]>
+        <![CDATA[ (u.id >= 20000 OR u.id <= 10000)]]>
         <if test="nickname!=null">
             AND u.nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')
         </if>
@@ -1023,9 +1020,20 @@
                 ORDER BY u.level DESC
             </if>
         </if>
-        LIMIT #{pageNo,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+
     </select>
 
+    <select id="queryUserStatistics" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.user.entity.UserAll">
+        SELECT
+        (SELECT COUNT(1) FROM yw_coupon WHERE isdel=0 AND userid=u.id) AS coupon,
+        (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isactive=0) AS postsum,
+        (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isessence=1 AND isactive=0) AS isessencesum
+        FROM yw_user u WHERE
+        u.id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <!-- LIMIT #{pageNo,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER} -->
     <select id="queryAllTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
         SELECT count(u.id)
         FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE

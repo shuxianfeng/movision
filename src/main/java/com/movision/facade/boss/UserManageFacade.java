@@ -7,6 +7,7 @@ import com.movision.mybatis.applyVipDetail.service.ApplyVipDetailService;
 import com.movision.mybatis.auditVipDetail.service.AuditVipDetailService;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
+import com.movision.mybatis.pageHelper.entity.Datagrid;
 import com.movision.mybatis.province.entity.ProvinceVo;
 import com.movision.mybatis.record.entity.RecordVo;
 import com.movision.mybatis.record.service.RecordService;
@@ -397,12 +398,12 @@ public class UserManageFacade {
      * @param
      * @return
      */
-    public Map queryAllUserList(String nickname, String phone, String authentication, String vip, String seal,
-                                String begintime, String endtime, String pointsSort, String postsumSort, String isessenceSort,
-                                String fansSort, String conditionon, String conditiontwo, String price, String login,
-                                String pai, String pageNo, String pageSize) {
+    public Datagrid queryAllUserList(String nickname, String phone, String authentication, String vip, String seal,
+                                     String begintime, String endtime, String pointsSort, String postsumSort, String isessenceSort,
+                                     String fansSort, String conditionon, String conditiontwo, String price, String login,
+                                     String pai, String pageNo, String pageSize) {
         Map map = new HashedMap();
-        Map resa = new HashMap();
+        //Map resa = new HashMap();
         Date beg = null;
         Date end = null;
         if (StringUtil.isNotEmpty(begintime) && StringUtil.isNotEmpty(endtime)) {
@@ -458,35 +459,17 @@ public class UserManageFacade {
         if (StringUtil.isNotEmpty(pai)) {
             map.put("pai", pai);//排序方式
         }
-        if (StringUtil.isNotEmpty(pageNo) && StringUtil.isNotEmpty(pageSize)) {
-            map.put("pageNo", (Integer.parseInt(pageNo) - 1) * Integer.parseInt(pageSize));
+
+        Datagrid list = userService.queryAllUserList(map, pageNo, pageSize);
+        //查询统计
+        for (int i = 0; i < list.getRows().size(); i++) {
+            UserAll all = (UserAll) list.getRows().get(i);
+            UserAll u = userService.queryUserStatistics(all.getId());
+            all.setCoupon(u.getCoupon());
+            all.setPostsum(u.getPostsum());
+            all.setIsessencesum(u.getIsessencesum());
         }
-        if (StringUtil.isNotEmpty(pageSize)) {
-            map.put("pageSize", Integer.parseInt(pageSize));
-        }
-        List<UserAll> list = userService.queryAllUserList(map);
-        //查询用户列表所有用户数量
-        Integer usum = userService.queryAllTotal(map);
-        for (int j = 0; j < list.size(); j++) {
-            if (list.get(j).getAuthstatus() == null) {
-                list.get(j).setAuthstatus(3);//如果当前用户没有实名认证 返回3作为提示
-            }
-            if (list.get(j).getNickname() == null) {//如果查询出的用户昵称为空，拼接默认的昵称显示
-                String p = list.get(j).getPhone();
-                String substr = p.replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2");
-                substr = "mofo_" + substr;
-                list.get(j).setNickname(substr);
-            }
-            if (list.get(j).getPhone() != null) {
-                list.get(j).setLogin("8");//如果用户手机号不为null那么手机号作为登录方式
-            } else {
-                String resault = returnLoginType(list.get(j).getQq(), list.get(j).getOpenid(), list.get(j).getSina());
-                list.get(j).setLogin(resault);
-            }
-        }
-        resa.put("rows", list);
-        resa.put("total", usum);
-        return resa;
+        return list;
     }
 
     /**
