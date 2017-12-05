@@ -463,9 +463,9 @@ public class ExcelIntoEnquiryUtil {
                 label1.setType(1);
                 label1.setUserid(post.getUserid());
                 //不存在新增
-                Integer labelid = postLabelService.insertPostLabel(label1);
+                postLabelService.insertPostLabel(label1);
                 PostLabelRelation relation = new PostLabelRelation();
-                relation.setLabelid(labelid);
+                relation.setLabelid(relation.getId());
                 relation.setPostid(post.getId());
                 postLabelRelationService.insertPostToLabel(relation);
             }
