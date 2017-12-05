@@ -6,6 +6,7 @@ import java.util.List;
 /**
  * @Author shuxf
  * @Date 2017/12/5 9:17
+ * Datagrid：返回体的承载形式；
  */
 public class Datagrid {
     private long total;
