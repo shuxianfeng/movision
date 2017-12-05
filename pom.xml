@@ -119,6 +119,13 @@
             <version>${mybatis.spring.version}</version>
         </dependency>
 
+        <!-- pagehelper -->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>5.1.2</version>
+        </dependency>
+
         <!-- jackson -->
         <dependency>
             <groupId>org.codehaus.jackson</groupId>

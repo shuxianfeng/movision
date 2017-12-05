@@ -40,6 +40,7 @@ import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.mybatis.labelSearchTerms.entity.LabelSearchTerms;
 import com.movision.mybatis.labelSearchTerms.service.LabelSearchTermsService;
 import com.movision.mybatis.opularSearchTerms.service.OpularSearchTermsService;
+import com.movision.mybatis.pageHelper.entity.Datagrid;
 import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostReturnAll;
@@ -305,6 +306,10 @@ public class FacadePost {
             }
         }
         return vo;
+    }
+
+    public Datagrid queryAllPageHelper(String pageNo, String pageSize){
+        return postService.queryAllPageHelper(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
     }
 
     /**

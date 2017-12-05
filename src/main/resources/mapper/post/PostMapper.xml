@@ -51,6 +51,10 @@
         from yw_post
         where id = #{id,jdbcType=INTEGER}
     </select>
+    
+    <select id="queryAllPageHelper" resultType="com.movision.mybatis.post.entity.Post" >
+        SELECT * FROM yw_post
+    </select>
 
     <!--查询当前用户是否点赞过该帖子-->
     <select id="queryIsZanPost" parameterType="java.util.Map" resultType="java.lang.Integer">

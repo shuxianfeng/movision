@@ -8,6 +8,7 @@ import com.movision.fsearch.pojo.spec.NormalSearchSpec;
 import com.movision.fsearch.service.impl.LabelSearchService;
 import com.movision.mybatis.compressImg.entity.CompressImg;
 import com.movision.mybatis.labelSearchTerms.service.LabelSearchTermsService;
+import com.movision.mybatis.pageHelper.entity.Datagrid;
 import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.postLabel.entity.PostLabel;
@@ -69,6 +70,20 @@ public class AppPostController {
             response.setMessage("该帖已删除");
         }
         response.setData(post);
+        return response;
+    }
+
+    @ApiOperation(value = "数据库物理分页demo接口", notes = "物理分页样例接口", response = Response.class)
+    @RequestMapping(value = "pageHelper", method = RequestMethod.POST)
+    public Response queryAllPageHelper(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                       @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize){
+        Response response = new Response();
+
+        Datagrid datagrid = facadePost.queryAllPageHelper(pageNo, pageSize);
+
+        response.setCode(200);
+        response.setMessage("查询成功");
+        response.setData(datagrid);
         return response;
     }
 

@@ -1,9 +1,12 @@
 package com.movision.mybatis.post.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.compressImg.entity.CompressImg;
 import com.movision.mybatis.compressImg.mapper.CompressImgMapper;
 import com.movision.mybatis.goods.entity.Goods;
+import com.movision.mybatis.pageHelper.entity.Datagrid;
 import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.post.mapper.PostMapper;
@@ -1948,6 +1951,18 @@ public class PostService {
             log.error("修改帖子浏览失败", e);
             throw e;
         }
+    }
+
+    public Datagrid queryAllPageHelper(int pageNo, int pageSize){
+
+        PageHelper.startPage(pageNo, pageSize);
+        PageHelper.orderBy("intime desc");
+
+        List<Post> list = postMapper.queryAllPageHelper();
+
+        PageInfo<Post> pageInfo = new PageInfo<>(list);
+        Datagrid datagrid = new Datagrid(pageInfo.getTotal(),pageInfo.getList());
+        return datagrid;
     }
 
     public PostReturnAll postReAll(Map map) {
