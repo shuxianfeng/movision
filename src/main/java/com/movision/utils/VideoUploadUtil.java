@@ -19,7 +19,7 @@ import com.movision.mybatis.fuwuhao.service.FuwuhaoService;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.redis.RedisClient;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
-import org.dom4j.Document;
+ import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
@@ -30,8 +30,8 @@ import org.springframework.stereotype.Service;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import javax.servlet.http.HttpServletRequest;
-import javax.xml.crypto.dsig.SignatureMethod;
+ import javax.servlet.http.HttpServletRequest;
+ import javax.xml.crypto.dsig.SignatureMethod;
 import java.io.*;
 import java.net.*;
 import java.security.MessageDigest;
@@ -1144,7 +1144,7 @@ public class VideoUploadUtil {
      * @return
      */
     public String createMenu() {
-        String menu = "{\"button\":[{\"type\":\"click\",\"name\":\"投票系统555\",\"key\":\"1\",\"url\":\"http://51mofo.com/H5/vs/index.html?state=1\"}]}";
+        String menu = "{\"button\":[{\"type\":\"click\",\"name\":\"投票系统555\",\"key\":\"1\"}]}";
 
         //此处改为自己想要的结构体，替换即可
         String access_token=getaccesstokenDY();
