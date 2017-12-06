@@ -38,7 +38,6 @@
          <property name="plugins">
             <list>
                 <ref bean="pageConfig"/>
-                <ref bean="pageHelper"/>
             </list>
         </property>
     </bean>
@@ -51,12 +50,6 @@
                 <prop key="dbms">MYSQL</prop>
                 <prop key="sqlRegex">.*findAll.*</prop>
             </props>
-        </property>
-    </bean>
-
-    <bean id="pageHelper" class="com.github.pagehelper.PageInterceptor">
-        <property name="properties">
-            <value></value>
         </property>
     </bean>
 
