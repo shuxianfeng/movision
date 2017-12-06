@@ -19,19 +19,24 @@ import com.movision.mybatis.fuwuhao.service.FuwuhaoService;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.redis.RedisClient;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
- import org.dom4j.Document;
+import com.thoughtworks.xstream.XStream;
+import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
- import javax.servlet.http.HttpServletRequest;
- import javax.xml.crypto.dsig.SignatureMethod;
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.crypto.dsig.SignatureMethod;
 import java.io.*;
 import java.net.*;
 import java.security.MessageDigest;
@@ -310,13 +315,13 @@ public class VideoUploadUtil {
      */
     //美番（MOFO）公众号
     //服务号
-    //static String APPID = "wxfe9eb21fdb46a1a6";
-    //static String APPSECRET = "c20dc2afd2d8e38a4c49abebf4d0f532";
+    static String APPID = "wxfe9eb21fdb46a1a6";
+    static String APPSECRET = "c20dc2afd2d8e38a4c49abebf4d0f532";
 
     //三元佳美公众号
     //服务号
-    static String APPID = "wx1a8d32888a41fcb2";
-    static String APPSECRET = "58f2162e7c0253e8486b4d8679e787dd";
+    //static String APPID = "wx1a8d32888a41fcb2";
+    //static String APPSECRET = "58f2162e7c0253e8486b4d8679e787dd";
 
     //美番（MOFO）公众号
     //订阅号
@@ -440,18 +445,6 @@ public class VideoUploadUtil {
     }
 
 
-    /**
-     * 微信投票系统用户有没有关注
-     * @param request
-     * @return
-     */
-    public String wex(HttpServletRequest request){
-        String openid=processRequest(request);
-        Map map=getUserInformationH5DY(openid);
-        String subscribe=map.get("subscribe").toString();
-        return subscribe;
-    }
-
 
     /**
      * wex
@@ -511,38 +504,7 @@ public class VideoUploadUtil {
         return map;
     }
 
-    /**
-     * 解析微信发来的请求
-     * @param request
-     * @return
-     * @throws Exception
-     */
-    public  Map<String, String> parseXml(HttpServletRequest request){
-        // 将解析结果存储在HashMap中
-        Map<String, String> map = new HashMap<String, String>();
-        try {
-            // 从request中取得输入流
-            InputStream inputStream = request.getInputStream();
-            // 读取输入流
-            SAXReader reader = new SAXReader();
-            Document document = reader.read(inputStream);
-            // document.selectSingleNode("//")
-            // 得到xml根元素
-            Element root = document.getRootElement();
-            // 得到根元素的所有子节点
-            List<Element> elementList = root.elements();
-            // 遍历所有子节点
-            for (Element e : elementList)
-                map.put(e.getName(), e.getText());
-            // 释放资源
-            inputStream.close();
-            inputStream = null;
-        }catch (Exception e){
-            e.printStackTrace();
-        }
 
-        return map;
-    }
 
     /**
      * 获取临时acctoken
@@ -736,6 +698,39 @@ public class VideoUploadUtil {
         } catch (Exception e) {
             return null;
         }
+    }
+
+
+    /**
+     * 检验微信tokken
+     * @param request
+     * @param response
+     */
+     public String get(HttpServletRequest request,HttpServletResponse response) {
+        log.info("请求进来了...");
+        // 微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数。
+        String signature =request.getParameter("signature");
+        // 时间戳
+        String timestamp =request.getParameter("timestamp");
+        // 随机数
+        String nonce =request.getParameter("nonce");
+        // 随机字符串
+        String echostr =request.getParameter("echostr");
+
+        PrintWriter out = null;
+        try {
+            out = response.getWriter();
+            // 通过检验signature对请求进行校验，若校验成功则原样返回echostr，否则接入失败
+            if (MessageUtil.checkSignature(signature,timestamp, nonce)) {
+                out.print(echostr);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            out.close();
+            out = null;
+        }
+        return echostr;
     }
 
     /**
@@ -1179,6 +1174,34 @@ public class VideoUploadUtil {
         return "createMenu 失败";
     }
 
+
+
+    public Map<String, String> parseXml(HttpServletRequest request){
+        // 将解析结果存储在HashMap中
+        Map<String, String> map = new HashMap<String, String>();
+        try {
+            // 从request中取得输入流
+            InputStream inputStream = request.getInputStream();
+            // 读取输入流
+            SAXReader reader = new SAXReader();
+            Document document = reader.read(inputStream);
+            // document.selectSingleNode("//")
+            // 得到xml根元素
+            Element root = document.getRootElement();
+            // 得到根元素的所有子节点
+            List<Element> elementList = root.elements();
+            // 遍历所有子节点
+            for (Element e : elementList)
+                map.put(e.getName(), e.getText());
+            // 释放资源
+            inputStream.close();
+            inputStream = null;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return map;
+    }
     /**
      * 微信的返回xml
      * @param request
@@ -1188,9 +1211,8 @@ public class VideoUploadUtil {
         String fromUserName="";
         String respContent="";
          try {
-             
              // xml请求解析
-            Map<String, String> requestMap = parseXml(request);
+            Map<String, String> requestMap =parseXml(request);
             // 发送方帐号（open_id）
             fromUserName = requestMap.get("FromUserName");
             // 公众帐号
@@ -1201,8 +1223,10 @@ public class VideoUploadUtil {
             String eventType = requestMap.get("Event");
 
             String eventKey = requestMap.get("EventKey");
-             if(eventKey.equals(1)){
-                 respContent = "聊天唠嗑菜单项被点击！";
+             if(eventType.equals(MessageUtil.EVENT_TYPE_CLICK)){
+                 if(eventKey.equals(1)){
+                     respContent = "聊天唠嗑菜单项被点击！";
+                 }
              }
         }catch (Exception e){
             e.printStackTrace();

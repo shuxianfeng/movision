@@ -342,16 +342,7 @@ public class AppVideoController {
     }
 
 
-    @ApiOperation(value = " 微信投票系统用户有没有关注", notes = " 微信投票系统用户有没有关注", response = Response.class)
-    @RequestMapping(value = "wex", method = RequestMethod.GET)
-    public Response DYOpenid(HttpServletRequest request) {
-        Response response = new Response();
-        String openid = videoUploadUtil.wex(request);
-        if (response.getCode() == 200) {
-            response.setData(openid);
-        }
-        return response;
-    }
+
 
 
 
@@ -369,16 +360,17 @@ public class AppVideoController {
 
 
 
-    @ApiOperation(value = " parseXml", notes = " parseXml", response = Response.class)
-    @RequestMapping(value = "parseXml", method = RequestMethod.POST)
-    public Response parseXml(HttpServletRequest request) {
+    @ApiOperation(value = " get", notes = " get", response = Response.class)
+    @RequestMapping(value = "get", method = RequestMethod.GET)
+    public Response get(HttpServletRequest request,HttpServletResponse responses) {
         Response response = new Response();
-        Map xml = videoUploadUtil.parseXml(request);
+        String ector=videoUploadUtil.get(request,responses);
         if (response.getCode() == 200) {
-            response.setData(xml);
+            response.setData(ector);
         }
         return response;
     }
+
 
 
     @ApiOperation(value = " GetFUUserList", notes = " GetFUUserList", response = Response.class)
