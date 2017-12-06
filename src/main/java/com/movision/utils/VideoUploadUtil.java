@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -731,6 +732,14 @@ public class VideoUploadUtil {
             out = null;
         }
         return echostr;
+    }
+
+    /**
+     * 处理微信服务器发来的消息
+     */
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
     }
 
     /**
