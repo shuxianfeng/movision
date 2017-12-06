@@ -16,12 +16,15 @@ import com.movision.mybatis.dinyuehao.entity.Dinyuehao;
 import com.movision.mybatis.dinyuehao.service.DinyuehaoService;
 import com.movision.mybatis.fuwuhao.entity.Fuwuhao;
 import com.movision.mybatis.fuwuhao.service.FuwuhaoService;
+import com.movision.mybatis.wechat.ClickButton;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.redis.RedisClient;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+import net.sf.json.JSONObject;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -440,6 +443,25 @@ public class VideoUploadUtil {
     }
 
 
+    /**
+     * 微信投票系统用户有没有关注
+     * @param request
+     * @return
+     */
+    public String wex(HttpServletRequest request){
+        String openid=processRequest(request);
+        Map map=getUserInformationH5DY(openid);
+        String subscribe=map.get("subscribe").toString();
+        return subscribe;
+    }
+
+
+    /**
+     * wex
+     * @param request
+     * @param code
+     * @return
+     */
     public Map doPost(HttpServletRequest request, String code) {
         String openid = "";
         Map map = new HashMap();
@@ -1120,7 +1142,78 @@ public class VideoUploadUtil {
         return weixinListService.findAllList(paging);
      }*/
 
-    public static void main(String[] args) {
+    /**
+     * 创建菜单
+     * @return
+     */
+    public String createMenu() {
+        String menu = "{\"button\":[{\"type\":\"click\",\"name\":\"投票系统555\",\"key\":\"1\",\"url\":\"http://51mofo.com/H5/vs/index.html?state=1\"}]}";
+
+        //此处改为自己想要的结构体，替换即可
+        String access_token=getaccesstokenDY();
+        String action = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token="+access_token;
+        try {
+            URL url = new URL(action);
+            HttpURLConnection http =   (HttpURLConnection) url.openConnection();
+
+            http.setRequestMethod("POST");
+            http.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+            http.setDoOutput(true);
+            http.setDoInput(true);
+            System.setProperty("sun.net.client.defaultConnectTimeout", "30000");//连接超时30秒
+            System.setProperty("sun.net.client.defaultReadTimeout", "30000"); //读取超时30秒
+            http.connect();
+            OutputStream os= http.getOutputStream();
+            os.write(menu.getBytes("UTF-8"));//传入参数
+            os.flush();
+            os.close();
+
+            InputStream is =http.getInputStream();
+            int size =is.available();
+            byte[] jsonBytes =new byte[size];
+            is.read(jsonBytes);
+            String message=new String(jsonBytes,"UTF-8");
+            return "返回信息"+message;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "createMenu 失败";
+    }
+
+    /**
+     * 微信的返回xml
+     * @param request
+     * @return
+     */
+    public  String processRequest(HttpServletRequest request) {
+        String fromUserName="";
+        String respContent="";
+         try {
+             
+             // xml请求解析
+            Map<String, String> requestMap = parseXml(request);
+            // 发送方帐号（open_id）
+            fromUserName = requestMap.get("FromUserName");
+            // 公众帐号
+            String toUserName = requestMap.get("ToUserName");
+            // 消息类型
+            String msgType = requestMap.get("MsgType");
+            // 事件类型
+            String eventType = requestMap.get("Event");
+
+            String eventKey = requestMap.get("EventKey");
+             if(eventKey.equals(1)){
+                 respContent = "聊天唠嗑菜单项被点击！";
+             }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return respContent;
+     }
+
+        public static void main(String[] args) {
         /**DefaultAcsClient aliyunClient;
         aliyunClient = new DefaultAcsClient(
                 DefaultProfile.getProfile("cn-shanghai", accessKeyId, accessKeySecret));
@@ -1137,5 +1230,6 @@ public class VideoUploadUtil {
         VideoUploadUtil videoUploadUtil = new VideoUploadUtil();
         //   videoUploadUtil.getticket("bCANmBh3eg9XtfRZ75Wy6ko3sn8KXajggGzxUfpGoyME82ON5umkP-hm8cZbw2JvZYnNUWNyg6VdtQi6r-UyF7Dr10w3a4z5xWyslJVeyvc");
         //videoUploadUtil.getaccesstoken();
+       // videoUploadUtil.createMenu();
      }
 }

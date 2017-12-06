@@ -191,6 +191,18 @@ public class AppVideoController {
     }
 
 
+    @ApiOperation(value = " createMenu", notes = " createMenu", response = Response.class)
+    @RequestMapping(value = "createMenu", method = RequestMethod.GET)
+    public Response createMenu() {
+        Response response = new Response();
+        String result = videoUploadUtil.createMenu();
+        if (response.getCode() == 200) {
+            response.setMessage("获取成功");
+            response.setData(result);
+        }
+        return response;
+    }
+
     @ApiOperation(value = " sssss", notes = " sssss", response = Response.class)
     @RequestMapping(value = "sssss", method = RequestMethod.GET)
     public Response sssss() {
@@ -323,6 +335,18 @@ public class AppVideoController {
                              @ApiParam("code") @RequestParam String code) {
         Response response = new Response();
         Map openid = videoUploadUtil.doPost(request, code);
+        if (response.getCode() == 200) {
+            response.setData(openid);
+        }
+        return response;
+    }
+
+
+    @ApiOperation(value = " 微信投票系统用户有没有关注", notes = " 微信投票系统用户有没有关注", response = Response.class)
+    @RequestMapping(value = "wex", method = RequestMethod.GET)
+    public Response DYOpenid(HttpServletRequest request) {
+        Response response = new Response();
+        String openid = videoUploadUtil.wex(request);
         if (response.getCode() == 200) {
             response.setData(openid);
         }
