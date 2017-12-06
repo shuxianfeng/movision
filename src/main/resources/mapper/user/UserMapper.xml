@@ -1482,7 +1482,6 @@
           AND nickname IS NOT NULL
           AND sex IS NOT NULL
           AND birthday IS NOT NULL
-          AND SIGN IS NOT NULL
     </select>
     
     <!--查询当前用户邀请的好友列表-->
