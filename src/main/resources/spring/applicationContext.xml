@@ -56,10 +56,7 @@
 
     <bean id="pageHelper" class="com.github.pagehelper.PageInterceptor">
         <property name="properties">
-            <value>
-                dialect=mysql
-                reasonable=true
-            </value>
+            <value></value>
         </property>
     </bean>
 
