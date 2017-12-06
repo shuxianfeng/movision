@@ -90,7 +90,7 @@ public class BossIndexController {
      */
     @RequestMapping(value = "query_user_statistics", method = RequestMethod.POST)
     @ApiOperation(value = "用户统计", notes = "用户统计", response = Response.class)
-    public Response queryUserStatistics(@ApiParam(value = "时间范围") @RequestParam String time) {
+    public Response queryUserStatistics(@ApiParam(value = "时间范围") @RequestParam(required = false) String time) {
         Response response = new Response();
         Map statistics = indexFacade.queryUserStatistics(time);
         response.setMessage("查询成功");
@@ -106,7 +106,7 @@ public class BossIndexController {
      */
     @RequestMapping(value = "query_post_statistics", method = RequestMethod.POST)
     @ApiOperation(value = "查询平台数据统计", notes = "查询平台数据统计", response = Response.class)
-    public Response queryPostStatistics(@ApiParam(value = "时间范围") @RequestParam String time) {
+    public Response queryPostStatistics(@ApiParam(value = "时间范围") @RequestParam(required = false) String time) {
         Response response = new Response();
         Map map = indexFacade.queryPostStatistics(time);
         response.setMessage("查询成功");
