@@ -118,7 +118,7 @@
 
     <select id="queryUserStatistics" parameterType="java.util.Map"
             resultType="com.movision.mybatis.userDauStatistics.entity.UserDauStatisticsVo">
-        SELECT * FROM yw_user_dau_statistics
+        SELECT *,FORMAT((validsum/usersum),2) AS activityRate FROM yw_user_dau_statistics
         <where>
             <if test="begin != null and end != null">
                 <![CDATA[intime >= #{begin,jdbcType=TIMESTAMP} AND intime <= DATE_ADD(#{end,jdbcType=TIMESTAMP},INTERVAL 1 DAY)]]>

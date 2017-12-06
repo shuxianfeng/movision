@@ -19,9 +19,29 @@ public class UserDauStatisticsVo {
 
     private Integer regGather;//注册统计
 
-    private Integer userGather;//日活统计
+    private Double userGather;//日活统计
 
-    private Integer valGather;//活跃统计
+    private Double valGather;//活跃统计
+
+    private Double activityRate;//活跃率
+
+    private Integer preserve;//留存
+
+    public Integer getPreserve() {
+        return preserve;
+    }
+
+    public void setPreserve(Integer preserve) {
+        this.preserve = preserve;
+    }
+
+    public Double getActivityRate() {
+        return activityRate;
+    }
+
+    public void setActivityRate(Double activityRate) {
+        this.activityRate = activityRate;
+    }
 
     public Integer getRegGather() {
         return regGather;
@@ -31,19 +51,19 @@ public class UserDauStatisticsVo {
         this.regGather = regGather;
     }
 
-    public Integer getUserGather() {
+    public Double getUserGather() {
         return userGather;
     }
 
-    public void setUserGather(Integer userGather) {
+    public void setUserGather(Double userGather) {
         this.userGather = userGather;
     }
 
-    public Integer getValGather() {
+    public Double getValGather() {
         return valGather;
     }
 
-    public void setValGather(Integer valGather) {
+    public void setValGather(Double valGather) {
         this.valGather = valGather;
     }
 

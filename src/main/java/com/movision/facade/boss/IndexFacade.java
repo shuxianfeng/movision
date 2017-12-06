@@ -14,6 +14,8 @@ import com.movision.mybatis.userParticipate.service.UserParticipateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -86,6 +88,7 @@ public class IndexFacade {
         List<UserDauStatisticsVo> list = userDauStatisticeService.queryUserStatistics(map);
         resault.put("lists", list);
         UserDauStatisticsVo vo = userDauStatisticeService.queryUserStatisticsGather(map);
+        vo.setActivityRate(vo.getValGather() / vo.getUserGather());
         resault.put("gather", vo);
         return resault;
     }
