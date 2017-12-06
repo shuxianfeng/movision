@@ -222,6 +222,7 @@ public interface PostMapper {
 
     int updateZanPostHeatValue(Map map);//修改热度
 
+
     int lessUserHeatValue(Map map);//用户热度
     int updateZeroHeatValue(int postid);
 

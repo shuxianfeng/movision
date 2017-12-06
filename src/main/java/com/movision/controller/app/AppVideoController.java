@@ -344,6 +344,19 @@ public class AppVideoController {
     }
 
 
+
+    @ApiOperation(value = " parseXml", notes = " parseXml", response = Response.class)
+    @RequestMapping(value = "parseXml", method = RequestMethod.POST)
+    public Response parseXml(HttpServletRequest request) {
+        Response response = new Response();
+        Map xml = videoUploadUtil.parseXml(request);
+        if (response.getCode() == 200) {
+            response.setData(xml);
+        }
+        return response;
+    }
+
+
     @ApiOperation(value = " GetFUUserList", notes = " GetFUUserList", response = Response.class)
     @RequestMapping(value = "GetFUUserList", method = RequestMethod.GET)
     public Response GetFUUserList() {

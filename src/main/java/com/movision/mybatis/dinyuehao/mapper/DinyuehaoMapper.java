@@ -22,6 +22,7 @@ public interface DinyuehaoMapper {
     int unionidByOpenid(String unionid);
     String unionidByOpenids(String unionid);
 
+    int unionidByD(String unionid);
     int updateFU(Fuwuhao fuwuhao);
     int selectO(String openid);
 

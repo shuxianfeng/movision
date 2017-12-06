@@ -84,4 +84,7 @@
     <update id="updateFU" parameterType="com.movision.mybatis.fuwuhao.entity.Fuwuhao">
         UPDATE  tp_fuwuhao SET code=#{code,jdbcType=VARCHAR},count=#{count,jdbcType=INTEGER} WHERE  openid=#{openid,jdbcType=VARCHAR}
     </update>
+    <delete id="unionidByD" parameterType="java.lang.String">
+        DELETE  FROM tp_dinyuehao WHERE unionid=#{unionid,jdbcType=VARCHAR}
+    </delete>
 </mapper>

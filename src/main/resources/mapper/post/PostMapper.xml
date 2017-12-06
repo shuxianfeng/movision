@@ -1955,34 +1955,45 @@
     </select>
 
     <select id="findAllPostHeatValue" resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT p.*,c.name as circlename ,u.nickname,u.photo FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid
+        /**SELECT p.*,c.name as circlename ,u.nickname,u.photo FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid
         LEFT JOIN yw_user u ON u.id=p.userid
         WHERE p.isdel=0 ORDER BY
-        p.heat_value DESC
+        p.heat_value DESC*/
+        SELECT * FROM (SELECT TO_DAYS(p.intime) AS date,p.*,c.name as circlename ,u.nickname,u.photo FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid
+        LEFT JOIN yw_user u ON u.id=p.userid ORDER BY p.intime DESC) AS a WHERE a.isdel=0 ORDER BY a.date desc,a.heat_value DESC
     </select>
     <select id="findAllPostListHeat" resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT p.*,c.name as circlename ,u.nickname,u.photo
+       /** SELECT p.*,c.name as circlename ,u.nickname,u.photo
         FROM yw_post p
         LEFT JOIN yw_circle c ON c.id=p.circleid
         LEFT JOIN yw_user u ON u.id=p.userid
         WHERE p.isdel=0
-        ORDER BY p.heat_value DESC
+        ORDER BY p.heat_value DESC*/
+        SELECT * FROM (SELECT TO_DAYS(p.intime) AS date,p.*,c.name as circlename ,u.nickname,u.photo FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid
+        LEFT JOIN yw_user u ON u.id=p.userid ORDER BY p.intime DESC) AS a WHERE a.isdel=0 ORDER BY a.date desc,a.heat_value DESC
     </select>
     <select id="queryPostCricle" resultType="com.movision.mybatis.post.entity.PostVo" parameterType="java.lang.Integer">
-        SELECT p.*, c.name as circlename,u.nickname,u.photo
+       /** SELECT p.*, c.name as circlename,u.nickname,u.photo
         FROM yw_post p
         LEFT JOIN yw_circle c ON c.id=p.circleid
         LEFT JOIN yw_user u ON u.id=p.userid
         WHERE p.isdel=0 AND p.circleid=#{crileid,jdbcType=INTEGER}
-        ORDER BY p.heat_value DESC
+        ORDER BY p.heat_value DESC*/
+        SELECT * FROM (SELECT TO_DAYS(p.intime) AS date,p.*,c.name as circlename ,u.nickname,u.photo FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid
+        LEFT JOIN yw_user u ON u.id=p.userid ORDER BY p.intime DESC) AS a WHERE a.isdel=0 AND
+        a.circleid=#{circleid,jdbcType=INTEGER} ORDER BY a.date desc,a.heat_value DESC
+
     </select>
     <select id="queryoverPost" resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT p.*,c.name as circlename,u.nickname,u.photo
+        /**SELECT p.*,c.name as circlename,u.nickname,u.photo
         from yw_post p
         LEFT JOIN yw_circle c ON c.id=p.circleid
         LEFT JOIN yw_user u ON u.id=p.userid
         WHERE p.isdel=0 AND p.circleid!=#{crileid,jdbcType=INTEGER} OR (p.circleid IS NULL AND p.isdel=0)
-        ORDER BY p.heat_value DESC
+        ORDER BY p.heat_value DESC*/
+        SELECT * FROM (SELECT TO_DAYS(p.intime) AS date,p.*,c.name as circlename ,u.nickname,u.photo FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid
+        LEFT JOIN yw_user u ON u.id=p.userid ORDER BY p.intime DESC) AS a WHERE a.isdel=0 AND
+        a.circleid!=#{crileid,jdbcType=INTEGER} OR (a.circleid IS NULL AND a.isdel=0)  ORDER BY a.date desc,a.heat_value DESC
     </select>
     <select id="queryPostDetailById" resultType="com.movision.mybatis.post.entity.Post"
             parameterType="java.lang.Integer">
@@ -2034,13 +2045,17 @@
     </select>
     <select id="findAllPostCrile" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.post.entity.PostVo">
-        select yw_post.*,yw_user.nickname,yw_user.photo,yw_circle.`name` AS circlename
+       /** select yw_post.*,yw_user.nickname,yw_user.photo,yw_circle.`name` AS circlename
         from yw_post
         LEFT JOIN yw_user ON yw_user.id=yw_post.userid
         LEFT JOIN yw_circle ON yw_circle.id=yw_post.circleid
         where yw_post.circleid=#{circleid,jdbcType=INTEGER}
         and yw_post.isdel=0
-        order by yw_post.heat_value desc
+        order by yw_post.heat_value desc*/
+        SELECT * FROM (SELECT TO_DAYS(p.intime) AS date,p.*,c.name as circlename ,u.nickname,u.photo FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid
+        LEFT JOIN yw_user u ON u.id=p.userid ORDER BY p.intime DESC) AS a WHERE a.isdel=0 AND
+        a.circleid=#{circleid,jdbcType=INTEGER} ORDER BY a.date desc,a.heat_value DESC
+
     </select>
     <select id="queryCityCode" parameterType="java.lang.String" resultType="java.lang.String">
         SELECT code FROM yw_city WHERE name LIKE concat('%',#{area,jdbcType=VARCHAR},'%')
@@ -2062,11 +2077,15 @@
         WHERE p.isdel=0 AND l.name LIKE concat('%',#{area,jdbcType=VARCHAR},'%') ORDER BY p.heat_value DESC
     </select>
     <select id="findAllCityPost" resultType="com.movision.mybatis.post.entity.PostVo" parameterType="java.lang.String">
-        SELECT p.*,c.name as circlename,u.nickname,u.photo FROM yw_post p
+       /** SELECT p.*,c.name as circlename,u.nickname,u.photo FROM yw_post p
         LEFT JOIN yw_circle c ON c.id=p.circleid
         LEFT JOIN yw_user u ON u.id=p.userid
         WHERE p.isdel=0 AND
-        p.city=#{citycode,jdbcType=VARCHAR} ORDER BY p.heat_value DESC
+        p.city=#{citycode,jdbcType=VARCHAR} ORDER BY p.heat_value DESC*/
+        SELECT * FROM (SELECT TO_DAYS(p.intime) AS date,p.*,c.name as circlename ,u.nickname,u.photo FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid
+        LEFT JOIN yw_user u ON u.id=p.userid ORDER BY p.intime DESC) AS a WHERE a.isdel=0 AND
+        a.city=#{citycode,jdbcType=VARCHAR} ORDER BY a.date desc,a.heat_value DESC
+
     </select>
 
     <select id="queryPostLabel" parameterType="java.lang.Integer"
@@ -2080,13 +2099,19 @@
 
     <select id="findAllLabelAllPost" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT yw_post.*,yw_circle.`name` AS circlename,u.nickname,u.photo FROM yw_post
+        /**SELECT yw_post.*,yw_circle.`name` AS circlename,u.nickname,u.photo FROM yw_post
         LEFT JOIN yw_post_label_relation ON
         yw_post_label_relation.postid=yw_post.id
         LEFT JOIN yw_circle ON yw_circle.id=yw_post.circleid
         LEFT JOIN yw_user u ON u.id=yw_post.userid
         WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} AND yw_post.isdel=0 ORDER BY yw_post.heat_value
-        DESC
+        DESC*/
+        SELECT * FROM (SELECT TO_DAYS(p.intime) AS date,p.*,c.name as circlename ,u.nickname,u.photo,r.labelid FROM yw_post p
+		 LEFT JOIN yw_post_label_relation r ON r.postid=p.id
+        LEFT JOIN yw_circle c ON c.id=p.circleid
+        LEFT JOIN yw_user u ON u.id=p.userid ORDER BY p.intime DESC) AS a WHERE a.isdel=0 AND
+        a.labelid=#{labelid,jdbcType=INTEGER} ORDER BY a.date desc,a.heat_value DESC
+
     </select>
     <select id="findAllPostByid" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT p.*,c.name AS circlename,u.nickname,u.photo FROM yw_post p

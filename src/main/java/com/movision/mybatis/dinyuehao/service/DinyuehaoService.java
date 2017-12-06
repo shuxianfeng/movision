@@ -41,6 +41,17 @@ public class DinyuehaoService {
         }
     }
 
+
+    public int unionidByD(String unionid) {
+        try {
+            log.info("根据unionid查询存在openid");
+            return dinyuehaoMapper.unionidByD(unionid);
+        } catch (Exception e) {
+            log.error("根据unionid查询存在openid失败");
+            throw e;
+        }
+    }
+
     public String unionidByOpenids(String unionid) {
         try {
             log.info("根据unionid查询存在openid");

@@ -19,6 +19,9 @@ import com.movision.mybatis.fuwuhao.service.FuwuhaoService;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.redis.RedisClient;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+import org.dom4j.Document;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -459,9 +462,12 @@ public class VideoUploadUtil {
                 map.put("DYopenid", DYopenid);
             } else {
                 DYopenid= dinyuehaoService.unionidByOpenids(unionid);
-                map.put("DYopenid", DYopenid);
                 Map map1=getUserInformationH5DY(DYopenid);
                 count=Integer.parseInt(map1.get("subscribe").toString());
+                if(count==0){
+                    dinyuehaoService.unionidByD(unionid);
+                }
+                map.put("DYopenid", DYopenid);
             }
              map.put("count", count);
             //把用户的信息存入表中code  count
@@ -487,6 +493,38 @@ public class VideoUploadUtil {
         return map;
     }
 
+    /**
+     * 解析微信发来的请求
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    public  Map<String, String> parseXml(HttpServletRequest request){
+        // 将解析结果存储在HashMap中
+        Map<String, String> map = new HashMap<String, String>();
+        try {
+            // 从request中取得输入流
+            InputStream inputStream = request.getInputStream();
+            // 读取输入流
+            SAXReader reader = new SAXReader();
+            Document document = reader.read(inputStream);
+            // document.selectSingleNode("//")
+            // 得到xml根元素
+            Element root = document.getRootElement();
+            // 得到根元素的所有子节点
+            List<Element> elementList = root.elements();
+            // 遍历所有子节点
+            for (Element e : elementList)
+                map.put(e.getName(), e.getText());
+            // 释放资源
+            inputStream.close();
+            inputStream = null;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return map;
+    }
 
     /**
      * 获取临时acctoken

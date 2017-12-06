@@ -2003,17 +2003,11 @@ public class FacadePost {
                         posts.add(post);//把mongodb转为post实体
                     }
                     list.removeAll(posts);
-                    /**Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(list);
-                     list = new ArrayList<PostVo>(linkedHashSet);
-                     ComparatorChain chain = new ComparatorChain();
-                     chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
-                     Collections.sort(list, chain);
-                     list = NotLoginretuenList(list, 3, device, -1);*/
                 }
                 Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(list);
                 list = new ArrayList<PostVo>(linkedHashSet);
                 ComparatorChain chain = new ComparatorChain();
-                chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
+                chain.addComparator(new BeanComparator("intime"), true);//true,fase正序反序
                 Collections.sort(list, chain);
                 list = NotLoginretuenList(list, 3, device, -1);
                 return list;
@@ -2039,7 +2033,7 @@ public class FacadePost {
                     Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(postVos);
                     postVos = new ArrayList<PostVo>(linkedHashSet);
                     ComparatorChain chain = new ComparatorChain();
-                    chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
+                    chain.addComparator(new BeanComparator("intime"), true);//true,fase正序反序
                     Collections.sort(postVos, chain);
                     list = retuenList(postVos, userid, 3, device, -1);
                 } else {//登录但是刷新列表中没有帖子
@@ -2053,7 +2047,7 @@ public class FacadePost {
                     Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(list);
                     list = new ArrayList<PostVo>(linkedHashSet);
                     ComparatorChain chain = new ComparatorChain();
-                    chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
+                    chain.addComparator(new BeanComparator("intime"), true);//true,fase正序反序
                     Collections.sort(list, chain);
                     list = retuenList(list, userid, 3, device, -1);
                     return list;
@@ -3834,8 +3828,10 @@ public class FacadePost {
         List<DBObject> us = null;
         if (!postids.equals("0")) {
             List<DBObject> onlyPost = queryOnlPostNotLoginCircleid(device, type, Integer.parseInt(postids), circleid);
-            String intime = onlyPost.get(0).get("intime").toString();
-            intimePost = queryPosyByImtimeDeviceCircle(intime, device, type, circleid);
+            if(onlyPost.size()!=0) {
+                String intime = onlyPost.get(0).get("intime").toString();
+                intimePost = queryPosyByImtimeDeviceCircle(intime, device, type, circleid);
+            }
         } else {
             //查询用户有无历史
             int count = userHistoryDeviceCircleCount(device, type, circleid);
@@ -3886,8 +3882,10 @@ public class FacadePost {
         List<DBObject> us = null;
         if (!postids.equals("0")) {
             List<DBObject> onlyPost = queryOnlPostNotLoginLabelid(device, type, Integer.parseInt(postids), Integer.parseInt(labelid));
-            String intime = onlyPost.get(0).get("intime").toString();
-            intimePost = queryPosyByImtimeDeviceLabel(intime, device, type, Integer.parseInt(labelid));
+            if(onlyPost.size()!=0) {
+                String intime = onlyPost.get(0).get("intime").toString();
+                intimePost = queryPosyByImtimeDeviceLabel(intime, device, type, Integer.parseInt(labelid));
+            }
         } else {
             //查询用户有无历史
             int count = userHistoryDeviceLabelCount(device, type, Integer.parseInt(labelid));
@@ -3936,8 +3934,10 @@ public class FacadePost {
         List<DBObject> us = null;
         if (!postids.equals("0")) {
             List<DBObject> onlyPost = queryOnlPostNotLogin(device, type, Integer.parseInt(postids));
-            String intime = onlyPost.get(0).get("intime").toString();
-            intimePost = queryPosyByImtimeDevice(intime, device, type);
+            if(onlyPost.size()!=0) {
+                String intime = onlyPost.get(0).get("intime").toString();
+                intimePost = queryPosyByImtimeDevice(intime, device, type);
+            }
         } else {
 
             if (type == 2) {
@@ -4025,8 +4025,10 @@ public class FacadePost {
         List<DBObject> us = null;
         if (!postids.equals("0")) {
             List<DBObject> onlyPost = queryOnlPostNotLoginCircleid(device, type, Integer.parseInt(postids), circleid);
-            String intime = onlyPost.get(0).get("intime").toString();
-            intimePost = queryPosyByImtimeDeviceCircle(intime, device, type, circleid);
+            if(onlyPost.size()!=0) {
+                String intime = onlyPost.get(0).get("intime").toString();
+                intimePost = queryPosyByImtimeDeviceCircle(intime, device, type, circleid);
+            }
         } else {
             //查询用户有无历史
             int count = userHistoryDeviceCircleCount(device, type, circleid);
@@ -4089,8 +4091,10 @@ public class FacadePost {
         List<DBObject> us = null;
         if (!postids.equals("0")) {
             List<DBObject> onlyPost = queryOnlPostNotLoginLabelid(device, type, Integer.parseInt(postids), Integer.parseInt(labelid));
-            String intime = onlyPost.get(0).get("intime").toString();
-            intimePost = queryPosyByImtimeDeviceLabel(intime, device, type, Integer.parseInt(labelid));
+            if(onlyPost.size()!=0) {
+                String intime = onlyPost.get(0).get("intime").toString();
+                intimePost = queryPosyByImtimeDeviceLabel(intime, device, type, Integer.parseInt(labelid));
+            }
         } else {
             //查询用户有无历史
             int count = userHistoryDeviceLabelCount(device, type, Integer.parseInt(labelid));
@@ -4154,9 +4158,11 @@ public class FacadePost {
             //【该分支正确】
             //postid传值的情况下
             List<DBObject> onlyPost = queryOnlPostNotLogin(device, type, Integer.parseInt(postids));
-            String intime = onlyPost.get(0).get("intime").toString();
-            //查出在这个时间之前的用户浏览历史
-            intimePost = queryPosyByImtimeDevice(intime, device, type);
+            if(onlyPost.size()!=0) {
+                String intime = onlyPost.get(0).get("intime").toString();
+                //查出在这个时间之前的用户浏览历史
+                intimePost = queryPosyByImtimeDevice(intime, device, type);
+            }
         } else {    //传0，是因为app本地无缓存
 
             if (type == 2) {
