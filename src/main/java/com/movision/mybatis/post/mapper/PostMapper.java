@@ -118,9 +118,9 @@ public interface PostMapper {
 
     int updatePostBycommentsum(int postid);
 
-    List<PostList> findAllqueryPostByList();
+    List<PostList> findAllqueryPostByList(RowBounds rowBounds);
 
-    List<PostList> findAllqueryPostByManageByList(Map map);
+    List<PostList> findAllqueryPostByManageByList(Map map, RowBounds rowBounds);
 
     List<PostList> findAllqueryPostByCircleId(Map map, RowBounds rowBounds);
 
@@ -172,7 +172,7 @@ public interface PostMapper {
 
     List<Post> findAllCostRecommendPostList(RowBounds rowBounds);
 
-    List<PostList> findAllpostSearch(Map spread);
+    List<PostList> findAllpostSearch(Map spread, RowBounds rowBounds);
 
     List<PostList> findAllQueryCircleByPostList(Map map, RowBounds rowBounds);
 

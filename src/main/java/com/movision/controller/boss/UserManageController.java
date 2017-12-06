@@ -315,8 +315,9 @@ public class UserManageController {
                                      @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                      @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
-        Datagrid list = userManageFacade.queryAllUserList(nickname, phone, authentication, vip, seal, begintime, endtime, pointsSort,
-                postsumSort, isessenceSort, fansSort, conditionon, conditiontwo, price, login, pai, pageNo, pageSize);
+        Paging<UserAll> pag = new Paging<UserAll>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Map list = userManageFacade.queryAllUserList(nickname, phone, authentication, vip, seal, begintime, endtime, pointsSort,
+                postsumSort, isessenceSort, fansSort, conditionon, conditiontwo, price, login, pai, pag);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

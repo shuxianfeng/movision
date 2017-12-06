@@ -80,12 +80,12 @@ public class PostController {
                                     @RequestParam(required = false, defaultValue = "1") String pageNo,
                                     @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
-        //Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        Datagrid list = postFacade.queryPostByList(loginid, pageNo, pageSize);
+        Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<PostList> list = postFacade.queryPostByList(loginid, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        //pager.result(list);
+        pager.result(list);
         response.setData(list);
         return response;
     }
@@ -817,12 +817,12 @@ public class PostController {
                                @ApiParam(value = "精选日期（yyyy-MM-dd）") @RequestParam(required = false) String essencedate,
                                @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response=new Response();
-        //Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        Datagrid list = postFacade.postSearch(title, circleid, userid, postcontent, endtime, begintime, pai, essencedate, uid, price, loginid, pageNo, pageSize);
+        Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<PostList> list = postFacade.postSearch(title, circleid, userid, postcontent, endtime, begintime, pai, essencedate, uid, price, loginid, pager);
         if (response.getCode()==200){
             response.setMessage("查询成功");
         }
-        //pager.result(list);
+        pager.result(list);
         response.setData(list);
         return response;
     }

@@ -19,6 +19,7 @@ import javafx.geometry.Pos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -442,18 +443,18 @@ public class PostService {
      * @param
      * @return List
      */
-    public Datagrid queryPostByList(String pageNo, String pageSize) {
+    public List<PostList> queryPostByList(Paging<PostList> pager) {
         try {
             log.info("查询帖子列表");
-            //return postMapper.findAllqueryPostByList();
-            PageHelper.startPage(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+            return postMapper.findAllqueryPostByList(pager.getRowBounds());
+            /*PageHelper.startPage(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
             PageHelper.orderBy("intime desc");
 
             List<PostList> list = postMapper.findAllqueryPostByList();
 
             PageInfo<PostList> pageInfo = new PageInfo<>(list);
             Datagrid datagrid = new Datagrid(pageInfo.getTotal(), pageInfo.getList());
-            return datagrid;
+            return datagrid;*/
         } catch (Exception e) {
             log.error("查询帖子列表异常", e);
             throw e;
@@ -466,19 +467,19 @@ public class PostService {
      * @param
      * @return list
      */
-    public Datagrid queryPostByManageByList(Map map, String pageNo, String pageSize) {
+    public List<PostList> queryPostByManageByList(Map map, Paging<PostList> pager) {
         try {
             log.info("查询帖子列表");
-            //return postMapper.findAllqueryPostByManageByList(map, pager.getRowBounds());
+            return postMapper.findAllqueryPostByManageByList(map, pager.getRowBounds());
 
-            PageHelper.startPage(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+           /* PageHelper.startPage(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
             PageHelper.orderBy("intime desc");
 
             List<PostList> list = postMapper.findAllqueryPostByManageByList(map);
 
             PageInfo<PostList> pageInfo = new PageInfo<>(list);
             Datagrid datagrid = new Datagrid(pageInfo.getTotal(), pageInfo.getList());
-            return datagrid;
+            return datagrid;*/
         } catch (Exception e) {
             log.error("查询帖子列表异常", e);
             throw e;
@@ -993,18 +994,18 @@ public class PostService {
      * @param
      * @return
      */
-    public Datagrid postSearch(Map spread, String pagNo, String pagSize) {
+    public List<PostList> postSearch(Map spread, Paging<PostList> pager) {
         try {
             log.info("帖子条件查询");
-            //return postMapper.findAllpostSearch(spread, Integer.parseInt(pagNo),Integer.parseInt(pagSize));
-            PageHelper.startPage(Integer.parseInt(pagNo), Integer.parseInt(pagSize));
+            return postMapper.findAllpostSearch(spread, pager.getRowBounds());
+            /*PageHelper.startPage(Integer.parseInt(pagNo), Integer.parseInt(pagSize));
             PageHelper.orderBy("intime desc");
 
             List<PostList> list = postMapper.findAllpostSearch(spread);
 
             PageInfo<PostList> pageInfo = new PageInfo<>(list);
             Datagrid datagrid = new Datagrid(pageInfo.getTotal(), pageInfo.getList());
-            return datagrid;
+            return datagrid;*/
 
         } catch (Exception e) {
             log.error("帖子条件查询异常",e);

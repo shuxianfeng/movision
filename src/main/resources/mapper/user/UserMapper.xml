@@ -873,7 +873,7 @@
     </select>
 
 
-    <select id="queryAllUserList" parameterType="java.util.Map"
+    <select id="findAllqueryAllUserList" parameterType="java.util.Map"
             resultType="com.movision.mybatis.user.entity.UserAll">
         SELECT u.id,u.nickname,u.phone,u.level,u.status,u.points,u.fans,u.intime,u.qq,u.sina,
         u.openid,aut.authstatus,u.heat_value,u.isrecommend,u.attention,u.isdv

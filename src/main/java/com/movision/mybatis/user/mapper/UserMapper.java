@@ -93,7 +93,7 @@ public interface UserMapper {
 
     List<UserVo> findAllQueryUserExamineAndVerify(Map map, RowBounds rowBounds);
 
-    List<UserAll> queryAllUserList(Map map);
+    List<UserAll> findAllqueryAllUserList(Map map, RowBounds rowBounds);
 
     Integer queryAllTotal(Map map);
 

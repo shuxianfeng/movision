@@ -398,12 +398,12 @@ public class UserManageFacade {
      * @param
      * @return
      */
-    public Datagrid queryAllUserList(String nickname, String phone, String authentication, String vip, String seal,
-                                     String begintime, String endtime, String pointsSort, String postsumSort, String isessenceSort,
-                                     String fansSort, String conditionon, String conditiontwo, String price, String login,
-                                     String pai, String pageNo, String pageSize) {
+    public Map queryAllUserList(String nickname, String phone, String authentication, String vip, String seal,
+                                String begintime, String endtime, String pointsSort, String postsumSort, String isessenceSort,
+                                String fansSort, String conditionon, String conditiontwo, String price, String login,
+                                String pai, Paging<UserAll> pag) {
         Map map = new HashedMap();
-        //Map resa = new HashMap();
+        Map resa = new HashMap();
         Date beg = null;
         Date end = null;
         if (StringUtil.isNotEmpty(begintime) && StringUtil.isNotEmpty(endtime)) {
@@ -460,16 +460,16 @@ public class UserManageFacade {
             map.put("pai", pai);//排序方式
         }
 
-        Datagrid list = userService.queryAllUserList(map, pageNo, pageSize);
+        List<UserAll> list = userService.queryAllUserList(map, pag);
+        resa.put("rows", list);
         //查询统计
-        for (int i = 0; i < list.getRows().size(); i++) {
-            UserAll all = (UserAll) list.getRows().get(i);
-            UserAll u = userService.queryUserStatistics(all.getId());
-            all.setCoupon(u.getCoupon());
-            all.setPostsum(u.getPostsum());
-            all.setIsessencesum(u.getIsessencesum());
+        for (int i = 0; i < list.size(); i++) {
+            UserAll u = userService.queryUserStatistics(list.get(i).getId());
+            list.get(i).setCoupon(u.getCoupon());
+            list.get(i).setPostsum(u.getPostsum());
+            list.get(i).setIsessencesum(u.getIsessencesum());
         }
-        return list;
+        return resa;
     }
 
     /**

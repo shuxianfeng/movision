@@ -510,17 +510,18 @@ public class UserService {
      * @param
      * @return
      */
-    public Datagrid queryAllUserList(Map map, String pageNo, String pageSize) {
+    public List<UserAll> queryAllUserList(Map map, Paging<UserAll> pag) {
         try {
             log.info("查询所有用户列表");
-            PageHelper.startPage(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+            return userMapper.findAllqueryAllUserList(map, pag.getRowBounds());
+            /*PageHelper.startPage(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
             PageHelper.orderBy("intime desc");
 
             List<UserAll> list = userMapper.queryAllUserList(map);
 
             PageInfo<UserAll> pageInfo = new PageInfo<>(list);
             Datagrid datagrid = new Datagrid(pageInfo.getTotal(), pageInfo.getList());
-            return datagrid;
+            return datagrid;*/
         } catch (Exception e) {
             log.error("查询所有用户列表异常", e);
             throw e;
