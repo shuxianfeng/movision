@@ -13,6 +13,7 @@ import com.movision.mybatis.post.mapper.PostMapper;
 import com.movision.mybatis.postHeatvalueEverydayRecord.entity.PostHeatvalueEverydayRecord;
 import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
+import com.movision.mybatis.user.entity.UserAll;
 import com.movision.utils.pagination.model.Paging;
 import javafx.geometry.Pos;
 import org.slf4j.Logger;
@@ -438,13 +439,21 @@ public class PostService {
     /**
      * 后台管理-查询帖子列表
      *
-     * @param pager
+     * @param
      * @return List
      */
-    public List<PostList> queryPostByList(Paging<PostList> pager) {
+    public Datagrid queryPostByList(String pageNo, String pageSize) {
         try {
             log.info("查询帖子列表");
-            return postMapper.findAllqueryPostByList(pager.getRowBounds());
+            //return postMapper.findAllqueryPostByList();
+            PageHelper.startPage(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+            PageHelper.orderBy("intime desc");
+
+            List<PostList> list = postMapper.findAllqueryPostByList();
+
+            PageInfo<PostList> pageInfo = new PageInfo<>(list);
+            Datagrid datagrid = new Datagrid(pageInfo.getTotal(), pageInfo.getList());
+            return datagrid;
         } catch (Exception e) {
             log.error("查询帖子列表异常", e);
             throw e;
@@ -454,13 +463,22 @@ public class PostService {
     /**
      * 查询帖子列表
      *
-     * @param pager
+     * @param
      * @return list
      */
-    public List<PostList> queryPostByManageByList(Map map, Paging<PostList> pager) {
+    public Datagrid queryPostByManageByList(Map map, String pageNo, String pageSize) {
         try {
             log.info("查询帖子列表");
-            return postMapper.findAllqueryPostByManageByList(map, pager.getRowBounds());
+            //return postMapper.findAllqueryPostByManageByList(map, pager.getRowBounds());
+
+            PageHelper.startPage(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+            PageHelper.orderBy("intime desc");
+
+            List<PostList> list = postMapper.findAllqueryPostByManageByList(map);
+
+            PageInfo<PostList> pageInfo = new PageInfo<>(list);
+            Datagrid datagrid = new Datagrid(pageInfo.getTotal(), pageInfo.getList());
+            return datagrid;
         } catch (Exception e) {
             log.error("查询帖子列表异常", e);
             throw e;
@@ -975,10 +993,19 @@ public class PostService {
      * @param
      * @return
      */
-    public List<PostList> postSearch(Map spread, Paging<PostList> pager) {
+    public Datagrid postSearch(Map spread, String pagNo, String pagSize) {
         try {
             log.info("帖子条件查询");
-            return postMapper.findAllpostSearch(spread, pager.getRowBounds());
+            //return postMapper.findAllpostSearch(spread, Integer.parseInt(pagNo),Integer.parseInt(pagSize));
+            PageHelper.startPage(Integer.parseInt(pagNo), Integer.parseInt(pagSize));
+            PageHelper.orderBy("intime desc");
+
+            List<PostList> list = postMapper.findAllpostSearch(spread);
+
+            PageInfo<PostList> pageInfo = new PageInfo<>(list);
+            Datagrid datagrid = new Datagrid(pageInfo.getTotal(), pageInfo.getList());
+            return datagrid;
+
         } catch (Exception e) {
             log.error("帖子条件查询异常",e);
             throw e;

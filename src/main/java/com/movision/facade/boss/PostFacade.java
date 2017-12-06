@@ -27,6 +27,7 @@ import com.movision.mybatis.compressImg.entity.CompressImg;
 import com.movision.mybatis.compressImg.service.CompressImgService;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.service.GoodsService;
+import com.movision.mybatis.pageHelper.entity.Datagrid;
 import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.period.service.PeriodService;
 import com.movision.mybatis.post.entity.*;
@@ -165,27 +166,29 @@ public class PostFacade {
     /**
      * 后台管理-查询帖子列表
      *
-     * @param pager
+     * @param
      * @return
      */
-    public List<PostList> queryPostByList(String loginid, Paging<PostList> pager) {
+    public Datagrid queryPostByList(String loginid, String pageNo, String pageSize) {
         Integer userid = Integer.parseInt(loginid);
         Map res = commonalityFacade.verifyUserByQueryMethod(userid, JurisdictionConstants.JURISDICTION_TYPE.select.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), null);
-        List<PostList> list = new ArrayList<>();
+        Datagrid list = null;
         if (res.get("resault").equals(1)) {//查询当前登录用户的帖子列表
             Map map = new HashMap();
             map.put("loginid", loginid);
-            list = postService.queryPostByManageByList(map, pager);
-            for (int i = 0; i < list.size(); i++) {
-                Integer click = userRefreshRecordService.postcount(list.get(i).getId());
-                list.get(i).setClick(click);
+            list = postService.queryPostByManageByList(map, pageNo, pageSize);
+            for (int i = 0; i < list.getRows().size(); i++) {
+                PostList l = (PostList) list.getRows().get(i);
+                Integer click = userRefreshRecordService.postcount(l.getId());
+                l.setClick(click);
             }
             return list;
         } else if (res.get("resault").equals(2) || res.get("resault").equals(0)) {//权限最大查询所有帖子列表
-            list = postService.queryPostByList(pager);
-            for (int i = 0; i < list.size(); i++) {//获取帖子的点击次数
-                Integer click = userRefreshRecordService.postcount(list.get(i).getId());
-                list.get(i).setClick(click);
+            list = postService.queryPostByList(pageNo, pageSize);
+            for (int i = 0; i < list.getRows().size(); i++) {//获取帖子的点击次数
+                PostList l = (PostList) list.getRows().get(i);
+                Integer click = userRefreshRecordService.postcount(l.getId());
+                l.setClick(click);
             }
             return list;
         } else {
@@ -2009,12 +2012,11 @@ public class PostFacade {
      * @param endtime
      * @param begintime
      * @param essencedate
-     * @param pager
+     * @param
      * @return
      */
-    public List<PostList> postSearch(String title, String circleid,
-                                     String userid, String postcontent, String endtime,
-                                     String begintime, String pai, String essencedate, String uid, String price, String loginid, Paging<PostList> pager) {
+    public Datagrid postSearch(String title, String circleid, String userid, String postcontent, String endtime,
+                               String begintime, String pai, String essencedate, String uid, String price, String loginid, String pagNo, String pagSize) {
         Map map = new HashedMap();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date end = null;
@@ -2066,13 +2068,14 @@ public class PostFacade {
         }
         Integer louser = Integer.parseInt(loginid);
         Map res = commonalityFacade.verifyUserByQueryMethod(louser, JurisdictionConstants.JURISDICTION_TYPE.select.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), null);
-        List<PostList> list = new ArrayList<>();
+        //Datagrid list = new ArrayList<>();
+        Datagrid list = null;
         if (res.get("resault").equals(2) || res.get("resault").equals(0)) {
-            list = postService.postSearch(map, pager);
+            list = postService.postSearch(map, pagNo, pagSize);
             return list;
         } else if (res.get("resault").equals(1)) {
             map.put("loginid", loginid);
-            list = postService.queryPostByManageByList(map, pager);
+            list = postService.queryPostByManageByList(map, pagNo, pagSize);
             return list;
         }
         return list;

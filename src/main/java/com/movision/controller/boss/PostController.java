@@ -13,6 +13,7 @@ import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circleCategory.entity.CircleCategory;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.goods.entity.GoodsVo;
+import com.movision.mybatis.pageHelper.entity.Datagrid;
 import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.postHeatvalueRecord.entity.EChartOfEverydayData;
 import com.movision.mybatis.postHeatvalueRecord.entity.EchartOf24HourData;
@@ -79,13 +80,13 @@ public class PostController {
                                     @RequestParam(required = false, defaultValue = "1") String pageNo,
                                     @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
-        Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<PostList> list = postFacade.queryPostByList(loginid, pager);
+        //Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Datagrid list = postFacade.queryPostByList(loginid, pageNo, pageSize);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        pager.result(list);
-        response.setData(pager);
+        //pager.result(list);
+        response.setData(list);
         return response;
     }
 
@@ -816,13 +817,13 @@ public class PostController {
                                @ApiParam(value = "精选日期（yyyy-MM-dd）") @RequestParam(required = false) String essencedate,
                                @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response=new Response();
-        Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<PostList> list = postFacade.postSearch(title, circleid, userid, postcontent, endtime, begintime, pai, essencedate, uid, price, loginid, pager);
+        //Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Datagrid list = postFacade.postSearch(title, circleid, userid, postcontent, endtime, begintime, pai, essencedate, uid, price, loginid, pageNo, pageSize);
         if (response.getCode()==200){
             response.setMessage("查询成功");
         }
-        pager.result(list);
-        response.setData(pager);
+        //pager.result(list);
+        response.setData(list);
         return response;
     }
 
