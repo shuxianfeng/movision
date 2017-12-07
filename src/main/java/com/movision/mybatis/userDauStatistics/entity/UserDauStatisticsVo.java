@@ -25,14 +25,24 @@ public class UserDauStatisticsVo {
 
     private Double activityRate;//活跃率
 
-    private Integer preserve;//留存
+    private String keeprate;//留存
 
-    public Integer getPreserve() {
-        return preserve;
+    private String keeGather;//留存统计
+
+    public String getKeeGather() {
+        return keeGather;
     }
 
-    public void setPreserve(Integer preserve) {
-        this.preserve = preserve;
+    public void setKeeGather(String keeGather) {
+        this.keeGather = keeGather;
+    }
+
+    public String getKeeprate() {
+        return keeprate;
+    }
+
+    public void setKeeprate(String keeprate) {
+        this.keeprate = keeprate;
     }
 
     public Double getActivityRate() {

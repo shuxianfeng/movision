@@ -1,5 +1,6 @@
 package com.movision.facade.boss;
 
+import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.bossIndex.entity.AboveStatistics;
 import com.movision.mybatis.bossIndex.entity.IndexTodayDetails;
 import com.movision.mybatis.bossIndex.entity.ProcessedGoodsOrders;
@@ -72,16 +73,18 @@ public class IndexFacade {
 
     public Map queryUserStatistics(String time) {
         Map resault = new HashMap();
-        String[] dates = time.split(",");
         Date begin = null;
         Date end = null;
         Map map = new HashMap();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            begin = format.parse(dates[0]);
-            end = format.parse(dates[1]);
-        } catch (ParseException e) {
-            e.printStackTrace();
+        if (StringUtil.isNotEmpty(time)) {
+            String[] dates = time.split(",");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                begin = format.parse(dates[0]);
+                end = format.parse(dates[1]);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         map.put("begin", begin);
         map.put("end", end);
@@ -95,16 +98,18 @@ public class IndexFacade {
 
     public Map queryPostStatistics(String time) {
         Map resault = new HashMap();
-        String[] dates = time.split(",");
         Date begin = null;
         Date end = null;
         Map map = new HashMap();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            begin = format.parse(dates[0]);
-            end = format.parse(dates[1]);
-        } catch (ParseException e) {
-            e.printStackTrace();
+        if (StringUtil.isNotEmpty(time)) {
+            String[] dates = time.split(",");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                begin = format.parse(dates[0]);
+                end = format.parse(dates[1]);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         map.put("begin", begin);
         map.put("end", end);

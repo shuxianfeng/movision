@@ -17,6 +17,16 @@ public class UserDauStatistics {
 
     private Date intime;
 
+    private String keeprate;//留存
+
+    public String getKeeprate() {
+        return keeprate;
+    }
+
+    public void setKeeprate(String keeprate) {
+        this.keeprate = keeprate;
+    }
+
     public Integer getId() {
         return id;
     }

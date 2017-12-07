@@ -7,11 +7,12 @@
         <result column="registenum" property="registenum" jdbcType="INTEGER"/>
         <result column="usersum" property="usersum" jdbcType="INTEGER"/>
         <result column="validsum" property="validsum" jdbcType="INTEGER"/>
+        <result column="keeprate" property="keeprate" jdbcType="VARCHAR"/>
         <result column="channel" property="channel" jdbcType="INTEGER"/>
         <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, date, registenum, usersum, validsum, channel, intime
+        id, date, registenum, usersum, validsum, keeprate, channel, intime
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -24,11 +25,12 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
     <insert id="insert" parameterType="com.movision.mybatis.userDauStatistics.entity.UserDauStatistics">
-    insert into yw_user_dau_statistics (id, date, registenum, 
-      usersum, validsum, channel, 
+    insert into yw_user_dau_statistics (id, date, registenum,
+        usersum, validsum, keeprate, channel,
       intime)
-    values (#{id,jdbcType=INTEGER}, #{date,jdbcType=DATE}, #{registenum,jdbcType=INTEGER}, 
-      #{usersum,jdbcType=INTEGER}, #{validsum,jdbcType=INTEGER}, #{channel,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=INTEGER}, #{date,jdbcType=DATE}, #{registenum,jdbcType=INTEGER},
+        #{usersum,jdbcType=INTEGER}, #{validsum,jdbcType=INTEGER}, #{keeprate,jdbcType=VARCHAR},
+        #{channel,jdbcType=INTEGER},
       #{intime,jdbcType=TIMESTAMP})
   </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.userDauStatistics.entity.UserDauStatistics">
@@ -48,6 +50,9 @@
             </if>
             <if test="validsum != null">
                 validsum,
+            </if>
+            <if test="keeprate != null">
+                keeprate,
             </if>
             <if test="channel != null">
                 channel,
@@ -71,6 +76,9 @@
             </if>
             <if test="validsum != null">
                 #{validsum,jdbcType=INTEGER},
+            </if>
+            <if test="keeprate != null">
+                #{keeprate,jdbcTypef=VARCHAR},
             </if>
             <if test="channel != null">
                 #{channel,jdbcType=INTEGER},
@@ -96,6 +104,9 @@
             <if test="validsum != null">
                 validsum = #{validsum,jdbcType=INTEGER},
             </if>
+            <if test="keeprate != null">
+                keeprate = #{keeprate,jdbcType=VARCHAR},
+            </if>
             <if test="channel != null">
                 channel = #{channel,jdbcType=INTEGER},
             </if>
@@ -111,6 +122,7 @@
       registenum = #{registenum,jdbcType=INTEGER},
       usersum = #{usersum,jdbcType=INTEGER},
       validsum = #{validsum,jdbcType=INTEGER},
+        keeprate = #{keeprate,jdbcType=VARCHAR},
       channel = #{channel,jdbcType=INTEGER},
       intime = #{intime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
@@ -118,7 +130,9 @@
 
     <select id="queryUserStatistics" parameterType="java.util.Map"
             resultType="com.movision.mybatis.userDauStatistics.entity.UserDauStatisticsVo">
-        SELECT *,FORMAT((validsum/usersum),2) AS activityRate FROM yw_user_dau_statistics
+        SELECT id,date,registenum,usersum,validsum,channel,intime,
+        COALESCE(keeprate,0.00) AS keeprate,COALESCE(FORMAT((validsum/usersum),2),0.00) AS activityRate
+        FROM yw_user_dau_statistics
         <where>
             <if test="begin != null and end != null">
                 <![CDATA[intime >= #{begin,jdbcType=TIMESTAMP} AND intime <= DATE_ADD(#{end,jdbcType=TIMESTAMP},INTERVAL 1 DAY)]]>
@@ -128,7 +142,8 @@
 
     <select id="queryUserStatisticsGather" parameterType="java.util.Map"
             resultType="com.movision.mybatis.userDauStatistics.entity.UserDauStatisticsVo">
-        SELECT SUM(a.registenum) AS regGather,sum(a.usersum) AS userGather,sum(a.validsum) AS valGather FROM
+        SELECT SUM(a.registenum) AS regGather,sum(a.usersum) AS userGather,sum(a.validsum) AS valGather, sum(a.keeprate)
+        AS keeGather FROM
         yw_user_dau_statistics ds
         LEFT JOIN (SELECT * FROM yw_user_dau_statistics) a ON a.id = ds.id
         <where>
