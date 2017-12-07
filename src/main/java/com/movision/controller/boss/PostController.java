@@ -67,6 +67,7 @@ public class PostController {
 
     @Autowired
     private FacadePost facadePost;
+
     /**
      * 后台管理-查询帖子列表
      *
@@ -128,11 +129,11 @@ public class PostController {
 /*
     */
 /**
-     * 后台管理-查询活动列表
-     *
-     * @param pageNo
-     * @param pageSize
-     * @return
+ * 后台管理-查询活动列表
+ *
+ * @param pageNo
+ * @param pageSize
+ * @return
  *//*
 
     @ApiOperation(value = "查询活动列表", notes = "查询活动列表", response = Response.class)
@@ -174,6 +175,7 @@ public class PostController {
         response.setData(pager);
         return response;
     }
+
     /**
      * 查询发帖人信息
      *
@@ -463,6 +465,7 @@ public class PostController {
 
     /**
      * 后台管理-添加活动帖子
+     *
      * @param title
      * @param subtitle
      * @param activetype
@@ -500,11 +503,11 @@ public class PostController {
             @ApiParam(value = "分享商品") @RequestParam(required = false) String goodsid) {
         Response response = new Response();
         Map<String, Integer> result = postFacade.addPostActive(title, subtitle, activetype, partsumEnddays, iscontribute, activefee, coverimg, postcontent, isessence, orderid, essencedate, begintime, endtime, userid, hotimgurl, ishot, ishotorder, goodsid);
-        if(response.getCode()==200){
+        if (response.getCode() == 200) {
             response.setMessage("添加成功");
         }
         response.setData(result);
-        return  response;
+        return response;
     }
 
     /**
@@ -682,7 +685,6 @@ public class PostController {
     }*/
 
 
-
     /**
      * 编辑帖子-数据回显
      *
@@ -802,11 +804,11 @@ public class PostController {
      * @return
      */
     @ApiOperation(value = "帖子联合条件搜索", notes = "用于精确查找帖子搜索接口", response = Response.class)
-    @RequestMapping(value = "/post_search",method = RequestMethod.POST)
+    @RequestMapping(value = "/post_search", method = RequestMethod.POST)
     public Response postSearch(@ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize,
-                               @ApiParam(value = "帖子标题")@RequestParam(required = false) String title,
-                               @ApiParam(value = "圈子id")@RequestParam(required = false) String circleid,
+                               @ApiParam(value = "帖子标题") @RequestParam(required = false) String title,
+                               @ApiParam(value = "圈子id") @RequestParam(required = false) String circleid,
                                @ApiParam(value = "发帖人") @RequestParam(required = false) String userid,
                                @ApiParam(value = "帖子内容") @RequestParam(required = false) String postcontent,
                                @ApiParam(value = "结束时间(yyyy-MM-dd)") @RequestParam(required = false) String endtime,
@@ -816,10 +818,10 @@ public class PostController {
                                @ApiParam(value = "用户列表跳转传值：5 帖子 6 精贴") @RequestParam(required = false) String price,
                                @ApiParam(value = "精选日期（yyyy-MM-dd）") @RequestParam(required = false) String essencedate,
                                @ApiParam(value = "登录用户") @RequestParam String loginid) {
-        Response response=new Response();
+        Response response = new Response();
         Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         List<PostList> list = postFacade.postSearch(title, circleid, userid, postcontent, endtime, begintime, pai, essencedate, uid, price, loginid, pager);
-        if (response.getCode()==200){
+        if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
         pager.result(list);
@@ -1021,6 +1023,15 @@ public class PostController {
         return new Response(list);
     }
 
+    @ApiOperation(value = "测试上传图片", notes = "测试上传图片", response = Response.class)
+    @RequestMapping(value = {"/upload_test_test"}, method = RequestMethod.POST)
+    public Response updatetest(@RequestParam(value = "file", required = false) MultipartFile file) {
+        List<Map<String, Object>> list = new ArrayList<>();
+        Map map = postFacade.updatePostImgTest(file);
+        list.add(map);
+        return new Response(list);
+    }
+
     /**
      * boss上传帖子封面图
      *
@@ -1090,7 +1101,6 @@ public class PostController {
         map.put("height", m.get("height"));
         return new Response(map);
     }
-
 
 
     /**
@@ -1358,6 +1368,7 @@ public class PostController {
 
     /**
      * 删除帖子标签
+     *
      * @param id
      * @return
      */
@@ -1443,7 +1454,6 @@ public class PostController {
         response.setData(map);
         return response;
     }
-
 
 
 }
