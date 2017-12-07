@@ -711,12 +711,16 @@ public class VideoUploadUtil {
         log.info("请求进来了...");
         // 微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数。
         String signature =request.getParameter("signature");
+         log.info(signature+"--------------------------------");
         // 时间戳
         String timestamp =request.getParameter("timestamp");
+         log.info(timestamp+"--------------------------------");
         // 随机数
         String nonce =request.getParameter("nonce");
+         log.info(nonce+"--------------------------------");
         // 随机字符串
         String echostr =request.getParameter("echostr");
+         log.info(echostr+"--------------------------------");
 
         PrintWriter out = null;
         try {
@@ -741,7 +745,8 @@ public class VideoUploadUtil {
      * 处理微信服务器发来的消息
      */
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
-        get(request,response);
+        //get(request,response);
+        processRequest(request);
     }
 
     /**
