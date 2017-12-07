@@ -398,10 +398,10 @@ public class UserManageFacade {
      * @param
      * @return
      */
-    public Map queryAllUserList(String nickname, String phone, String authentication, String vip, String seal,
-                                String begintime, String endtime, String pointsSort, String postsumSort, String isessenceSort,
-                                String fansSort, String conditionon, String conditiontwo, String price, String login,
-                                String pai, Paging<UserAll> pag) {
+    public List<UserAll> queryAllUserList(String nickname, String phone, String authentication, String vip, String seal,
+                                          String begintime, String endtime, String pointsSort, String postsumSort, String isessenceSort,
+                                          String fansSort, String conditionon, String conditiontwo, String price, String login,
+                                          String pai, Paging<UserAll> pag) {
         Map map = new HashedMap();
         Map resa = new HashMap();
         Date beg = null;
@@ -469,7 +469,7 @@ public class UserManageFacade {
             list.get(i).setPostsum(u.getPostsum());
             list.get(i).setIsessencesum(u.getIsessencesum());
         }
-        return resa;
+        return list;
     }
 
     /**

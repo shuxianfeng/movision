@@ -823,7 +823,7 @@ public class PostController {
             response.setMessage("查询成功");
         }
         pager.result(list);
-        response.setData(list);
+        response.setData(pager);
         return response;
     }
 
