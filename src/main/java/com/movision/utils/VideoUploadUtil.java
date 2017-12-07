@@ -326,13 +326,13 @@ public class VideoUploadUtil {
 
     //美番（MOFO）公众号
     //订阅号
-    //static String DYAPPID = "wxd5b48a6ca0c168fa";
-    //static String DYAPPSECRET = "f89ff5a40b7e440a87e9fff74327e52c";
+    static String DYAPPID = "wxd5b48a6ca0c168fa";
+     static String DYAPPSECRET = "f89ff5a40b7e440a87e9fff74327e52c";
 
     //三元佳美公众号
     //订阅号
-    static String DYAPPID = "wx02f87b0f2283d306";
-    static String DYAPPSECRET = "ce7d888e707af276e21464d114995281";
+   // static String DYAPPID = "wx02f87b0f2283d306";
+   // static String DYAPPSECRET = "ce7d888e707af276e21464d114995281";
 
 
     //https://api.weixin.qq.com/cgi-bin/user/get?access_token=ACCESS_TOKEN&next_openid=NEXT_OPENID
