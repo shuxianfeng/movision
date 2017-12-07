@@ -737,9 +737,8 @@ public class VideoUploadUtil {
     /**
      * 处理微信服务器发来的消息
      */
-    public void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
+    public void doPost(HttpServletRequest request, HttpServletResponse response) {
+        get(request,response);
     }
 
     /**

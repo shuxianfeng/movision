@@ -372,6 +372,17 @@ public class AppVideoController {
     }
 
 
+    @ApiOperation(value = " doPost", notes = " doPost", response = Response.class)
+    @RequestMapping(value = "doPost", method = RequestMethod.GET)
+    public Response doPost(HttpServletRequest request,HttpServletResponse responses) {
+        Response response = new Response();
+       videoUploadUtil.doPost(request,responses);
+        if (response.getCode() == 200) {
+            response.setData("成功");
+        }
+        return response;
+    }
+
 
     @ApiOperation(value = " GetFUUserList", notes = " GetFUUserList", response = Response.class)
     @RequestMapping(value = "GetFUUserList", method = RequestMethod.GET)
