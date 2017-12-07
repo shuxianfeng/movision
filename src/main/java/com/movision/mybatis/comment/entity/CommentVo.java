@@ -13,8 +13,8 @@ public class CommentVo implements Serializable {
     private Integer pid;
     private User user;
     private  Integer postid;
-    private Integer repliesnumber;//回复条数
-    private User puser;//子评论的用户信息
+    private Integer repliesnumber;  //回复条数
+    private User puser; //子评论的用户信息
     private String content;
 
     private Date intime;

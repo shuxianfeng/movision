@@ -35,13 +35,12 @@
         <!--用来指定mybatis的xml配置文件路径-->
         <property name="configLocation" value="classpath:/mybatis/mybatis-configuration.xml"/>
         <property name="mapperLocations" value="classpath*:/mapper/**/*.xml"/>
-         <property name="plugins">
+        <property name="plugins">
             <list>
                 <ref bean="pageConfig"/>
             </list>
         </property>
     </bean>
-
 
     <!--mysql分页-->
     <bean id="pageConfig" class="com.movision.utils.pagination.PaginationInterceptor">
@@ -57,7 +56,6 @@
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
     </bean>
-
 
     <!-- mybatis接口扫描路径 -->
     <mybatis:scan base-package="com.movision.mybatis"/>

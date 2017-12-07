@@ -526,14 +526,23 @@
 
     <select id="findAllOneComment" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.comment.entity.CommentVo">
-    SELECT c.*,u.photo,u.nickname FROM yw_post_comment c LEFT JOIN yw_user u ON u.id=c.userid WHERE
-        c.postid=#{postid,jdbcType=INTEGER} AND c.pid IS NULL ORDER BY c.intime ASC
+    SELECT c.*,u.photo,u.nickname
+    FROM yw_post_comment c
+    LEFT JOIN yw_user u ON u.id=c.userid
+    WHERE
+        c.postid=#{postid,jdbcType=INTEGER}
+        AND c.pid IS NULL
+        ORDER BY c.intime ASC
   </select>
 
     <select id="queryTwoComment" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.comment.entity.CommentVo">
-        SELECT c.*,u.photo,u.nickname,u.isdv FROM yw_post_comment c LEFT JOIN yw_user u ON u.id=c.userid WHERE
-        c.pid=#{pid,jdbcType=INTEGER} ORDER BY c.intime ASC
+        SELECT c.*,u.photo,u.nickname,u.isdv
+        FROM yw_post_comment c
+        LEFT JOIN yw_user u ON u.id=c.userid
+        WHERE
+        c.pid=#{pid,jdbcType=INTEGER}
+        ORDER BY c.intime ASC
   </select>
 
     <!--增加一个isZan的字段输出，用于判断当前登录的用户是否点赞过这三条热门评论-->

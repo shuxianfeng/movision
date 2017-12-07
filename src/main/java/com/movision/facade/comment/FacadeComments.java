@@ -313,6 +313,7 @@ public class FacadeComments {
              } else {
              commentVoList.get(i).setIsZan(0);
              }*/
+            //利用HashSet去重
             listWithoutDup = new ArrayList<CommentVo>(new HashSet<CommentVo>(commentVoList.get(i).getCommentVos()));
             for (int j = 0; j < listWithoutDup.size(); j++) {
                 if (listWithoutDup.get(j).getPid().equals(commentVoList.get(i).getId())) {
@@ -359,7 +360,7 @@ public class FacadeComments {
 
 
     /**
-     * 全部评论
+     * 全部评论（递归）
      *
      * @param pid
      * @return
