@@ -1060,10 +1060,25 @@ public class XmlParseFacade {
                 while ((buff = is.read()) != -1) {
                     os.write(buff);
                 }
+
+                if (os != null) {
+                    try {
+                        os.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (is != null) {
+                    try {
+                        is.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
                 map.put("oldurl", path + s);
                 if (type.equals("img")) {
                     //图片上传
-                    Thread.sleep(800);
+                    Thread.sleep(2000);
                     Map t = movisionOssClient.uploadFileObject(new File(path + s), "img", "post");
                     map.put("newurl", t.get("url"));
                     //获取原图大小
