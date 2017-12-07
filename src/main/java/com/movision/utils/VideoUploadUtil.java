@@ -723,8 +723,11 @@ public class VideoUploadUtil {
             out = response.getWriter();
             // 通过检验signature对请求进行校验，若校验成功则原样返回echostr，否则接入失败
             if (MessageUtil.checkSignature(signature,timestamp, nonce)) {
-                out.print(echostr);
-            }
+                log.info(echostr+"--------------------------------");
+                log.info(signature+"--------------------------------");
+                log.info(timestamp+"--------------------------------");
+                log.info(nonce+"--------------------------------");
+             }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
