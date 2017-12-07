@@ -468,6 +468,16 @@ public class UserManageFacade {
             list.get(i).setCoupon(u.getCoupon());
             list.get(i).setPostsum(u.getPostsum());
             list.get(i).setIsessencesum(u.getIsessencesum());
+
+            if (list.get(i).getAuthstatus() == null) {
+                list.get(i).setAuthstatus(3);//如果当前用户没有实名认证 返回3作为提示
+            }
+            if (list.get(i).getPhone() != null) {
+                list.get(i).setLogin("8");//如果用户手机号不为null那么手机号作为登录方式
+            } else {
+                String resault = returnLoginType(list.get(i).getQq(), list.get(i).getOpenid(), list.get(i).getSina());
+                list.get(i).setLogin(resault);
+            }
         }
         return list;
     }
