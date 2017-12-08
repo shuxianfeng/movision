@@ -112,15 +112,18 @@ public class ImgCompressUtil {
                 Image srcImage = toolkit.getImage(file.getAbsolutePath()); // 构造Image对象
                 BufferedImage image_to_save;//------------------------------解决压缩后图片变红的问题20170411 13:46 shuxf
 
-                BufferedImage bufferedImage = toBufferedImage(srcImage);
-                if (bufferedImage.isAlphaPremultiplied()) {
+                //BufferedImage bufferedImage = toBufferedImage(srcImage);
+                //BufferedImage bufferedImage = new BufferedImage(originWidth,originHeight,BufferedImage.TYPE_INT_RGB);
+                ImageIcon imgicon = new ImageIcon(url);
+                Image img = imgicon.getImage();
+                /*if (img.isAlphaPremultiplied()) {
                     image_to_save = new BufferedImage(final_w, final_h, BufferedImage.TRANSLUCENT);
-                } else {
+                } else {*/
                     image_to_save = new BufferedImage(final_w, final_h, BufferedImage.TYPE_INT_RGB);
-                }
+                /*}*/
 
                 image_to_save.getGraphics().drawImage(
-                        bufferedImage.getScaledInstance(final_w, final_h,
+                        img.getScaledInstance(final_w, final_h,
                                 Image.SCALE_SMOOTH), 0, 0, null);
                 log.info("第二次测试压缩核心方法中压缩后的图片存储路径>>>>>>>>>>>>>>>>" + tempDir + name);
                 FileOutputStream fos = new FileOutputStream(tempDir + name); // 输出到文件流
@@ -144,47 +147,30 @@ public class ImgCompressUtil {
         if (image instanceof BufferedImage) {
             return (BufferedImage) image;
         }
-
-        // This code ensures that all the pixels in the image are loaded
         image = new ImageIcon(image).getImage();
 
-        // Determine if the image has transparent pixels; for this method's
-        // implementation, see e661 Determining If an Image Has Transparent Pixels
-        //boolean hasAlpha = hasAlpha(image);
-
-        // Create a buffered image with a format that's compatible with the screen
         BufferedImage bimage = null;
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         try {
-            // Determine the type of transparency of the new buffered image
-            int transparency = Transparency.OPAQUE;
-           /* if (hasAlpha) {
-             transparency = Transparency.BITMASK;
-             }*/
 
-            // Create the buffered image
+            int transparency = Transparency.OPAQUE;
+
             GraphicsDevice gs = ge.getDefaultScreenDevice();
             GraphicsConfiguration gc = gs.getDefaultConfiguration();
             bimage = gc.createCompatibleImage(
                     image.getWidth(null), image.getHeight(null), transparency);
         } catch (HeadlessException e) {
-            // The system does not have a screen
         }
 
         if (bimage == null) {
-            // Create a buffered image using the default color model
+
             int type = BufferedImage.TYPE_INT_RGB;
-            //int type = BufferedImage.TYPE_3BYTE_BGR;//by wang
-            /*if (hasAlpha) {
-             type = BufferedImage.TYPE_INT_ARGB;
-             }*/
+
             bimage = new BufferedImage(image.getWidth(null), image.getHeight(null), type);
         }
 
-        // Copy image to buffered image
         Graphics g = bimage.createGraphics();
 
-        // Paint the image onto the buffered image
         g.drawImage(image, 0, 0, null);
         g.dispose();
 
