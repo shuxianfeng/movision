@@ -11,7 +11,6 @@ import javax.imageio.ImageTypeSpecifier;
 import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
 import javax.imageio.stream.ImageOutputStream;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -82,13 +81,13 @@ public class ImgCompressUtil {
                     tempfile.mkdir();
                 }
 
-                /*BufferedImage bufferedImage = ImageIO.read(file);
+                BufferedImage bufferedImage = ImageIO.read(file);
 
                 File imgFile = new File(url);// 读入文件
-                Image img = ImageIO.read(imgFile);      // 构造Image对象
+                /*Image img = ImageIO.read(imgFile);      // 构造Image对象
                 int originWidth = img.getWidth(null);    // 得到源图宽
                 int originHeight = img.getHeight(null);  // 得到源图长*/
-                File imgFile = new File(url);// 读入文件
+
                 FileInputStream b = new FileInputStream(imgFile);
                 GetImgToWH imageInfo = new GetImgToWH(b);
                 System.out.println(imageInfo);
@@ -108,22 +107,16 @@ public class ImgCompressUtil {
                 map = resizeImgSize(w, h, map);
                 int final_w = map.get("w");    //最终的宽度
                 int final_h = map.get("h");    //最终的高度
-                Toolkit toolkit = Toolkit.getDefaultToolkit();
-                Image srcImage = toolkit.getImage(file.getAbsolutePath()); // 构造Image对象
-                BufferedImage image_to_save;//------------------------------解决压缩后图片变红的问题20170411 13:46 shuxf
 
-                //BufferedImage bufferedImage = toBufferedImage(srcImage);
-                //BufferedImage bufferedImage = new BufferedImage(originWidth,originHeight,BufferedImage.TYPE_INT_RGB);
-                ImageIcon imgicon = new ImageIcon(url);
-                Image img = imgicon.getImage();
-                /*if (img.isAlphaPremultiplied()) {
+                BufferedImage image_to_save;//------------------------------解决压缩后图片变红的问题20170411 13:46 shuxf
+                if (bufferedImage.isAlphaPremultiplied()) {
                     image_to_save = new BufferedImage(final_w, final_h, BufferedImage.TRANSLUCENT);
-                } else {*/
+                } else {
                     image_to_save = new BufferedImage(final_w, final_h, BufferedImage.TYPE_INT_RGB);
-                /*}*/
+                }
 
                 image_to_save.getGraphics().drawImage(
-                        img.getScaledInstance(final_w, final_h,
+                        bufferedImage.getScaledInstance(final_w, final_h,
                                 Image.SCALE_SMOOTH), 0, 0, null);
                 log.info("第二次测试压缩核心方法中压缩后的图片存储路径>>>>>>>>>>>>>>>>" + tempDir + name);
                 FileOutputStream fos = new FileOutputStream(tempDir + name); // 输出到文件流
@@ -142,41 +135,6 @@ public class ImgCompressUtil {
         return compressFlag;
 
     }
-
-    public static BufferedImage toBufferedImage(Image image) {
-        if (image instanceof BufferedImage) {
-            return (BufferedImage) image;
-        }
-        image = new ImageIcon(image).getImage();
-
-        BufferedImage bimage = null;
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        try {
-
-            int transparency = Transparency.OPAQUE;
-
-            GraphicsDevice gs = ge.getDefaultScreenDevice();
-            GraphicsConfiguration gc = gs.getDefaultConfiguration();
-            bimage = gc.createCompatibleImage(
-                    image.getWidth(null), image.getHeight(null), transparency);
-        } catch (HeadlessException e) {
-        }
-
-        if (bimage == null) {
-
-            int type = BufferedImage.TYPE_INT_RGB;
-
-            bimage = new BufferedImage(image.getWidth(null), image.getHeight(null), type);
-        }
-
-        Graphics g = bimage.createGraphics();
-
-        g.drawImage(image, 0, 0, null);
-        g.dispose();
-
-        return bimage;
-    }
-
 
     /**
      * 重新设置图片尺寸（核心算法）
