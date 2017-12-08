@@ -741,9 +741,12 @@ public class VideoUploadUtil {
     /**
      * 处理微信服务器发来的消息
      */
-    public void doPost(HttpServletRequest request, HttpServletResponse response) {
+    public Map doPost(HttpServletRequest request, HttpServletResponse response) {
         //get(request,response);
-        processRequest(request);
+        Map map=processRequest(request);
+        String openid=map.get("fromUserName").toString();
+        Map map1=getUserInformationH5DY(openid);
+        return map1;
     }
 
     /**
@@ -1133,13 +1136,13 @@ public class VideoUploadUtil {
         map.put("sex", sex);
         map.put("unionid", unionid);
         //查询有没有
-        int c=dinyuehaoService.selectO(openid);
+       /** int c=dinyuehaoService.selectO(openid);
         if(c==0) {
             Dinyuehao dinyuehao = new Dinyuehao();
             dinyuehao.setOpenid(openids);
             dinyuehao.setUnionid(unionid);
             dinyuehaoService.insertSelective(dinyuehao);
-        }
+        }*/
         return map;
     }
 
@@ -1220,8 +1223,9 @@ public class VideoUploadUtil {
      * @param request
      * @return
      */
-    public  String processRequest(HttpServletRequest request) {
+    public  Map processRequest(HttpServletRequest request) {
         String fromUserName="";
+        Map map= new HashMap();
         String respContent="";
          try {
              // xml请求解析
@@ -1241,10 +1245,12 @@ public class VideoUploadUtil {
                      respContent = "聊天唠嗑菜单项被点击！";
                  }
              }
+             map.put("fromUserName",fromUserName);
+             map.put("respContent",respContent);
         }catch (Exception e){
             e.printStackTrace();
         }
-        return respContent;
+        return map;
      }
 
         public static void main(String[] args) {

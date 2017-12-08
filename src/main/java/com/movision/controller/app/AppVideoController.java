@@ -376,9 +376,9 @@ public class AppVideoController {
     @RequestMapping(value = "doPost", method = RequestMethod.GET)
     public Response doPost(HttpServletRequest request,HttpServletResponse responses) {
         Response response = new Response();
-       videoUploadUtil.doPost(request,responses);
+       Map map= videoUploadUtil.doPost(request,responses);
         if (response.getCode() == 200) {
-            response.setData("成功");
+            response.setData(map);
         }
         return response;
     }
