@@ -127,6 +127,9 @@ public class ImgCompressUtil {
                 // 关闭输出流
                 fos.close();
                 compressFlag = true;
+                image_to_save = null;
+                bufferedImage = null;
+                System.gc();
             } catch (IOException ex) {
                 log.error("压缩图片异常 原图路径" + url, ex);
             }
