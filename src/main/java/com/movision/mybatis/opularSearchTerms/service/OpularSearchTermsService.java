@@ -87,7 +87,7 @@ import java.util.List;
             BasicDBObject keys = new BasicDBObject();
             keys.put("_id", 0);
             keys.put("keywords", 1);
-            cursor = collection.find(queryObject, keys).sort(new BasicDBObject("intime", 1)).limit(12);
+            cursor = collection.find(queryObject, keys).sort(new BasicDBObject("intime", -1)).limit(12);
             list = cursor.toArray();
             for (int i = 0; i < list.size(); i++) {
                 for (int j = list.size() - 1; j > i; j--) {
