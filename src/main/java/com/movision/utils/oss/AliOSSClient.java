@@ -302,6 +302,7 @@ public class AliOSSClient {
         log.info("阿里云OSS上传Started");
         OSSClient ossClient = init();
         InputStream in = null;
+        FileInputStream b = null;
         try {
             long size = file.getSize();
             // 上传文件流
@@ -333,7 +334,7 @@ public class AliOSSClient {
                 DiskFileItem fi = (DiskFileItem) cf.getFileItem();
                 File fs = fi.getStoreLocation();
 
-                FileInputStream b = new FileInputStream(fs);
+                b = new FileInputStream(fs);
                 GetImgToWH imageInfo = new GetImgToWH(b);
                 System.out.println(imageInfo);
                 // Getting image data from a file
@@ -379,6 +380,10 @@ public class AliOSSClient {
                     e.printStackTrace();
                 }
             }
+            if (b != null) {
+                b = null;
+            }
+            System.gc();
         }
 
         log.info("阿里云OSS上传Completed");

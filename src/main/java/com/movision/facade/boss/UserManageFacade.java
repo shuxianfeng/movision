@@ -14,10 +14,7 @@ import com.movision.mybatis.record.service.RecordService;
 import com.movision.mybatis.submission.entity.Submission;
 import com.movision.mybatis.submission.entity.SubmissionVo;
 import com.movision.mybatis.submission.service.SubmissionService;
-import com.movision.mybatis.user.entity.User;
-import com.movision.mybatis.user.entity.UserAll;
-import com.movision.mybatis.user.entity.UserParticulars;
-import com.movision.mybatis.user.entity.UserVo;
+import com.movision.mybatis.user.entity.*;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.SysNoticeUtil;
 import com.movision.utils.pagination.model.Paging;
@@ -109,15 +106,6 @@ public class UserManageFacade {
         return users;
     }
 
-    /**
-     * 查询所有VIP用户
-     *
-     * @param pager
-     * @return
-     */
-    public List<UserVo> queryVipList(Paging<UserVo> pager) {
-        return userService.findAllqueryUserVIPByList(pager);//查询所有VIP用户
-    }
 
     /**
      * 根据条件查看VIP列表
@@ -132,16 +120,16 @@ public class UserManageFacade {
      * @return
      */
     public List<UserVo> queryByConditionvipList(String name, String phone, String authstatus, String begintime, String endtime, String type, Paging<UserVo> pager) {
-        Map map = new HashedMap();
+        SearchUser searchUser = new SearchUser();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         if (StringUtil.isNotEmpty(name)) {
-            map.put("name", name);
+            searchUser.setName(name);
         }
         if (StringUtil.isNotEmpty(phone)) {
-            map.put("phone", phone);
+            searchUser.setPhone(phone);
         }
         if (StringUtil.isNotEmpty(authstatus)) {
-            map.put("authstatus", authstatus);
+            searchUser.setAuthstatus(Integer.parseInt(authstatus));
         }
         Date beg = null;
         Date end = null;
@@ -152,13 +140,13 @@ public class UserManageFacade {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            map.put("begintime", beg);
-            map.put("endtime", end);
+            searchUser.setBegintime(beg);
+            searchUser.setEndtime(end);
         }
         if (StringUtil.isNotEmpty(type)) {
-            map.put("type", type);
+            searchUser.setType(Integer.parseInt(type));
         }
-        List<UserVo> users = userService.queryByConditionvipList(map, pager);
+        List<UserVo> users = userService.queryByConditionvipList(searchUser, pager);
         /*for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getAuthstatus() == null) {
                 users.get(i).setAuthstatus(3);

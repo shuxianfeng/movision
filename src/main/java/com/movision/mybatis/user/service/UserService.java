@@ -367,33 +367,18 @@ public class UserService {
     }
 
 
-    /**
-     * 查询所有VIP用户
-     *
-     * @param pager
-     * @return
-     */
-    public List<UserVo> findAllqueryUserVIPByList(Paging<UserVo> pager) {
-        try {
-            log.info("查询所有VIP用户");
-            return userMapper.findAllqueryUserVIPByList(pager.getRowBounds());
-        } catch (Exception e) {
-            log.error("查询所有VIP用户异常", e);
-            throw e;
-        }
-    }
 
     /**
      * 根据条件查看VIP列表
      *
-     * @param map
+     * @param searchUser
      * @param pager
      * @return
      */
-    public List<UserVo> queryByConditionvipList(Map map, Paging<UserVo> pager) {
+    public List<UserVo> queryByConditionvipList(SearchUser searchUser, Paging<UserVo> pager) {
         try {
             log.info("根据条件查看VIP列表");
-            return userMapper.findAllQueryByConditionvipList(map, pager.getRowBounds());
+            return userMapper.findAllQueryByConditionvipList(searchUser, pager.getRowBounds());
         } catch (Exception e) {
             log.error("根据条件查看VIP列表异常", e);
             throw e;

@@ -79,13 +79,11 @@ public interface UserMapper {
 
     List<UserVo> findAllqueryUsers(RowBounds rowBounds);
 
-    List<UserVo> findAllqueryUserVIPByList(RowBounds rowBounds);
-
     List<BossUser> findAllQueryIssuePostManList();
 
     List<User> findAllQueryCircleManList();
 
-    List<UserVo> findAllQueryByConditionvipList(Map map, RowBounds rowBounds);
+    List<UserVo> findAllQueryByConditionvipList(SearchUser searchUser, RowBounds rowBounds);
 
     List<UserVo> findAllqueryAddVSortUser(Map map, RowBounds rowBounds);
 
