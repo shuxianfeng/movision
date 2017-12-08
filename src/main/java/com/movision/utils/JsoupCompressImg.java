@@ -302,11 +302,22 @@ public class JsoupCompressImg {
 
                         boolean compressFlag = false;
 
-                        //根据原图尺寸计算压缩后的图片尺寸
+                       /* //根据原图尺寸计算压缩后的图片尺寸
                         BufferedImage image = ImageIO.read(fis);
                         //根据不同图片的宽高程度进行不同程度的压缩
                         int prow = image.getWidth();//原图宽
                         int proh = image.getHeight();//原图高
+*/
+                        FileInputStream b = new FileInputStream(file);
+                        GetImgToWH imageInfo = new GetImgToWH(b);
+                        System.out.println(imageInfo);
+                        // Getting image data from a file
+                        imageInfo = new GetImgToWH(file);
+                        System.out.println("ˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇ高" + imageInfo.getHeight());
+                        System.out.println("ˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇ宽" + imageInfo.getWidth());
+                        int prow = imageInfo.getWidth();//原图宽
+                        int proh = imageInfo.getHeight();//原图高
+
                         Double rate = getWH(prow, proh);//计算压缩比例
                         int w = (int) (prow * rate);//压缩后宽
                         int h = (int) (proh * rate);//压缩后高
