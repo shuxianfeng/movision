@@ -4,25 +4,27 @@ import com.aliyun.oss.ClientConfiguration;
 import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.OSSException;
-import com.aliyun.oss.model.*;
+import com.aliyun.oss.model.BucketInfo;
+import com.aliyun.oss.model.OSSObject;
+import com.aliyun.oss.model.ObjectMetadata;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.exception.BusinessException;
 import com.movision.mybatis.systemLayout.service.SystemLayoutService;
-import com.movision.mybatis.userPhoto.entity.UserPhoto;
-import com.movision.mybatis.userPhoto.service.UserPhotoService;
-import com.movision.utils.propertiesLoader.PropertiesLoader;
+import com.movision.utils.GetImgToWH;
 import com.movision.utils.file.FileUtil;
+import com.movision.utils.propertiesLoader.PropertiesLoader;
+import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,6 +39,7 @@ public class AliOSSClient {
 
     @Autowired
     private SystemLayoutService systemLayoutService;
+
 
     private static final Logger log = LoggerFactory.getLogger(AliOSSClient.class);
 
@@ -322,9 +325,23 @@ public class AliOSSClient {
                     throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过最大限制");
                 }
                 //返回图片的宽高
-                BufferedImage bi = ImageIO.read(file.getInputStream());
-                result.put("width", bi.getWidth());
-                result.put("height", bi.getHeight());
+                //BufferedImage bi = ImageIO.read(file.getInputStream());
+                //result.put("width", bi.getWidth());
+                //result.put("height", bi.getHeight());
+                CommonsMultipartFile cf = (CommonsMultipartFile) file;
+                //这个myfile是MultipartFile的
+                DiskFileItem fi = (DiskFileItem) cf.getFileItem();
+                File fs = fi.getStoreLocation();
+
+                FileInputStream b = new FileInputStream(fs);
+                GetImgToWH imageInfo = new GetImgToWH(b);
+                System.out.println(imageInfo);
+                // Getting image data from a file
+                imageInfo = new GetImgToWH(fs);
+                System.out.println("ˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇ高" + imageInfo.getHeight());
+                System.out.println("ˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇ宽" + imageInfo.getWidth());
+                result.put("width", imageInfo.getWidth());
+                result.put("height", imageInfo.getHeight());
 
             } else if (type.equals("doc")) {
                 //bucketName = PropertiesLoader.getValue("file.bucket");
@@ -417,10 +434,17 @@ public class AliOSSClient {
 //                domain = PropertiesLoader.getValue("ali.domain");
                 data = domain + "/" + fileKey;
                 //返回图片的宽高
-                is = new FileInputStream(file);
-                BufferedImage src = ImageIO.read(is);
-                result.put("width", src.getWidth());
-                result.put("height", src.getHeight());
+                /*is = new FileInputStream(file);
+                BufferedImage src = ImageIO.read(is);*/
+                FileInputStream b = new FileInputStream(file);
+                GetImgToWH imageInfo = new GetImgToWH(b);
+                System.out.println(imageInfo);
+                // Getting image data from a file
+                imageInfo = new GetImgToWH(file);
+                System.out.println("ˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇ高" + imageInfo.getHeight());
+                System.out.println("ˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇ宽" + imageInfo.getWidth());
+                result.put("width", imageInfo.getWidth());
+                result.put("height", imageInfo.getHeight());
 
             } else if (type.equals("doc")) {
                 //bucketName = PropertiesLoader.getValue("file.bucket");
