@@ -26,7 +26,7 @@ public class CommonSearchService {
      */
     public List<Map<String, Object>> setSortFields(NormalSearchSpec spec, Map<String, Object> result) {
         List<Map<String, Object>> sortFields = new ArrayList<Map<String, Object>>(1);
-        Map<String, Object> sortField = new HashMap<String, Object>(3);
+        Map<String, Object> sortField = new HashMap<String, Object>(4);
 
         if (StringUtil.isNotEmpty(spec.getSort())) {
             /**
