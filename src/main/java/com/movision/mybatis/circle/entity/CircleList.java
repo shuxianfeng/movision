@@ -139,11 +139,11 @@ public class CircleList implements Serializable {
         this.postnum = postnum;
     }
 
-    public Integer getTodayPost() {
+    public Integer getPostnewnum() {
         return postnewnum;
     }
 
-    public void setTodayPost(Integer postnewnum) {
+    public void setPostnewnum(Integer postnewnum) {
         this.postnewnum = postnewnum;
     }
 
