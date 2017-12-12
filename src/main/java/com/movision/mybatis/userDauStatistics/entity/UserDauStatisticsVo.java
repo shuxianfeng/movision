@@ -9,9 +9,9 @@ public class UserDauStatisticsVo {
 
     private Integer registenum;
 
-    private Integer usersum;
+    private int usersum;
 
-    private Integer validsum;
+    private int validsum;
 
     private Integer channel;
 
@@ -101,19 +101,19 @@ public class UserDauStatisticsVo {
         this.registenum = registenum;
     }
 
-    public Integer getUsersum() {
+    public int getUsersum() {
         return usersum;
     }
 
-    public void setUsersum(Integer usersum) {
+    public void setUsersum(int usersum) {
         this.usersum = usersum;
     }
 
-    public Integer getValidsum() {
+    public int getValidsum() {
         return validsum;
     }
 
-    public void setValidsum(Integer validsum) {
+    public void setValidsum(int validsum) {
         this.validsum = validsum;
     }
 

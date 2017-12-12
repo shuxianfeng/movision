@@ -35,7 +35,7 @@ public class CircleList implements Serializable {
 
     private Integer postnum;//圈子帖子数
 
-    private Integer todayPost;//今日新增帖子数量
+    private Integer postnewnum;//今日新增帖子数量
 
     private Integer isessencenum;//圈子中精贴数
 
@@ -140,11 +140,11 @@ public class CircleList implements Serializable {
     }
 
     public Integer getTodayPost() {
-        return todayPost;
+        return postnewnum;
     }
 
-    public void setTodayPost(Integer todayPost) {
-        this.todayPost = todayPost;
+    public void setTodayPost(Integer postnewnum) {
+        this.postnewnum = postnewnum;
     }
 
     public Integer getIsessencenum() {

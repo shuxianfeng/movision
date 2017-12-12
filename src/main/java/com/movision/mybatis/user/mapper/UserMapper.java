@@ -214,4 +214,20 @@ public interface UserMapper {
     List<User> selectNotLoadPhotoUser();
 
     UserAll queryUserStatistics(Integer id);
+
+    Integer queryUserBriskNumber(Map map);
+
+    List<User> dauStatistic(Map map);
+
+    int queryComment(int id);
+
+    int queryForward(int id);
+
+    int queryCollect(int id);
+
+    int queryPost(int id);
+
+    int queryZan(int id);
+
+    int queryFollow(int id);
 }

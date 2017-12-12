@@ -5,7 +5,9 @@ import com.movision.mybatis.bossIndex.entity.AboveStatistics;
 import com.movision.mybatis.bossIndex.entity.IndexTodayDetails;
 import com.movision.mybatis.bossIndex.entity.ProcessedGoodsOrders;
 import com.movision.mybatis.bossIndex.service.IndexService;
+import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserParticulars;
+import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userDauStatistics.entity.UserDauStatistics;
 import com.movision.mybatis.userDauStatistics.entity.UserDauStatisticsVo;
 import com.movision.mybatis.userDauStatistics.service.UserDauStatisticsService;
@@ -19,10 +21,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author zhurui
@@ -39,6 +38,9 @@ public class IndexFacade {
 
     @Autowired
     private UserParticipateService userParticipateService;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * 查询后台首页今日详情
@@ -90,10 +92,49 @@ public class IndexFacade {
         map.put("end", end);
         List<UserDauStatisticsVo> list = userDauStatisticeService.queryUserStatistics(map);
         resault.put("lists", list);
+        //默认查询7日新增
         UserDauStatisticsVo vo = userDauStatisticeService.queryUserStatisticsGather(map);
-        vo.setActivityRate(vo.getValGather() / vo.getUserGather());
+        //默认查询7日活跃数
+        Integer brisk = userService.queryUserBriskNumber(map);
+        vo.setUsersum(brisk);//活跃数
+        Integer validDrisk = 0;
+        List<User> activeUserList = userService.dauStatistic(map);
+        for (int i = 0; i < activeUserList.size(); i++) {
+            int id = activeUserList.get(i).getId();//用户id
+            //根据userid查询用户是否进行过上述行为
+            int followsum = userService.queryFollow(id);//是否关注过圈子、标签或作者
+            int postsum = userService.queryPost(id);//是否发过贴
+            int zansum = userService.queryZan(id);//是否点赞过
+            int collectsum = userService.queryCollect(id);//是否收藏过
+            int commentsum = userService.queryComment(id);//是否评论过
+            int forwardsum = userService.queryForward(id);//是否转发过
+            if (followsum > 0 || postsum > 0 || zansum > 0 || collectsum > 0 || commentsum > 0 || forwardsum > 0) {
+                validDrisk++;
+            }
+        }
+        vo.setValidsum(validDrisk);//有效活跃数
+        vo.setActivityRate((Double.parseDouble(String.valueOf(vo.getValidsum()))) / (Double.parseDouble(String.valueOf(vo.getUsersum()))));//活跃率
         resault.put("gather", vo);
         return resault;
+    }
+
+    /**
+     * 计算两个日期之间相差的天数
+     *
+     * @param smdate 较小的时间
+     * @param bdate  较大的时间
+     * @return 相差天数
+     * @throws ParseException calendar 对日期进行时间操作
+     *                        getTimeInMillis() 获取日期的毫秒显示形式
+     */
+    public static int daysBetween(Date smdate, Date bdate) throws ParseException {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(smdate);
+        long time1 = cal.getTimeInMillis();
+        cal.setTime(bdate);
+        long time2 = cal.getTimeInMillis();
+        long between_days = (time2 - time1) / (1000 * 3600 * 24);
+        return Integer.parseInt(String.valueOf(between_days));
     }
 
     public Map queryPostStatistics(String time) {

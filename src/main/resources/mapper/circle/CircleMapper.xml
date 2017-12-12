@@ -539,7 +539,7 @@
 
     <select id="queryListByCircleCategory" resultType="com.movision.mybatis.circle.entity.CircleList"
             parameterType="java.util.Map">
-        SELECT c.id AS category,c.categoryname , c.intime,
+        SELECT c.id AS category,c.categoryname AS name, c.intime,
         (SELECT COUNT(1) FROM yw_follow_circle WHERE circleid IN (SELECT id FROM yw_circle WHERE category=c.id)) as
         follownum,
         (SELECT COUNT(1) FROM yw_follow_circle WHERE circleid IN(select circleid from yw_follow_circle where

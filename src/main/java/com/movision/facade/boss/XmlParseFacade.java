@@ -1090,6 +1090,14 @@ public class XmlParseFacade {
                     videoUploadUtil.videoUpload(path,)
                     map.put("newurl", );
                 }*/
+
+                try {
+                    //删除本地文件
+                    File file1 = new File(path + s);
+                    file1.delete();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }/* else {
                 map.put("oldurl", "");
                 map.put("newurl", "");
