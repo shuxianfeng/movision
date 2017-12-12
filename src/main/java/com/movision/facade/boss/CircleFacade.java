@@ -921,7 +921,7 @@ public class CircleFacade {
             endtime = strings[1];
         }
         Map map = new HashedMap();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date beg = null;
         Date end = null;
         Map map1 = new HashMap();
