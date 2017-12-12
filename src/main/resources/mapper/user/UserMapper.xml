@@ -1664,7 +1664,7 @@ SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
             <![CDATA[ AND login_time >= DATE_SUB(NOW(),INTERVAL 7 DAY) AND login_time <=DATE_FORMAT(NOW(),'%y-%m-%d')]]>
         </if>
         <if test="begin != null and end != null">
-            <![CDATA[ds.intime >= #{begin,jdbcType=TIMESTAMP} AND ds.intime < DATE_ADD(#{end,jdbcType=TIMESTAMP},INTERVAL 1 DAY)]]>
+            <![CDATA[AND intime >= #{begin,jdbcType=TIMESTAMP} AND intime < DATE_ADD(#{end,jdbcType=TIMESTAMP},INTERVAL 1 DAY)]]>
         </if>
     </select>
 
@@ -1675,7 +1675,7 @@ SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
             <![CDATA[ AND login_time >= DATE_SUB(NOW(),INTERVAL 7 DAY) AND login_time <=DATE_FORMAT(NOW(),'%y-%m-%d')]]>
         </if>
         <if test="begin != null and end != null">
-            <![CDATA[ds.intime >= #{begin,jdbcType=TIMESTAMP} AND ds.intime < DATE_ADD(#{end,jdbcType=TIMESTAMP},INTERVAL 1 DAY)]]>
+            <![CDATA[AND login_time >= #{begin,jdbcType=TIMESTAMP} AND login_time < DATE_ADD(#{end,jdbcType=TIMESTAMP},INTERVAL 1 DAY)]]>
         </if>
     </select>
 
