@@ -557,7 +557,7 @@
         FROM yw_circle_category c
         <where>
             <if test="type!=null">
-                AND c.category=#{type,jdbcType=INTEGER}
+                AND c.id=#{type,jdbcType=INTEGER}
             </if>
             <if test="circleman != null">
                 AND c.id IN (SELECT category FROM yw_circle WHERE userid IN (SELECT id FROM yw_admin_user WHERE name
