@@ -712,7 +712,6 @@ public class PostFacade {
             e.printStackTrace();
         }
         Integer click = userRefreshRecordService.postcount(postList.getId());
-        System.out.println("点击量=============" + click);
         postList.setClick(click);//活动点击量
         String str = null;
         if (postList != null) {
@@ -759,7 +758,6 @@ public class PostFacade {
         }
 
         Integer click = userRefreshRecordService.postcount(postList.getId());
-        System.out.println("点击量=============" + click);
         postList.setClick(click);//活动点击量
         postList.setActivestatue(activeStatue);//活动状态
         if (postList.getActivetype() == 1) {//含有商城促销类商品
