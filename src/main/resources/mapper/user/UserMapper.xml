@@ -79,22 +79,56 @@
 
     <!--根据登录用户和圈子类型查询圈子的管理员列表-->
     <select id="queryCircleMangerByUseridList" parameterType="java.util.Map"
-            resultType="com.movision.mybatis.user.entity.User">
+            resultType="java.lang.String">
         <if test="userid==null">
-            SELECT id,photo,nickname,phone,level FROM yw_user WHERE id in(
+            SELECT nickname FROM yw_user WHERE id in(
             SELECT userid FROM yw_circle_manager WHERE circleid in(
-            SELECT id FROM yw_circle
-            WHERE category=#{category,jdbcType=INTEGER})) GROUP BY phone DESC
+            SELECT id FROM yw_circle c
+            <where>
+                <if test="category != null">
+                    c.category=#{category,jdbcType=INTEGER}
+                </if>
+                <if test="circleman != null">
+                    AND c.userid IN (SELECT id FROM yw_admin_user WHERE name LIKE
+                    concat('%',#{circleman,jdbcType=VARCHAR},'%'))
+                </if>
+                <if test="circleid != null">
+                    AND c.id = #{circleid,jdbcType=INTEGER}
+                </if>
+                <if test="status != null">
+                    AND c.status = #{status,jdbcType=INTEGER}
+                </if>
+                <if test="begintime != null and endtime != null">
+                    <![CDATA[AND c.createtime >= #{begintime,jdbcType=DATE} AND c.createtime <= DATE_ADD(#{endtime,jdbcType=DATE},INTERVAL 1 DAY)]]>
+                </if>
+            </where>
+            )) GROUP BY phone DESC
         </if>
         <if test="userid!=null">
-            SELECT u.id,u.photo,u.nickname,u.phone,u.level FROM yw_circle_manager m LEFT JOIN yw_user u ON m.userid=u.id
+            SELECT u.nickname FROM yw_circle_manager m LEFT JOIN yw_user u ON m.userid=u.id
             WHERE m.circleid in(
             SELECT c.id
             FROM yw_circle c WHERE isdel=0
-            AND c.phone=(SELECT phone FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER}) AND
-            c.category=#{category,jdbcType=INTEGER}
-            OR c.id in (SELECT circleid FROM yw_circle_manager WHERE userid=(SELECT id FROM yw_user WHERE phone =(SELECT
-            phone FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER}))) AND c.category=#{category,jdbcType=INTEGER})
+            AND c.id in (SELECT circleid FROM yw_circle_manager WHERE userid=(SELECT id FROM yw_user WHERE phone
+            =(SELECT
+            phone FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER})))
+            <if test="type != null">
+                AND c.category=#{type,jdbcType=INTEGER}
+            </if>
+            <if test="circleman != null">
+                AND c.userid IN (SELECT id FROM yw_admin_user WHERE name LIKE
+                concat('%',#{circleman,jdbcType=VARCHAR},'%'))
+            </if>
+            <if test="circleid != null">
+                AND c.id = #{circleid,jdbcType=INTEGER})
+            </if>
+            <if test="status != null">
+                AND c.status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="begintime != null and endtime != null">
+                <![CDATA[AND c.createtime >= #{begintime,jdbcType=DATE} AND c.createtime <= DATE_ADD(#{endtime,jdbcType=DATE},INTERVAL 1 DAY)]]>
+            </if>
+            )
             GROUP BY u.nickname
         </if>
 
@@ -102,8 +136,8 @@
 
     <!-- 查询圈子管理员列表 -->
     <select id="queryCircleManagerByCircleList" parameterType="java.lang.Integer"
-            resultType="com.movision.mybatis.user.entity.User">
-        SELECT id,photo,nickname,phone,level FROM yw_user WHERE id in(
+            resultType="java.lang.String">
+        SELECT nickname FROM yw_user WHERE id in(
         SELECT userid FROM yw_circle_manager WHERE circleid=#{circleid,jdbcType=INTEGER})
     </select>
 

@@ -262,7 +262,7 @@ public class CircleService {
      * @param map
      * @return
      */
-    public List<CircleVo> queryCircleByLikeList(Map map) {
+    public List<CircleList> queryCircleByLikeList(Map map) {
         try {
             if (log.isInfoEnabled()) {
                 log.info("根据条件查询圈子列表");
@@ -274,7 +274,7 @@ public class CircleService {
         }
     }
 
-    public List<CircleVo> queryCircleManagementByLikeList(Map map) {
+    public List<CircleList> queryCircleManagementByLikeList(Map map) {
         try {
             if (log.isInfoEnabled()) {
                 log.info("根据条件查询圈子列表");
@@ -286,18 +286,30 @@ public class CircleService {
         }
     }
 
+    /**
+     * 根据圈子类型查询圈主列表
+     *
+     * @return
+     */
+    public List<String> queryCircleEmaster(Map map) {
+        try {
+            log.info("根据圈子类型查询圈主列表");
+            return circleMapper.queryCircleEmaster(map);
+        } catch (Exception e) {
+            log.error("根据圈子类的星查询圈主列表异常", e);
+            throw e;
+        }
+    }
+
 
     /**
      * 查询圈子中所有圈子所属分类
      *
      * @return
      */
-    public List<CircleIndexList> queryListByCircleCategory(Map map) {
+    public List<CircleList> queryListByCircleCategory(Map map) {
         try {
-            if (log.isInfoEnabled()) {
-                log.info("查询圈子中所有圈子所属分类");
-            }
-
+            log.info("查询圈子中所有圈子所属分类");
             return circleMapper.queryListByCircleCategory(map);
         } catch (Exception e) {
             log.error("查询圈子中所有圈子所属分类异常", e);

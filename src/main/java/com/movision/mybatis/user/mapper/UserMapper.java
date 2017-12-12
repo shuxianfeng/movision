@@ -58,9 +58,9 @@ public interface UserMapper {
 
     List<User> queryCircleManagerByCircleid(Integer circleid);
 
-    List<User> queryCircleMangerByUseridList(Map map);
+    List<String> queryCircleMangerByUseridList(Map map);
 
-    List<User> queryCircleManagerByCircleList(Integer circleid);
+    List<String> queryCircleManagerByCircleList(Integer circleid);
 
     String queryUserByOpenid(Integer userid);
 

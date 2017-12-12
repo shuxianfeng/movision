@@ -352,7 +352,7 @@
         SELECT * FROM yw_circle WHERE category=#{category,jdbcType=INTEGER}
     </select>
 
-    <select id="queryCircleByLikeList" resultType="com.movision.mybatis.circle.entity.CircleVo"
+    <select id="queryCircleByLikeList" resultType="com.movision.mybatis.circle.entity.CircleList"
             parameterType="java.util.Map">
         SELECT c.* ,
         (SELECT COUNT(1) FROM yw_follow_circle WHERE circleid=c.id) as follownum,
@@ -398,7 +398,7 @@
         </if>
     </select>
 
-    <select id="queryCircleManagementByLikeList" resultType="com.movision.mybatis.circle.entity.CircleVo"
+    <select id="queryCircleManagementByLikeList" resultType="com.movision.mybatis.circle.entity.CircleList"
             parameterType="java.util.Map">
         SELECT c.* ,
         (SELECT COUNT(1) FROM yw_follow_circle WHERE circleid=c.id) as follownum,
@@ -492,6 +492,29 @@
         </if>
     </select>
 
+    <select id="queryCircleEmaster" resultType="java.lang.String" parameterType="java.util.Map">
+        SELECT u.nickname
+        FROM yw_circle c
+        INNER JOIN yw_user u ON u.phone = c.phone
+        WHERE c.isdel = 0
+        <if test="category!=null">
+            AND c.category=#{category,jdbcType=INTEGER}
+        </if>
+        <if test="circleman != null">
+            AND c.userid IN (SELECT id FROM yw_admin_user WHERE name LIKE concat('%',#{circleman,jdbcType=VARCHAR},'%'))
+        </if>
+        <if test="circleid != null">
+            AND c.id = #{circleid,jdbcType=INTEGER}
+        </if>
+        <if test="status != null">
+            AND c.status = #{status,jdbcType=INTEGER}
+        </if>
+        <if test="begintime != null and endtime != null">
+            <![CDATA[AND c.id IN (SELECT id FROM yw_circle WHERE createtime >= #{begintime,jdbcType=DATE} AND createtime <= DATE_ADD(#{endtime,jdbcType=DATE},INTERVAL 1 DAY))]]>
+        </if>
+        GROUP BY c.phone
+    </select>
+
     <select id="queryCircleBycirclemaster" resultType="com.movision.mybatis.user.entity.User"
             parameterType="java.lang.String">
         SELECT u.level,u.nickname FROM yw_user u WHERE u.phone=#{phone,jdbcType=VARCHAR}
@@ -514,7 +537,7 @@
         SELECT name,category FROM yw_circle WHERE id=#{circleid,jdbcType=INTEGER}
     </select>
 
-    <select id="queryListByCircleCategory" resultType="com.movision.mybatis.circle.entity.CircleIndexList"
+    <select id="queryListByCircleCategory" resultType="com.movision.mybatis.circle.entity.CircleList"
             parameterType="java.util.Map">
         SELECT c.id AS category,c.categoryname , c.intime,
         (SELECT COUNT(1) FROM yw_follow_circle WHERE circleid IN (SELECT id FROM yw_circle WHERE category=c.id)) as
@@ -531,9 +554,24 @@
         WHERE category=c.id AND status=1 AND isdel=0)) AS postnum,
         (SELECT COALESCE(SUM(supportnum),0) FROM yw_circle WHERE category=c.id) AS supportnum
         FROM yw_circle_category c
-        <if test="categoryid!=null">
-            WHERE c.id=#{categoryid,jdbcType=INTEGER}
-        </if>
+        <where>
+            <if test="type!=null">
+                AND c.category=#{type,jdbcType=INTEGER}
+            </if>
+            <if test="circleman != null">
+                AND c.id IN (SELECT category FROM yw_circle WHERE userid IN (SELECT id FROM yw_admin_user WHERE name
+                LIKE concat('%',#{circleman,jdbcType=VARCHAR},'%')))
+            </if>
+            <if test="circleid != null">
+                AND c.id = (SELECT category FROM yw_circle WHERE id = #{circleid,jdbcType=INTEGER})
+            </if>
+            <if test="status != null">
+                AND c.id IN (SELECT category FROM yw_circle WHERE status = #{status,jdbcType=INTEGER})
+            </if>
+            <if test="begintime != null and endtime != null">
+                <![CDATA[AND c.id IN (SELECT category FROM yw_circle WHERE createtime >= #{begintime,jdbcType=DATE} AND createtime <= DATE_ADD(#{endtime,jdbcType=DATE},INTERVAL 1 DAY))]]>
+            </if>
+        </where>
     </select>
 
     <select id="queryListByCircleCategoryTo" resultType="com.movision.mybatis.circle.entity.Circle">

@@ -57,11 +57,13 @@ public interface CircleMapper {
 
     String queryCircleName(int circleid);
 
-    List<CircleVo> queryCircleByLikeList(Map map);
+    List<CircleList> queryCircleByLikeList(Map map);
 
-    List<CircleVo> queryCircleManagementByLikeList(Map map);
+    List<CircleList> queryCircleManagementByLikeList(Map map);
 
-    List<CircleIndexList> queryListByCircleCategory(Map map);
+    List<String> queryCircleEmaster(Map map);
+
+    List<CircleList> queryListByCircleCategory(Map map);
 
     List<Circle> queryListByCircleList(Map categoryid);
 

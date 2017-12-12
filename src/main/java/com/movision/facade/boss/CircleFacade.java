@@ -66,11 +66,11 @@ public class CircleFacade {
     private CircleCategoryService circleCategoryService;
 
 
-    /**
+  /*  *//**
      * 圈子首页列表查询
      *List<CircleIndexList>
      * @return
-     */
+     *//*
     public Map queryCircleByList(String loginid) {
         Map tm = new HashedMap();
         Integer id = Integer.parseInt(loginid);
@@ -174,7 +174,7 @@ public class CircleFacade {
             return map1;
         }
     }
-
+*/
 
     /**
      * 后台管理--查询精贴列表
@@ -669,8 +669,10 @@ public class CircleFacade {
         return userService.queryIssuePostManList();
     }*/
 
+/*
 
-    /**
+*/
+/**
      * 根据条件查询圈子列表
      *
      * @param circle
@@ -679,7 +681,9 @@ public class CircleFacade {
      * @param begintime
      * @param endtime
      * @return
-     */
+ *//*
+
+
     public Map queryCircleByCondition(String pai, String circle, String circleman, String type, String status, String begintime, String endtime, String loginid) {
         Map map = new HashedMap();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -891,6 +895,110 @@ public class CircleFacade {
                 map1.put("resault", circlenum);
                 return map1;
             }
+        } else {
+            map1.put("resault", -1);
+            map1.put("resault", "权限不足");
+            return map1;
+        }
+    }
+*/
+
+
+    /**
+     * 根据条件查询圈子列表
+     *
+     * @param circle
+     * @param circleman
+     * @param type
+     * @return
+     */
+    public Map queryCircleByConditionNew(String pai, String circle, String circleman, String type, String status, String intime, String loginid) {
+        String begintime = null;
+        String endtime = null;
+        if (StringUtil.isNotEmpty(intime)) {
+            String[] strings = intime.split(",");
+            begintime = strings[0];
+            endtime = strings[1];
+        }
+        Map map = new HashedMap();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date beg = null;
+        Date end = null;
+        Map map1 = new HashMap();
+        Map res = commonalityFacade.verifyUserByQueryMethod(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.select.getCode(), JurisdictionConstants.JURISDICTION_TYPE.circle.getCode(), null);
+        if (res.get("resault").equals(1) || res.get("resault").equals(2)) {
+            if (StringUtil.isNotEmpty(begintime) && StringUtil.isNotEmpty(endtime)) {
+                try {
+                    beg = format.parse(begintime);
+                    end = format.parse(endtime);
+                } catch (ParseException e) {
+                    logger.error("时间格式转换异常", e);
+                }
+            }
+            if (!StringUtils.isEmpty(pai)) {
+                map.put("pai", pai);
+            }
+            if (!StringUtils.isEmpty(circle)) {
+                map.put("circleid", circle);
+            }
+            if (!StringUtils.isEmpty(type)) {
+                map.put("type", type);
+            }
+            if (!StringUtils.isEmpty(status)) {
+                map.put("status", status);
+            }
+            if (!StringUtils.isEmpty(circleman)) {
+                map.put("circleman", circleman);
+            }
+            map.put("begintime", beg);
+            map.put("endtime", end);
+
+            List<CircleList> circlenum = circleService.queryListByCircleCategory(map);//查询圈子分类统计汇总
+            //循环圈子分类
+            for (int i = 0; i < circlenum.size(); i++) {
+                //圈主或者圈子管理员
+                if (res.get("resault").equals(1)) {
+                    map.put("userid", Integer.parseInt(loginid));
+                    //根据圈子类型查询管理员列表
+                    map.put("category", circlenum.get(i).getCategory());
+                    List<String> userslist = userService.queryCircleMangerByUseridList(map);
+                    circlenum.get(i).setCirclemanagerlist(userslist);
+                } else {
+                    //后台管理员
+                    map.put("userid", null);
+                    map.put("category", circlenum.get(i).getCategory());
+                    //根据圈子类型查询圈主列表
+                    List<String> circlemaster = circleService.queryCircleEmaster(map);
+                    circlenum.get(i).setCirclemaster(circlemaster);
+                    //根据圈子类型查询管理员列表
+                    List<String> userslist = userService.queryCircleMangerByUseridList(map);
+                    circlenum.get(i).setCirclemanagerlist(userslist);
+                }
+                map.put("type", circlenum.get(i).getCategory());
+                List<CircleList> listt = new ArrayList<>();
+                if (res.get("resault").equals(2) || res.get("resault").equals(0)) {
+                    //根据条件查询所有圈子列表
+                    listt = circleService.queryCircleByLikeList(map);
+                    //圈子管理员,圈主
+                } else if (res.get("resault").equals(1)) {
+                    map.put("userid", loginid);
+                    //根据条件查询 圈主活管理员管理的圈子列表
+                    listt = circleService.queryCircleManagementByLikeList(map);
+                }
+                //遍历所有圈子
+                for (int e = 0; e < listt.size(); e++) {
+                    Integer circleid = listt.get(e).getId();
+                    //根据圈子id查询圈子的管理员列表
+                    List<String> circleManage = userService.queryCircleManagerByCircleList(circleid);
+                    listt.get(e).setCirclemanagerlist(circleManage);
+                }
+
+                circlenum.get(i).setFoldCircle(listt);
+            }
+
+            map1.put("resault", circlenum);
+            return map1;
+
         } else {
             map1.put("resault", -1);
             map1.put("resault", "权限不足");

@@ -192,7 +192,7 @@ public class UserService {
         }
     }
 
-    public List<User> queryCircleMangerByUseridList(Map map) {
+    public List<String> queryCircleMangerByUseridList(Map map) {
         try {
             log.info("根据登录用户和圈子类型查询圈子的管理员列表");
             return userMapper.queryCircleMangerByUseridList(map);
@@ -208,7 +208,7 @@ public class UserService {
      * @param circleid
      * @return
      */
-    public List<User> queryCircleManagerByCircleList(Integer circleid) {
+    public List<String> queryCircleManagerByCircleList(Integer circleid) {
         try {
             log.info("查询圈子管理员列表");
             return userMapper.queryCircleManagerByCircleList(circleid);

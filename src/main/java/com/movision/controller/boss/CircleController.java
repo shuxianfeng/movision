@@ -46,11 +46,11 @@ public class CircleController {
     @Autowired
     private UserManageFacade userManageFacade;
 
-    /**
+  /*  *//**
      * 后台管理-查询圈子列表
      *List<CircleIndexList>
      * @return
-     */
+     *//*
     @ApiOperation(value = "查询圈子列表", notes = "用于查询圈子列表接口", response = Response.class)
     @RequestMapping(value = "/circle_list", method = RequestMethod.POST)
     public Response circleByList(@ApiParam(value = "登录用户") @RequestParam String loginid) {
@@ -61,7 +61,7 @@ public class CircleController {
         }
         response.setData(list);
         return response;
-    }
+    }*/
 
     /**
      * 后台管理-查询精贴列表
@@ -382,16 +382,14 @@ public class CircleController {
         return response;
     }
 
-    /**
+  /*  *//**
      * 根据条件查询圈子列表
      *
      * @param circleid
      * @param circleman
      * @param type
-     * @param begintime
-     * @param endtime
      * @return
-     */
+     *//*
     @ApiOperation(value = "按条件搜索圈子列表", notes = "用于根据条件查询圈子列表", response = Response.class)
     @RequestMapping(value = "query_circle_condition", method = RequestMethod.POST)
     public Response queryCircleByCondition(@ApiParam(value = "排序方式(默认按创建时间排序，1为按人气排序)") @RequestParam(required = false) String pai,
@@ -403,7 +401,37 @@ public class CircleController {
                                            @ApiParam(value = "圈子创建结束时间") @RequestParam(required = false) String endtime,
                                            @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
-        Map list = circleFacade.queryCircleByCondition(pai, circleid, circleman, type, status, begintime, endtime, loginid);
+        Map list = circleFacade.queryCircleByCondition(pai, circleid, circleman, type, status, begintime,endtime, loginid);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(list);
+        return response;
+    }*/
+
+    /**
+     * 按条件搜索圈子列表
+     *
+     * @param pai
+     * @param circleid
+     * @param circleman
+     * @param type
+     * @param status
+     * @param intime
+     * @param loginid
+     * @return
+     */
+    @ApiOperation(value = "按条件搜索圈子列表", notes = "用于根据条件查询圈子列表", response = Response.class)
+    @RequestMapping(value = "query_circle_condition_new", method = RequestMethod.POST)
+    public Response queryCircleByConditionNew(@ApiParam(value = "排序方式(默认按创建时间排序，1为按人气排序)") @RequestParam(required = false) String pai,
+                                              @ApiParam(value = "圈子id") @RequestParam(required = false) String circleid,
+                                              @ApiParam(value = "圈主") @RequestParam(required = false) String circleman,
+                                              @ApiParam(value = "圈子类型") @RequestParam(required = false) String type,
+                                              @ApiParam(value = "圈子状态：0 待审核 1 审核通过 2 审核不通过") @RequestParam(required = false) String status,
+                                              @ApiParam(value = "圈子创建开始时间") @RequestParam(required = false) String intime,
+                                              @ApiParam(value = "登录用户") @RequestParam String loginid) {
+        Response response = new Response();
+        Map list = circleFacade.queryCircleByConditionNew(pai, circleid, circleman, type, status, intime, loginid);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
