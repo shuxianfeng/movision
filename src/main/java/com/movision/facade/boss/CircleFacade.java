@@ -995,8 +995,15 @@ public class CircleFacade {
 
                 circlenum.get(i).setFoldCircle(listt);
             }
+            //去除圈子为空的圈子类型
+            List<CircleList> resault = new ArrayList<>();
+            for (int k = 0; k < circlenum.size(); k++) {
+                if (circlenum.get(k).getFoldCircle().size() > 0) {
+                    resault.add(circlenum.get(k));
+                }
+            }
 
-            map1.put("resault", circlenum);
+            map1.put("resault", resault);
             return map1;
 
         } else {

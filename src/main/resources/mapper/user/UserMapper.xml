@@ -663,10 +663,10 @@
     <select id="findAllUser" resultType="com.movision.mybatis.user.entity.User" parameterType="java.lang.Integer">
         SELECT u.id,u.nickname,u.phone,u.photo FROM yw_user u WHERE u.id=#{id,jdbcType=INTEGER}
     </select>
+    <!-- <![CDATA[ (u.id > 20000 OR u.id < 10000)]]> -->
     <select id="findAlllikeQueryPostByNickname" resultType="com.movision.mybatis.user.entity.UserLike"
             parameterType="java.lang.String">
         SELECT u.nickname,u.id FROM yw_user u WHERE
-        <![CDATA[ (u.id > 20000 OR u.id < 10000)]]>
         AND u.nickname LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
         AND u.status=0
     </select>
