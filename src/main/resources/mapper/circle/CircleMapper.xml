@@ -493,6 +493,7 @@
     </select>
 
     <select id="queryCircleEmaster" resultType="java.lang.String" parameterType="java.util.Map">
+        <if test="userid == null">
         SELECT u.nickname
         FROM yw_circle c
         INNER JOIN yw_user u ON u.phone = c.phone
@@ -513,6 +514,34 @@
             <![CDATA[AND c.id IN (SELECT id FROM yw_circle WHERE createtime >= #{begintime,jdbcType=DATE} AND createtime <= DATE_ADD(#{endtime,jdbcType=DATE},INTERVAL 1 DAY))]]>
         </if>
         GROUP BY c.phone
+        </if>
+        <if test="userid != null">
+            SELECT u.nickname
+            FROM yw_circle c
+            INNER JOIN yw_user u ON u.phone = c.phone
+            WHERE (c.phone = (SELECT phone FROM yw_admin_user WHERE id = #{userid,jdbcType=INTEGER})
+            OR c.id IN (SELECT circleid FROM yw_circle_manager WHERE userid =
+            (SELECT id FROM yw_user WHERE phone = (SELECT phone FROM yw_admin_user WHERE id =
+            #{userid,jdbcType=INTEGER}))) )
+            AND c.isdel = 0
+            <if test="category!=null">
+                AND c.category=#{category,jdbcType=INTEGER}
+            </if>
+            <if test="circleman != null">
+                AND c.userid IN (SELECT id FROM yw_admin_user WHERE name LIKE
+                concat('%',#{circleman,jdbcType=VARCHAR},'%'))
+            </if>
+            <if test="circleid != null">
+                AND c.id = #{circleid,jdbcType=INTEGER}
+            </if>
+            <if test="status != null">
+                AND c.status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="begintime != null and endtime != null">
+                <![CDATA[AND c.id IN (SELECT id FROM yw_circle WHERE createtime >= #{begintime,jdbcType=DATE} AND createtime <= DATE_ADD(#{endtime,jdbcType=DATE},INTERVAL 1 DAY))]]>
+            </if>
+            GROUP BY c.phone
+        </if>
     </select>
 
     <select id="queryCircleBycirclemaster" resultType="com.movision.mybatis.user.entity.User"

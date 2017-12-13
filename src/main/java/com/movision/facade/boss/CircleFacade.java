@@ -959,8 +959,11 @@ public class CircleFacade {
                 //圈主或者圈子管理员
                 if (res.get("resault").equals(1)) {
                     map.put("userid", Integer.parseInt(loginid));
-                    //根据圈子类型查询管理员列表
                     map.put("category", circlenum.get(i).getCategory());
+                    //根据圈子类型查询圈主列表
+                    List<String> circlemaster = circleService.queryCircleEmaster(map);
+                    circlenum.get(i).setCirclemaster(circlemaster);
+                    //根据圈子类型查询管理员列表
                     List<String> userslist = userService.queryCircleMangerByUseridList(map);
                     circlenum.get(i).setCirclemanagerlist(userslist);
                 } else {
