@@ -156,7 +156,7 @@
         SELECT * FROM yw_user_participate
         <where>
             <if test="begin != null and end != null">
-                <![CDATA[date >= #{begin,jdbcType=TIMESTAMP} AND date <= DATE_ADD(#{end,jdbcType=TIMESTAMP},INTERVAL 1 DAY)]]>
+                <![CDATA[date >= #{begin,jdbcType=TIMESTAMP} AND date < DATE_ADD(#{end,jdbcType=TIMESTAMP},INTERVAL 1 DAY)]]>
             </if>
             <if test="begin == null and end == null">
                 <![CDATA[date >= DATE_SUB(NOW(),INTERVAL 7 DAY) AND date < NOW()]]>
@@ -172,7 +172,7 @@
         LEFT JOIN (SELECT * FROM yw_user_participate) p ON p.id = u.id
         <where>
             <if test="begin != null and end != null">
-                <![CDATA[u.date >= #{begin,jdbcType=TIMESTAMP} AND u.date <= DATE_ADD(#{end,jdbcType=TIMESTAMP},INTERVAL 1 DAY)]]>
+                <![CDATA[u.date >= #{begin,jdbcType=TIMESTAMP} AND u.date < DATE_ADD(#{end,jdbcType=TIMESTAMP},INTERVAL 1 DAY)]]>
             </if>
             <if test="begin == null and end == null">
                 <![CDATA[u.date >= DATE_SUB(NOW(),INTERVAL 7 DAY) AND u.date < NOW()]]>

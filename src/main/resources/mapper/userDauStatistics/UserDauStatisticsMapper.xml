@@ -135,7 +135,7 @@
         FROM yw_user_dau_statistics
         <where>
             <if test="begin != null and end != null">
-                <![CDATA[date >= #{begin,jdbcType=TIMESTAMP} AND date <= DATE_ADD(#{end,jdbcType=TIMESTAMP},INTERVAL 1 DAY)]]>
+                <![CDATA[date >= #{begin,jdbcType=TIMESTAMP} AND date < DATE_ADD(#{end,jdbcType=TIMESTAMP},INTERVAL 1 DAY)]]>
             </if>
             <if test="begin == null and end == null">
                 <![CDATA[date >= DATE_SUB(NOW(),INTERVAL 7 DAY) AND date < NOW()]]>
