@@ -27,7 +27,7 @@ import java.util.Date;
  * @author zhuangyuhao@20160413
  */
 
-//@Component//临时屏蔽这两个注解，屏蔽这个切面日志，暂时用不到
+//@Component//临时屏蔽这两个注解，屏蔽这个切面日志，暂时用不到--20171213 shuxf
 //@Aspect
 public class AspectLog {
 
