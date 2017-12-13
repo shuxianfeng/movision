@@ -215,7 +215,7 @@ public interface UserMapper {
 
     UserAll queryUserStatistics(Integer id);
 
-    Integer queryUserBriskNumber(Map map);
+    Double queryUserBriskNumber(Map map);
 
     List<User> dauStatistic(Map map);
 

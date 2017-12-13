@@ -1367,7 +1367,7 @@ public class UserService {
      * @param map
      * @return
      */
-    public Integer queryUserBriskNumber(Map map) {
+    public Double queryUserBriskNumber(Map map) {
         try {
             log.info("默认查询7日活跃数");
             return userMapper.queryUserBriskNumber(map);

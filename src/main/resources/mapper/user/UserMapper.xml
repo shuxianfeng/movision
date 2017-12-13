@@ -1658,7 +1658,7 @@ SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
         UPDATE yw_user SET level=#{le,jdbcType=INTEGER} WHERE id=#{userid,jdbcType=INTEGER}
     </update>
 
-    <select id="queryUserBriskNumber" parameterType="java.util.Map" resultType="java.lang.Integer">
+    <select id="queryUserBriskNumber" parameterType="java.util.Map" resultType="java.lang.Double">
         SELECT COUNT(id) FROM yw_user WHERE status = 0
         <if test="begin == null and end == null">
             <![CDATA[ AND login_time >= DATE_SUB(NOW(),INTERVAL 7 DAY) AND login_time <=DATE_FORMAT(NOW(),'%y-%m-%d')]]>

@@ -95,9 +95,9 @@ public class IndexFacade {
         //默认查询7日新增
         UserDauStatisticsVo vo = userDauStatisticeService.queryUserStatisticsGather(map);
         //默认查询7日活跃数
-        Integer brisk = userService.queryUserBriskNumber(map);
-        vo.setUsersum(brisk);//活跃数
-        Integer validDrisk = 0;
+        Double brisk = userService.queryUserBriskNumber(map);
+        vo.setUserGather(brisk);//活跃数
+        Double validDrisk = 0.0;
         List<User> activeUserList = userService.dauStatistic(map);
         for (int i = 0; i < activeUserList.size(); i++) {
             int id = activeUserList.get(i).getId();//用户id
@@ -112,8 +112,8 @@ public class IndexFacade {
                 validDrisk++;
             }
         }
-        vo.setValidsum(validDrisk);//有效活跃数
-        vo.setActivityRate((Double.parseDouble(String.valueOf(vo.getValidsum()))) / (Double.parseDouble(String.valueOf(vo.getUsersum()))));//活跃率
+        vo.setValGather(Double.parseDouble(String.valueOf(validDrisk + "")));//有效活跃数
+        vo.setActivityRate((Double.parseDouble(String.valueOf(vo.getValGather()))) / (Double.parseDouble(String.valueOf(vo.getUserGather()))));//活跃率
         resault.put("gather", vo);
         return resault;
     }
