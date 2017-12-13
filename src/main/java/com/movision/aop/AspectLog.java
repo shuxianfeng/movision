@@ -27,8 +27,8 @@ import java.util.Date;
  * @author zhuangyuhao@20160413
  */
 
-@Component
-@Aspect
+//@Component//临时屏蔽这两个注解，屏蔽这个切面日志，暂时用不到
+//@Aspect
 public class AspectLog {
 
     @Autowired
