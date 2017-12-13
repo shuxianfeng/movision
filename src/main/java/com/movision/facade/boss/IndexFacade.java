@@ -73,6 +73,12 @@ public class IndexFacade {
         return indexService.queryAboveStatistics();
     }
 
+    /**
+     * 首页用户统计
+     *
+     * @param time
+     * @return
+     */
     public Map queryUserStatistics(String time) {
         Map resault = new HashMap();
         Date begin = null;
