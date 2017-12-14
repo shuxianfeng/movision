@@ -73,6 +73,17 @@ public class User implements Serializable {
 
     private String ip_city;
 
+    private Integer source;
+
+    public void setSource(Integer source) {
+        this.source = source;
+    }
+
+    public Integer getSource() {
+
+        return source;
+    }
+
     public void setIsrecommend(Integer isrecommend) {
         this.isrecommend = isrecommend;
     }
@@ -375,6 +386,7 @@ public class User implements Serializable {
                 ", intime=" + intime +
                 ", growth=" + growth +
                 ", level=" + level +
+                ", isdv=" + isdv +
                 ", status=" + status +
                 ", applydate=" + applydate +
                 ", deviceno='" + deviceno + '\'' +
@@ -385,6 +397,7 @@ public class User implements Serializable {
                 ", latitude='" + latitude + '\'' +
                 ", ip='" + ip + '\'' +
                 ", ip_city='" + ip_city + '\'' +
+                ", source=" + source +
                 '}';
     }
 }

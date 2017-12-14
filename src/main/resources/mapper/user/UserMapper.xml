@@ -35,12 +35,13 @@
         <result column="latitude" property="latitude" jdbcType="VARCHAR"/>
         <result column="ip" property="ip" jdbcType="VARCHAR"/>
         <result column="ip_city" property="ip_city" jdbcType="VARCHAR"/>
+        <result column="source" property="source" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id, openid, qq, sina, phone, email, token, invitecode, referrals, nickname, sign, attention, fans,
         points, photo, sex, birthday, province, city, intime, growth, level, isdv, status, applydate, deviceno,
-        login_time, isrecommend, heat_value, longitude, latitude, ip, ip_city
+        login_time, isrecommend, heat_value, longitude, latitude, ip, ip_city,source
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -538,6 +539,9 @@
             </if>
             <if test="ip_city!=null">
                 ip_city=#{ip_city},
+            </if>
+            <if test="source != null">
+                source=#{source},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}

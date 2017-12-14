@@ -227,6 +227,7 @@ public class AppLoginController {
                                        @ApiParam(value = "token") @RequestParam String appToken,
                                        @ApiParam(value = "登录人的经度") @RequestParam(required = false) String longitude,
                                        @ApiParam(value = "登录人的纬度") @RequestParam(required = false) String latitude,
+                                       @ApiParam(value = "用户来源渠道") @RequestParam(required = false) Integer source,
                                        HttpServletRequest request) throws Exception {
 
         Response response = new Response();
@@ -240,7 +241,7 @@ public class AppLoginController {
             } else {
                 String ip = IpUtil.getRequestClientIp(request);
                 log.info("获取的ip=" + ip);
-                appRegisterFacade.handleLoginProcess(appToken, response, originUser, ip, longitude, latitude);
+                appRegisterFacade.handleLoginProcess(appToken, response, originUser, ip, longitude, latitude, source);
             }
 
         } catch (Exception e) {
@@ -272,6 +273,7 @@ public class AppLoginController {
                                  @ApiParam(value = "token") @RequestParam String appToken,
                                  @ApiParam(value = "登录人的经度") @RequestParam(required = false) String longitude,
                                  @ApiParam(value = "登录人的纬度") @RequestParam(required = false) String latitude,
+                                 @ApiParam(value = "用户来源渠道") @RequestParam(required = false) Integer source,
                                  HttpServletRequest request) throws Exception {
         Response response = new Response();
         try {
@@ -286,7 +288,7 @@ public class AppLoginController {
             } else {
                 String ip = IpUtil.getRequestClientIp(request);
                 log.info("获取的ip=" + ip);
-                appRegisterFacade.handleLoginProcess(appToken, response, user, ip, longitude, latitude);
+                appRegisterFacade.handleLoginProcess(appToken, response, user, ip, longitude, latitude, source);
             }
 
         } catch (Exception e) {

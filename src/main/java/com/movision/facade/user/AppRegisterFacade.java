@@ -700,7 +700,8 @@ public class AppRegisterFacade {
      * @param longitude
      * @param latitude
      */
-    public void handleLoginProcess(String appToken, Response response, User user, String ip, String longitude, String latitude)
+    public void handleLoginProcess(String appToken, Response response, User user, String ip, String longitude,
+                                   String latitude, Integer source)
             throws UnsupportedEncodingException, NoSuchAlgorithmException {
         //1 校验appToken和serverToken非空
         String serverToken = this.validateAppTokenAndServerToken(appToken, response, user);
@@ -733,7 +734,7 @@ public class AppRegisterFacade {
                 //7 返回用户是否是第一次登录（根据登录时间和注册时间的间隔判断，若间隔小于10秒，则认为是第一次登录，否则不是）
                 Date loginTime = calculateIsFirstLoginApp(returnMap, appuserid);
                 //8 登录验证成功后，更新用户信息
-                updateLoginUserInfo(appuserid, longitude, latitude, ip, loginTime);
+                updateLoginUserInfo(appuserid, longitude, latitude, ip, loginTime, source);
                 //9 返回登录人的信息
                 LoginUser loginuser = userFacade.getLoginuserByUserid(appuserid);
                 ShiroRealm.ShiroUser shiroUser = ShiroUtil.getShiroUserFromLoginUser(loginuser);
@@ -800,7 +801,7 @@ public class AppRegisterFacade {
      * @param latitude
      * @param ip
      */
-    private void updateLoginUserInfo(int appuserid, String longitude, String latitude, String ip, Date loginTime)
+    private void updateLoginUserInfo(int appuserid, String longitude, String latitude, String ip, Date loginTime, Integer source)
             throws UnsupportedEncodingException, NoSuchAlgorithmException {
 
         User u = new User();
@@ -819,6 +820,8 @@ public class AppRegisterFacade {
         //查询省的name
         String provice = userService.provicename(ip_city);
         u.setProvince(provice);
+        u.setSource(source);    //记录用户来源渠道
+
         userService.updateLoginappuserInfo(u);
     }
 
