@@ -2107,9 +2107,9 @@
    WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} AND yw_post.isdel=0 ORDER BY yw_post.heat_value
    DESC-->
    SELECT * FROM (SELECT TO_DAYS(p.intime) AS date,p.*,c.name as circlename ,u.nickname,u.photo,r.labelid FROM yw_post p
-    LEFT JOIN yw_post_label_relation r ON r.postid=p.id
-   LEFT JOIN yw_circle c ON c.id=p.circleid
-   LEFT JOIN yw_user u ON u.id=p.userid ORDER BY p.intime DESC) AS a WHERE a.isdel=0 AND
+        INNER JOIN yw_post_label_relation r ON r.postid=p.id
+        INNER JOIN yw_circle c ON c.id=p.circleid
+        INNER JOIN yw_user u ON u.id=p.userid ORDER BY p.intime DESC) AS a WHERE a.isdel=0 AND
    a.labelid=#{labelid,jdbcType=INTEGER} ORDER BY a.date desc,a.heat_value DESC
 
 </select>
