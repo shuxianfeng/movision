@@ -230,4 +230,6 @@ public interface UserMapper {
     int queryZan(int id);
 
     int queryFollow(int id);
+
+    List<String> queryCircleaAministratorListById(Integer circleid);
 }

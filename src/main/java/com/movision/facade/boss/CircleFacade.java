@@ -357,7 +357,7 @@ public class CircleFacade {
     public Map<String, CircleDetails> queryCircleByShow(String circleid) {
         Map<String, CircleDetails> map = new HashedMap();
         CircleDetails circleDetails = circleService.queryCircleByShow(Integer.parseInt(circleid));//查询出圈子信息
-        List<User> list = userService.queryCircleManagerByCircleid(Integer.parseInt(circleid));//根据圈子id查询出管理员列表
+        List<String> list = userService.queryCircleaAministratorListById(Integer.parseInt(circleid));//根据圈子id查询出管理员列表
         if (list != null) {
             circleDetails.setAdmin(list);
         }

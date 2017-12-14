@@ -78,6 +78,12 @@
         SELECT userid FROM yw_circle_manager WHERE circleid=#{circleid,jdbcType=INTEGER})
     </select>
 
+    <select id="queryCircleaAministratorListById" parameterType="java.lang.Integer"
+            resultType="java.lang.String">
+        SELECT nickname FROM yw_user WHERE id in(
+        SELECT userid FROM yw_circle_manager WHERE circleid=#{circleid,jdbcType=INTEGER})
+    </select>
+
     <!--根据登录用户和圈子类型查询圈子的管理员列表-->
     <select id="queryCircleMangerByUseridList" parameterType="java.util.Map"
             resultType="java.lang.String">
