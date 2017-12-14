@@ -198,7 +198,7 @@ public class UserService {
      * @param circleid
      * @return
      */
-    public List<String> queryCircleaAministratorListById(Integer circleid) {
+    public List<Integer> queryCircleaAministratorListById(Integer circleid) {
         try {
             log.info("根据圈子id查询出圈子管理员");
             return userMapper.queryCircleaAministratorListById(circleid);

@@ -58,7 +58,7 @@ public class CircleDetails implements Serializable {
 
     private String categoryname;//圈子所属类型
 
-    private List<String> admin;//管理员列表
+    private List<Integer> admin;//管理员列表
 
     private String userid;//创建人id
 
@@ -260,11 +260,11 @@ public class CircleDetails implements Serializable {
         this.categoryname = categoryname;
     }
 
-    public List<String> getAdmin() {
+    public List<Integer> getAdmin() {
         return admin;
     }
 
-    public void setAdmin(List<String> admin) {
+    public void setAdmin(List<Integer> admin) {
         this.admin = admin;
     }
 

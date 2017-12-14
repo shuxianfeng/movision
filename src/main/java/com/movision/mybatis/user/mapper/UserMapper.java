@@ -231,5 +231,5 @@ public interface UserMapper {
 
     int queryFollow(int id);
 
-    List<String> queryCircleaAministratorListById(Integer circleid);
+    List<Integer> queryCircleaAministratorListById(Integer circleid);
 }
