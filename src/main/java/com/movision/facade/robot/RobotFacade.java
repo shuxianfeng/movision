@@ -1,16 +1,19 @@
 package com.movision.facade.robot;
 
+import com.movision.common.constant.ImConstant;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.PointConstant;
 import com.movision.common.constant.RobotConstant;
 import com.movision.exception.BusinessException;
 import com.movision.facade.collection.CollectionFacade;
+import com.movision.facade.im.ImFacade;
 import com.movision.facade.index.FacadeHeatValue;
 import com.movision.facade.index.FacadePost;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
+import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.personalizedSignature.entity.PersonalizedSignature;
 import com.movision.mybatis.personalizedSignature.service.PersonalizedSignatureService;
 import com.movision.mybatis.post.entity.PostVo;
@@ -30,6 +33,7 @@ import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
 import com.movision.utils.DateUtils;
 import com.movision.utils.ListUtil;
 import com.movision.utils.UUIDGenerator;
+import com.movision.utils.im.CheckSumBuilder;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.formula.functions.T;
@@ -39,6 +43,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.*;
 
 
@@ -90,12 +95,15 @@ public class RobotFacade {
     @Autowired
     private SystemLayoutService systemLayoutService;
 
+    @Autowired
+    private ImFacade imFacade;
+
     /**
      * 创建n个robot用户
      *
      * @param num
      */
-    public void batchAddRobotUser(int num) {
+    public void batchAddRobotUser(int num) throws IOException {
         //1 先找到本次批次的最大的id, 在 10001-20000 之间
         Integer maxId = userService.selectMaxRobotId();
         int firstId = 10001;    //默认第一个id是10001
@@ -126,6 +134,16 @@ public class RobotFacade {
             pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.new_user_register.getCode(), PointConstant.POINT.new_user_register.getCode(), uid);
             //3)增加绑定手机号积分流水
             pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.binding_phone.getCode(), PointConstant.POINT.binding_phone.getCode(), uid);
+            //4)新增im信息
+            ImUser imUser = new ImUser();
+            imUser.setName(nickname);
+            imUser.setIcon(photo);
+            imUser.setSign(sign);
+            imUser.setUserid(uid);
+            imUser.setAccid(CheckSumBuilder.getAccid(String.valueOf(uid)));  //根据userid生成accid
+
+            imFacade.registerImUserAndSave(imUser, imUser.getUserid(), ImConstant.TYPE_APP);
+
         }
     }
 

@@ -360,7 +360,7 @@ public class UserFacade {
      *
      * @throws IOException
      */
-    public void queryNotExistImUser() throws IOException {
+    public void registeNewImUser() throws IOException {
         List<User> list = imUserService.queryNotExistImUser();
         if (ListUtil.isNotEmpty(list)) {
             //循环重新注册云信IM用户

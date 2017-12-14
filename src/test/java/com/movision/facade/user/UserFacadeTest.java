@@ -1,11 +1,8 @@
 package com.movision.facade.user;
 
-import com.movision.mybatis.user.entity.LoginUser;
 import com.movision.test.SpringTestCase;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import static org.junit.Assert.*;
 
 /**
  * @Author zhuangyuhao
@@ -16,20 +13,20 @@ public class UserFacadeTest extends SpringTestCase {
     @Autowired
     private UserFacade userFacade;
 
-    /*@Test
+    @Test
     public void testqueryNotExistImUser() throws Exception{
-        userFacade.queryNotExistImUser();
-    }*/
+        userFacade.registeNewImUser();
+    }
 
     /*@Test
     public void executecompleteImuserInfo() throws Exception{
         userFacade.completeImuserInfo();
     }*/
 
-    @Test
+    /*@Test
     public void executecompleteImdeviceInfo() throws Exception {
         userFacade.completeImdeviceInfo();
-    }
+    }*/
 
     /*@Test
     public void isExistAccount() throws Exception {

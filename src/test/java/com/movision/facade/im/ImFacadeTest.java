@@ -15,11 +15,11 @@ public class ImFacadeTest extends SpringTestCase {
     @Autowired
     private ImFacade imFacade;
 
-    @Test
+    /*@Test
     public void testIsInBlackList() throws Exception {
 //        System.out.println(imFacade.isInBlackList("0e37febaefd39b95f514cf82b5487ae2", "22356e36fb009573c79ff93858d23919"));
         System.out.println(imFacade.isInBlackList("22356e36fb009573c79ff93858d23919", "0e37febaefd39b95f514cf82b5487ae2"));
-    }
+    }*/
 
 
 
