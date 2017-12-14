@@ -29,6 +29,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -390,6 +392,7 @@ public class CircleFacade {
      * @param maylikeimg
      * @return
      */
+    @Transactional
     public Map addCircle(String name, String category, String userid, String circleadmin,
                          String circlemanid, String photo, String maylikeimg, String introduction, String notice, String loginid) {
         CircleDetails circleDetails = new CircleDetails();
