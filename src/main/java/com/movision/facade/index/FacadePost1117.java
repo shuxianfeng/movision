@@ -558,7 +558,7 @@ public class FacadePost1117 {
         } else {
             //查询用户有无历史
             int count = facadePost.userHistoryDeviceCircleCount(device, type, circleid);
-            if (count > 0) {
+            if (count > 10) {
                 us = facadePost.userRefulshListMongodbToDeviceHistory(device, type, circleid);
             } else {
                 us = null;
@@ -609,7 +609,7 @@ public class FacadePost1117 {
         } else {
             //查询用户有无历史
             int count = facadePost.userHistoryDeviceLabelCount(device, type, Integer.parseInt(labelid));
-            if (count > 0) {
+            if (count > 10) {
                 us = facadePost.userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
             } else {
                 us = null;
@@ -744,7 +744,7 @@ public class FacadePost1117 {
         } else {
             //查询用户有无历史
             int count = facadePost.userHistoryDeviceCircleCount(device, type, circleid);
-            if (count > 0) {
+            if (count > 10) {
                 us = facadePost.userRefulshListMongodbToDeviceHistory(device, type, circleid);
             } else {
                 us = null;
@@ -808,7 +808,7 @@ public class FacadePost1117 {
         } else {
             //查询用户有无历史
             int count = facadePost.userHistoryDeviceLabelCount(device, type, Integer.parseInt(labelid));
-            if (count > 0) {
+            if (count > 10) {
                 us = facadePost.userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
             } else {
                 us = null;
