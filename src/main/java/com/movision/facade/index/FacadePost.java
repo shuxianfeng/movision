@@ -3835,7 +3835,7 @@ public class FacadePost {
         } else {
             //查询用户有无历史
             int count = userHistoryDeviceCircleCount(device, type, circleid);
-            if (count > 10) {
+            if (count > 0) {
                 us = userRefulshListMongodbToDeviceHistory(device, type, circleid);
             } else {
                 us = null;
@@ -3889,7 +3889,7 @@ public class FacadePost {
         } else {
             //查询用户有无历史
             int count = userHistoryDeviceLabelCount(device, type, Integer.parseInt(labelid));
-            if (count > 10) {
+            if (count > 0) {
                 us = userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
             } else {
                 us = null;
