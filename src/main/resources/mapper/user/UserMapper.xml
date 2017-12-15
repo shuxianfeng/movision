@@ -162,7 +162,7 @@
             (SELECT * FROM yw_user WHERE isrecommend = '1' AND id != '-1')
             UNION
             (SELECT * FROM yw_user WHERE id != '-1' ORDER BY heat_value DESC limit 10)
-        ) t1 WHERE right(t1.phone,6) NOT LIKE '%000000' limit 10
+        ) t1 WHERE right(t1.phone,6) NOT LIKE '%000000' OR t1.phone IS NULL limit 10
     </select>
 
     <!--美番2.0发现作者页查询推荐作者列表-->
