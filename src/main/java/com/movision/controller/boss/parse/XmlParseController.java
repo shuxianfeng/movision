@@ -150,4 +150,28 @@ public class XmlParseController {
     }
 
 
+    /**
+     * 导入帖子评论
+     *
+     * @param file
+     * @param type
+     * @return
+     */
+    @ApiOperation(value = "导入Excel为帖子评论", response = Response.class)
+    @RequestMapping(value = "input_excel_comment", method = RequestMethod.POST)
+    public Response inputExcelToPostComment(HttpServletRequest request,
+                                            @ApiParam(value = "Excel文件") @RequestParam MultipartFile file,
+                                            @ApiParam(value = "评论类型 ：0：普通 1：专业摄影 2：风光 3：人像 4：诗词 5：段子'") @RequestParam String type) {
+        Response response = new Response();
+        Map map = xmlParseFacade.inputExcelToPostComment(request, file, type);
+        if (map.get("code").equals("200")) {
+            response.setMessage("操作成功");
+            response.setData(map);
+        } else {
+            response.setMessage("操作失败");
+            response.setData(map);
+        }
+        return response;
+    }
+
 }

@@ -19,6 +19,8 @@ import com.movision.mybatis.post.entity.PostXml;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.postLabel.service.PostLabelService;
+import com.movision.mybatis.robotComment.entity.RobotComment;
+import com.movision.mybatis.robotComment.service.RobotCommentService;
 import com.movision.mybatis.systemLayout.service.SystemLayoutService;
 import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
@@ -28,6 +30,7 @@ import com.movision.utils.ImgCompressUtil;
 import com.movision.utils.StrUtil;
 import com.movision.utils.excel.ExcelIntoEnquiryUtil;
 import com.movision.utils.excel.ExcelUpdatePostByLable;
+import com.movision.utils.excel.InputExcelToPostComment;
 import com.movision.utils.excel.InsertExcelToPost;
 import com.movision.utils.im.CheckSumBuilder;
 import com.movision.utils.oss.AliOSSClient;
@@ -108,7 +111,7 @@ public class XmlParseFacade {
     private InsertExcelToPost insertExcelToPost;
 
     @Autowired
-    private static ImgCompressUtil imgCompressUtil;
+    private RobotCommentService robotCommentService;
 
     @Autowired
     private CoverImgCompressUtil coverImgCompressUtil;
@@ -118,6 +121,9 @@ public class XmlParseFacade {
 
     @Autowired
     private CompressImgService compressImgService;
+
+    @Autowired
+    private InputExcelToPostComment ToPostComments;
 
     private static Logger log = LoggerFactory.getLogger(XmlParseFacade.class);
 
@@ -1134,5 +1140,26 @@ public class XmlParseFacade {
 
     public Map inputExcelToPostByLable(HttpServletRequest request, MultipartFile file) {
         return excelUpdatePostByLable.queryExcelIntoEnquiry(request, file);
+    }
+
+    /**
+     * 导入Excel，帖子评论
+     *
+     * @param file
+     * @param type
+     * @return
+     */
+    public Map inputExcelToPostComment(HttpServletRequest request, MultipartFile file, String type) {
+        Map map = ToPostComments.queryExcelIntoEnquiry(request, file);
+        //给刚刚导入的帖子评论增加评论类型
+        if (map.get("code").equals("200")) {
+            RobotComment comment = new RobotComment();
+            if (StringUtil.isNotEmpty(type)) {
+                comment.setType(Integer.parseInt(type));
+                System.out.print(type);
+                robotCommentService.updateRoboltComentByTypeIsNull(comment);
+            }
+        }
+        return map;
     }
 }

@@ -112,6 +112,16 @@ public class RobotCommentService {
         }
     }
 
+    public void updateRoboltComentByTypeIsNull(RobotComment comment) {
+        try {
+            logger.info("修改没有类型的评论");
+            robotCommentMapper.updateRoboltComentByTypeIsNull(comment);
+        } catch (Exception e) {
+            logger.error("修改没有类型的评论异常", e);
+            throw e;
+        }
+    }
+
     /**
      * 根据id查询机器人评论内容
      *

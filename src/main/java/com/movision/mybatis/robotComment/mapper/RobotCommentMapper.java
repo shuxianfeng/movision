@@ -28,4 +28,6 @@ public interface RobotCommentMapper {
     void updateByCommentById(RobotComment robotComment);
 
     Integer queryComentMessage(RobotComment robotComment);
+
+    void updateRoboltComentByTypeIsNull(RobotComment comment);
 }
