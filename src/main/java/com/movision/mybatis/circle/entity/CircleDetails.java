@@ -1,7 +1,6 @@
 package com.movision.mybatis.circle.entity;
 
-import com.movision.mybatis.bossUser.entity.BossUser;
-import com.movision.mybatis.user.entity.User;
+import com.movision.mybatis.user.entity.UserLike;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -58,7 +57,7 @@ public class CircleDetails implements Serializable {
 
     private String categoryname;//圈子所属类型
 
-    private List<Integer> admin;//管理员列表
+    private List<UserLike> admin;//管理员列表
 
     private String userid;//创建人id
 
@@ -260,11 +259,11 @@ public class CircleDetails implements Serializable {
         this.categoryname = categoryname;
     }
 
-    public List<Integer> getAdmin() {
+    public List<UserLike> getAdmin() {
         return admin;
     }
 
-    public void setAdmin(List<Integer> admin) {
+    public void setAdmin(List<UserLike> admin) {
         this.admin = admin;
     }
 

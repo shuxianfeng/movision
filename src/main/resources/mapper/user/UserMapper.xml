@@ -79,8 +79,8 @@
     </select>
 
     <select id="queryCircleaAministratorListById" parameterType="java.lang.Integer"
-            resultType="java.lang.Integer">
-        SELECT id FROM yw_user WHERE id in(
+            resultType="com.movision.mybatis.user.entity.UserLike">
+        SELECT id,nickname,photo FROM yw_user WHERE id in(
         SELECT userid FROM yw_circle_manager WHERE circleid=#{circleid,jdbcType=INTEGER})
     </select>
 
