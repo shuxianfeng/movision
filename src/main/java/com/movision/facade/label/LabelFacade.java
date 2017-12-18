@@ -341,11 +341,8 @@ public class LabelFacade {
      * @param type
      */
     public int userDontLike(int type, int userid, int postid) {
-        //查看该贴有没有被删除.
-       int isdel= postService.queryPostIsdel(postid);
-        int count = 0;
-        if(isdel==0) {
-            if (type == 1) {//内容差
+         int count = 0;
+             if (type == 1) {//内容差
                 //查询该帖子的热度值
                 int heat_value = postLabelService.queryPostHeatValue(postid);
                 if (heat_value >= 10) {
@@ -399,8 +396,7 @@ public class LabelFacade {
             userDontLike.setUserid(userid);  //不登录的情况下，返回0
             userDontLike.setType(type);
             userDontLikeService.insert(userDontLike);
-        }
-        return count;
+         return count;
     }
 
 

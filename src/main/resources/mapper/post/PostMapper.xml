@@ -2472,7 +2472,4 @@
         SELECT id FROM yw_post WHERE title = #{title,jdbcType=VARCHAR} AND isdel <> 1
         ]]>
     </select>
-    <select id="queryPostIsdel" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT isdel FROM  yw_post WHERE id=#{postid,jdbcType=INTEGER}
-    </select>
-</mapper>
+ </mapper>

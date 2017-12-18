@@ -341,5 +341,4 @@ public interface PostMapper {
 
     List<Integer> queryPostIdByTitle(Post post);
 
-    int queryPostIsdel(Integer postid);
-}
+ }

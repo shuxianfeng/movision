@@ -386,13 +386,13 @@
         </if>
     </select>
     <update id="updatePostHeatValue" parameterType="java.lang.Integer">
-        UPDATE yw_post SET  heat_value=heat_value-10 WHERE id=#{postid,jdbcType=INTEGER} AND  isdel=0
+        UPDATE yw_post SET  heat_value=heat_value-10 WHERE id=#{postid,jdbcType=INTEGER}
     </update>
     <select id="queryPostHeatValue" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT heat_value FROM  yw_post WHERE  id=#{postid,jdbcType=INTEGER} AND  isdel=0
+        SELECT heat_value FROM  yw_post WHERE  id=#{postid,jdbcType=INTEGER}
     </select>
     <update id="heatvale" parameterType="java.lang.Integer">
-        UPDATE yw_post SET  heat_value=0 WHERE id=#{postid,jdbcType=INTEGER} AND  isdel=0
+        UPDATE yw_post SET  heat_value=0 WHERE id=#{postid,jdbcType=INTEGER}
     </update>
     <select id="queryUserid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT  userid FROM  yw_post WHERE  id=#{postid,jdbcType=INTEGER} AND  isdel=0
