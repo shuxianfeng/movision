@@ -503,7 +503,7 @@ public class CommentService {
             commentMapper.updateCommentIsRead(map);
         } catch (Exception e) {
             log.error("更新评论已读异常", e);
-            throw e;
+//            throw e;
         }
     }
 
