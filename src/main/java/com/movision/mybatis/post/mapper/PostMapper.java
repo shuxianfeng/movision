@@ -340,4 +340,6 @@ public interface PostMapper {
     void deletePostByIDAndCircleid(Post post);
 
     List<Integer> queryPostIdByTitle(Post post);
+
+    int queryPostIsdel(Integer postid);
 }

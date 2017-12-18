@@ -2026,4 +2026,16 @@ public class PostService {
             throw e;
         }
     }
+
+
+    public int queryPostIsdel(int postid) {
+        try {
+            log.info("查询帖子有没有被删除");
+            return postMapper.queryPostIsdel(postid);
+        } catch (Exception e) {
+            log.error("查询帖子有没有被删除", e);
+            throw e;
+        }
+    }
+
 }
