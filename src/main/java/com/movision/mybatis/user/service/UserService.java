@@ -444,10 +444,10 @@ public class UserService {
      * @param
      * @return
      */
-    public List<User> queryCircleManList() {
+    public List<User> queryCircleManList(String nickname) {
         try {
             log.info("查询圈主和管理员");
-            return userMapper.findAllQueryCircleManList();
+            return userMapper.findAllQueryCircleManList(nickname);
         } catch (Exception e) {
             log.error("查询圈主和管理员异常", e);
             throw e;

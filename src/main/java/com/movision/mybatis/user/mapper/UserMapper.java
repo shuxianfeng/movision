@@ -81,7 +81,7 @@ public interface UserMapper {
 
     List<BossUser> findAllQueryIssuePostManList();
 
-    List<User> findAllQueryCircleManList();
+    List<User> findAllQueryCircleManList(@Param(value = "nickname") String nickname);
 
     List<UserVo> findAllQueryByConditionvipList(SearchUser searchUser, RowBounds rowBounds);
 

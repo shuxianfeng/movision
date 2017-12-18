@@ -771,9 +771,15 @@
         SELECT id,username FROM yw_admin_user WHERE isdel=0 AND status=0 AND username IS NOT NULL AND phone IS NOT NULL
     </select>
 
-    <select id="findAllQueryCircleManList" resultType="com.movision.mybatis.user.entity.User">
-        SELECT id,nickname FROM yw_user WHERE <![CDATA[ (id > 20000 OR id < 10000)]]> AND status=0 AND nickname IS NOT
-        NULL AND phone IS NOT NULL
+    <select id="findAllQueryCircleManList" resultType="com.movision.mybatis.user.entity.User"
+            parameterType="java.lang.String">
+        SELECT id,nickname
+        FROM yw_user
+        WHERE <![CDATA[ (id > 20000 OR id < 10000)]]>
+        AND status=0 AND nickname IS NOT NULL AND phone IS NOT NULL
+        <if test="nickname != null">
+            AND nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')
+        </if>
     </select>
 
     <select id="findAllqueryAddVSortUser" resultType="com.movision.mybatis.user.entity.UserVo"
