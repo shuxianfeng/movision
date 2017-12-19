@@ -2004,28 +2004,31 @@ public class PostFacade {
      * @param title
      * @param circleid
      * @param postcontent
-     * @param endtime
-     * @param begintime
      * @param essencedate
      * @param
      * @return
      */
-    public List<PostList> postSearch(String title, String circleid, String userid, String postcontent, String endtime,
-                                     String begintime, String pai, String essencedate, String uid, String price, String loginid, Paging<PostList> pager) {
+    public List<PostList> postSearch(String title, String circleid, String userid, String postcontent, String intime,
+                                     String pai, String essencedate, String uid, String price, String loginid, Paging<PostList> pager) {
         Map map = new HashedMap();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date end = null;
         Date beg = null;
         Date ess = null;
-        //结束时间,开始时间
-        if (!StringUtils.isEmpty(endtime) && !StringUtils.isEmpty(begintime)) {
-            try {
-                end = format.parse(endtime);
-                beg = format.parse(begintime);
-                map.put("endtime", end);
-                map.put("begintime", beg);
-            } catch (ParseException e) {
-                log.error("时间格式转换异常");
+        if (StringUtil.isNotEmpty(intime)) {
+            String[] times = intime.split(",");
+            String endtime = times[1];
+            String begintime = times[0];
+            //结束时间,开始时间
+            if (!StringUtils.isEmpty(endtime) && !StringUtils.isEmpty(begintime)) {
+                try {
+                    end = format.parse(endtime);
+                    beg = format.parse(begintime);
+                    map.put("endtime", end);
+                    map.put("begintime", beg);
+                } catch (ParseException e) {
+                    log.error("时间格式转换异常");
+                }
             }
         }
         map.put("endtime", end);
