@@ -113,13 +113,11 @@ public class UserManageFacade {
      * @param name
      * @param phone
      * @param authstatus
-     * @param begintime
-     * @param endtime
      * @param type
      * @param pager
      * @return
      */
-    public List<UserVo> queryByConditionvipList(String name, String phone, String authstatus, String begintime, String endtime, String type, Paging<UserVo> pager) {
+    public List<UserVo> queryByConditionvipList(String name, String phone, String authstatus, String intime, String type, Paging<UserVo> pager) {
         SearchUser searchUser = new SearchUser();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         if (StringUtil.isNotEmpty(name)) {
@@ -133,15 +131,20 @@ public class UserManageFacade {
         }
         Date beg = null;
         Date end = null;
-        if (StringUtil.isNotEmpty(begintime) && StringUtil.isNotEmpty(endtime)) {
-            try {
-                beg = format.parse(begintime);
-                end = format.parse(endtime);
-            } catch (ParseException e) {
-                e.printStackTrace();
+        if (StringUtil.isNotEmpty(intime)) {
+            String[] time = intime.split(",");
+            String begintime = time[0];
+            String endtime = time[1];
+            if (StringUtil.isNotEmpty(begintime) && StringUtil.isNotEmpty(endtime)) {
+                try {
+                    beg = format.parse(begintime);
+                    end = format.parse(endtime);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                searchUser.setBegintime(beg);
+                searchUser.setEndtime(end);
             }
-            searchUser.setBegintime(beg);
-            searchUser.setEndtime(end);
         }
         if (StringUtil.isNotEmpty(type)) {
             searchUser.setType(Integer.parseInt(type));
@@ -191,22 +194,25 @@ public class UserManageFacade {
      *
      * @param username
      * @param phone
-     * @param begintime
-     * @param endtime
      * @param pager
      * @return
      */
-    public List<UserVo> queryUniteConditionByApply(String username, String phone, String authstatus, String begintime, String endtime, String type, Paging<UserVo> pager) {
+    public List<UserVo> queryUniteConditionByApply(String username, String phone, String authstatus, String intime, String type, Paging<UserVo> pager) {
         Map map = new HashedMap();
         Date beg = null;
         Date end = null;
-        if (StringUtil.isNotEmpty(begintime) && StringUtil.isNotEmpty(endtime)) {
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            try {
-                beg = format.parse(begintime);
-                end = format.parse(endtime);
-            } catch (ParseException e) {
-                e.printStackTrace();
+        if (StringUtil.isNotEmpty(intime)) {
+            String[] time = intime.split(",");
+            String begintime = time[0];
+            String endtime = time[1];
+            if (StringUtil.isNotEmpty(begintime) && StringUtil.isNotEmpty(endtime)) {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                try {
+                    beg = format.parse(begintime);
+                    end = format.parse(endtime);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         }
         if (StringUtil.isNotEmpty(username)) {
@@ -245,23 +251,26 @@ public class UserManageFacade {
      * @param username
      * @param phone
      * @param authstatus
-     * @param begintime
-     * @param endtime
      * @param type
      * @param pager
      * @return
      */
-    public List<UserVo> queryUserExamineAndVerify(String username, String phone, String authstatus, String begintime, String endtime, String type, Paging<UserVo> pager) {
+    public List<UserVo> queryUserExamineAndVerify(String username, String phone, String authstatus, String intime, String type, Paging<UserVo> pager) {
         Map map = new HashedMap();
         Date beg = null;
         Date end = null;
-        if (StringUtil.isNotEmpty(begintime) && StringUtil.isNotEmpty(endtime)) {
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            try {
-                beg = format.parse(begintime);
-                end = format.parse(endtime);
-            } catch (ParseException e) {
-                e.printStackTrace();
+        if (StringUtil.isNotEmpty(intime)) {
+            String[] time = intime.split(",");
+            String begintime = time[0];
+            String endtime = time[1];
+            if (StringUtil.isNotEmpty(begintime) && StringUtil.isNotEmpty(endtime)) {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                try {
+                    beg = format.parse(begintime);
+                    end = format.parse(endtime);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         }
         if (StringUtil.isNotEmpty(username)) {
@@ -387,20 +396,25 @@ public class UserManageFacade {
      * @return
      */
     public List<UserAll> queryAllUserList(String nickname, String phone, String authentication, String vip, String seal,
-                                          String begintime, String endtime, String pointsSort, String postsumSort, String isessenceSort,
+                                          String intime, String pointsSort, String postsumSort, String isessenceSort,
                                           String fansSort, String conditionon, String conditiontwo, String price, String login,
                                           String pai, Paging<UserAll> pag) {
         Map map = new HashedMap();
         Map resa = new HashMap();
         Date beg = null;
         Date end = null;
-        if (StringUtil.isNotEmpty(begintime) && StringUtil.isNotEmpty(endtime)) {
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            try {
-                beg = format.parse(begintime);
-                end = format.parse(endtime);
-            } catch (ParseException e) {
-                e.printStackTrace();
+        if (StringUtil.isNotEmpty(intime)) {
+            String[] time = intime.split(",");
+            String begintime = time[0];
+            String endtime = time[1];
+            if (StringUtil.isNotEmpty(begintime) && StringUtil.isNotEmpty(endtime)) {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                try {
+                    beg = format.parse(begintime);
+                    end = format.parse(endtime);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         }
         if (StringUtil.isNotEmpty(nickname)) {
