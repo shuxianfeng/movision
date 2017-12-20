@@ -19,7 +19,7 @@ public interface ManageTypeMapper {
 
     int updateByPrimaryKey(ManageType record);
 
-    List<ManageType> findAllqueryAdvertisementTypeList(RowBounds rowBounds);
+    List<ManageType> findAllqueryAdvertisementTypeList();
 
     int addAdvertisementType(Map map);
 

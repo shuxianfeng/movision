@@ -28,10 +28,10 @@ public class ManageTypeService {
      *
      * @return
      */
-    public List<ManageType> queryAdvertisementTypeList(Paging<ManageType> pager) {
+    public List<ManageType> queryAdvertisementTypeList() {
         try {
             logge.info("查询广告类型列表");
-            return manageTypeMapper.findAllqueryAdvertisementTypeList(pager.getRowBounds());
+            return manageTypeMapper.findAllqueryAdvertisementTypeList();
         } catch (Exception e) {
             logge.error("查询广告类型列表异常");
             throw e;

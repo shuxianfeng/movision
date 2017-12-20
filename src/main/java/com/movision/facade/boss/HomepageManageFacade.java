@@ -43,8 +43,8 @@ public class HomepageManageFacade {
      *
      * @return
      */
-    public List<ManageType> queryAdvertisementTypeList(Paging<ManageType> pager) {
-        return manageTypeService.queryAdvertisementTypeList(pager);
+    public List<ManageType> queryAdvertisementTypeList() {
+        return manageTypeService.queryAdvertisementTypeList();
     }
 
     /**
@@ -294,4 +294,6 @@ public class HomepageManageFacade {
         map.put("resault", i);
         return map;
     }
+
+
 }

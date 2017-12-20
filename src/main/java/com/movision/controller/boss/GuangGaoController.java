@@ -224,16 +224,15 @@ public class GuangGaoController {
      */
     @ApiOperation(value = "查询广告类型列表", notes = "用于查询广告类型列表接口", response = Response.class)
     @RequestMapping(value = "query_guang_gao_type", method = RequestMethod.POST)
-    public Response queryAdvertisementTypeList(@ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                               @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+    public Response queryAdvertisementTypeList() {
         Response response = new Response();
-        Paging<ManageType> pager = new Paging<ManageType>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<ManageType> type = homepageManageFacade.queryAdvertisementTypeList(pager);
+        //Paging<ManageType> pager = new Paging<ManageType>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<ManageType> type = homepageManageFacade.queryAdvertisementTypeList();
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        pager.result(type);
-        response.setData(pager);
+        //pager.result(type);
+        response.setData(type);
         return response;
     }
 
@@ -262,7 +261,6 @@ public class GuangGaoController {
         response.setData(pager);
         return response;
     }
-
 
     /**
      * 添加广告类型
