@@ -784,20 +784,6 @@ public class UserFacade {
         paramap.put("userid", Integer.parseInt(userid));
         List<UserVo> myFollowAuthorList = userService.findAllMineFollowAuthor(paramap, pager);
 
-//        for (int i=0; i<myFollowAuthorList.size(); i++){
-//            //遍历获取作者的已发帖子数
-//            UserVo vo = myFollowAuthorList.get(i);
-//            int id = vo.getId();//查询到的作者userid
-//            paramap.put("id", id);
-//            int count = userService.queryPostNumByAuthor(paramap);
-//            vo.setPostsum(count);
-//
-//            //获取当前用户是否关注过该作者
-//            int sum = userService.queryIsFollowAuthor(paramap);
-//            vo.setIsfollow(sum);
-//
-//            myFollowAuthorList.set(i, vo);
-//        }
         pager.result(myFollowAuthorList);
         return pager;
     }

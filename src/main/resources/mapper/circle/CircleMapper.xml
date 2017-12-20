@@ -1011,11 +1011,13 @@
 
     <!--2.0查询用户关注的圈子列表，有分页-->
     <select id="findAllMineFollowCircle" resultType="com.movision.mybatis.circle.entity.CircleVo" >
-        SELECT c.id, c.name, c.maylikeimg
+        SELECT c.id, c.name, c.maylikeimg, d.intime as intime
             FROM yw_circle c
+            LEFT JOIN yw_follow_circle d ON c.id = d.circleid
             WHERE c.isdel = 0
             AND c.status = 1
-            AND id IN(SELECT circleid FROM yw_follow_circle WHERE userid = #{userid})
+                AND d.userid = #{userid}
+            ORDER BY intime DESC
     </select>
     
     <select id="findAllHotCircleList" resultType="com.movision.mybatis.circle.entity.CircleVo" >

@@ -1411,12 +1411,14 @@
     <select id="findAllMineFollowAuthor" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.UserVo" >
         SELECT u.id, u.nickname, u.photo, u.fans,
           (SELECT count(*) FROM yw_post WHERE userid = u.id AND isdel = '0') AS postsum,
-          (SELECT count(*) FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER} AND interestedusers = u.id) AS isfollow
+          (SELECT count(*) FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER} AND interestedusers = u.id) AS isfollow,
+          fu.intime as intime
         FROM yw_user u
         JOIN yw_follow_user fu ON u.id = fu.interestedusers
         WHERE u.status = 0
         AND fu.userid = #{userid,jdbcType=INTEGER}
         AND u.id != #{userid,jdbcType=INTEGER}
+        ORDER  BY  intime DESC
     </select>
 
     <!--查询该作者有没有被当前登录的用户关注过-->

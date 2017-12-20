@@ -245,9 +245,11 @@
 
     <!--查询我的.关注.关注的标签列表-->
     <select id="findAllMineFollowLabel" resultType="com.movision.mybatis.postLabel.entity.PostLabelVo">
-        SELECT t1.id AS labelid, t1.name, t1.photo, t1.use_count AS useCount, t1.fans FROM yw_post_label t1
+        SELECT t1.id AS labelid, t1.name, t1.photo, t1.use_count AS useCount, t1.fans, t2.intime AS intime
+        FROM yw_post_label t1
         LEFT JOIN yw_follow_label t2 ON t1.id = t2.labelid
         WHERE t2.userid = #{userid}
+        ORDER BY intime DESC
     </select>
 
     <select id="queryPostLabelById" parameterType="com.movision.mybatis.postLabel.entity.PostLabel"
