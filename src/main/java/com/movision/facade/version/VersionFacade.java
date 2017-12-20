@@ -34,14 +34,36 @@ public class VersionFacade {
             verintarr[i] = Integer.parseInt(verstrarr[i]);
         }
 
-        if (verintarr[0] < newintarr[0]){
-            return 0;//app版本号过低
-        }else if (verintarr[1] < newintarr[1]){
-            return 0;//app版本号过低
-        }else if (verintarr[2] < newintarr[2]){
-            return 0;//app版本号过低
-        }else{
+//        if (verintarr[0] < newintarr[0]){
+//            return 0;//app版本号过低
+//        }else if (verintarr[1] < newintarr[1]){
+//            return 0;//app版本号过低
+//        }else if (verintarr[2] < newintarr[2]){
+//            return 0;//app版本号过低
+//        }else{
+//            return 1;//app版本最新
+//        }
+
+        if (verintarr[0] > newintarr[0]){
             return 1;//app版本最新
+        }else if (verintarr[0] < newintarr[0]){
+            return 0;//app版本过低
+        }else {//第一位相等再判断第二位
+
+            if (verintarr[1] > newintarr[1]){
+                return 1;//app版本最新
+            }else if (verintarr[1] < newintarr[1]){
+                return 0;//app版本过低
+            }else {//第二位相等再判断第三位
+
+                if (verintarr[2] >= newintarr[2]){
+                    return 1;//app版本最新
+                }else {
+                    return 0;//app版本过低
+                }
+
+            }
+
         }
     }
 }
