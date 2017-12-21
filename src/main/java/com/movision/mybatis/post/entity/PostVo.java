@@ -138,6 +138,27 @@ public class PostVo implements Serializable {
 
     private List<CommentVo> commentVos;
 
+
+    private Integer takeCount;//帖子投票总数
+
+    private Integer istake;//是否投票
+
+    public Integer getIstake() {
+        return istake;
+    }
+
+    public void setIstake(Integer istake) {
+        this.istake = istake;
+    }
+
+    public Integer getTakeCount() {
+        return takeCount;
+    }
+
+    public void setTakeCount(Integer takeCount) {
+        this.takeCount = takeCount;
+    }
+
     public PostReturnAll getPostReturnAlls() {
         return postReturnAlls;
     }

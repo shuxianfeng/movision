@@ -55,6 +55,7 @@ public class AppWaterfallController {
     @Autowired
     private FacadePost1117 facadePost1117;
 
+
     /**
      * 下拉刷新
      *
@@ -409,6 +410,26 @@ public class AppWaterfallController {
         return response;
     }
 
+
+    @ApiOperation(value = "活动详情中的最热最新_20171220", notes = "活动详情中的最热最新_20171220", response = Response.class)
+    @RequestMapping(value = "activePostDetailHot_20171220", method = RequestMethod.POST)
+    public Response activePostDetailHot(@ApiParam(value = "类型 0 最热 1 最新") @RequestParam int type,
+                                        @ApiParam(value = "活动id") @RequestParam String postid,
+                                        @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                        @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize,
+                                        @ApiParam(value = "设备号") @RequestParam String device) {
+        Response response = new Response();
+        Paging<PostVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List result = facadePost.activePostDetailHot_20171220(type, postid, pager,device);
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        pager.result(result);
+        response.setData(pager);
+        return response;
+    }
+
+
     @ApiOperation(value = "点击圈子标签页上半部分", notes = "点击圈子标签页上半部分", response = Response.class)
     @RequestMapping(value = "queryCircleByPostid", method = RequestMethod.POST)
     public Response queryCircleByPostid(@ApiParam(value = "圈子id") @RequestParam String circleid,
@@ -725,12 +746,49 @@ public class AppWaterfallController {
         return response;
     }
 
+
+    @ApiOperation(value = "获取首页活动图片", notes = "获取首页活动图片", response = Response.class)
+    @RequestMapping(value = "queryIndexPic", method = RequestMethod.POST)
+    public Response queryIndexPic() {
+        Response response = new Response();
+        String imgurl = facadePost.queryIndexPic();
+        if (response.getCode() == 200) {
+            response.setMessage("获取成功");
+        } else {
+            response.setMessage("获取失败");
+        }
+        response.setData(imgurl);
+        return response;
+    }
+
     @ApiOperation(value = "查询缓存中的帖子的浏览数等属性（修复帖子列表和帖子详情浏览数等属性不对称问题）", notes = "查询缓存中的帖子的浏览数等属性（修复帖子列表和帖子详情浏览数等属性不对称问题）", response = Response.class)
     @RequestMapping(value = "get_app_cache_post_attribute", method = RequestMethod.GET)
     public Response getAppCachePostAttr(@ApiParam(value = "帖子id，字符串形式，以逗号分隔") @RequestParam() String postids) {
         Response response = new Response();
         response.setData(facadePost.querySelectedSortedPosts(postids));
         response.setMessage("查询成功");
+        return response;
+    }
+
+
+
+    @ApiOperation(value = "跨年活动投票接口", notes = "跨年活动投票接口", response = Response.class)
+    @RequestMapping(value = "takeActive", method = RequestMethod.POST)
+    public Response takeActive(@ApiParam(value = "帖子id") @RequestParam String postid,
+                               @ApiParam(value = "设备号") @RequestParam String device,
+                               @ApiParam(value = "活动id") @RequestParam String activeid){
+        Response response =new Response();
+        Map count= facadePost.takeActive(device,postid,activeid);
+        if(response.getCode()==200&& (int) count.get("code") == 200){
+            response.setMessage("获取成功");
+            response.setData(count);
+        }else if((int) count.get("code") == 300){
+            response.setCode(300);
+            response.setMessage("该设备已投过该帖子");
+        }else if((int) count.get("code") == 400){
+            response.setCode(400);
+            response.setMessage("该设备已达到投票上限");
+        }
         return response;
     }
 }

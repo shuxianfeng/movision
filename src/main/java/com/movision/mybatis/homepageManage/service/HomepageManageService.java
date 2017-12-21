@@ -219,4 +219,15 @@ public class HomepageManageService {
         }
     }
 
+
+    public String queryIndexPic(){
+        try {
+            log.info("获取首页活动图片");
+            return homepageManageMapper.queryIndexPic();
+        }catch (Exception e){
+            log.error("获取首页活动图片失败");
+            throw e;
+        }
+    }
+
 }

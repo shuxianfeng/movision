@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.activeTake.mapper.ActiveTakeMapper" >
+  <resultMap id="BaseResultMap" type="com.movision.mybatis.activeTake.entity.ActiveTake" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="postid" property="postid" jdbcType="INTEGER" />
+    <result column="device" property="device" jdbcType="VARCHAR" />
+    <result column="intime" property="intime" jdbcType="TIMESTAMP" />
+    <result column="activeid" property="activeid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, postid, device, intime,activeid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yw_active_take
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yw_active_take
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.movision.mybatis.activeTake.entity.ActiveTake" >
+    insert into yw_active_take (id, postid, device, 
+      intime)
+    values (#{id,jdbcType=INTEGER}, #{postid,jdbcType=INTEGER}, #{device,jdbcType=VARCHAR}, 
+      #{intime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.movision.mybatis.activeTake.entity.ActiveTake" >
+    insert into yw_active_take
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="postid != null" >
+        postid,
+      </if>
+      <if test="device != null" >
+        device,
+      </if>
+      <if test="intime != null" >
+        intime,
+      </if>
+      <if test="activeid != null" >
+        activeid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="postid != null" >
+        #{postid,jdbcType=INTEGER},
+      </if>
+      <if test="device != null" >
+        #{device,jdbcType=VARCHAR},
+      </if>
+      <if test="intime != null" >
+        #{intime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeid != null" >
+        #{activeid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.activeTake.entity.ActiveTake" >
+    update yw_active_take
+    <set >
+      <if test="postid != null" >
+        postid = #{postid,jdbcType=INTEGER},
+      </if>
+      <if test="device != null" >
+        device = #{device,jdbcType=VARCHAR},
+      </if>
+      <if test="intime != null" >
+        intime = #{intime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.activeTake.entity.ActiveTake" >
+    update yw_active_take
+    set postid = #{postid,jdbcType=INTEGER},
+      device = #{device,jdbcType=VARCHAR},
+      intime = #{intime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="deviceCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+    SELECT COUNT(1) FROM yw_active_take WHERE  device = #{device,jdbcType=VARCHAR} AND activeid=#{activeid,jdbcType=INTEGER}
+  </select>
+
+   <insert id="takeActive" parameterType="com.movision.mybatis.activeTake.entity.ActiveTake" >
+    insert into yw_active_take
+     <trim prefix="(" suffix=")" suffixOverrides="," >
+       <if test="id != null" >
+         id,
+       </if>
+       <if test="postid != null" >
+         postid,
+       </if>
+       <if test="device != null" >
+         device,
+       </if>
+       <if test="intime != null" >
+         intime,
+       </if>
+       <if test="activeid != null" >
+         activeid,
+       </if>
+     </trim>
+     <trim prefix="values (" suffix=")" suffixOverrides="," >
+       <if test="id != null" >
+         #{id,jdbcType=INTEGER},
+       </if>
+       <if test="postid != null" >
+         #{postid,jdbcType=INTEGER},
+       </if>
+       <if test="device != null" >
+         #{device,jdbcType=VARCHAR},
+       </if>
+       <if test="intime != null" >
+         #{intime,jdbcType=TIMESTAMP},
+       </if>
+       <if test="activeid != null" >
+         #{activeid,jdbcType=INTEGER},
+       </if>
+     </trim>
+  </insert>
+  <select id="postidCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_active_take WHERE  device = #{device,jdbcType=VARCHAR} AND activeid=#{activeid,jdbcType=INTEGER} and postid=#{postid,jdbcType=INTEGER}
+  </select>
+</mapper>
