@@ -353,7 +353,7 @@
         UPDATE yw_homepage_manage SET orderid=#{orderid,jdbcType=INTEGER} WHERE id=#{id,jdbcType=INTEGER}
     </update>
 
-    <select id="queryIndexPic" resultType="java.lang.String">
+    <select id="queryIndexPic" resultType="com.movision.mybatis.homepageManage.entity.HomepageManage">
         SELECT  postid,url,mark FROM yw_homepage_manage WHERE topictype=10 AND  isdel=0
     </select>
 </mapper>
