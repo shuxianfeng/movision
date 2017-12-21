@@ -2482,5 +2482,9 @@
         yw_circle c ON c.id=p.circleid WHERE
         p.activeid=#{postid,jdbcType=VARCHAR} AND p.isdel=0 ORDER BY p.intime DESC
     </select>
-
+    <select id="findAllActivePostTake_20171220"  parameterType="java.lang.String" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.*,u.nickname,u.photo,c.name AS circlename,(SELECT COUNT(1) FROM yw_active_take WHERE  activeid=#{postid,jdbcType=VARCHAR} and postid=p.id) AS takeCount,(SELECT COUNT(1) FROM yw_active_take WHERE  device = #{device,jdbcType=VARCHAR} AND activeid=#{postid,jdbcType=VARCHAR} AND postid=p.id) AS istake FROM yw_post p LEFT JOIN yw_user u ON u.id=p.userid LEFT JOIN
+        yw_circle c ON c.id=p.circleid WHERE
+        p.activeid=#{postid,jdbcType=VARCHAR} AND p.isdel=0 ORDER BY takeCount DESC
+    </select>
 </mapper>
