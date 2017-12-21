@@ -220,7 +220,7 @@ public class HomepageManageService {
     }
 
 
-    public String queryIndexPic(){
+    public List<HomepageManage> queryIndexPic(){
         try {
             log.info("获取首页活动图片");
             return homepageManageMapper.queryIndexPic();

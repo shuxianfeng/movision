@@ -39,6 +39,7 @@ import com.movision.mybatis.followUser.service.FollowUserService;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.service.GoodsService;
+import com.movision.mybatis.homepageManage.entity.HomepageManage;
 import com.movision.mybatis.homepageManage.service.HomepageManageService;
 import com.movision.mybatis.labelSearchTerms.entity.LabelSearchTerms;
 import com.movision.mybatis.labelSearchTerms.service.LabelSearchTermsService;
@@ -4707,13 +4708,9 @@ public class FacadePost {
     /**
      * 获取首页活动图片
      */
-    public String queryIndexPic(){
-        String url =  homepageManageService.queryIndexPic();
-        if (StringUtil.isNotEmpty(url)){
-            return url;
-        }else {
-            return "";
-        }
+    public List<HomepageManage> queryIndexPic(){
+        List<HomepageManage> url =  homepageManageService.queryIndexPic();
+        return url;
     }
 
 }

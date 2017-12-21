@@ -35,11 +35,11 @@
     <select id="queryBannerList" parameterType="java.lang.Integer" resultType="com.movision.mybatis.homepageManage.entity.HomepageManage">
         SELECT * FROM yw_homepage_manage WHERE topictype = #{topictype,jdbcType=INTEGER} ORDER BY orderid
     </select>
-    
+
     <select id="myinvite" parameterType="java.lang.Integer" resultType="java.lang.String" >
         SELECT url FROM yw_homepage_manage WHERE topictype = #{topictype,jdbcType=INTEGER}
     </select>
-    
+
     <select id="getOpenAppImg" resultType="java.lang.String" >
         SELECT url FROM yw_homepage_manage WHERE topictype = '8'
     </select>
@@ -354,6 +354,6 @@
     </update>
 
     <select id="queryIndexPic" resultType="java.lang.String">
-        SELECT  url FROM yw_homepage_manage WHERE topictype=10 AND  isdel=0
+        SELECT  postid,url,mark FROM yw_homepage_manage WHERE topictype=10 AND  isdel=0
     </select>
 </mapper>
