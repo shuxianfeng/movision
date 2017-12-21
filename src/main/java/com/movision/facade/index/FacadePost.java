@@ -4285,6 +4285,11 @@ public class FacadePost {
             countView(list);
             findPostLabel(list);
             findAllCircleName(list);
+        }else if(type==2){//排行榜
+            list = postService.findAllActivePostTake_20171220(postid, paging,device);
+            countView(list);
+            findPostLabel(list);
+            findAllCircleName(list);
         }
         return list;
     }
