@@ -185,7 +185,8 @@
     </select>
 
     <!--美番2.0发现作者页查询兴趣作者列表-->
-    <select id="findAllInterestAuthor" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.Author">
+    <select id="findAllInterestAuthor" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.user.entity.Author">
         SELECT t.* FROM (
             (SELECT id, nickname, photo, phone, heat_value FROM yw_user WHERE id IN (
                 SELECT userid FROM yw_post WHERE circleid IN (
@@ -214,31 +215,31 @@
     <!--美番2.0发现作者页查询附近作者列表-->
     <select id="findAllNearAuthor" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.Author">
         SELECT t.* FROM(
-            SELECT id, nickname, photo, phone, ROUND(
-                6378.138 * 2 * ASIN(
-                    SQRT(
-                        POW(
-                            SIN(
-                                (
-                                #{lat,jdbcType=DOUBLE} * PI() / 180 - latitude * PI() / 180
-                                ) / 2
-                            ),2)
-                        + COS(#{lat,jdbcType=DOUBLE} * PI() / 180) * COS(latitude * PI() / 180) * POW(
-                            SIN(
-                                (
-                                #{lng,jdbcType=DOUBLE} * PI() / 180 - longitude * PI() / 180
-                                ) / 2
-                            ),2)
-                    )
-                ) * 1000
-            ) AS distance FROM yw_user
+        SELECT id, nickname, photo, phone, ROUND(
+        6378.138 * 2 * ASIN(
+        SQRT(
+        POW(
+        SIN(
+        (
+        #{lat,jdbcType=DOUBLE} * PI() / 180 - latitude * PI() / 180
+        ) / 2
+        ),2)
+        + COS(#{lat,jdbcType=DOUBLE} * PI() / 180) * COS(latitude * PI() / 180) * POW(
+        SIN(
+        (
+        #{lng,jdbcType=DOUBLE} * PI() / 180 - longitude * PI() / 180
+        ) / 2
+        ),2)
+        )
+        ) * 1000
+        ) AS distance FROM yw_user
         ) t
         <where>
             30000 > t.distance
             AND t.id != '-1'
             <if test="userid != null and userid != ''">
                 AND t.id NOT IN (
-                  SELECT interestedusers FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER}
+                SELECT interestedusers FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER}
                 )
                 AND t.id != #{userid,jdbcType=INTEGER}
             </if>
@@ -646,9 +647,9 @@
         INSERT INTO yw_goods_share (userid, goodsid, intime, channel)
         VALUES (#{userid,jdbcType=INTEGER}, #{goodsid,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP}, #{channel,jdbcType=VARCHAR})
     </insert>
-    
+
     <!--插入举报用户记录-->
-    <insert id="accusationUser" parameterType="java.util.Map" >
+    <insert id="accusationUser" parameterType="java.util.Map">
         INSERT INTO yw_user_accusation (userid, beaccid, intime)
         VALUES (#{userid,jdbcType=INTEGER}, #{beaccid,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP})
     </insert>
@@ -872,11 +873,11 @@
         AND p5.isdel=0)) AS besharesum,
         (SELECT COALESCE(SUM(commentsum),0) FROM yw_post p3 WHERE p3.userid=vd.userid AND p3.isdel=0) AS commentsum,
         (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=vd.userid AND p4.isdel=0) AS zansum,u.fans,
-        (SELECT apply_time FROM yw_apply_vip_detail WHERE userid = u.id ORDER BY userid,apply_time DESC LIMIT 1)AS
-        applydate
+        (SELECT apply_time FROM yw_apply_vip_detail WHERE userid = u.id ORDER BY userid,apply_time DESC LIMIT 1) AS
+        applydate,
+        COALESCE(au.stauthstatus,3) AS authstatus
         FROM yw_user u LEFT JOIN yw_audit_vip_detail vd ON vd.apply_userid=u.id LEFT JOIN yw_autonym_authentication au
-        ON
-        au.userid=u.id
+        ON au.userid=u.id
         WHERE vd.apply_userid=u.id AND u.phone IS NOT NULL
         AND <![CDATA[ (u.id > 20000 OR u.id< 10000)]]>
         <if test="username!=null">
@@ -1223,13 +1224,13 @@
         </set>
         WHERE
     </update>
-    
-    <update id="updateUserAttention" parameterType="java.lang.Integer" >
+
+    <update id="updateUserAttention" parameterType="java.lang.Integer">
         UPDATE yw_user
         SET attention = attention + 1
         WHERE id = #{userid,jdbcType=INTEGER}
     </update>
-    
+
     <select id="queryUserParticulars" parameterType="java.lang.String"
             resultType="com.movision.mybatis.user.entity.UserParticulars">
         SELECT u.*,
@@ -1410,7 +1411,8 @@
     </select>
 
     <!--2.0查询当前用户关注的所有作者列表-->
-    <select id="findAllMineFollowAuthor" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.UserVo" >
+    <select id="findAllMineFollowAuthor" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.user.entity.UserVo">
         SELECT u.id, u.nickname, u.photo, u.fans,
           (SELECT count(*) FROM yw_post WHERE userid = u.id AND isdel = '0') AS postsum,
           (SELECT count(*) FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER} AND interestedusers = u.id) AS isfollow,
@@ -1424,13 +1426,13 @@
     </select>
 
     <!--查询该作者有没有被当前登录的用户关注过-->
-    <select id="queryIsFollowAuthor" parameterType="java.util.Map" resultType="java.lang.Integer" >
+    <select id="queryIsFollowAuthor" parameterType="java.util.Map" resultType="java.lang.Integer">
         SELECT count(*) FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER} AND interestedusers =
         #{id,jdbcType=INTEGER}
     </select>
 
     <!--2.0查询当前用户的所有粉丝列表-->
-    <select id="findAllMineFans" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.UserVo" >
+    <select id="findAllMineFans" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.UserVo">
         SELECT u.id, u.nickname, u.photo, u.fans,
           (SELECT count(*) FROM yw_post WHERE userid = u.id AND isdel = '0') AS postsum,
           (SELECT count(*) FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER} AND interestedusers = u.id) AS isfollow
@@ -1509,14 +1511,14 @@
     <select id="queryUserIsrecommend" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT isrecommend FROM yw_user WHERE id = #{id,jdbcType=INTEGER} AND status = 0
     </select>
-    
-    <select id="queryInviteNum" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
+
+    <select id="queryInviteNum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT count(*) FROM yw_user WHERE referrals = (
           SELECT invitecode FROM yw_user WHERE id = #{userid,jdbcType=INTEGER}
         )
     </select>
-    
-    <select id="queryFinishUserInfo" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
+
+    <select id="queryFinishUserInfo" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT count(*) FROM yw_user
         WHERE id = #{userid,jdbcType=INTEGER}
           AND photo IS NOT NULL
@@ -1524,16 +1526,17 @@
           AND sex IS NOT NULL
           AND birthday IS NOT NULL
     </select>
-    
+
     <!--查询当前用户邀请的好友列表-->
-    <select id="findAllMyInviteList" parameterType="java.lang.Integer" resultType="com.movision.mybatis.user.entity.InviteUserVo" >
+    <select id="findAllMyInviteList" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.user.entity.InviteUserVo">
         SELECT id, nickname, photo FROM yw_user WHERE referrals = (
           SELECT invitecode FROM yw_user WHERE id = #{userid,jdbcType=INTEGER}
         )
     </select>
 
     <!--查询我的模块邀请好友页面里的邀请好友排行榜数据-->
-    <select id="findAllInviteRank" resultType="com.movision.mybatis.user.entity.InviteUserVo" >
+    <select id="findAllInviteRank" resultType="com.movision.mybatis.user.entity.InviteUserVo">
         SELECT t2.id, t2.nickname, t2.photo, t2.invitecode, t2.referrals, t1.invitenum
         FROM yw_user_invite_rank t1
         LEFT JOIN yw_user t2 ON t1.userid = t2.id
@@ -1563,7 +1566,7 @@
     </select>
 
     <!--统计当前用户足迹点总数-->
-    <select id="getfootmap" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
+    <select id="getfootmap" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT count(*) FROM yw_post_label
         WHERE type = '0' AND isdel = '0'
         AND id IN (
@@ -1603,14 +1606,16 @@ SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
         select max(id)
         from yw_user u
         where
-        <![CDATA[ u.id <=20000 AND u.id >= 10000 ]]>
+        <![CDATA[ u.id <=20000 AND u.id >= 10000
+        ]]>
     </select>
 
     <!-- 查询所有机器人用户 -->
     <select id="selectRobotUser" resultType="com.movision.mybatis.user.entity.User">
         SELECT *
         FROM yw_user u where
-        <![CDATA[ u.id <= 20000 AND u.id >= 10000 ]]>
+        <![CDATA[ u.id <= 20000 AND u.id >= 10000
+        ]]>
     </select>
 
     <!-- 查询机器人列表 -->
@@ -1631,7 +1636,9 @@ SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
     <!-- 随机查询机器人 -->
     <select id="queryRandomUser" resultType="com.movision.mybatis.user.entity.User" parameterType="java.lang.Integer">
         <![CDATA[
+
         SELECT * FROM yw_user u where u.id<=20000 AND u.id >= 10000 ORDER BY RAND() LIMIT 0,#{number,jdbcType=INTEGER}
+
         ]]>
     </select>
 
