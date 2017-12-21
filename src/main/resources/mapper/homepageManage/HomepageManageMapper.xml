@@ -352,4 +352,8 @@
     <update id="updateAtionAdvertisementOrderid" parameterType="java.util.Map">
         UPDATE yw_homepage_manage SET orderid=#{orderid,jdbcType=INTEGER} WHERE id=#{id,jdbcType=INTEGER}
     </update>
+
+    <select id="queryIndexPic" resultType="java.lang.String">
+        SELECT  url FROM yw_homepage_manage WHERE topictype=10 AND  isdel=0
+    </select>
 </mapper>
