@@ -751,7 +751,7 @@ public class AppWaterfallController {
     @RequestMapping(value = "queryIndexPic", method = RequestMethod.POST)
     public Response queryIndexPic() {
         Response response = new Response();
-        String imgurl = facadePost.queryIndexPic();
+        List imgurl = facadePost.queryIndexPic();
         if (response.getCode() == 200) {
             response.setMessage("获取成功");
         } else {
