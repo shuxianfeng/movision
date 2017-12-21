@@ -728,7 +728,7 @@
         avd.apply_id WHERE status = 0 AND vd.userid = u.id LIKE 1) AS applydate,au.authstatus
         FROM yw_user u
         LEFT JOIN yw_autonym_authentication au ON au.userid=u.id
-        INNER JOIN yw_apply_vip_detail vd ON vd.userid = u.id
+        INNER JOIN (SELECT * FROM yw_apply_vip_detail WHERE isdel = 1 GROUP BY userid) vd ON vd.userid = u.id
         WHERE u.isdv>0 AND u.status=0
         AND <![CDATA[ (u.id > 20000 OR u.id < 10000) ]]>
         <if test="name!=null">
