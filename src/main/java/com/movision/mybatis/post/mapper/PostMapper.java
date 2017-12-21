@@ -7,6 +7,7 @@ import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.postHeatvalueEverydayRecord.entity.PostHeatvalueEverydayRecord;
 import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
 
@@ -341,4 +342,7 @@ public interface PostMapper {
 
     List<Integer> queryPostIdByTitle(Post post);
 
- }
+    List<PostVo> findAllActivePost_20171220(@Param(value ="postid")String postid, RowBounds rowBounds, @Param(value = "device")String device);
+
+    List<PostVo> findAllActivePostIntime_20171220(@Param(value ="postid")String postid, RowBounds rowBounds,  @Param(value = "device")String device);
+}

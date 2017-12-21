@@ -45,4 +45,5 @@ public interface HomepageManageMapper {
 
     int updateAtionAdvertisementOrderid(Map map);
 
+    String queryIndexPic();
 }

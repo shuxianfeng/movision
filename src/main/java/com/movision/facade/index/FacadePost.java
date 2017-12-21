@@ -21,6 +21,8 @@ import com.movision.mybatis.accusation.entity.Accusation;
 import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.activePart.entity.ActivePart;
 import com.movision.mybatis.activePart.service.ActivePartService;
+import com.movision.mybatis.activeTake.entity.ActiveTake;
+import com.movision.mybatis.activeTake.service.ActiveTakeService;
 import com.movision.mybatis.circle.entity.CirclePost;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circle.service.CircleService;
@@ -37,6 +39,7 @@ import com.movision.mybatis.followUser.service.FollowUserService;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.service.GoodsService;
+import com.movision.mybatis.homepageManage.service.HomepageManageService;
 import com.movision.mybatis.labelSearchTerms.entity.LabelSearchTerms;
 import com.movision.mybatis.labelSearchTerms.service.LabelSearchTermsService;
 import com.movision.mybatis.opularSearchTerms.service.OpularSearchTermsService;
@@ -191,17 +194,20 @@ public class FacadePost {
     private TestIntimeService testIntimeService;
     @Autowired
     private CityService cityService;
-/*
+ /*
     @Autowired
     private UserBehaviorService userBehaviorService;
 */
+    @Autowired
+    private ActiveTakeService activeTakeService;
 
     @Autowired
     private SystemLayoutService systemLayoutService;
 
     @Autowired
     private XmlParseFacade xmlParseFacade;
-
+    @Autowired
+    private HomepageManageService homepageManageService;
 
     public PostVo queryPostDetail(String postid, String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         //通过userid、postid查询该用户有没有关注该圈子的权限
@@ -4251,7 +4257,7 @@ public class FacadePost {
             countView(list);
             findPostLabel(list);
             findAllCircleName(list);
-        } else if (type == 1) {//最新
+         } else if (type == 1) {//最新
             list = postService.findAllActivePostIntime(Integer.parseInt(postid), paging);
             countView(list);
             findPostLabel(list);
@@ -4259,6 +4265,30 @@ public class FacadePost {
         }
         return list;
     }
+
+    /**
+     * 活动详情里的最热最新
+     *2017-12-20 修改 增加帖子投票总数和是否已投票
+     * @param type
+     * @param postid
+     * @return
+     */
+    public List activePostDetailHot_20171220(int type, String postid, Paging<PostVo> paging,String device) {
+        List<PostVo> list = null;
+        if (type == 0) {//最热
+            list = postService.findAllActivePost_20171220(postid, paging,device);
+            countView(list);
+            findPostLabel(list);
+            findAllCircleName(list);
+        } else if (type == 1) {//最新
+            list = postService.findAllActivePostIntime_20171220(postid, paging,device);
+            countView(list);
+            findPostLabel(list);
+            findAllCircleName(list);
+        }
+        return list;
+    }
+
 
     /**
      * 关注用户
@@ -4630,6 +4660,55 @@ public class FacadePost {
             intArr[i] = Integer.valueOf(strArr[i]);
         }
         return postService.querySelectedSortedPosts(intArr);
+    }
+
+
+    /**
+     * 跨年活动投票
+     * @param
+     * @return
+     */
+    public Map takeActive(String device ,String postid,String activeid){
+        //查询这个设备号有没有投过10次
+        Map map = new HashMap();
+        map.put("device",device);
+        map.put("activeid",Integer.parseInt(activeid));
+        int count=activeTakeService.deviceCount(map);
+        //查看这个设备号对这个帖子有没有投过票
+        Map map1 = new HashMap();
+        map1.put("device",device);
+        map1.put("activeid",Integer.parseInt(activeid));
+        map1.put("postid",Integer.parseInt(postid));
+        int postidCoun=activeTakeService.postidCount(map1);
+        Map map2 = new HashMap();
+        int ok=0;
+        if(count<10) {
+            if(postidCoun==0) {
+                ActiveTake activeTake = new ActiveTake();
+                activeTake.setDevice(device);
+                activeTake.setPostid(Integer.parseInt(postid));
+                activeTake.setIntime(new Date());
+                activeTake.setActiveid(Integer.parseInt(activeid));
+                ok = activeTakeService.takeActive(activeTake);
+                map2.put("code",200);
+            }else {
+                map2.put("code",300);
+            }
+        }else {
+            map2.put("code",400);
+        }
+        return map2;
+    }
+    /**
+     * 获取首页活动图片
+     */
+    public String queryIndexPic(){
+        String url =  homepageManageService.queryIndexPic();
+        if (StringUtil.isNotEmpty(url)){
+            return url;
+        }else {
+            return "";
+        }
     }
 
 }

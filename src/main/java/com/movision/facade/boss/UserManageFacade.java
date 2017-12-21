@@ -132,6 +132,7 @@ public class UserManageFacade {
         Date beg = null;
         Date end = null;
         if (StringUtil.isNotEmpty(intime)) {
+            intime = intime.replaceAll(" ", "");
             String[] time = intime.split(",");
             String begintime = time[0];
             String endtime = time[1];

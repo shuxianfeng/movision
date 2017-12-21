@@ -2028,5 +2028,27 @@ public class PostService {
     }
 
 
+    public List<PostVo> findAllActivePost_20171220(String postid, Paging<PostVo> paging, String device) {
+        try {
+            log.info("查询活动里面最热的帖子_20171220");
+            return postMapper.findAllActivePost_20171220(postid, paging.getRowBounds(),device);
+        } catch (Exception e) {
+            log.error("查询活动里面最热的帖子_20171220", e);
+            throw e;
+        }
+
+    }
+
+
+    public List<PostVo> findAllActivePostIntime_20171220(String postid, Paging<PostVo> paging, String device) {
+        try {
+            log.info("查询活动里面最热的帖子_20171220");
+            return postMapper.findAllActivePostIntime_20171220(postid, paging.getRowBounds(),device);
+        } catch (Exception e) {
+            log.error("查询活动里面最热的帖子_20171220", e);
+            throw e;
+        }
+
+    }
 
 }
