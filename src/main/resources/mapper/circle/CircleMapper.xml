@@ -497,7 +497,7 @@
         SELECT u.nickname
         FROM yw_circle c
         INNER JOIN yw_user u ON u.phone = c.phone
-            WHERE c.isdel = 0 AND status = 1
+            WHERE c.isdel = 0 AND c.status = 1
         <if test="category!=null">
             AND c.category=#{category,jdbcType=INTEGER}
         </if>
