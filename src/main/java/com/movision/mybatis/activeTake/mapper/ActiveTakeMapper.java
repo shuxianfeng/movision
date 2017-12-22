@@ -26,4 +26,6 @@ public interface ActiveTakeMapper {
 
     int takeCount(Map map);
 
+    int activeid(Integer postid);
+
  }

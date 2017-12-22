@@ -68,4 +68,16 @@ public class ActiveTakeService {
 
     }
 
+
+    public int activeid(int postid){
+        try {
+            log.info("根据帖子id查活动id");
+            return  activeTakeMapper.activeid(postid);
+        }catch (Exception e){
+            log.error("根据帖子id查活动id失败");
+            throw e;
+        }
+
+    }
+
 }

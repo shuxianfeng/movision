@@ -792,4 +792,17 @@ public class AppWaterfallController {
         }
         return response;
     }
+
+    @ApiOperation(value = "机器人刷票", notes = "机器人刷票", response = Response.class)
+    @RequestMapping(value = "Brushvotes", method = RequestMethod.POST)
+    public Response Brushvotes(@ApiParam(value = "帖子id") @RequestParam String postid,
+                               @ApiParam(value = "数量") @RequestParam int num){
+        Response response =new Response();
+        Integer count= facadePost.Brushvotes(postid,num);
+        if (response.getCode() == 200) {
+            response.setMessage("获取成功");
+            response.setData(count);
+        }
+        return response;
+    }
 }
