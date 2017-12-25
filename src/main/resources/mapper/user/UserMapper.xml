@@ -727,7 +727,8 @@
         (SELECT COALESCE(SUM(commentsum),0) FROM yw_post p3 WHERE p3.userid=u.id AND p3.isdel=0) AS commentsum,
         (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=u.id AND p4.isdel=0) AS
         zansum,u.fans,(SELECT avd.audit_time FROM yw_audit_vip_detail avd INNER JOIN yw_apply_vip_detail vd ON vd.id =
-        avd.apply_id WHERE status = 0 AND vd.userid = u.id) AS applydate,COALESCE(au.authstatus,3) AS authstatus
+        avd.apply_id WHERE status = 0 AND vd.userid = u.id GROUP BY avd.apply_userid) AS
+        applydate,COALESCE(au.authstatus,3) AS authstatus
         FROM yw_user u
         LEFT JOIN yw_autonym_authentication au ON au.userid=u.id
         INNER JOIN (SELECT * FROM yw_apply_vip_detail WHERE isdel = 1 GROUP BY userid) vd ON vd.userid = u.id
