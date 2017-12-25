@@ -2625,7 +2625,7 @@ public class PostFacade {
         //查询活动排序
         List<Integer> list = postService.queryActiveByOrderid();
         List<Integer> tem = new ArrayList<>();
-        for (int i = 1; i < 10; i++) {
+        for (int i = 1; i <= 10; i++) {
             tem.add(i);
         }
         for (int k = 0; k < list.size(); k++) {
