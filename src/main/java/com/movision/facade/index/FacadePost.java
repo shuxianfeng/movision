@@ -220,11 +220,14 @@ public class FacadePost {
         PostVo vo = postService.queryPostDetail(parammap);
         log.info("帖子详情中的pistid:-----------" + postid);
         if (vo != null) {
-            Map map = new HashMap();
-            int userids = vo.getUserid();
-            map.put("id", userids);//被关注的
-            map.put("userid", ShiroUtil.getAppUserID());//关注的人
-            int sum = userService.queryIsFollowAuthor(map);
+            int sum = 0;
+            if (!StringUtils.isEmpty(userid)) {
+                Map map = new HashMap();
+                int userids = vo.getUserid();
+                map.put("id", userids);//被关注的
+                map.put("userid", Integer.parseInt(userid));//关注的人
+                sum = userService.queryIsFollowAuthor(map);
+            }
             vo.setIsfollow(sum + "");
 
 
