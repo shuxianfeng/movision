@@ -133,4 +133,8 @@
   <select id="activeid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
     select activeid from yw_post WHERE  id=#{postid,jdbcType=INTEGER}
   </select>
+  <select id="takeCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+    SELECT COUNT(1) FROM yw_active_take WHERE activeid=#{activeid,jdbcType=INTEGER} and postid=#{postid,jdbcType=INTEGER}
+  </select>
+
 </mapper>

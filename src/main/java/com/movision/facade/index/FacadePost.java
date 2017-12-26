@@ -4696,7 +4696,12 @@ public class FacadePost {
                 activeTake.setIntime(new Date());
                 activeTake.setActiveid(Integer.parseInt(activeid));
                 ok = activeTakeService.takeActive(activeTake);
+                Map map3 = new HashMap();
+                map3.put("postid",postid);
+                map3.put("activeid",activeid);
+                int takecount=activeTakeService.takeCount(map3);
                 map2.put("code",200);
+                map2.put("takecount",takecount);
             }else {
                 map2.put("code",300);
             }
@@ -4716,15 +4721,18 @@ public class FacadePost {
         //根据帖子id查活动
         int ok=0;
        int activeid= activeTakeService.activeid(Integer.parseInt(postid));
-        for (int i=0;i<num;i++){
-            ActiveTake activeTake = new ActiveTake();
-            activeTake.setDevice(UUID.randomUUID().toString().replaceAll("\\-", ""));
-            activeTake.setPostid(Integer.parseInt(postid));
-            activeTake.setIntime(new Date());
-            activeTake.setActiveid(activeid);
-            ok = activeTakeService.takeActive(activeTake);
+        if(num<1){
+            ok=-1;
+        }else {
+            for (int i = 0; i < num; i++) {
+                ActiveTake activeTake = new ActiveTake();
+                activeTake.setDevice(UUID.randomUUID().toString().replaceAll("\\-", ""));
+                activeTake.setPostid(Integer.parseInt(postid));
+                activeTake.setIntime(new Date());
+                activeTake.setActiveid(activeid);
+                ok = activeTakeService.takeActive(activeTake);
+            }
         }
-
         return ok;
     }
 
