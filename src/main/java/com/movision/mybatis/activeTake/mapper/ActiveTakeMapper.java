@@ -31,4 +31,5 @@ public interface ActiveTakeMapper {
 
     Period queryActiveTime(Integer postid);
 
+
  }

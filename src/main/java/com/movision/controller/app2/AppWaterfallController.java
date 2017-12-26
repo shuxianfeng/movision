@@ -776,10 +776,9 @@ public class AppWaterfallController {
     @ApiOperation(value = "跨年活动投票接口", notes = "跨年活动投票接口", response = Response.class)
     @RequestMapping(value = "takeActive", method = RequestMethod.POST)
     public Response takeActive(@ApiParam(value = "帖子id") @RequestParam String postid,
-                               @ApiParam(value = "设备号") @RequestParam String device,
-                               @ApiParam(value = "活动id") @RequestParam String activeid){
+                               @ApiParam(value = "设备号") @RequestParam String device){
         Response response =new Response();
-        Map count= facadePost.takeActive(device,postid,activeid);
+        Map count= facadePost.takeActive(device,postid);
         if(response.getCode()==200&& (int) count.get("code") == 200){
             response.setMessage("获取成功");
             response.setData(count);

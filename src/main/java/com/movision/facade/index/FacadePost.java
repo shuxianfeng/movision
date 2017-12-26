@@ -4817,16 +4817,18 @@ public class FacadePost {
      * @param
      * @return
      */
-    public Map takeActive(String device ,String postid,String activeid){
+    public Map takeActive(String device ,String postid){
+        //根据帖子获取活动id
+        int activeid= activeTakeService.activeid(Integer.parseInt(postid));
         //查询这个设备号有没有投过10次
         Map map = new HashMap();
         map.put("device",device);
-        map.put("activeid",Integer.parseInt(activeid));
+        map.put("activeid",activeid);
         int count=activeTakeService.deviceCount(map);
         //查看这个设备号对这个帖子有没有投过票
         Map map1 = new HashMap();
         map1.put("device",device);
-        map1.put("activeid",Integer.parseInt(activeid));
+        map1.put("activeid",activeid);
         map1.put("postid",Integer.parseInt(postid));
         int postidCoun=activeTakeService.postidCount(map1);
         Map map2 = new HashMap();
@@ -4846,7 +4848,7 @@ public class FacadePost {
                     activeTake.setDevice(device);
                     activeTake.setPostid(Integer.parseInt(postid));
                     activeTake.setIntime(new Date());
-                    activeTake.setActiveid(Integer.parseInt(activeid));
+                    activeTake.setActiveid(activeid);
                     ok = activeTakeService.takeActive(activeTake);
                     Map map3 = new HashMap();
                     map3.put("postid", postid);
