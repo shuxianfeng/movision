@@ -4687,6 +4687,7 @@ public class FacadePost {
         map1.put("postid",Integer.parseInt(postid));
         int postidCoun=activeTakeService.postidCount(map1);
         Map map2 = new HashMap();
+        int takecount=0;
         int ok=0;
         if(count<10) {
             if(postidCoun==0) {
@@ -4699,14 +4700,16 @@ public class FacadePost {
                 Map map3 = new HashMap();
                 map3.put("postid",postid);
                 map3.put("activeid",activeid);
-                int takecount=activeTakeService.takeCount(map3);
+                takecount=activeTakeService.takeCount(map3);
                 map2.put("code",200);
                 map2.put("takecount",takecount);
             }else {
                 map2.put("code",300);
+                map2.put("takecount",takecount);
             }
         }else {
             map2.put("code",400);
+            map2.put("takecount",takecount);
         }
         return map2;
     }

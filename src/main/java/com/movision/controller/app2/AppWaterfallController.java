@@ -786,9 +786,11 @@ public class AppWaterfallController {
         }else if((int) count.get("code") == 300){
             response.setCode(300);
             response.setMessage("该设备已投过该帖子");
+            response.setData(count);
         }else if((int) count.get("code") == 400){
             response.setCode(400);
             response.setMessage("该设备已达到投票上限");
+            response.setData(count);
         }
         return response;
     }
