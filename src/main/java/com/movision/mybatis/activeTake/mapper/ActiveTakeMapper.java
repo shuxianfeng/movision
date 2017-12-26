@@ -1,10 +1,8 @@
 package com.movision.mybatis.activeTake.mapper;
 
-import com.movision.mybatis.activePart.entity.ActivePart;
 import com.movision.mybatis.activeTake.entity.ActiveTake;
 import com.movision.mybatis.period.entity.Period;
 
-import java.util.List;
 import java.util.Map;
 
 public interface ActiveTakeMapper {
