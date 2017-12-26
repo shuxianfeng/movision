@@ -2,9 +2,10 @@ package com.movision.mybatis.activeTake.mapper;
 
 import com.movision.mybatis.activeTake.entity.ActiveTake;
 import com.movision.mybatis.period.entity.Period;
+import org.springframework.stereotype.Repository;
 
 import java.util.Map;
-
+@Repository
 public interface ActiveTakeMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -18,7 +19,6 @@ public interface ActiveTakeMapper {
 
     int updateByPrimaryKey(ActiveTake record);
 
-
     int takeActive(ActiveTake activeTake);
 
     int deviceCount(Map map);
@@ -26,7 +26,6 @@ public interface ActiveTakeMapper {
     int postidCount(Map map);
 
     int takeCount(Map map);
-
 
     int activeid(Integer postid);
 
