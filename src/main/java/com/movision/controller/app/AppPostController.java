@@ -72,7 +72,7 @@ public class AppPostController {
         return response;
     }
 
-    @ApiOperation(value = "帖子详情数据返回接口", notes = "用于返回请求帖子详情内容", response = Response.class)
+    @ApiOperation(value = "帖子详情数据返回接口", notes = "用于返回请求帖子详情内容，返回字段takemark：0 不显示投票按钮 1 不在投票时间段 2 已投票 3 可投票", response = Response.class)
     @RequestMapping(value = "detail_20171226", method = RequestMethod.POST)
     public Response queryPostDetail_20171226(@ApiParam(value = "帖子id") @RequestParam String postid,
                                              @ApiParam(value = "用户id(登录状态下不可为空)") @RequestParam(required = false) String userid,
