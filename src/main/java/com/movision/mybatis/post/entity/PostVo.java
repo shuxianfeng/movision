@@ -143,6 +143,8 @@ public class PostVo implements Serializable {
 
     private Integer istake;//是否投票
 
+    private Integer takemark;//帖子是否显示投票按钮标志位：0 不显示 1 显示但不可投 2 显示也可投（帖子详情接口中使用）
+
     public Integer getIstake() {
         return istake;
     }
@@ -633,6 +635,14 @@ public class PostVo implements Serializable {
 
     public void setPartsumEnddays(Integer partsumEnddays) {
         this.partsumEnddays = partsumEnddays;
+    }
+
+    public Integer getTakemark() {
+        return takemark;
+    }
+
+    public void setTakemark(Integer takemark) {
+        this.takemark = takemark;
     }
 
     /**

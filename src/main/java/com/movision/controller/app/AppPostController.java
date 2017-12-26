@@ -61,6 +61,24 @@ public class AppPostController {
         Response response = new Response();
         PostVo post = facadePost.queryPostDetail(postid, userid);
 
+        if (null != post) {
+            response.setCode(200);
+            response.setMessage("查询成功");
+        }else if (null == post){
+            response.setCode(300);
+            response.setMessage("该帖已删除");
+        }
+        response.setData(post);
+        return response;
+    }
+
+    @ApiOperation(value = "帖子详情数据返回接口", notes = "用于返回请求帖子详情内容", response = Response.class)
+    @RequestMapping(value = "detail_20171226", method = RequestMethod.POST)
+    public Response queryPostDetail_20171226(@ApiParam(value = "帖子id") @RequestParam String postid,
+                                             @ApiParam(value = "用户id(登录状态下不可为空)") @RequestParam(required = false) String userid,
+                                             @ApiParam(value = "设备号(APP必填，H5可不填)") @RequestParam(required = false) String device) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
+        Response response = new Response();
+        PostVo post = facadePost.queryPostDetail_20171226(postid, userid, device);
 
         if (null != post) {
             response.setCode(200);

@@ -45,10 +45,7 @@ import com.movision.mybatis.labelSearchTerms.entity.LabelSearchTerms;
 import com.movision.mybatis.labelSearchTerms.service.LabelSearchTermsService;
 import com.movision.mybatis.opularSearchTerms.service.OpularSearchTermsService;
 import com.movision.mybatis.pageHelper.entity.Datagrid;
-import com.movision.mybatis.post.entity.ActiveVo;
-import com.movision.mybatis.post.entity.Post;
-import com.movision.mybatis.post.entity.PostReturnAll;
-import com.movision.mybatis.post.entity.PostVo;
+import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postAndUserRecord.entity.PostAndUserRecord;
 import com.movision.mybatis.postAndUserRecord.service.PostAndUserRecordService;
@@ -230,6 +227,113 @@ public class FacadePost {
             }
             vo.setIsfollow(sum + "");
 
+            List<PostVo> array = new ArrayList<>();
+            array.add(vo);
+            findPostLabel(array);
+
+            /**List<PostLabel> postLabels = postService.queryPostLabel(Integer.parseInt(postid));
+             if (postLabels.size() != 0) {
+             vo.setPostLabels(postLabels);
+             }*/
+            //-----帖子内容格式转换
+            String str = vo.getPostcontent();
+            JSONArray jsonArray = JSONArray.fromObject(str);
+
+            //因为视频封面会有播放权限失效限制，过期失效，所以这里每请求一次都需要对帖子内容中包含的视频封面重新请求
+            //增加这个工具类 videoCoverURL.getVideoCover(jsonArray); 进行封面url重新请求
+            jsonArray = videoCoverURL.getVideoCover(jsonArray);
+            //-----将转换完的数据封装返回
+            vo.setPostcontent(jsonArray.toString());
+            //评论
+            List<CommentVo> co = facadeComments.postDetailComment(Integer.parseInt(postid), userid);
+            if (co != null) {
+                vo.setCommentVos(co);
+            }
+            if (null != vo) {
+                //根据帖子封面原图url查询封面压缩图url，如果存在替换，不存在就用原图
+                String compressurl = postService.queryCompressUrl(vo.getCoverimg());
+                if (null != compressurl && !compressurl.equals("") && !compressurl.equals("null")) {
+                    vo.setCoverimg(compressurl);
+                }
+
+                /** int rewardsum = postService.queryRewardSum(postid);//查询帖子被打赏的次数
+                 vo.setRewardsum(rewardsum);
+                 List<UserLike> nicknamelist = postService.queryRewardPersonNickname(postid);
+                 vo.setRewardpersonnickname(nicknamelist);*/
+                /**   if (type.equals("1") || type.equals("2")) {
+                 Video video = postService.queryVideoUrl(Integer.parseInt(postid));
+                 vo.setVideourl(video.getVideourl());
+                 vo.setVideocoverimgurl(video.getBannerimgurl());
+                 }*/
+                if (vo.getUserid() != -1) {//发帖人为普通用户时查询发帖人昵称和手机号
+                    User user = userService.queryUserB(vo.getUserid());
+                    if (user != null) {
+                        vo.setUserid(user.getId());
+                        vo.setNickname(user.getNickname());
+                        vo.setPhone(user.getPhone());
+                        vo.setPhoto(user.getPhoto());
+                        vo.setNickname((String) desensitizationUtil.desensitization(vo.getNickname()).get("str"));//昵称脱敏
+                    }
+                } else {
+                    User user = userService.queryUserB(vo.getUserid());
+                    if (user != null) {
+                        vo.setUserid(user.getId());
+                        vo.setNickname(user.getNickname());
+                        vo.setPhoto(user.getPhoto());
+                        vo.setNickname((String) desensitizationUtil.desensitization(vo.getNickname()).get("str"));//昵称脱敏
+                    }
+                }
+                Integer circleid = vo.getCircleid();
+                //查询帖子详情最下方推荐的4个热门圈子
+                /**List<Circle> hotcirclelist = circleService.queryHotCircle();
+                 vo.setHotcirclelist(hotcirclelist);*/
+                //查询帖子中分享的商品
+                List<GoodsVo> shareGoodsList = goodsService.queryShareGoodsList(Integer.parseInt(postid));
+                vo.setShareGoodsList(shareGoodsList);
+
+                //对帖子内容进行脱敏处理
+                vo.setTitle((String) desensitizationUtil.desensitization(vo.getTitle()).get("str"));//帖子主标题脱敏
+                if (null != vo.getSubtitle()) {
+                    vo.setSubtitle((String) desensitizationUtil.desensitization(vo.getSubtitle()).get("str"));//帖子副标题脱敏
+                }
+                vo.setPostcontent((String) desensitizationUtil.desensitization(vo.getPostcontent()).get("str"));//帖子正文文字脱敏
+
+                //数据插入mongodb
+                if (StringUtil.isNotEmpty(userid)) {
+                    PostAndUserRecord postAndUserRecord = new PostAndUserRecord();
+                    postAndUserRecord.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
+                    postAndUserRecord.setCrileid(circleid);
+                    postAndUserRecord.setPostid(Integer.parseInt(postid));
+                    postAndUserRecord.setUserid(Integer.parseInt(userid));
+                    postAndUserRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+                    postAndUserRecordService.insert(postAndUserRecord);
+                    //同步mysql的浏览量
+                    postService.updateCountView(Integer.parseInt(postid));
+                }
+            }
+        }
+        return vo;
+    }
+
+    public PostVo queryPostDetail_20171226(String postid, String userid, String device) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
+        //通过userid、postid查询该用户有没有关注该圈子的权限
+        Map<String, Object> parammap = new HashMap<>();
+        parammap.put("postid", Integer.parseInt(postid));
+        if (!StringUtils.isEmpty(userid)) {
+            parammap.put("userid", Integer.parseInt(userid));
+        }
+        PostVo vo = postService.queryPostDetail(parammap);
+        log.info("帖子详情中的pistid:-----------" + postid);
+        if (vo != null) {
+            int sum = 0;
+            if (!StringUtils.isEmpty(userid)) {
+                Map map = new HashMap();
+                int userids = vo.getUserid();
+                map.put("id", userids);//被关注的
+                map.put("userid", Integer.parseInt(userid));//关注的人
+                sum = userService.queryIsFollowAuthor(map);
+            }
+            vo.setIsfollow(sum + "");
 
             List<PostVo> array = new ArrayList<>();
             array.add(vo);
@@ -301,6 +405,37 @@ public class FacadePost {
                     vo.setSubtitle((String) desensitizationUtil.desensitization(vo.getSubtitle()).get("str"));//帖子副标题脱敏
                 }
                 vo.setPostcontent((String) desensitizationUtil.desensitization(vo.getPostcontent()).get("str"));//帖子正文文字脱敏
+
+                //判断帖子详情页是否显示投票按钮：0 不显示 1 不在投票时间段 2 已投票 3 可投票----2017.12.26shuxf，随投稿新需求一同增加
+                int tmark = 0;
+                if (null != vo.getActiveid()){
+                    int activeid = vo.getActiveid();
+                    PostActiveList activeVo = postService.queryActiveById(activeid);
+                    //计算距离结束时间
+                    Date begin = activeVo.getBegintime();
+                    Date end = activeVo.getEndtime();
+                    Date now = new Date();
+                    int enddays = DateUtils.activeEndDays(now, begin, end);
+                    //先判断时间是否在投票时间段
+                    if (enddays == 0 || enddays == -1){
+                        tmark = 1;//不在投票时间段
+                    }else {
+                        tmark = 3;//在投票时间段，可投票
+                    }
+                    //判断当前用户是否已投票
+                    if (StringUtil.isNotEmpty(device)){//APP发起的请求，device不为空
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("device", device);
+                        map.put("activeid", activeid);
+                        map.put("postid", Integer.parseInt(postid));
+                        int takenum = activeTakeService.postidCount(map);
+                        if (takenum > 0){
+                            tmark = 2;//已投票
+                        }
+                    }
+                }
+                vo.setTakemark(tmark);
+
                 //数据插入mongodb
                 if (StringUtil.isNotEmpty(userid)) {
                     PostAndUserRecord postAndUserRecord = new PostAndUserRecord();
