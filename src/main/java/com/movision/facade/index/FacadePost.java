@@ -4834,7 +4834,7 @@ public class FacadePost {
         Map map2 = new HashMap();
         int takecount=0;
         int ok=0;
-        Period period=activeTakeService.queryActiveTime(Integer.parseInt(postid));
+        Period period=activeTakeService.queryActiveTime(activeid);
         Date beg=period.getBegintime();
         Date end=period.getEndtime();
         Date date = new Date();

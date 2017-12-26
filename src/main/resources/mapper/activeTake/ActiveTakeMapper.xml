@@ -136,5 +136,8 @@
   <select id="takeCount" parameterType="java.util.Map" resultType="java.lang.Integer">
     SELECT COUNT(1) FROM yw_active_take WHERE activeid=#{activeid,jdbcType=INTEGER} and postid=#{postid,jdbcType=INTEGER}
   </select>
-
+  <select id="queryActiveTime" parameterType="java.lang.Integer" resultType="com.movision.mybatis.period.entity.Period">
+SELECT c.begintime,c.endtime FROM yw_post  p LEFT JOIN yw_active_period c ON c.postid=p.id
+WHERE p.id=#{postid,jdbcType=INTEGER}
+  </select>
 </mapper>
