@@ -2,12 +2,14 @@ package com.movision.mybatis.activeTake.service;
 
 import com.movision.mybatis.activeTake.entity.ActiveTake;
 import com.movision.mybatis.activeTake.mapper.ActiveTakeMapper;
+import com.movision.mybatis.period.entity.Period;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -75,6 +77,17 @@ public class ActiveTakeService {
             return  activeTakeMapper.activeid(postid);
         }catch (Exception e){
             log.error("根据帖子id查活动id失败");
+            throw e;
+        }
+
+    }
+
+    public Period queryActiveTime(int postid){
+        try {
+            log.info("查询活动时间");
+            return  activeTakeMapper.queryActiveTime(postid);
+        }catch (Exception e){
+            log.error("查询活动时间");
             throw e;
         }
 

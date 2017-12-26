@@ -791,6 +791,10 @@ public class AppWaterfallController {
             response.setCode(400);
             response.setMessage("该设备已达到投票上限");
             response.setData(count);
+        }else if((int) count.get("code") == 600){
+            response.setCode(600);
+            response.setMessage("该活动不可投票");
+            response.setData(count);
         }
         return response;
     }

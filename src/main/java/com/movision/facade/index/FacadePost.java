@@ -45,6 +45,11 @@ import com.movision.mybatis.labelSearchTerms.entity.LabelSearchTerms;
 import com.movision.mybatis.labelSearchTerms.service.LabelSearchTermsService;
 import com.movision.mybatis.opularSearchTerms.service.OpularSearchTermsService;
 import com.movision.mybatis.pageHelper.entity.Datagrid;
+import com.movision.mybatis.period.entity.Period;
+import com.movision.mybatis.post.entity.ActiveVo;
+import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.post.entity.PostReturnAll;
+import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postAndUserRecord.entity.PostAndUserRecord;
@@ -4827,27 +4832,39 @@ public class FacadePost {
         Map map2 = new HashMap();
         int takecount=0;
         int ok=0;
-        if(count<10) {
-            if(postidCoun==0) {
-                ActiveTake activeTake = new ActiveTake();
-                activeTake.setDevice(device);
-                activeTake.setPostid(Integer.parseInt(postid));
-                activeTake.setIntime(new Date());
-                activeTake.setActiveid(Integer.parseInt(activeid));
-                ok = activeTakeService.takeActive(activeTake);
-                Map map3 = new HashMap();
-                map3.put("postid",postid);
-                map3.put("activeid",activeid);
-                takecount=activeTakeService.takeCount(map3);
-                map2.put("code",200);
-                map2.put("takecount",takecount);
-            }else {
-                map2.put("code",300);
-                map2.put("takecount",takecount);
+        Period period=activeTakeService.queryActiveTime(Integer.parseInt(postid));
+        Date beg=period.getBegintime();
+        Date end=period.getEndtime();
+        Date date = new Date();
+        long beding=beg.getTime();
+        long endtime=end.getTime();
+        long str= date.getTime();
+        if(str > beding && str < endtime) {
+            if (count < 10) {
+                if (postidCoun == 0) {
+                    ActiveTake activeTake = new ActiveTake();
+                    activeTake.setDevice(device);
+                    activeTake.setPostid(Integer.parseInt(postid));
+                    activeTake.setIntime(new Date());
+                    activeTake.setActiveid(Integer.parseInt(activeid));
+                    ok = activeTakeService.takeActive(activeTake);
+                    Map map3 = new HashMap();
+                    map3.put("postid", postid);
+                    map3.put("activeid", activeid);
+                    takecount = activeTakeService.takeCount(map3);
+                    map2.put("code", 200);
+                    map2.put("takecount", takecount);
+                } else {
+                    map2.put("code", 300);
+                    map2.put("takecount", takecount);
+                }
+            } else {
+                map2.put("code", 400);
+                map2.put("takecount", takecount);
             }
         }else {
-            map2.put("code",400);
-            map2.put("takecount",takecount);
+            map2.put("code", 600);
+            map2.put("takecount", takecount);
         }
         return map2;
     }
