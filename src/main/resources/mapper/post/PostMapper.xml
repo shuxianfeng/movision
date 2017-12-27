@@ -1734,7 +1734,7 @@
             ORDER BY p.intime DESC
         </if>
         <if test="pai==1">
-            ORDER BY (SELECT COUNT(1) persum FROM yw_active_part) DESC
+            ORDER BY persum DESC
         </if>
     </select>
 

@@ -2155,8 +2155,8 @@ public class PostFacade {
                 try {
                     beg = format.parse(begintime);
                     end = format.parse(endtime);
-                    period.setEndtime(end);
-                    period.setBegintime(beg);
+                    post.setEndtime(end);
+                    post.setBegintime(beg);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
