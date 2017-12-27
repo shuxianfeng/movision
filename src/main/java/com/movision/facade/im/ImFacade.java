@@ -39,6 +39,10 @@ import com.movision.utils.im.CheckSumBuilder;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.sms.SDKSendSms;
+import com.taobao.api.DefaultTaobaoClient;
+import com.taobao.api.TaobaoClient;
+import com.taobao.api.request.AlibabaAliqinFcSmsNumSendRequest;
+import com.taobao.api.response.AlibabaAliqinFcSmsNumSendResponse;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
@@ -1211,6 +1215,67 @@ public class ImFacade {
 
         }
     }
+
+    /**
+     * 推广短信
+      */
+   public void  TGSend(){
+        try {
+            TaobaoClient client = new DefaultTaobaoClient("https://eco.taobao.com/router/rest", "23696382", "27717070d06e98f5e4bd982293b0d77f");
+            AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
+            List<String> list = systemPushService.findAllPhone();
+            int pageNo = 1;
+            int pageSize = 200;
+            if (list.size() <= 200) {
+                for (int i = 0; i < list.size(); i++) {
+                    String mobile = "";
+                    mobile += list.get(i) + ",";
+                    mobile = mobile.substring(0, mobile.length() - 1);
+                    req.setExtend("123456");
+                    req.setSmsType("normal");
+                    req.setSmsFreeSignName("美番");
+                    req.setSmsParamString("");
+                    req.setRecNum(mobile);
+                    req.setSmsTemplateCode("SMS_118590090");
+                    AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
+                    System.out.println(rsp.getBody());
+                }
+            }
+            int totalPageNum = (list.size() + pageSize - 1) / pageSize;
+            if (list.size() > 200) {
+                for (int j = 0; j <= totalPageNum; j++) {
+                    Paging pa = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+                    List<String> phone = systemPushService.findPhone(pa);
+                    String mobile = "";
+                    for (int i = 0; i < phone.size(); i++) {
+                        mobile += phone.get(i) + ",";
+                    }
+                    mobile = mobile.substring(0, mobile.length() - 1);
+                    pageNo += 1;
+                    req.setExtend("123456");
+                    req.setSmsType("normal");
+                    req.setSmsFreeSignName("美番");
+                    req.setSmsParamString("");
+                    req.setRecNum(mobile);
+                    req.setSmsTemplateCode("SMS_118590090");
+                    AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
+                    System.out.println(rsp.getBody());
+                }
+
+            }
+            /**req.setExtend("123456");
+            req.setSmsType("normal");
+            req.setSmsFreeSignName("美番");
+            req.setSmsParamString("");
+            req.setRecNum("13814501287");
+            req.setSmsTemplateCode("SMS_118645085");
+            AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
+            System.out.println(rsp.getBody());*/
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+   }
 
     /**
      * 带不带链接发送消息

@@ -299,6 +299,17 @@ public class BossImNoticeController {
         return response;
     }
 
+    @ApiOperation(value = "推广消息", notes = "推广消息", response = Response.class)
+    @RequestMapping(value = "TGSend", method = RequestMethod.POST)
+    public Response TGSend() {
+        Response response = new Response();
+        imFacade.TGSend();
+        if (response.getCode() == 200) {
+            response.setMessage("发送成功");
+        }
+        return response;
+    }
+
 
 
     @ApiOperation(value = "带不带链接发送消息", notes = "带不带链接发送消息", response = Response.class)
