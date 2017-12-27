@@ -219,17 +219,17 @@ public interface UserMapper {
 
     List<User> dauStatistic(Map map);
 
-    int queryComment(int id);
+    int queryComment(Map map);
 
-    int queryForward(int id);
+    int queryForward(Map map);
 
-    int queryCollect(int id);
+    int queryCollect(Map map);
 
-    int queryPost(int id);
+    int queryPost(Map map);
 
-    int queryZan(int id);
+    int queryZan(Map map);
 
-    int queryFollow(int id);
+    int queryFollow(Map map);
 
     List<UserLike> queryCircleaAministratorListById(Integer circleid);
 }

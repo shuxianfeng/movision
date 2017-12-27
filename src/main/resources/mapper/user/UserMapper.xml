@@ -1709,45 +1709,99 @@ SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
     </select>
 
     <!--查询该用户前一天是否关注过圈子或标签或作者-->
-    <select id="queryFollow" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    <select id="queryFollow" parameterType="java.util.Map" resultType="java.lang.Integer">
         SELECT count(*) FROM (
-        SELECT id, userid FROM yw_follow_circle WHERE userid = #{id,jdbcType=INTEGER} AND intime between curdate()-INTERVAL 1 day  and CURDATE()
+        SELECT id, userid FROM yw_follow_circle WHERE userid = #{id,jdbcType=INTEGER}
+        <if test="begin == null and end == null">
+            <![CDATA[ AND intime >= DATE_SUB(NOW(),INTERVAL 7 DAY) AND intime <=DATE_FORMAT(NOW(),'%y-%m-%d')]]>
+        </if>
+        <if test="begin != null and end != null">
+            <![CDATA[AND intime >= #{begin,jdbcType=TIMESTAMP} AND intime < DATE_ADD(#{end,jdbcType=TIMESTAMP},INTERVAL 1 DAY)]]>
+        </if>
         UNION ALL
-        SELECT id, userid FROM yw_follow_label WHERE userid = #{id,jdbcType=INTEGER} AND intime between curdate()-INTERVAL 1 day  and CURDATE()
+        SELECT id, userid FROM yw_follow_label WHERE userid = #{id,jdbcType=INTEGER}
+        <if test="begin == null and end == null">
+            <![CDATA[ AND intime >= DATE_SUB(NOW(),INTERVAL 7 DAY) AND intime <=DATE_FORMAT(NOW(),'%y-%m-%d')]]>
+        </if>
+        <if test="begin != null and end != null">
+            <![CDATA[AND intime >= #{begin,jdbcType=TIMESTAMP} AND intime < DATE_ADD(#{end,jdbcType=TIMESTAMP},INTERVAL 1 DAY)]]>
+        </if>
         UNION ALL
-        SELECT id, userid FROM yw_follow_user WHERE userid = #{id,jdbcType=INTEGER} AND intime between curdate()-INTERVAL 1 day  and CURDATE()
+        SELECT id, userid FROM yw_follow_user WHERE userid = #{id,jdbcType=INTEGER}
+        <if test="begin == null and end == null">
+            <![CDATA[ AND intime >= DATE_SUB(NOW(),INTERVAL 7 DAY) AND intime <=DATE_FORMAT(NOW(),'%y-%m-%d')]]>
+        </if>
+        <if test="begin != null and end != null">
+            <![CDATA[AND intime >= #{begin,jdbcType=TIMESTAMP} AND intime < DATE_ADD(#{end,jdbcType=TIMESTAMP},INTERVAL 1 DAY)]]>
+        </if>
         ) t
     </select>
 
     <!--查询当前用户前一天中是否发过帖子-->
-    <select id="queryPost" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT count(*) FROM yw_post WHERE userid = #{id,jdbcType=INTEGER} AND intime between curdate()-INTERVAL 1 day  and CURDATE()
+    <select id="queryPost" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT count(*) FROM yw_post WHERE userid = #{id,jdbcType=INTEGER}
+        <if test="begin == null and end == null">
+            <![CDATA[ AND intime >= DATE_SUB(NOW(),INTERVAL 7 DAY) AND intime <=DATE_FORMAT(NOW(),'%y-%m-%d')]]>
+        </if>
+        <if test="begin != null and end != null">
+            <![CDATA[AND intime >= #{begin,jdbcType=TIMESTAMP} AND intime < DATE_ADD(#{end,jdbcType=TIMESTAMP},INTERVAL 1 DAY)]]>
+        </if>
     </select>
 
     <!--查询该用户前一天中是否点赞过帖子或评论-->
-    <select id="queryZan" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    <select id="queryZan" parameterType="java.util.Map" resultType="java.lang.Integer">
         SELECT count(*) FROM (
-        SELECT id, userid FROM yw_post_zan_record WHERE userid = #{id,jdbcType=INTEGER} AND intime between curdate()-INTERVAL 1 day  and CURDATE()
+        SELECT id, userid FROM yw_post_zan_record WHERE userid = #{id,jdbcType=INTEGER}
+        <if test="begin == null and end == null">
+            <![CDATA[ AND intime >= DATE_SUB(NOW(),INTERVAL 7 DAY) AND intime <=DATE_FORMAT(NOW(),'%y-%m-%d')]]>
+        </if>
+        <if test="begin != null and end != null">
+            <![CDATA[AND intime >= #{begin,jdbcType=TIMESTAMP} AND intime < DATE_ADD(#{end,jdbcType=TIMESTAMP},INTERVAL 1 DAY)]]>
+        </if>
         UNION ALL
-        SELECT id, userid FROM yw_post_comment_zan_record WHERE userid = #{id,jdbcType=INTEGER} AND intime between curdate()-INTERVAL 1 day  and CURDATE()
+        SELECT id, userid FROM yw_post_comment_zan_record WHERE userid = #{id,jdbcType=INTEGER}
+        <if test="begin == null and end == null">
+            <![CDATA[ AND intime >= DATE_SUB(NOW(),INTERVAL 7 DAY) AND intime <=DATE_FORMAT(NOW(),'%y-%m-%d')]]>
+        </if>
+        <if test="begin != null and end != null">
+            <![CDATA[AND intime >= #{begin,jdbcType=TIMESTAMP} AND intime < DATE_ADD(#{end,jdbcType=TIMESTAMP},INTERVAL 1 DAY)]]>
+        </if>
         ) t
     </select>
 
     <!--查询该用户前一天中是否收藏过帖子-->
-    <select id="queryCollect" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT count(*) FROM yw_collection WHERE userid = #{id,jdbcType=INTEGER} AND collect_time between curdate()-INTERVAL 1 day  and CURDATE()
+    <select id="queryCollect" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT count(*) FROM yw_collection WHERE userid = #{id,jdbcType=INTEGER}
+        <if test="begin == null and end == null">
+            <![CDATA[ AND collect_time >= DATE_SUB(NOW(),INTERVAL 7 DAY) AND collect_time <=DATE_FORMAT(NOW(),'%y-%m-%d')]]>
+        </if>
+        <if test="begin != null and end != null">
+            <![CDATA[AND collect_time >= #{begin,jdbcType=TIMESTAMP} AND collect_time < DATE_ADD(#{end,jdbcType=TIMESTAMP},INTERVAL 1 DAY)]]>
+        </if>
     </select>
 
 
     <!--查询该用户前一天中是否评论过帖子或回复过评论-->
-    <select id="queryComment" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT count(*) FROM yw_post_comment WHERE userid = #{id,jdbcType=INTEGER} AND intime between curdate()-INTERVAL 1 day  and CURDATE()
+    <select id="queryComment" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT count(*) FROM yw_post_comment WHERE userid = #{id,jdbcType=INTEGER}
+        <if test="begin == null and end == null">
+            <![CDATA[ AND intime >= DATE_SUB(NOW(),INTERVAL 7 DAY) AND intime <=DATE_FORMAT(NOW(),'%y-%m-%d')]]>
+        </if>
+        <if test="begin != null and end != null">
+            <![CDATA[AND intime >= #{begin,jdbcType=TIMESTAMP} AND intime < DATE_ADD(#{end,jdbcType=TIMESTAMP},INTERVAL 1 DAY)]]>
+        </if>
     </select>
 
 
     <!--查询该用户前一天中是否转发过帖子-->
-    <select id="queryForward" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT count(*) FROM yw_post_share WHERE userid = #{id,jdbcType=INTEGER} AND intime between curdate()-INTERVAL 1 day  and CURDATE()
+    <select id="queryForward" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT count(*) FROM yw_post_share WHERE userid = #{id,jdbcType=INTEGER}
+        <if test="begin == null and end == null">
+            <![CDATA[ AND intime >= DATE_SUB(NOW(),INTERVAL 7 DAY) AND intime <=DATE_FORMAT(NOW(),'%y-%m-%d')]]>
+        </if>
+        <if test="begin != null and end != null">
+            <![CDATA[AND intime >= #{begin,jdbcType=TIMESTAMP} AND intime < DATE_ADD(#{end,jdbcType=TIMESTAMP},INTERVAL 1 DAY)]]>
+        </if>
     </select>
 
 </mapper>

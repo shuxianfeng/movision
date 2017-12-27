@@ -104,16 +104,18 @@ public class IndexFacade {
         Double brisk = userService.queryUserBriskNumber(map);
         vo.setUserGather(brisk);//活跃数
         Double validDrisk = 0.0;
+        //按时间查询活跃用户
         List<User> activeUserList = userService.dauStatistic(map);
         for (int i = 0; i < activeUserList.size(); i++) {
             int id = activeUserList.get(i).getId();//用户id
+            map.put("id", id);
             //根据userid查询用户是否进行过上述行为
-            int followsum = userService.queryFollow(id);//是否关注过圈子、标签或作者
-            int postsum = userService.queryPost(id);//是否发过贴
-            int zansum = userService.queryZan(id);//是否点赞过
-            int collectsum = userService.queryCollect(id);//是否收藏过
-            int commentsum = userService.queryComment(id);//是否评论过
-            int forwardsum = userService.queryForward(id);//是否转发过
+            int followsum = userService.queryFollow(map);//是否关注过圈子、标签或作者
+            int postsum = userService.queryPost(map);//是否发过贴
+            int zansum = userService.queryZan(map);//是否点赞过
+            int collectsum = userService.queryCollect(map);//是否收藏过
+            int commentsum = userService.queryComment(map);//是否评论过
+            int forwardsum = userService.queryForward(map);//是否转发过
             if (followsum > 0 || postsum > 0 || zansum > 0 || collectsum > 0 || commentsum > 0 || forwardsum > 0) {
                 validDrisk++;
             }
