@@ -1236,7 +1236,7 @@ public class ImFacade {
                     req.setSmsFreeSignName("美番");
                     req.setSmsParamString("");
                     req.setRecNum(mobile);
-                    req.setSmsTemplateCode("SMS_118590090");
+                    req.setSmsTemplateCode("SMS_118590093");
                     AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
                     System.out.println(rsp.getBody());
                 }
@@ -1257,7 +1257,7 @@ public class ImFacade {
                     req.setSmsFreeSignName("美番");
                     req.setSmsParamString("");
                     req.setRecNum(mobile);
-                    req.setSmsTemplateCode("SMS_118590090");
+                    req.setSmsTemplateCode("SMS_118590093");
                     AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
                     System.out.println(rsp.getBody());
                 }
