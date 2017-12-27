@@ -1045,14 +1045,14 @@ public class VideoUploadUtil {
         map.put("city", city);
         map.put("sex", sex);
         map.put("unionid", unionid);
-        Fuwuhao fuwuhao = new Fuwuhao();
+       /** Fuwuhao fuwuhao = new Fuwuhao();
         //查询表中服务号有没有
         int have=fuwuhaoService.haveFuwu(openid);
         if(have==0) {
             fuwuhao.setOpenid(openids);
             fuwuhao.setUnionid(unionid);
             fuwuhaoService.insertSelective(fuwuhao);
-        }
+        }*/
         return map;
     }
 
