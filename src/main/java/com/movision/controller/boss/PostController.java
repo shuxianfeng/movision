@@ -881,8 +881,7 @@ public class PostController {
      * @param title
      * @param userid
      * @param content
-     * @param begintime
-     * @param endtime
+     * @param intime
      * @param statue
      * @param pageNo
      * @param pageSize
@@ -893,15 +892,14 @@ public class PostController {
     public Response queryAllActivePostCondition(@ApiParam(value = "活动名称") @RequestParam(required = false) String title,
                                                 @ApiParam(value = "发帖人id") @RequestParam(required = false) String userid,
                                                 @ApiParam(value = "内容") @RequestParam(required = false) String content,
-                                                @ApiParam(value = "活动开始日期") @RequestParam(required = false) String begintime,
-                                                @ApiParam(value = "活动结束日期") @RequestParam(required = false) String endtime,
+                                                @ApiParam(value = "活动日期") @RequestParam(required = false) String intime,
                                                 @ApiParam(value = "活动状态") @RequestParam(required = false) String statue,
                                                 @ApiParam(value = "排序") @RequestParam(required = false) String pai,
                                                 @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                                 @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<PostActiveList> pager = new Paging<PostActiveList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<PostActiveList> list = postFacade.queryAllActivePostCondition(title, userid, content, begintime, endtime, statue, pai, pager);
+        List<PostActiveList> list = postFacade.queryAllActivePostCondition(title, userid, content, intime, statue, pai, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

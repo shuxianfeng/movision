@@ -2124,13 +2124,12 @@ public class PostFacade {
      * @param title
      * @param userid
      * @param content
-     * @param begintime
-     * @param endtime
+     * @param intime
      * @param statue
      * @param pager
      * @return
      */
-    public List<PostActiveList> queryAllActivePostCondition(String title, String userid, String content, String begintime, String endtime, String statue, String pai, Paging<PostActiveList> pager) {
+    public List<PostActiveList> queryAllActivePostCondition(String title, String userid, String content, String intime, String statue, String pai, Paging<PostActiveList> pager) {
         //活动对象
         PostActiveList post = new PostActiveList();
         //活动周期对象
@@ -2145,17 +2144,22 @@ public class PostFacade {
             post.setPostcontent(content);
         }
 
-        Date beg = null;//开始时间
-        Date end = null;//结束时间
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        if (StringUtil.isNotEmpty(begintime) && StringUtil.isNotEmpty(endtime)) {
-            try {
-                beg = format.parse(begintime);
-                end = format.parse(endtime);
-                period.setEndtime(end);
-                period.setBegintime(beg);
-            } catch (ParseException e) {
-                e.printStackTrace();
+        if (StringUtil.isNotEmpty(intime)) {
+            String[] dat = intime.split(",");
+            String begintime = dat[0];
+            String endtime = dat[1];
+            Date beg = null;//开始时间
+            Date end = null;//结束时间
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            if (StringUtil.isNotEmpty(begintime) && StringUtil.isNotEmpty(endtime)) {
+                try {
+                    beg = format.parse(begintime);
+                    end = format.parse(endtime);
+                    period.setEndtime(end);
+                    period.setBegintime(beg);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         }
         if (!StringUtils.isEmpty(statue)) {
@@ -2169,19 +2173,17 @@ public class PostFacade {
         list = postService.queryAllActivePostCondition(post, pager);
         long str = new Date().getTime();
         //获取活动状态
-        getActiveStatus(begintime, endtime, list, str);
+        getActiveStatus(list, str);
         return list;
     }
 
     /**
      * 获取活动状态
      *
-     * @param begintime
-     * @param endtime
      * @param list
      * @param str
      */
-    private void getActiveStatus(String begintime, String endtime, List<PostActiveList> list, long str) {
+    private void getActiveStatus(List<PostActiveList> list, long str) {
         for (int i = 0; i < list.size(); i++) {
             String activeStatue = "";
             long begin = list.get(i).getBegintime().getTime();
