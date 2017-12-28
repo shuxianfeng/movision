@@ -5,6 +5,7 @@ import com.movision.common.constant.ImConstant;
 import com.movision.facade.im.ImFacade;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInformVo;
+import com.movision.mybatis.systemLayout.entity.SystemLayout;
 import com.movision.mybatis.systemPush.entity.SystemPush;
 import com.movision.mybatis.systemToPush.entity.SystemToPush;
 import com.movision.utils.SysNoticeUtil;
@@ -310,6 +311,17 @@ public class BossImNoticeController {
         return response;
     }
 
+    @ApiOperation(value = "推广消息_20171228", notes = "推广消息_20171228", response = Response.class)
+    @RequestMapping(value = "TGSend_20171228", method = RequestMethod.POST)
+    public Response TGSend_20171228(@ApiParam(value = "id") @RequestParam int id) {
+        Response response = new Response();
+        imFacade.TGSend_20171228(id);
+        if (response.getCode() == 200) {
+            response.setMessage("发送成功");
+        }
+        return response;
+    }
+
 
 
     @ApiOperation(value = "带不带链接发送消息", notes = "带不带链接发送消息", response = Response.class)
@@ -346,6 +358,26 @@ public class BossImNoticeController {
         response.setData(paging);
         return response;
     }
+
+    /**
+     * 查询所有消息模板
+     *
+     * @param
+     * @param
+     * @return
+     */
+    @ApiOperation(value = "查询所有消息模板", notes = "查询所有消息模板", response = Response.class)
+    @RequestMapping(value = "querySmsList", method = RequestMethod.POST)
+    public Response querySmsList( ) {
+        Response response = new Response();
+       List<SystemLayout> list = imFacade.querySmsList();
+        if (response.getCode() == 200) {
+            response.setMessage("查询所有消息模板");
+            response.setData(list);
+        }
+         return response;
+    }
+
 
     /**
      * 查询系统推送搜索

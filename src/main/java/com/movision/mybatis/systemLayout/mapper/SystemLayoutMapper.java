@@ -38,4 +38,10 @@ public interface SystemLayoutMapper {
     int queryHaetValue(String value);
 
     String querySysNoticeTemp(Map<String, Object> parammap);
+
+    List<SystemLayout> querySmsList();
+
+    String queryTemplet(int id);
+
+
 }

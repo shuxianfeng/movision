@@ -23,6 +23,7 @@ import com.movision.mybatis.imUserAccusation.service.ImUserAccusationService;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.imuser.service.ImUserService;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.mybatis.systemLayout.entity.SystemLayout;
 import com.movision.mybatis.systemLayout.service.SystemLayoutService;
 import com.movision.mybatis.systemPush.entity.SystemPush;
 import com.movision.mybatis.systemPush.service.SystemPushService;
@@ -1277,6 +1278,72 @@ public class ImFacade {
 
    }
 
+
+    /**
+     * 推广短信_20171228
+     */
+    public void  TGSend_20171228(int id){
+        //根据id查询模板
+        String templet=systemLayoutService.queryTemplet(id);
+        try {
+            TaobaoClient client = new DefaultTaobaoClient("https://eco.taobao.com/router/rest", "23696382", "27717070d06e98f5e4bd982293b0d77f");
+            AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
+            List<String> list = systemPushService.findAllPhone();
+            int pageNo = 1;
+            int pageSize = 200;
+            if (list.size() <= 200) {
+                for (int i = 0; i < list.size(); i++) {
+                    String mobile = "";
+                    mobile += list.get(i) + ",";
+                    mobile = mobile.substring(0, mobile.length() - 1);
+                    req.setExtend("123456");
+                    req.setSmsType("normal");
+                    req.setSmsFreeSignName("美番");
+                    req.setSmsParamString("");
+                    req.setRecNum(mobile);
+                    req.setSmsTemplateCode(templet);
+                    AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
+                    System.out.println(rsp.getBody());
+                }
+            }
+            int totalPageNum = (list.size() + pageSize - 1) / pageSize;
+            if (list.size() > 200) {
+                for (int j = 0; j <= totalPageNum; j++) {
+                    Paging pa = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+                    List<String> phone = systemPushService.findPhone(pa);
+                    String mobile = "";
+                    for (int i = 0; i < phone.size(); i++) {
+                        mobile += phone.get(i) + ",";
+                    }
+                    mobile = mobile.substring(0, mobile.length() - 1);
+                    pageNo += 1;
+                    req.setExtend("123456");
+                    req.setSmsType("normal");
+                    req.setSmsFreeSignName("美番");
+                    req.setSmsParamString("");
+                    req.setRecNum(mobile);
+                    req.setSmsTemplateCode(templet);
+                    AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
+                    System.out.println(rsp.getBody());
+                }
+
+            }
+            /**req.setExtend("123456");
+             req.setSmsType("normal");
+             req.setSmsFreeSignName("美番");
+             req.setSmsParamString("");
+             req.setRecNum("13814501287");
+             req.setSmsTemplateCode("SMS_118645085");
+             AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
+             System.out.println(rsp.getBody());*/
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    //
+
     /**
      * 带不带链接发送消息
      * @param body
@@ -1549,6 +1616,15 @@ public class ImFacade {
      */
     public String querySysNoticeTemp(Map<String, Object> parammap){
         return systemLayoutService.querySysNoticeTemp(parammap);
+    }
+
+
+    /**
+     * 查询所有消息模板
+     * @return
+     */
+    public List<SystemLayout> querySmsList(){
+        return systemLayoutService.querySmsList();
     }
 
 

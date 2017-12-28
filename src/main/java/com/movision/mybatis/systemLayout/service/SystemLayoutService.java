@@ -226,4 +226,26 @@ public class SystemLayoutService {
             throw e;
         }
     }
+
+    public List<SystemLayout> querySmsList(){
+        try {
+            log.info("查询Sms模板所有");
+            return systemLayoutMapper.querySmsList();
+        }catch (Exception e){
+            log.error("查询Sms模板所有失败", e);
+            throw e;
+        }
+    }
+
+
+    public String queryTemplet(int id){
+        try {
+            log.info("根据id查询模板");
+            return systemLayoutMapper.queryTemplet(id);
+        }catch (Exception e){
+            log.error("根据id查询模板失败", e);
+            throw e;
+        }
+    }
+
 }

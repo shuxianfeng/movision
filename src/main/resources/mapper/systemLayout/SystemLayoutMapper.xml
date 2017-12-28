@@ -157,5 +157,10 @@
             WHERE type = 'sysInformTemplate5'
         </if>
     </select>
-
+    <select id="querySmsList" resultType="com.movision.mybatis.systemLayout.entity.SystemLayout">
+        SELECT * FROM yw_system_layout WHERE module='sms'
+    </select>
+    <select id="queryTemplet" parameterType="java.lang.Integer" resultType="java.lang.String">
+        SELECT value FROM  yw_system_layout WHERE id=#{id,jdbcType=INTEGER}
+    </select>
 </mapper>
