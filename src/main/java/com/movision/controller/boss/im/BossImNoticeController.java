@@ -300,7 +300,7 @@ public class BossImNoticeController {
         return response;
     }
 
-    @ApiOperation(value = "推广消息", notes = "推广消息", response = Response.class)
+    /**@ApiOperation(value = "推广消息", notes = "推广消息", response = Response.class)
     @RequestMapping(value = "TGSend", method = RequestMethod.POST)
     public Response TGSend() {
         Response response = new Response();
@@ -309,13 +309,13 @@ public class BossImNoticeController {
             response.setMessage("发送成功");
         }
         return response;
-    }
+    }*/
 
-    @ApiOperation(value = "推广消息_20171228", notes = "推广消息_20171228", response = Response.class)
-    @RequestMapping(value = "TGSend_20171228", method = RequestMethod.POST)
+    @ApiOperation(value = "推广消息", notes = "推广消息_20171228", response = Response.class)
+    @RequestMapping(value = "TGSend", method = RequestMethod.POST)
     public Response TGSend_20171228(@ApiParam(value = "id") @RequestParam int id) {
         Response response = new Response();
-        imFacade.TGSend_20171228(id);
+        imFacade.TGSend(id);
         if (response.getCode() == 200) {
             response.setMessage("发送成功");
         }

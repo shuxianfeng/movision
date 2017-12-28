@@ -1220,7 +1220,7 @@ public class ImFacade {
     /**
      * 推广短信
       */
-   public void  TGSend(){
+   /**public void  TGSend(){
         try {
             TaobaoClient client = new DefaultTaobaoClient("https://eco.taobao.com/router/rest", "23696382", "27717070d06e98f5e4bd982293b0d77f");
             AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
@@ -1271,18 +1271,18 @@ public class ImFacade {
             req.setRecNum("13814501287");
             req.setSmsTemplateCode("SMS_118645085");
             AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
-            System.out.println(rsp.getBody());*/
+            System.out.println(rsp.getBody());
         }catch (Exception e){
             e.printStackTrace();
         }
 
-   }
+   }*/
 
 
     /**
-     * 推广短信_20171228
+     * 推广短信
      */
-    public void  TGSend_20171228(int id){
+    public void  TGSend(int id){
         //根据id查询模板
         String templet=systemLayoutService.queryTemplet(id);
         try {
