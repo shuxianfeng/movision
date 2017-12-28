@@ -1126,6 +1126,7 @@ public class ImFacade {
      * @return
      */
     public void AddPushMovement(String body) {
+        log.info("进入发送普通短信方法........................");
         Map<String, String> map = new LinkedHashMap<>();
         SystemPush systemPush = new SystemPush();
         systemPush.setUserid(ShiroUtil.getBossUserID());
@@ -1287,6 +1288,7 @@ public class ImFacade {
      * 推广短信
      */
     public void  TGSend(int id){
+        log.info("进入推广活动短信方法........................");
         //根据id查询模板
         String templet=systemLayoutService.queryTemplet(id);
         try {
