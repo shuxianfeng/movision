@@ -156,9 +156,9 @@
         </trim>
     </insert>
     <select id="findAllPhone" resultType="java.lang.String">
-        SELECT phone FROM yw_user
+        SELECT phone FROM yw_user WHERE phone is NOT NULL AND id <![CDATA[<=]]> 10000 OR id <![CDATA[>=]]> 20000 AND phone <![CDATA[<>]]> ''
     </select>
     <select id="findPhone" resultType="java.lang.String">
-        SELECT phone FROM yw_user
+        SELECT phone FROM yw_user WHERE phone is NOT NULL AND id <![CDATA[<=]]> 10000 OR id <![CDATA[>=]]> 20000 AND phone <![CDATA[<>]]> ''
     </select>
 </mapper>

@@ -1135,15 +1135,17 @@ public class ImFacade {
         List<String> list = systemPushService.findAllPhone();
         int pageNo = 1;
         int pageSize = 200;
-        if (list.size() <= 200) {
-            for (int i = 0; i < list.size(); i++) {
-                String mobile = "";
-                mobile += list.get(i) + ",";
-                mobile = mobile.substring(0, mobile.length() - 1);
-                map.put("body", body);
-                Gson gson = new Gson();
-                String json = gson.toJson(map);
-                SDKSendSms.sendSMS(mobile, json, PropertiesLoader.getValue("propelling_movement_infomation"));
+        if(list!=null){
+            if (list.size() <= 200) {
+                for (int i = 0; i < list.size(); i++) {
+                    String mobile = "";
+                    mobile += list.get(i) + ",";
+                    mobile = mobile.substring(0, mobile.length() - 1);
+                    map.put("body", body);
+                    Gson gson = new Gson();
+                    String json = gson.toJson(map);
+                    SDKSendSms.sendSMS(mobile, json, PropertiesLoader.getValue("propelling_movement_infomation"));
+                }
             }
         }
         int totalPageNum = (list.size() + pageSize - 1) / pageSize;
@@ -1151,16 +1153,18 @@ public class ImFacade {
             for (int j = 0; j <= totalPageNum; j++) {
                 Paging pa = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
                 List<String> phone = systemPushService.findPhone(pa);
-                String mobile = "";
-                for (int i = 0; i < phone.size(); i++) {
-                    mobile += phone.get(i) + ",";
+                if(phone!=null){
+                    String mobile = "";
+                    for (int i = 0; i < phone.size(); i++) {
+                        mobile += phone.get(i) + ",";
+                    }
+                    mobile = mobile.substring(0, mobile.length() - 1);
+                    pageNo += 1;
+                    map.put("body", body);
+                    Gson gson = new Gson();
+                    String json = gson.toJson(map);
+                    SDKSendSms.sendSMS(mobile, json, PropertiesLoader.getValue("propelling_movement_infomation"));
                 }
-                mobile = mobile.substring(0, mobile.length() - 1);
-                pageNo += 1;
-                map.put("body", body);
-                Gson gson = new Gson();
-                String json = gson.toJson(map);
-                SDKSendSms.sendSMS(mobile, json, PropertiesLoader.getValue("propelling_movement_infomation"));
             }
 
         }
@@ -1291,40 +1295,45 @@ public class ImFacade {
             List<String> list = systemPushService.findAllPhone();
             int pageNo = 1;
             int pageSize = 200;
-            if (list.size() <= 200) {
-                for (int i = 0; i < list.size(); i++) {
-                    String mobile = "";
-                    mobile += list.get(i) + ",";
-                    mobile = mobile.substring(0, mobile.length() - 1);
-                    req.setExtend("123456");
-                    req.setSmsType("normal");
-                    req.setSmsFreeSignName("美番");
-                    req.setSmsParamString("");
-                    req.setRecNum(mobile);
-                    req.setSmsTemplateCode(templet);
-                    AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
-                    System.out.println(rsp.getBody());
+            if(list!=null){
+                if (list.size() <= 200) {
+                    for (int i = 0; i < list.size(); i++) {
+                        String mobile = "";
+                        mobile += list.get(i) + ",";
+                        mobile = mobile.substring(0, mobile.length() - 1);
+                        req.setExtend("123456");
+                        req.setSmsType("normal");
+                        req.setSmsFreeSignName("美番");
+                        req.setSmsParamString("");
+                        req.setRecNum(mobile);
+                        req.setSmsTemplateCode(templet);
+                        AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
+                        System.out.println(rsp.getBody());
+                    }
                 }
+
             }
             int totalPageNum = (list.size() + pageSize - 1) / pageSize;
             if (list.size() > 200) {
                 for (int j = 0; j <= totalPageNum; j++) {
                     Paging pa = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
                     List<String> phone = systemPushService.findPhone(pa);
-                    String mobile = "";
-                    for (int i = 0; i < phone.size(); i++) {
-                        mobile += phone.get(i) + ",";
+                    if(phone!=null){
+                        String mobile = "";
+                        for (int i = 0; i < phone.size(); i++) {
+                            mobile += phone.get(i) + ",";
+                        }
+                        mobile = mobile.substring(0, mobile.length() - 1);
+                        pageNo += 1;
+                        req.setExtend("123456");
+                        req.setSmsType("normal");
+                        req.setSmsFreeSignName("美番");
+                        req.setSmsParamString("");
+                        req.setRecNum(mobile);
+                        req.setSmsTemplateCode(templet);
+                        AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
+                        System.out.println(rsp.getBody());
                     }
-                    mobile = mobile.substring(0, mobile.length() - 1);
-                    pageNo += 1;
-                    req.setExtend("123456");
-                    req.setSmsType("normal");
-                    req.setSmsFreeSignName("美番");
-                    req.setSmsParamString("");
-                    req.setRecNum(mobile);
-                    req.setSmsTemplateCode(templet);
-                    AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
-                    System.out.println(rsp.getBody());
                 }
 
             }
