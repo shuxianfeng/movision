@@ -1136,7 +1136,7 @@ public class ImFacade {
         List<String> list = systemPushService.findAllPhone();
         int pageNo = 1;
         int pageSize = 200;
-        if(list!=null){
+        if(list.size()!=0){
             if (list.size() <= 200) {
                 for (int i = 0; i < list.size(); i++) {
                     String mobile = "";
@@ -1154,7 +1154,7 @@ public class ImFacade {
             for (int j = 0; j <= totalPageNum; j++) {
                 Paging pa = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
                 List<String> phone = systemPushService.findPhone(pa);
-                if(phone!=null){
+                if(phone.size()!=0){
                     String mobile = "";
                     for (int i = 0; i < phone.size(); i++) {
                         mobile += phone.get(i) + ",";
@@ -1297,7 +1297,7 @@ public class ImFacade {
             List<String> list = systemPushService.findAllPhone();
             int pageNo = 1;
             int pageSize = 200;
-            if(list!=null){
+            if(list.size()!=0){
                 if (list.size() <= 200) {
                     for (int i = 0; i < list.size(); i++) {
                         String mobile = "";
@@ -1320,7 +1320,7 @@ public class ImFacade {
                 for (int j = 0; j <= totalPageNum; j++) {
                     Paging pa = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
                     List<String> phone = systemPushService.findPhone(pa);
-                    if(phone!=null){
+                    if(phone.size()!=0){
                         String mobile = "";
                         for (int i = 0; i < phone.size(); i++) {
                             mobile += phone.get(i) + ",";
