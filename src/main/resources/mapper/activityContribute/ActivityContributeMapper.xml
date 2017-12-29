@@ -129,9 +129,9 @@
 
     <select id="findAllQueryActivityContribute" parameterType="java.util.Map"
             resultType="com.movision.mybatis.activityContribute.entity.ActivityContributeVo">
-        SELECT c.*,p.title AS postName,u.nickname,u.level FROM yw_activity_contribute c LEFT JOIN yw_user u ON
+        SELECT c.*,p.title AS postName,u.nickname,u.level FROM yw_activity_contribute c INNER JOIN yw_user u ON
         u.id=c.userid
-        LEFT JOIN yw_post p ON c.postid=p.id WHERE 1
+        INNER JOIN yw_post p ON c.postid=p.id WHERE 1
         <if test="nickname != null">
             AND u.nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')
         </if>
@@ -144,8 +144,8 @@
         <if test="type != null">
             AND c.status=#{type,jdbcType=INTEGER}
         </if>
-        <if test="level != null">
-            AND u.level=#{level,jdbcType=INTEGER}
+        <if test="vip != null">
+            AND u.isdv=#{vip,jdbcType=INTEGER}
         </if>
         <if test="begintime != null and endtime != null">
             AND c.intime BETWEEN #{begintime,jdbcType=TIMESTAMP} AND #{endtime,jdbcType=TIMESTAMP}

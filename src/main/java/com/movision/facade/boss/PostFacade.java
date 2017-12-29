@@ -2581,7 +2581,7 @@ public class PostFacade {
      * @param pager
      * @return
      */
-    public List<ActivityContributeVo> findAllQueryActivityContribute(String nickname, String email, String type, String level, String postname, String title,
+    public List<ActivityContributeVo> findAllQueryActivityContribute(String nickname, String email, String type, String vip, String postname, String title,
                                                                      String intime, String pai, Paging<ActivityContributeVo> pager) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Map map = new HashMap();
@@ -2609,10 +2609,10 @@ public class PostFacade {
             map.put("email", email);
         }
         if (StringUtil.isNotEmpty(type)) {
-            map.put("type", type);
+            map.put("type", Integer.parseInt(type));
         }
-        if (StringUtil.isNotEmpty(level)) {
-            map.put("level", level);
+        if (StringUtil.isNotEmpty(vip)) {
+            map.put("vip", vip);
         }
         if (StringUtil.isNotEmpty(postname)) {
             map.put("postname", postname);
