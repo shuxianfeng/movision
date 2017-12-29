@@ -470,8 +470,6 @@ public class PostController {
      * @param isessence
      * @param orderid
      * @param essencedate
-     * @param begintime
-     * @param endtime
      * @param userid
      * @return
      */
@@ -489,15 +487,15 @@ public class PostController {
             @ApiParam(value = "首页精选") @RequestParam(required = false) String isessence,
             @ApiParam(value = "精选排序") @RequestParam(required = false) String orderid,
             @ApiParam(value = "精选日期（毫秒值）") @RequestParam(required = false) String essencedate,
-            @ApiParam(value = "活动开始日期 ") @RequestParam String begintime,
-            @ApiParam(value = "活动结束日期 ") @RequestParam String endtime,
+            @ApiParam(value = "活动日期 ") @RequestParam String intime,
             @ApiParam(value = "发帖人") @RequestParam String userid,
             @ApiParam(value = "方形图片url") @RequestParam(required = false) String hotimgurl,
             @ApiParam(value = "是否设为热门（0 否  1 是）") @RequestParam(required = false) String ishot,
             @ApiParam(value = "热门排序") @RequestParam(required = false) String ishotorder,
             @ApiParam(value = "分享商品") @RequestParam(required = false) String goodsid) {
         Response response = new Response();
-        Map<String, Integer> result = postFacade.addPostActive(title, subtitle, activetype, partsumEnddays, iscontribute, activefee, coverimg, postcontent, isessence, orderid, essencedate, begintime, endtime, userid, hotimgurl, ishot, ishotorder, goodsid);
+        Map<String, Integer> result = postFacade.addPostActive(title, subtitle, activetype, partsumEnddays, iscontribute,
+                activefee, coverimg, postcontent, isessence, orderid, essencedate, intime, userid, hotimgurl, ishot, ishotorder, goodsid);
         if (response.getCode() == 200) {
             response.setMessage("添加成功");
         }

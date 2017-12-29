@@ -1080,8 +1080,7 @@ public class PostFacade {
      * @param isessence    首页精选
      * @param orderid      精选排序
      * @param essencedate  精选日期
-     * @param begintime
-     * @param endtime
+     * @param intime
      * @param userid
      * @return
      */
@@ -1089,7 +1088,7 @@ public class PostFacade {
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map<String, Integer> addPostActive(String title, String subtitle, String activetype, String partsumEnddays, String iscontribute, String activefee,
                                               String coverimg, String postcontent, String isessence, String orderid, String essencedate,
-                                              String begintime, String endtime, String userid, String hotimgurl, String ishot, String ishotorder, String goodsid) {
+                                              String intime, String userid, String hotimgurl, String ishot, String ishotorder, String goodsid) {
         PostTo post = new PostTo();
         Map<String, Integer> map = new HashedMap();
         post.setTitle(title);//帖子标题
@@ -1158,19 +1157,18 @@ public class PostFacade {
         int result = postService.addPostActiveList(post);//新建活动
         Period period = new Period();
         Date begin = null;//开始时间
-        if (StringUtil.isNotEmpty(begintime)) {
-            try {
-                begin = format.parse(begintime);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
         Date end = null;
-        if (StringUtil.isNotEmpty(endtime)) {
-            try {
-                end = format.parse(endtime);
-            } catch (ParseException e) {
-                e.printStackTrace();
+        if (StringUtil.isNotEmpty(intime)) {
+            String[] date = intime.split(",");
+            String begintime = date[0];
+            String endtime = date[1];
+            if (StringUtil.isNotEmpty(begintime) && StringUtil.isNotEmpty(endtime)) {
+                try {
+                    begin = format.parse(begintime);
+                    end = format.parse(endtime);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         }
         period.setBegintime(begin);
