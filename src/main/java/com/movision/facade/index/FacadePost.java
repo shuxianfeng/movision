@@ -4842,7 +4842,7 @@ public class FacadePost {
         long endtime=end.getTime();
         long str= date.getTime();
         if(str > beding && str < endtime) {
-            if (count < 10) {
+            if (count <= 3) {
                 if (postidCoun == 0) {
                     ActiveTake activeTake = new ActiveTake();
                     activeTake.setDevice(device);
