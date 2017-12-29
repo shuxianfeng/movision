@@ -1182,8 +1182,7 @@ public class PostController {
      * @param email
      * @param type
      * @param postname
-     * @param begintime
-     * @param endtime
+     * @param intime
      * @param pai
      * @param pageNo
      * @param pageSize
@@ -1197,14 +1196,13 @@ public class PostController {
                                             @ApiParam(value = "帖子标题") @RequestParam(required = false) String postname,
                                             @ApiParam(value = "是否是VIP") @RequestParam(required = false) String vip,
                                             @ApiParam(value = "投稿主题") @RequestParam(required = false) String title,
-                                            @ApiParam(value = "开始时间") @RequestParam(required = false) String begintime,
-                                            @ApiParam(value = "结束时间") @RequestParam(required = false) String endtime,
+                                            @ApiParam(value = "时间") @RequestParam(required = false) String intime,
                                             @ApiParam(value = "排序方式 0为时间倒叙") @RequestParam(required = false) String pai,
                                             @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                             @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<ActivityContributeVo> pager = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<ActivityContributeVo> resault = postFacade.findAllQueryActivityContribute(nickname, email, type, vip, postname, title, begintime, endtime, pai, pager);
+        List<ActivityContributeVo> resault = postFacade.findAllQueryActivityContribute(nickname, email, type, vip, postname, title, intime, pai, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

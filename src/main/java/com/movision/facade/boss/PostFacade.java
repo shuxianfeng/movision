@@ -2576,27 +2576,31 @@ public class PostFacade {
      * @param email
      * @param type
      * @param postname
-     * @param begintime
-     * @param endtime
+     * @param intime
      * @param pai
      * @param pager
      * @return
      */
     public List<ActivityContributeVo> findAllQueryActivityContribute(String nickname, String email, String type, String level, String postname, String title,
-                                                                     String begintime, String endtime, String pai, Paging<ActivityContributeVo> pager) {
+                                                                     String intime, String pai, Paging<ActivityContributeVo> pager) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Map map = new HashMap();
         Date beg = null;
         Date end = null;
-        try {
-            if (StringUtil.isNotEmpty(begintime) && StringUtil.isNotEmpty(endtime)) {
-                beg = format.parse(begintime);
-                end = format.parse(endtime);
+        if (StringUtil.isNotEmpty(intime)) {
+            String[] date = intime.split(",");
+            String begintime = date[0];
+            String endtime = date[1];
+            try {
+                if (StringUtil.isNotEmpty(begintime) && StringUtil.isNotEmpty(endtime)) {
+                    beg = format.parse(begintime);
+                    end = format.parse(endtime);
+                }
+                map.put("begintime", beg);
+                map.put("endtime", end);
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
-            map.put("begintime", beg);
-            map.put("endtime", end);
-        } catch (ParseException e) {
-            e.printStackTrace();
         }
         if (StringUtil.isNotEmpty(nickname)) {
             map.put("nickname", nickname);
