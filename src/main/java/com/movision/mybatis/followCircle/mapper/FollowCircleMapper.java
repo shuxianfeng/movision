@@ -1,8 +1,10 @@
 package com.movision.mybatis.followCircle.mapper;
 
+import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.followCircle.entity.FollowCircle;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -26,4 +28,5 @@ public interface FollowCircleMapper {
     int queryFollowSumByUser(int userid);
 
     void cancelFollowCircle(Map<String, Object> parammap);
+    List<Circle> queryUserFollowCircle(int userid);
 }

@@ -117,4 +117,7 @@
         intime = #{intime,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=INTEGER}
     </update>
+    <select id="queryUserFollowCircle" parameterType="java.lang.Integer" resultType="com.movision.mybatis.circle.entity.Circle">
+        SELECT e.* FROM yw_follow_circle c INNER JOIN yw_circle e ON e.id=c.circleid WHERE c.userid=#{userid,jdbcType=INTEGER}
+    </select>
 </mapper>

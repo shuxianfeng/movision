@@ -149,6 +149,23 @@ public class AppWaterfallController {
     }
 
     /**
+     * 首页滑动列表
+     *
+     * @return
+     */
+    @ApiOperation(value = "首页滑动列表_20180102", notes = "首页滑动列表_20180102", response = Response.class)
+    @RequestMapping(value = "indexHomeList_20180102", method = RequestMethod.POST)
+    public Response indexHomeList_20180102(@ApiParam(value = "用户id") @RequestParam(required = false) String userid) {
+        Response response = new Response();
+        List<CircleVo> list = facadePost.indexHomeList_20180102(userid);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(list);
+        return response;
+    }
+
+    /**
      * 用户刷新的历史列表
      *
      * @param userid

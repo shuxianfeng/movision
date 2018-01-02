@@ -23,6 +23,7 @@ import com.movision.mybatis.activePart.entity.ActivePart;
 import com.movision.mybatis.activePart.service.ActivePartService;
 import com.movision.mybatis.activeTake.entity.ActiveTake;
 import com.movision.mybatis.activeTake.service.ActiveTakeService;
+import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.entity.CirclePost;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circle.service.CircleService;
@@ -34,6 +35,8 @@ import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.compressImg.entity.CompressImg;
 import com.movision.mybatis.compressImg.service.CompressImgService;
+import com.movision.mybatis.followCircle.entity.FollowCircle;
+import com.movision.mybatis.followCircle.service.FollowCircleService;
 import com.movision.mybatis.followUser.entity.FollowUser;
 import com.movision.mybatis.followUser.service.FollowUserService;
 import com.movision.mybatis.goods.entity.Goods;
@@ -211,6 +214,9 @@ public class FacadePost {
     private XmlParseFacade xmlParseFacade;
     @Autowired
     private HomepageManageService homepageManageService;
+
+    @Autowired
+    private FollowCircleService followCircleService;
 
     public PostVo queryPostDetail(String postid, String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         //通过userid、postid查询该用户有没有关注该圈子的权限
@@ -4903,6 +4909,24 @@ public class FacadePost {
     public List<HomepageManage> queryIndexPic(){
         List<HomepageManage> url =  homepageManageService.queryIndexPic();
         return url;
+    }
+
+
+    /**
+     * 首页头部列表_2018年1月2号改
+     * @param userid
+     * @return
+     */
+    public List indexHomeList_20180102(String userid){
+        //查询用户关注的圈子
+        List<Circle> list=null;
+        if(userid!=null){
+            list=followCircleService.queryUserFollowCircle(Integer.parseInt(userid));
+        }else {
+            list=null;
+        }
+        return list;
+
     }
 
 }
