@@ -232,4 +232,6 @@ public interface UserMapper {
     int queryFollow(Map map);
 
     List<UserLike> queryCircleaAministratorListById(Integer circleid);
+
+    List<UserChannelStatistics> queryUserChannelStatistics();
 }

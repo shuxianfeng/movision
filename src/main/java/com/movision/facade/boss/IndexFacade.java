@@ -6,6 +6,7 @@ import com.movision.mybatis.bossIndex.entity.IndexTodayDetails;
 import com.movision.mybatis.bossIndex.entity.ProcessedGoodsOrders;
 import com.movision.mybatis.bossIndex.service.IndexService;
 import com.movision.mybatis.user.entity.User;
+import com.movision.mybatis.user.entity.UserChannelStatistics;
 import com.movision.mybatis.user.entity.UserParticulars;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userDauStatistics.entity.UserDauStatistics;
@@ -124,6 +125,15 @@ public class IndexFacade {
         vo.setActivityRate((Double.parseDouble(String.valueOf(vo.getValGather()))) / (Double.parseDouble(String.valueOf(vo.getUserGather()))));//活跃率
         resault.put("gather", vo);
         return resault;
+    }
+
+    /**
+     * 统计用户渠道数量
+     *
+     * @return
+     */
+    public List<UserChannelStatistics> queryUserChannelStatistics() {
+        return userService.queryUserChannelStatistics();
     }
 
     /**

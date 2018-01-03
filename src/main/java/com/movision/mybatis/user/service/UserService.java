@@ -1468,4 +1468,19 @@ public class UserService {
             throw e;
         }
     }
+
+    /**
+     * 统计用户渠道数量异常
+     *
+     * @return
+     */
+    public List<UserChannelStatistics> queryUserChannelStatistics() {
+        try {
+            log.info("查询用户渠道统计");
+            return userMapper.queryUserChannelStatistics();
+        } catch (Exception e) {
+            log.error("统计用户渠道数量异常", e);
+            throw e;
+        }
+    }
 }

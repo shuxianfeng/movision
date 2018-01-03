@@ -1804,4 +1804,10 @@ SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
         </if>
     </select>
 
+
+    <select id="queryUserChannelStatistics" resultType="com.movision.mybatis.user.entity.UserChannelStatistics">
+        <![CDATA[
+        SELECT COUNT(id) AS statistics,source FROM yw_user WHERE status = 0 AND id> 20000 or id < 10000 GROUP BY source
+        ]]>
+    </select>
 </mapper>

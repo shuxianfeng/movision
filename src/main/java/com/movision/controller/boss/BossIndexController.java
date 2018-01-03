@@ -5,6 +5,7 @@ import com.movision.facade.boss.IndexFacade;
 import com.movision.mybatis.bossIndex.entity.AboveStatistics;
 import com.movision.mybatis.bossIndex.entity.IndexTodayDetails;
 import com.movision.mybatis.bossIndex.entity.ProcessedGoodsOrders;
+import com.movision.mybatis.user.entity.UserChannelStatistics;
 import com.movision.mybatis.userDauStatistics.entity.UserDauStatistics;
 import com.movision.mybatis.userDauStatistics.entity.UserDauStatisticsVo;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -95,6 +97,16 @@ public class BossIndexController {
         Map statistics = indexFacade.queryUserStatistics(time);
         response.setMessage("查询成功");
         response.setData(statistics);
+        return response;
+    }
+
+    @RequestMapping(value = "query_user_channel_statistics", method = RequestMethod.POST)
+    @ApiOperation(value = "统计用户渠道数量", notes = "统计用户渠道数量", response = Response.class)
+    public Response queryUserChannelStatistics() {
+        Response response = new Response();
+        List<UserChannelStatistics> list = indexFacade.queryUserChannelStatistics();
+        response.setMessage("查询成功");
+        response.setData(list);
         return response;
     }
 
