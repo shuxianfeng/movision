@@ -35,12 +35,13 @@
         <result column="ishot_order" jdbcType="INTEGER" property="ishotorder"/>
         <result column="isheatoperate" jdbcType="INTEGER" property="isheatoperate"/>
         <result column="countview" jdbcType="INTEGER" property="countview"/>
+        <result column="category" jdbcType="INTEGER" property="category"/>
     </resultMap>
     <!--BaseColumn-->
     <sql id="Base_Column_List">
         id, circleid, title, subtitle, postcontent, zansum, commentsum, forwardsum, collectsum,
         isactive, partsum_enddays, activetype, activefee, iscontribute, type, ishot, orderid,
-        isessence, isessencepool, coverimg, hotimgurl,
+        isessence, isessencepool, coverimg, hotimgurl,category,
         intime,totalpoint,isdel,essencedate,userid,oprtime,heat_value,activeid,city,ishot_order,isheatoperate,countview
     </sql>
 
@@ -430,7 +431,8 @@
         circleid, title,
         postcontent, zansum, commentsum, forwardsum,
         collectsum, isactive, ishot, isessence,
-        isessencepool, coverimg, intime, totalpoint, isdel, essencedate, userid,oprtime, activeid, city, heat_value
+        isessencepool, coverimg, intime, totalpoint, isdel, essencedate, userid,oprtime, activeid, city,
+        heat_value,category,
         )
         VALUES (
         #{circleid,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{postcontent,jdbcType=LONGVARCHAR},
@@ -439,7 +441,7 @@
         #{ishot,jdbcType=INTEGER},#{isessence,jdbcType=INTEGER},#{isessencepool,jdbcType=INTEGER},
         #{coverimg,jdbcType=VARCHAR},now(),#{totalpoint,jdbcType=INTEGER},#{isdel,jdbcType=INTEGER},
         #{essencedate,jdbcType=DATE},#{userid,jdbcType=INTEGER},#{oprtime,jdbcType=TIMESTAMP},
-        #{activeid}, #{city}, #{heatvalue}
+        #{activeid}, #{city}, #{heatvalue},#{category}
         )
     </insert>
     <!--插入一条用户参与活动的记录-->
@@ -1626,7 +1628,7 @@
         (SELECT COALESCE(SUM(r.points),0) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
         (SELECT COALESCE(SUM(ac.num),0) FROM yw_post_accusation ac WHERE ac.postid =p.id) AS accusation,
         (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid) AS circlename,
-        (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid) AS category
+        (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid) AS circlecategory
         FROM yw_post AS p LEFT JOIN yw_user u ON u.id=p.userid
         WHERE p.isdel=0 AND p.isactive=0
         <if test="uid!=null">

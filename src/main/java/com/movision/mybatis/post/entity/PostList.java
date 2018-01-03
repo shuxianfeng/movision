@@ -90,7 +90,7 @@ public class PostList implements Serializable {
 
     private Date essencedate;//精选日期
 
-    private Integer category;//圈子分类
+    private Integer circlecategory;//圈子分类
 
     private String categoryname;//圈子分类名称
 
@@ -121,6 +121,16 @@ public class PostList implements Serializable {
     private List<PostLabel> postLabels;//帖子标签
 
     private Integer countview;//点击量
+
+    private Integer category;
+
+    public Integer getCategory() {
+        return category;
+    }
+
+    public void setCategory(Integer category) {
+        this.category = category;
+    }
 
     public Integer getCountview() {
         return countview;
@@ -252,12 +262,12 @@ public class PostList implements Serializable {
         this.userid = userid;
     }
 
-    public Integer getCategory() {
-        return category;
+    public Integer getCirclecategory() {
+        return circlecategory;
     }
 
-    public void setCategory(Integer category) {
-        this.category = category;
+    public void setCirclecategory(Integer circlecategory) {
+        this.circlecategory = circlecategory;
     }
 
     public String getActivestatue() {

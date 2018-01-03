@@ -203,10 +203,11 @@ public class AppPostController {
                                         @ApiParam(value = "帖子内容") @RequestParam String postcontent,
                                         @ApiParam(value = "帖子封面") @RequestParam String coverimg,
                                         @ApiParam(value = "标签id 多个以逗号分隔") @RequestParam(required = false) String labelid,
-                                        @ApiParam(value = "分享的产品id(多个商品用英文逗号,隔开)") @RequestParam(required = false) String proids) {
+                                        @ApiParam(value = "分享的产品id(多个商品用英文逗号,隔开)") @RequestParam(required = false) String proids,
+                                        @ApiParam(value = "发帖类型0长图文，1纯图文，2视频") @RequestParam(required = false) String category) {
         Response response = new Response();
 
-        Map count = facadePost.releasePostByPCTest(request, userid, circleid, title, postcontent, coverimg, labelid, proids);
+        Map count = facadePost.releasePostByPCTest(request, userid, circleid, title, postcontent, coverimg, labelid, proids, category);
 
         if (count.get("flag").equals(-2)) {
             response.setCode(300);
@@ -465,11 +466,12 @@ public class AppPostController {
                                        @ApiParam(value = "帖子封面图片url字符串") @RequestParam String coverimg,
                                        @ApiParam(value = "标签实体集合，json字符串形式") @RequestParam(required = false) String labellist,
                                        @ApiParam(value = "分享的产品id(多个商品用英文逗号,隔开)") @RequestParam(required = false) String proids,
-                                       @ApiParam(value = "IOS发帖传1，否则传0") @RequestParam(required = false) Integer mark) {
+                                       @ApiParam(value = "IOS发帖传1，否则传0") @RequestParam(required = false) Integer mark,
+                                       @ApiParam(value = "发帖类型0长图文，1纯图文，2视频") @RequestParam(required = false) String category) {
 
         Response response = new Response();
 
-        Map count = facadePost.postUnderZk(request, userid, circleid, title, postcontent, isactive, coverimg, proids, labellist, activeid, mark);
+        Map count = facadePost.postUnderZk(request, userid, circleid, title, postcontent, isactive, coverimg, proids, labellist, activeid, mark, category);
 
         if (count.get("flag").equals(-2)) {
             response.setCode(300);

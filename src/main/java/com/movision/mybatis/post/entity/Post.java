@@ -68,6 +68,16 @@ public class Post implements Serializable {
 
     private Integer countview;//帖子浏览量
 
+    private Integer category;//0长图文贴1纯文本贴2视频贴
+
+    public Integer getCategory() {
+        return category;
+    }
+
+    public void setCategory(Integer category) {
+        this.category = category;
+    }
+
     public Integer getCountview() {
         return countview;
     }

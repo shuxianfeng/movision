@@ -708,7 +708,7 @@ public class FacadePost {
     @Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map releasePostByPCTest(HttpServletRequest request, String userid, String circleid, String title,
-                                   String postcontent, String coverimg, String labelid, String proids) {
+                                   String postcontent, String coverimg, String labelid, String proids, String category) {
         Map map = new HashMap();
 
         //这里需要根据userid判断当前登录的用户是否有发帖权限
@@ -1040,7 +1040,7 @@ public class FacadePost {
      */
     public Map postUnderZk(HttpServletRequest request, String userid, String circleid, String title,
                            String postcontent, String isactive, String coverimg, String proids, String labellist,
-                           String activeid, Integer mark) {
+                           String activeid, Integer mark, String category) {
         DistributedLock lock = null;
         System.out.println("测试标签json》》》》》》》》》》》》》》" + labellist);
         try {
@@ -1048,7 +1048,7 @@ public class FacadePost {
             //加锁
             lock.lock();
             //发帖操作
-            return releaseModularPost(request, userid, circleid, title, postcontent, isactive, coverimg, proids, labellist, activeid);
+            return releaseModularPost(request, userid, circleid, title, postcontent, isactive, coverimg, proids, labellist, activeid, category);
 
         } catch (Exception e) {
             log.error("执行异常>>>", e);
@@ -1079,7 +1079,7 @@ public class FacadePost {
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map releaseModularPost(HttpServletRequest request, String userid, String circleid, String title,
                                   String postcontent, String isactive, String coverimg, String proids, String labellist,
-                                  String activeid) {
+                                  String activeid, String category) {
         Map map = new HashMap();
         validateNotNullUseridAndCircleid(userid, circleid);
 
@@ -1115,7 +1115,7 @@ public class FacadePost {
                 log.info("APP前端用户开始请求发帖");
                 Map contentMap = null;
                 //封装帖子实体
-                Post post = preparePostJavaBean(request, uid, cid, title, postcontent, isactive, coverimg, contentMap, activeid);
+                Post post = preparePostJavaBean(request, uid, cid, title, postcontent, isactive, coverimg, contentMap, activeid, category);
                 //1 插入帖子
                 postService.releaseModularPost(post);
                 //返回的主键--帖子id
@@ -1329,7 +1329,7 @@ public class FacadePost {
      */
     private Post preparePostJavaBean(HttpServletRequest request, Integer userid, Integer circleid, String title,
                                      String postcontent, String isactive,
-                                     String coverimg, Map contentMap, String activeid) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+                                     String coverimg, Map contentMap, String activeid, String category) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         Post post = new Post();
         post.setCircleid(circleid);
         post.setTitle(title);
@@ -1346,6 +1346,9 @@ public class FacadePost {
         post.setIsessencepool(0);//是否设为精选池中的帖子
         post.setIntime(new Date());//帖子发布时间
         post.setTotalpoint(0);//帖子综合评分
+        if (StringUtil.isNotEmpty(category)) {
+            post.setCategory(Integer.parseInt(category));
+        }
         if ((int) contentMap.get("flag") == 0) {
             post.setIsdel(0);//上架
         } else if ((int) contentMap.get("flag") > 0) {
