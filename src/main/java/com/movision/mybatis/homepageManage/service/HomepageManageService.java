@@ -230,4 +230,15 @@ public class HomepageManageService {
         }
     }
 
+
+    public List<HomepageManage> queryGetAppPeacockFigure(){
+        try {
+            log.info("获取App开屏图返回数据");
+            return homepageManageMapper.queryGetAppPeacockFigure();
+        }catch (Exception e){
+            log.error("获取App开屏图返回数据失败");
+            throw e;
+        }
+    }
+
 }

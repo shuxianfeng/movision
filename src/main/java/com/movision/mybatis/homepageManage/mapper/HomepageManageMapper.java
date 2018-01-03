@@ -46,4 +46,7 @@ public interface HomepageManageMapper {
     int updateAtionAdvertisementOrderid(Map map);
 
     List<HomepageManage> queryIndexPic();
+
+    List<HomepageManage> queryGetAppPeacockFigure();
+
 }

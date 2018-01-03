@@ -6,6 +6,7 @@ import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circle.entity.MyCircle;
 import com.movision.mybatis.circle.service.CircleService;
+import com.movision.mybatis.homepageManage.entity.HomepageManage;
 import com.movision.mybatis.homepageManage.service.HomepageManageService;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
@@ -169,5 +170,15 @@ public class CircleAppFacade {
         }else {
             return "";
         }
+    }
+
+
+    /**
+     *获取APP开屏图接口2018年1月3号修改
+     * @return
+     */
+    public List<HomepageManage> queryGetAppPeacockFigure(){
+        List<HomepageManage> list = homepageManageService.queryGetAppPeacockFigure();
+        return list;
     }
 }

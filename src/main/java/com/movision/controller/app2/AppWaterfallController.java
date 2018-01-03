@@ -14,6 +14,7 @@ import com.movision.mybatis.homepageManage.entity.HomepageManage;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.postLabel.entity.PostLabelTz;
 import com.movision.mybatis.user.entity.UserVo;
+import com.movision.utils.L;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.model.ServicePaging;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -58,21 +59,20 @@ public class AppWaterfallController {
 
 
     /**
-     * 下拉刷新
+     * 下拉刷新_20180103修改
      *
      * @return
      */
-    @ApiOperation(value = "下拉刷新", notes = "下拉刷新", response = Response.class)
-    @RequestMapping(value = "userRefreshListNew", method = RequestMethod.POST)
-    public Response userRefreshList(@ApiParam(value = "用户id ") @RequestParam(required = false) String userid,
-                                    @ApiParam(value = "类型 1：推荐2：关注3：本地 4：圈子 5：标签") @RequestParam(required = false) int type,
+    @ApiOperation(value = "下拉刷新_20180103修改", notes = "下拉刷新_20180103修改", response = Response.class)
+    @RequestMapping(value = "userRefreshListNew_20180103", method = RequestMethod.POST)
+    public Response userRefreshListNew_20180103(@ApiParam(value = "用户id ") @RequestParam(required = false) String userid,
+                                    @ApiParam(value = "类型 1：推荐2：关注3：本地 4：圈子") @RequestParam(required = false) int type,
                                     @ApiParam(value = "纬度") @RequestParam(required = false) String lat,
                                     @ApiParam(value = "圈子id") @RequestParam(required = false) String circleid,
-                                    @ApiParam(value = "标签id") @RequestParam(required = false) String labelid,
-                                    @ApiParam(value = "设备号") @RequestParam(required = false) String device,
+                                     @ApiParam(value = "设备号") @RequestParam(required = false) String device,
                                     @ApiParam(value = "经度") @RequestParam(required = false) String lng) {
         Response response = new Response();
-        List map = facadePost.userRefreshListNew(userid, device, type, lat, circleid, labelid, lng);
+        List map = facadePost.userRefreshListNew_20180103(userid, device, type, lat, circleid, lng);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
@@ -106,32 +106,7 @@ public class AppWaterfallController {
 
     }
 
-    /**
-     * 下拉刷新
-     *
-     * @return
-     */
-    /**@ApiOperation(value = "下拉刷新", notes = "下拉刷新", response = Response.class)
-     @RequestMapping(value = "userRefreshListNew", method = RequestMethod.POST)
-     public Response userRefreshList(@ApiParam(value = "用户id ") @RequestParam(required = false) String userid,
-     @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
-     @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize,
-     @ApiParam(value = "类型 1：推荐2：关注3：本地 4：圈子 5：标签") @RequestParam(required = false) int type,
-     @ApiParam(value = "地区") @RequestParam(required = false) String area,
-     @ApiParam(value = "圈子id") @RequestParam(required = false) String circleid,
-     @ApiParam(value = "标签id") @RequestParam(required = false) String labelid) {
-     Response response = new Response();
-     ServicePaging<PostVo> pager = new ServicePaging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-     List map = facadePost.userRefreshListNew(userid, pager, type, area, circleid, labelid);
-     if (response.getCode() == 200) {
-     response.setMessage("查询成功");
-     }
-     pager.setRows(map);
-     response.setData(pager);
-     return response;
-
-     }*/
-    /**
+     /**
      * 首页滑动列表
      *
      * @return
@@ -149,7 +124,7 @@ public class AppWaterfallController {
     }
 
     /**
-     * 首页滑动列表
+     * 首页滑动列表_20180102
      *
      * @return
      */
@@ -166,7 +141,7 @@ public class AppWaterfallController {
     }
 
     /**
-     * 用户刷新的历史列表
+     * 用户刷新的历史记录列表_20180103修改
      *
      * @param userid
      * @param pageNo
@@ -174,19 +149,18 @@ public class AppWaterfallController {
      * @return
      *
      */
-    @ApiOperation(value = "用户刷新的历史记录列表", notes = "用户刷新的历史记录列表", response = Response.class)
-    @RequestMapping(value = "userReflushHishtoryRecord", method = RequestMethod.POST)
-    public Response userReflushHishtoryRecord(@ApiParam(value = "用户id") @RequestParam(required = false) String userid,
-                                              @ApiParam(value = "1：推荐2：关注3：本地 4：圈子 5：标签") @RequestParam int type,
+    @ApiOperation(value = "用户刷新的历史记录列表_20180103修改", notes = "用户刷新的历史记录列表_20180103修改", response = Response.class)
+    @RequestMapping(value = "userReflushHishtoryRecord_20180103", method = RequestMethod.POST)
+    public Response userReflushHishtoryRecord_20180103(@ApiParam(value = "用户id") @RequestParam(required = false) String userid,
+                                              @ApiParam(value = "1：推荐2：关注3：本地 4：圈子") @RequestParam int type,
                                               @ApiParam(value = "设备号") @RequestParam(required = false) String device,
                                               @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                               @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "15") String pageSize,
-                                              @ApiParam(value = "标签id") @RequestParam(required = false) String labelid,
-                                              @ApiParam(value = "圈子id") @RequestParam(required = false) String circleid,
+                                               @ApiParam(value = "圈子id") @RequestParam(required = false) String circleid,
                                               @ApiParam(value = "帖子id") @RequestParam String postids) {
         Response response = new Response();
         Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List<PostVo> map = facadePost.userReflushHishtoryRecord(userid, pager, type, device, labelid, circleid, postids);
+        List<PostVo> map = facadePost.userReflushHishtoryRecord_20180103(userid, pager, type, device, circleid, postids);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
@@ -764,6 +738,21 @@ public class AppWaterfallController {
         return response;
     }
 
+
+
+    @ApiOperation(value = "返回APP开屏图或开屏动画2018年1月3号改", notes = "返回APP开屏图或开屏动画2018年1月3号改", response = Response.class)
+    @RequestMapping(value = "queryGetAppPeacockFigure", method = RequestMethod.POST)
+    public Response queryGetAppPeacockFigure() {
+        Response response = new Response();
+        List<HomepageManage> imgurl = circleAppFacade.queryGetAppPeacockFigure();
+        if (response.getCode() == 200) {
+            response.setMessage("获取成功");
+        } else {
+            response.setMessage("获取失败");
+        }
+        response.setData(imgurl);
+        return response;
+    }
 
     @ApiOperation(value = "获取首页活动图片", notes = "获取首页活动图片", response = Response.class)
     @RequestMapping(value = "queryIndexPic", method = RequestMethod.POST)

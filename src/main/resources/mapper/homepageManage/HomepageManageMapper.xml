@@ -43,7 +43,9 @@
     <select id="getOpenAppImg" resultType="java.lang.String" >
         SELECT url FROM yw_homepage_manage WHERE topictype = '8'
     </select>
-
+    <select id="queryGetAppPeacockFigure" resultType="com.movision.mybatis.homepageManage.entity.HomepageManage">
+         SELECT * FROM yw_homepage_manage WHERE topictype = '8'
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_homepage_manage
         where id = #{id,jdbcType=INTEGER}

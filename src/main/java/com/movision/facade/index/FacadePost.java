@@ -2906,14 +2906,14 @@ public class FacadePost {
     }
 
     /***
-     * 下拉刷新
+     * 下拉刷新下拉刷新_20180103修改
      * @param userid
      * @param
      * @param type
      * @param
      * @return
      */
-    public List userRefreshListNew(String userid, String device, int type, String lat, String circleid, String labelid, String lng) {
+    public List userRefreshListNew_20180103(String userid, String device, int type, String lat, String circleid, String lng) {
         List<PostVo> list = null;
         if (type == 1) {//推荐
             list = recommendPost(userid, device);
@@ -2923,8 +2923,6 @@ public class FacadePost {
             list = localhostPost(userid, lat, device, lng);
         } else if (type == 4) {//圈子c
             list = circleRefulsh(userid, Integer.parseInt(circleid), device);
-        } else if (type == 5) {//标签
-            list = labelPost(userid, Integer.parseInt(labelid), device);
         }
         return list;
     }
@@ -4109,16 +4107,16 @@ public class FacadePost {
      * @param userid
      * @return
      */
-    public List<PostVo> userReflushHishtoryRecord(String userid, Paging<PostVo> paging, int type, String device, String labelid, String circleid, String postids) {
+    public List<PostVo> userReflushHishtoryRecord_20180103(String userid, Paging<PostVo> paging, int type, String device, String circleid, String postids) {
         log.debug("首页历史接口的传参postid=" + postids);
         log.debug("首页历史接口的传参pageNo=" + paging.getCurPage());
         List<PostVo> postVo = null;
         if (userid != null) {
             //用户登录下
-            postVo = userLoginHistoryRecord(userid, paging, type, labelid, circleid, postids, postVo, device);
+            postVo = userLoginHistoryRecord(userid, paging, type, circleid, postids, postVo, device);
         } else {
             //未登录下
-            postVo = userNotLoginHistoryRecord(paging, type, device, labelid, circleid, postids, postVo);
+            postVo = userNotLoginHistoryRecord(paging, type, device, circleid, postids, postVo);
         }
         return postVo;
     }
@@ -4129,7 +4127,7 @@ public class FacadePost {
      * @param paging
      * @param type
      * @param device
-     * @param labelid
+     * @param
      * @param circleid
      * @param postids
      * @param postVo
@@ -4137,13 +4135,11 @@ public class FacadePost {
      * @param
      * @return
      */
-    private List<PostVo> userNotLoginHistoryRecord(Paging<PostVo> paging, int type, String device, String labelid, String circleid, String postids, List<PostVo> postVo) {
-        if (StringUtil.isEmpty(labelid) && StringUtil.isEmpty(circleid)) {
+    private List<PostVo> userNotLoginHistoryRecord(Paging<PostVo> paging, int type, String device, String circleid, String postids, List<PostVo> postVo) {
+        if ( StringUtil.isEmpty(circleid)) {
             postVo = userNotLoginHistoryRecordThird(paging, type, device, postids);
         }
-        if (StringUtil.isNotEmpty(labelid)) {
-            postVo = userNotLoginHistoryRecordLabel(paging, type, device, labelid, postids);
-        } else if (StringUtil.isNotEmpty(circleid)) {
+        if (StringUtil.isNotEmpty(circleid)) {
             postVo = userNotLoginHistoryRecordCircle(paging, type, device, circleid, postids);
         }
         return postVo;
@@ -4321,7 +4317,7 @@ public class FacadePost {
      * @param userid
      * @param paging
      * @param type
-     * @param labelid
+     * @param
      * @param circleid
      * @param postids
      * @param postVo
@@ -4329,17 +4325,14 @@ public class FacadePost {
      * @return
      */
     private List<PostVo> userLoginHistoryRecord(String userid, Paging<PostVo> paging, int type,
-                                                String labelid, String circleid, String postids,
+                                               String circleid, String postids,
                                                 List<PostVo> postVo, String device) {
         //推荐、关注、本地
-        if (StringUtil.isEmpty(circleid) && StringUtil.isEmpty(labelid)) {
+        if (StringUtil.isEmpty(circleid) ) {
             postVo = userLoginHistoryRecordThird(userid, paging, type, postids, device);
         }
 
-        if (StringUtil.isNotEmpty(labelid)) {
-            //首页标签
-            postVo = userLoginHistoryRecordLabel(userid, paging, type, labelid, postids, device);
-        } else if (StringUtil.isNotEmpty(circleid)) {
+        if (StringUtil.isNotEmpty(circleid)) {
             //首页圈子
             postVo = userLoginHistoryRecordCircle(userid, paging, type, circleid, postids, device);
         }
@@ -5109,6 +5102,182 @@ public class FacadePost {
         return list;
 
     }
+
+
+    /**
+     * 新版发帖--长图贴
+     * @param request
+     * @param userid
+     * @param circleid
+     * @param activeid
+     * @param title
+     * @param subtitle
+     * @param postcontent
+     * @param isactive
+     * @param labellist
+     * @param proids
+     * @return
+     */
+    public Map releasePicturePost(HttpServletRequest request, String userid, String circleid, String activeid, String title,
+                                String subtitle, String postcontent, String isactive, String labellist, String proids) {
+        DistributedLock lock = null;
+        System.out.println("测试标签json》》》》》》》》》》》》》》" + labellist);
+        try {
+            lock = new DistributedLock(LOCK_NAME);
+            //加锁
+            lock.lock();
+            //发帖操作
+            return releaseModularPicturePost(request, userid, circleid, activeid, title, subtitle, postcontent, isactive, labellist, proids);
+
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "zk控制下的发视频帖异常");
+        } finally {
+            if (lock != null) {
+                //释放锁
+                lock.unlock();
+            }
+        }
+    }
+
+    /**
+     * 模块化发帖（新版发帖--长图贴）
+     * @param request
+     * @param userid
+     * @param circleid
+     * @param title
+     * @param subtitle
+     * @param postcontent
+     * @param isactive
+     * @param proids
+     * @param labellist
+     * @param activeid
+     * @return
+     */
+    @Transactional
+    @CacheEvict(value = "indexData", key = "'index_data'")
+    public Map releaseModularPicturePost(HttpServletRequest request, String userid, String circleid, String title,
+                                       String subtitle, String postcontent, String isactive, String proids,
+                                       String labellist, String activeid) {
+        Map map = new HashMap();
+        validateNotNullUseridAndCircleid(userid, circleid);
+
+        int cid = Integer.parseInt(circleid);
+        int uid = Integer.parseInt(userid);
+
+        /**
+         *  这里需要根据userid判断当前登录的用户是否有发帖权限
+         */
+        //查询当前圈子的开放范围
+        int scope = circleService.queryCircleScope(cid);
+        //查询当前圈子的所有者
+        User owner = circleService.queryCircleOwner(cid);
+        //查询当前圈子的所有管理员列表
+        List<User> manageList = circleService.queryCircleManage(cid);
+        //判断该用户是否是圈子管理员
+        int mark = getMarkIsCircleAdmin(userid, manageList);
+        int lev = ShiroUtil.getUserLevel();     //用户等级
+
+        log.debug("发帖用户的id是：" + uid);
+        log.debug("发帖的圈子的所有者的id是：" + owner.getId());
+        log.debug("发帖的圈子的scope是：" + scope);
+        log.debug("发帖用户的mark是：" + mark);
+        log.debug("发帖用户的等级level是：" + lev);
+
+        //拥有权限的：1.该圈所有人均可发帖 2.该用户是该圈所有者 3.该用户是圈子管理员  4.所有者和大V可发时，发帖用户即为大V
+        if (scope == 2
+                || uid == owner.getId()
+                || mark == 1
+                || (scope == 1 && lev >= 1)) {
+
+            try {
+                log.info("APP前端用户开始请求发长图帖");
+                Map contentMap = null;
+                //封装帖子实体
+                Post post = preparePicturePostJavaBeanNew(request, uid, cid, title, subtitle, postcontent, isactive, contentMap, activeid, 1);//最后一个入参category为1：长图贴
+                //1 插入帖子
+                postService.insertSelective(post);
+                //返回的主键--帖子id
+                int flag = post.getId();
+                //2 再保存帖子中分享的商品列表(如果商品id字段不为空)
+                insertPostShareGoods(proids, flag);
+                //3 标签业务逻辑处理
+                if (StringUtils.isNotBlank(labellist)) {
+                    addLabelProcess(labellist, flag);
+                }
+                //4 积分处理
+                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), uid);//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                //5 增加用户热度
+                facadeHeatValue.addUserHeatValue(2, uid);
+                //6 如果是参与活动发帖，则需要记录流水
+                activePartService.addRecord(activeid, uid);
+
+                map.put("flag", flag);
+                return map;
+
+            } catch (Exception e) {
+                log.error("系统异常，APP发帖失败");
+                map.put("flag", -2);
+                e.printStackTrace();
+                return map;
+            }
+        } else {
+            log.info("该用户不具备发帖权限");
+            map.put("flag", -1);
+            return map;
+        }
+    }
+
+    /**
+     * 根据请求中的参数准备Post实体(无封面coverimg)
+     *
+     * @param request
+     * @param userid
+     * @param circleid
+     * @param title
+     * @param subtitle
+     * @param postcontent
+     * @param isactive
+     * @param contentMap
+     * @return
+     */
+    private Post preparePicturePostJavaBeanNew(HttpServletRequest request, Integer userid, Integer circleid, String title,
+                                        String subtitle, String postcontent, String isactive,
+                                        Map contentMap, String activeid, Integer category) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        Post post = new Post();
+        post.setCircleid(circleid);
+        post.setTitle(title);
+        post.setSubtitle(subtitle); //帖子副标题（作品描述）
+
+        contentMap = setPostContent(request, postcontent, contentMap, post);
+        post.setZansum(0);//新发帖全部默认为0次
+        post.setCommentsum(0);//被评论次数
+        post.setForwardsum(0);//被转发次数
+        post.setCollectsum(0);//被收藏次数
+        post.setIsactive(Integer.parseInt(isactive));//是否为活动 0 帖子 1 活动
+        post.setIshot(0);//是否设为热门：默认0否
+        post.setIsessence(0);//是否设为精选：默认0否
+        post.setIsessencepool(0);//是否设为精选池中的帖子
+        post.setIntime(new Date());//帖子发布时间
+        post.setTotalpoint(0);//帖子综合评分
+        if ((int) contentMap.get("flag") == 0) {
+            post.setIsdel(0);//上架
+        } else if ((int) contentMap.get("flag") > 0) {
+            post.setIsdel(2);
+        }
+        post.setUserid(userid);
+        post.setHeatvalue(3000); //默认的帖子热度值
+        //城市编码
+        String citycode = wrapCitycode();
+        post.setCity(citycode);    //使用登录时的城市一样
+
+        if (StringUtils.isNotBlank(activeid)) {
+            post.setActiveid(Integer.parseInt(activeid));
+        }
+        post.setCategory(category);
+        return post;
+    }
+
 
 }
 
