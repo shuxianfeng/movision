@@ -496,6 +496,35 @@ public class AppPostController {
         return response;
     }
 
+    @ApiOperation(value = "新版发帖--视频帖", notes = "新版发帖--视频贴", response = Response.class)
+    @RequestMapping(value = "releaseVideoPost", method = RequestMethod.POST)
+    public Response releaseVideoPost(HttpServletRequest request,
+                                     @ApiParam(value = "用户id") @RequestParam String userid,
+                                     @ApiParam(value = "所属圈子id") @RequestParam String circleid,
+                                     @ApiParam(value = "所属活动id") @RequestParam(required = false) String activeid,
+                                     @ApiParam(value = "帖子主标题(限18个字以内)") @RequestParam String title,
+                                     @ApiParam(value = "说说关于你拍摄的故事--帖子副标题（限制500字符或汉字）") @RequestParam String subtitle,
+                                     @ApiParam(value = "帖子内容") @RequestParam String postcontent,
+                                     @ApiParam(value = "是否为活动：0 帖子 1 活动（APP端固定传0）") @RequestParam String isactive,
+                                     @ApiParam(value = "标签实体集合，json字符串形式") @RequestParam(required = false) String labellist,
+                                     @ApiParam(value = "分享的产品id(多个商品用英文逗号,隔开)") @RequestParam(required = false) String proids){
+        Response response = new Response();
+
+        Map count = facadePost.releaseVideoPost(request, userid, circleid, activeid, title, subtitle, postcontent, isactive, labellist, proids);
+
+        if (count.get("flag").equals(-2)) {
+            response.setCode(300);
+            response.setMessage("系统异常，APP发帖失败");
+        } else if (count.get("flag").equals(-1)) {
+            response.setCode(201);
+            response.setMessage("用户不具备发帖权限");
+        } else {
+            response.setCode(200);
+            response.setMessage("发帖成功");
+        }
+        return response;
+    }
+
     @ApiOperation(value = "发帖-查询有发帖权限的圈子目录", notes = "发帖-查询有发帖权限的圈子目录", response = Response.class)
     @RequestMapping(value = "get_circle_category_when_post", method = RequestMethod.GET)
     public Response getCircleCategoryWhenPost() {

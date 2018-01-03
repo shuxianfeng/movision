@@ -708,6 +708,18 @@ public class PostService {
         }
     }
 
+    /**
+     * 添加帖子
+     */
+    public int insertSelective(Post post) {
+        try {
+            log.info("添加帖子");
+            return postMapper.insertSelective(post);
+        } catch (Exception e) {
+            log.error("添加帖子异常", e);
+            throw e;
+        }
+    }
 
     /**
      * 帖子添加商品

@@ -514,6 +514,9 @@
             <if test="isactive != null">
                 isactive,
             </if>
+            <if test="partsum_enddays != null">
+                partsum_enddays,
+            </if>
             <if test="activetype != null">
                 activetype,
             </if>
@@ -562,6 +565,27 @@
             <if test="oprtime != null">
                 oprtime,
             </if>
+            <if test="heat_value != null">
+                heat_value,
+            </if>
+            <if test="isheatoperate != null">
+                isheatoperate,
+            </if>
+            <if test="activeid != null">
+                activeid,
+            </if>
+            <if test="ishot_order != null">
+                ishot_order,
+            </if>
+            <if test="city != null">
+                city,
+            </if>
+            <if test="countview != null">
+                countview,
+            </if>
+            <if test="category != null">
+                category,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -593,6 +617,9 @@
             </if>
             <if test="isactive != null">
                 #{isactive,jdbcType=INTEGER},
+            </if>
+            <if test="partsum_enddays != null">
+                #{partsum_enddays,jdbcType=INTEGER},
             </if>
             <if test="activetype != null">
                 #{activetype,jdbcType=INTEGER},
@@ -641,6 +668,27 @@
             </if>
             <if test="oprtime !=null">
                 #{oprtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="heat_value != null">
+                #{heat_value,jdbcType=INTEGER},
+            </if>
+            <if test="isheatoperate != null">
+                #{isheatoperate,jdbcType=INTEGER},
+            </if>
+            <if test="activeid != null">
+                #{activeid,jdbcType=INTEGER},
+            </if>
+            <if test="ishot_order != null">
+                #{ishot_order,jdbcType=INTEGER},
+            </if>
+            <if test="city != null">
+                #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="countview != null">
+                #{countview,jdbcType=INTEGER},
+            </if>
+            <if test="category != null">
+                #{category,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
