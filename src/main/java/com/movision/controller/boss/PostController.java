@@ -448,9 +448,10 @@ public class PostController {
                                 @ApiParam(value = "内容") @RequestParam String postcontent,//帖子内容
                                 @ApiParam(value = "标签id") @RequestParam(required = false) String labelid,
                                 @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,
-                                @ApiParam(value = "登录用户") @RequestParam String loginid) {
+                                @ApiParam(value = "登录用户") @RequestParam String loginid,
+                                @ApiParam(value = "0图文贴1纯图片贴2视频贴") @RequestParam String category) {
         Response response = new Response();
-        Map resaut = postFacade.addPostTest(request, title, subtitle, circleid, userid, coverimg, postcontent, labelid, goodsid, loginid);
+        Map resaut = postFacade.addPostTest(request, title, subtitle, circleid, userid, coverimg, postcontent, labelid, goodsid, loginid, category);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -724,9 +725,10 @@ public class PostController {
                                        @ApiParam(value = "帖子内容（必填）") @RequestParam String postcontent,//帖子内容
                                        @ApiParam(value = "标签id") @RequestParam(required = false) String labelid,
                                        @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,
-                                       @ApiParam(value = "登录用户") @RequestParam String loginid) {
+                                       @ApiParam(value = "登录用户") @RequestParam String loginid,
+                                       @ApiParam(value = "帖子类型0图文贴1纯图贴2视频贴") @RequestParam String category) {
         Response response = new Response();
-        Map map = postFacade.updatePostByIdTest(request, id, title, subtitle, userid, circleid, coverimg, postcontent, labelid, goodsid, loginid);
+        Map map = postFacade.updatePostByIdTest(request, id, title, subtitle, userid, circleid, coverimg, postcontent, labelid, goodsid, loginid, category);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }

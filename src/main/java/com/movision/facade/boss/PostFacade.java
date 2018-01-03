@@ -769,189 +769,6 @@ public class PostFacade {
         return postList;
     }
 
-  /*  *//**
-     * 添加帖子
-     *
-     * @param title
-     * @param subtitle
-     * @param type
-     * @param circleid
-     * @param coverimg
-     * @param postcontent
-     * @param isessence
-     * @param time
-     * @return
-     *//*
-    @Transactional
-    @CacheEvict(value = "indexData", key = "'index_data'")
-    public Map addPost(HttpServletRequest request, String title, String subtitle, String type, String circleid,
-                       String userid, String coverimg, String vid, String bannerimgurl,
-                       String postcontent, String isessence, String ishot, String orderid, String time, String label,
-                       String goodsid, String loginid) {
-        PostTo post = new PostTo();
-        Map map = new HashedMap();
-        PostLabelRelation labelRelation = new PostLabelRelation();
-        Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.add.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), Integer.parseInt(circleid));
-        //-----------------添加开始
-        BossUser bu = bossUserService.queryUserByAdministrator(Integer.parseInt(loginid));//根据登录用户id查询当前用户有哪些权限
-        if (bu.getIscircle() > 0 || bu.getCirclemanagement() > 0) {
-            Integer isc = userService.queryUserIsCricle(Integer.parseInt(loginid));//查询用户对应前台用户id
-            userid = isc.toString();
-        }
-        //======================添加结束
-        if (res.get("resault").equals(1)) {
-                if (StringUtil.isNotEmpty(title)) {
-                    post.setTitle(title);//帖子标题
-                }
-                if (StringUtil.isNotEmpty(subtitle)) {
-                    post.setSubtitle(subtitle);//帖子副标题
-                }
-                if (StringUtil.isNotEmpty(type)) {
-                    post.setType(type);//帖子类型
-                }
-                if (StringUtil.isNotEmpty(circleid)) {
-                    post.setCircleid(circleid);//圈子id
-                }
-                if (StringUtil.isNotEmpty(bannerimgurl)) {
-                    post.setCoverimg(bannerimgurl);//添加帖子封面
-                }
-                post.setIsactive("0");//设置状态为帖子
-                if (StringUtil.isNotEmpty(postcontent)) {
-
-                    //内容转换
-                    Map con = jsoupCompressImg.compressImg(request, postcontent);
-                    System.out.println(con);
-                    if ((int) con.get("code") == 200) {
-                        String str = con.get("content").toString();
-                        str = str.replace("\\", "");
-                        post.setPostcontent(str);//帖子内容
-                    } else {
-                        logger.error("帖子内容转换异常");
-                        post.setPostcontent(postcontent);
-                    }
-
-                    *//*post.setPostcontent(postcontent);*//*
-                }
-                post.setIntime(new Date());//插入时间
-                if (StringUtil.isNotEmpty(ishot)) {
-                    post.setIshot(ishot);//是否为圈子精选
-                }
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                Date d = null;
-                if (StringUtil.isNotEmpty(isessence)) {
-                    if (isessence != "0") {//判断是否为加精
-                        post.setIsessence(isessence);//是否为首页精选
-                        if (StringUtil.isNotEmpty(orderid)) {
-                            post.setOrderid(Integer.parseInt(orderid));
-                        }
-                        if (StringUtil.isNotEmpty(time)) {
-                            try {
-                                d = format.parse(time);
-                                post.setEssencedate(d);
-                            } catch (ParseException e) {
-                                log.error("时间插入异常");
-                            }
-                        }
-
-                    }
-                }
-                post.setCoverimg(coverimg);//插入图片地址
-                post.setUserid(userid);
-                post.setIsdel("0");
-                int result = postService.addPost(post);//添加帖子
-
-            //帖子使用的标签
-            if (StringUtil.isNotEmpty(label)) {
-                String[] str = label.split(",");
-                Map postlabelrelationMap = new HashMap();
-                List<Integer> newLabelIdList = new ArrayList<>();
-                for (int i = 0; i < str.length; i++) {
-                    newLabelIdList.add(Integer.parseInt(str[i]));
-                }
-                postlabelrelationMap.put("postid", post.getId());
-                postlabelrelationMap.put("labelids", newLabelIdList.toArray());
-                //批量新增帖子、标签关系
-                postLabelRelationService.batchAdd(postlabelrelationMap);
-            }
-
-
-                //String fName = FileUtil.getPicName(vid);//获取视频文件名
-                //查询圈子名称
-                //  String circlename = circleService.queryCircleName(Integer.parseInt(circleid));
-                // String vedioid = videoUploadUtil.videoUpload(vid, fName, "", bannerimgurl, circlename);
-                if (result == 1) {
-                    Integer in = 0;
-                    Integer pid = post.getId();//获取到刚刚添加的帖子id
-                    if (StringUtil.isNotEmpty(ishot)) {
-                        if (Integer.parseInt(ishot) == 1) {
-                            //增加热度
-                            facadeHeatValue.addHeatValue(pid, 2, null);
-                        }
-                    }
-                    if (type.equals("1")) {
-                        Video vide = new Video();
-                        vide.setPostid(pid);
-                        vide.setVideourl(vid);
-                        vide.setBannerimgurl(bannerimgurl);
-                        vide.setIntime(new Date());
-                        in = videoService.insertVideoById(vide);//添加视频表
-                    } else if (type.equals("2")) {//分享视频贴
-                        Video vide = new Video();
-                        vide.setPostid(pid);
-                        vide.setVideourl(vid);
-                        vide.setBannerimgurl(coverimg);//分享视频贴的视频封面是帖子封面
-                        vide.setIntime(new Date());
-                        in = videoService.insertVideoById(vide);//添加视频表
-                    }
-                    if (StringUtil.isNotEmpty(goodsid)) {//帖子添加商品
-                        String[] lg = goodsid.split(",");//以逗号分隔
-                        for (int i = 0; i < lg.length; i++) {
-                            Map addgoods = new HashedMap();
-                            addgoods.put("postid", pid);
-                            addgoods.put("goodsid", lg[i]);
-                            int goods = postService.insertGoods(addgoods);//添加帖子分享的商品
-                            if (goods == 1 && in == 1) {//添加视频和添加帖子同时成功
-                                map.put("result", goods);
-                            }
-                        }
-                    }
-
-                    PostProcessRecord pprd = new PostProcessRecord();
-                    if (ishot != null) {
-                        pprd.setIshot(Integer.parseInt(ishot));
-                    }
-                    pprd.setPostid(post.getId());
-                    if (isessence != null) {
-                        pprd.setIsesence(Integer.parseInt(isessence));
-                    }
-                    postProcessRecordService.insertProcessRecord(pprd);//插入精选、热门记录
-                    if (StringUtil.isNotEmpty(ishot)) {
-                        if (ishot.equals("1")) {
-                            pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.circle_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
-                        }
-                    }
-                    if (StringUtil.isNotEmpty(isessence)) {
-                        if (isessence.equals("1")) {
-                            log.info("发帖人----------------------------------------", userid);
-                            pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.index_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
-                        }
-                    }
-                    if (Integer.parseInt(loginid) != -1) {
-                        log.info("发帖人（个人积分）----------------------------------------", userid);
-                        log.info("登录人id--------------------------------" + loginid);
-                        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
-                    }
-                }
-                map.put("resault", 1);
-                // map.put("vedioid", vedioid);
-                return map;
-        } else {
-            map.put("resault", -1);
-            map.put("massge", "权限不足");
-            return map;
-        }
-    }*/
-
     /**
      * 改版发帖
      *
@@ -967,7 +784,7 @@ public class PostFacade {
     @Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map addPostTest(HttpServletRequest request, String title, String subtitle, String circleid, String userid,
-                           String coverimg, String postcontent, String label, String goodsid, String loginid) {
+                           String coverimg, String postcontent, String label, String goodsid, String loginid, String category) {
         PostTo post = new PostTo();
         Map map = new HashedMap();
         //权限
@@ -983,6 +800,7 @@ public class PostFacade {
             post.setCircleid(circleid);//圈子id
             post.setCoverimg(coverimg);//帖子封面
             post.setIsactive("0");//设置状态为帖子
+            post.setCategory(Integer.parseInt(category));
             Map con = null;
             if (StringUtil.isNotEmpty(postcontent)) {
                 //内容转换
@@ -1887,7 +1705,7 @@ public class PostFacade {
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map updatePostByIdTest(HttpServletRequest request, String id, String title, String subtitle,
                                   String userid, String circleid, String coverimg, String postcontent,
-                                  String labelid, String goodsid, String loginid) {
+                                  String labelid, String goodsid, String loginid, String category) {
         PostTo post = new PostTo();
         Map map = new HashedMap();
         Integer lgid = Integer.parseInt(loginid);
@@ -1906,6 +1724,9 @@ public class PostFacade {
                     post.setCoverimg(coverimg);
                 }
                 post.setIsactive("0");//设置状态为帖子
+                if (StringUtil.isNotEmpty(category)) {
+                    post.setCategory(Integer.parseInt(category));
+                }
                 Map con = null;
                 if (StringUtil.isNotEmpty(postcontent)) {
                     //内容转换

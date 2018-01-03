@@ -154,6 +154,7 @@ public class XmlParseFacade {
                 List<Element> elements = element.elements("PostItem");
                 //存储本地图片路径，以便做空间释放操作
                 List list = new ArrayList();
+                String isk = "0";
                 //循环所有父节点
                 for (Element e : elements) {
                     try {
@@ -188,6 +189,8 @@ public class XmlParseFacade {
                             if (content != "") {
                                 content = textTransform(content, caption);
                             }
+                        } else {
+                            isk = "1";
                         }
                         //视频内容解析
                     /*if (type.equals("Video")) {
@@ -215,7 +218,7 @@ public class XmlParseFacade {
                             String lbs = postLabel(post, tag);
                             //新增帖子操作
                             postFacade.addPostTest(request, "", "", circleid, post.getUserid().toString(),
-                                    post.getCoverimg(), post.getPostcontent(), lbs, "", "1");
+                                    post.getCoverimg(), post.getPostcontent(), lbs, "", "1", isk);
                         }
                         kk++;
                     } catch (NumberFormatException e1) {

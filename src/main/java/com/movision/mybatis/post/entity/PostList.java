@@ -122,7 +122,7 @@ public class PostList implements Serializable {
 
     private Integer countview;//点击量
 
-    private Integer category;
+    private Integer category;//帖子分类0图文贴1纯图片贴2视频贴
 
     public Integer getCategory() {
         return category;

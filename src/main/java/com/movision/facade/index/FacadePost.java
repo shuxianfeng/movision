@@ -729,7 +729,7 @@ public class FacadePost {
             try {
                 log.info("APP前端用户开始请求发帖");
 
-                Post post = preparePost4PC(request, userid, circleid, title, postcontent, coverimg);
+                Post post = preparePost4PC(request, userid, circleid, title, postcontent, coverimg, category);
                 //插入帖子
                 postService.releasePost(post);
 
@@ -780,7 +780,7 @@ public class FacadePost {
      * @param coverimg
      * @return
      */
-    private Post preparePost4PC(HttpServletRequest request, String userid, String circleid, String title, String postcontent, String coverimg) {
+    private Post preparePost4PC(HttpServletRequest request, String userid, String circleid, String title, String postcontent, String coverimg, String category) {
         Post post = new Post();
         post.setCircleid(Integer.parseInt(circleid));
         post.setTitle(title);
@@ -809,6 +809,10 @@ public class FacadePost {
         post.setIsessencepool(0);//是否设为精选池中的帖子
         post.setIntime(new Date());//帖子发布时间
         post.setTotalpoint(0);//帖子综合评分
+        if (StringUtil.isNotEmpty(category)) {
+            //0图文发帖1纯图片发帖2视频贴
+            post.setCategory(Integer.parseInt(category));
+        }
         if ((int) con.get("flag") != 0) {
             post.setIsdel(2);//视频
         } else {

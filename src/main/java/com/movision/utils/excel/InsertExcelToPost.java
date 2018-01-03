@@ -163,6 +163,8 @@ public class InsertExcelToPost {
                 User user = new User();
                 //存放标签id
                 String labels = "";
+                //判断是纯图片帖子还是图文帖子
+                String isk = "0";
 
                 // 循环Excel的列
                 for (int c = 0; c < this.totalCells; c++) {
@@ -304,8 +306,11 @@ public class InsertExcelToPost {
                     //操作帖子封面
 
                     //新增帖子操作
+                    if (StringUtil.isEmpty(text)) {
+                        isk = "1";
+                    }
                     postFacade.addPostTest(request, post.getTitle().toString(), "", post.getCircleid().toString(), String.valueOf(userid),
-                            post.getCoverimg(), post.getPostcontent(), labelids, "", "1");
+                            post.getCoverimg(), post.getPostcontent(), labelids, "", "1", isk);
                 }
 
             }

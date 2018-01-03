@@ -68,6 +68,16 @@ public class PostTo implements Serializable {
 
     private Integer ishotorder;//热门排序
 
+    private Integer category;//0图文贴1纯图片贴2视频贴
+
+    public Integer getCategory() {
+        return category;
+    }
+
+    public void setCategory(Integer category) {
+        this.category = category;
+    }
+
     public Integer getHeatvalue() {
         return heatvalue;
     }

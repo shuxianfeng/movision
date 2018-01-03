@@ -727,6 +727,9 @@
             <if test="oprtime != null">
                 oprtime,
             </if>
+            <if test="category != null">
+                category,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -803,6 +806,9 @@
             </if>
             <if test="oprtime != null">
                 #{oprtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test=" category != null">
+                #{category,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -1243,7 +1249,7 @@
         (SELECT name FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=p.id AND isactive=0 AND isdel=0)) AS
         circlename,
         (SELECT category FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=p.id AND isactive=0 AND
-        isdel=0)) AS category,
+        isdel=0)) AS circlecategory,
         (SELECT categoryname FROM yw_circle_category WHERE id=(SELECT category FROM yw_circle WHERE id=(SELECT circleid
         FROM yw_post WHERE id=p.id AND isactive=0 AND
         isdel=0))) AS categoryname,
