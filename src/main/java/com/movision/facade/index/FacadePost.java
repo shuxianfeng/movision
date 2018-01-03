@@ -5194,7 +5194,7 @@ public class FacadePost {
                 log.info("APP前端用户开始请求发长图帖");
                 Map contentMap = null;
                 //封装帖子实体
-                Post post = preparePicturePostJavaBeanNew(request, uid, cid, title, subtitle, postcontent, isactive, contentMap, activeid, 1);//最后一个入参category为1：长图贴
+                Post post = preparePostJavaBeanNew(request, uid, cid, title, subtitle, postcontent, isactive, contentMap, activeid, 1);//最后一个入参category为1：长图贴
                 //1 插入帖子
                 postService.insertSelective(post);
                 //返回的主键--帖子id
@@ -5228,55 +5228,6 @@ public class FacadePost {
         }
     }
 
-    /**
-     * 根据请求中的参数准备Post实体(无封面coverimg)
-     *
-     * @param request
-     * @param userid
-     * @param circleid
-     * @param title
-     * @param subtitle
-     * @param postcontent
-     * @param isactive
-     * @param contentMap
-     * @return
-     */
-    private Post preparePicturePostJavaBeanNew(HttpServletRequest request, Integer userid, Integer circleid, String title,
-                                        String subtitle, String postcontent, String isactive,
-                                        Map contentMap, String activeid, Integer category) throws UnsupportedEncodingException, NoSuchAlgorithmException {
-        Post post = new Post();
-        post.setCircleid(circleid);
-        post.setTitle(title);
-        post.setSubtitle(subtitle); //帖子副标题（作品描述）
-
-        contentMap = setPostContent(request, postcontent, contentMap, post);
-        post.setZansum(0);//新发帖全部默认为0次
-        post.setCommentsum(0);//被评论次数
-        post.setForwardsum(0);//被转发次数
-        post.setCollectsum(0);//被收藏次数
-        post.setIsactive(Integer.parseInt(isactive));//是否为活动 0 帖子 1 活动
-        post.setIshot(0);//是否设为热门：默认0否
-        post.setIsessence(0);//是否设为精选：默认0否
-        post.setIsessencepool(0);//是否设为精选池中的帖子
-        post.setIntime(new Date());//帖子发布时间
-        post.setTotalpoint(0);//帖子综合评分
-        if ((int) contentMap.get("flag") == 0) {
-            post.setIsdel(0);//上架
-        } else if ((int) contentMap.get("flag") > 0) {
-            post.setIsdel(2);
-        }
-        post.setUserid(userid);
-        post.setHeatvalue(3000); //默认的帖子热度值
-        //城市编码
-        String citycode = wrapCitycode();
-        post.setCity(citycode);    //使用登录时的城市一样
-
-        if (StringUtils.isNotBlank(activeid)) {
-            post.setActiveid(Integer.parseInt(activeid));
-        }
-        post.setCategory(category);
-        return post;
-    }
 
 
 }
