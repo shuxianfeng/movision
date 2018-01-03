@@ -68,7 +68,7 @@ public class Post implements Serializable {
 
     private Integer countview;//帖子浏览量
 
-    private Integer category;//0长图文贴1纯文本贴2视频贴
+    private Integer category;//0：长图文贴 1：图片帖 2：视频贴
 
     public Integer getCategory() {
         return category;
