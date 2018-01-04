@@ -467,7 +467,7 @@ public class AppPostController {
                                        @ApiParam(value = "标签实体集合，json字符串形式") @RequestParam(required = false) String labellist,
                                        @ApiParam(value = "分享的产品id(多个商品用英文逗号,隔开)") @RequestParam(required = false) String proids,
                                        @ApiParam(value = "IOS发帖传1，否则传0") @RequestParam(required = false) Integer mark,
-                                       @ApiParam(value = "发帖类型0长图文，1纯图文，2视频") @RequestParam(required = false) String category) {
+                                       @ApiParam(value = "发帖类型0长图文，1纯图文，2视频(2.2.1以上的版本必填)") @RequestParam(required = false) String category) {
 
         Response response = new Response();
 
