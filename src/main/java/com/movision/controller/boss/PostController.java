@@ -444,7 +444,7 @@ public class PostController {
                                 @ApiParam(value = "帖子副标题") @RequestParam(required = false) String subtitle,//帖子副标题
                                 @ApiParam(value = "圈子id") @RequestParam String circleid,//圈子id
                                 @ApiParam(value = "发帖人") @RequestParam String userid,//发帖人
-                                @ApiParam(value = "帖子封面") @RequestParam String coverimg,//帖子封面
+                                @ApiParam(value = "帖子封面(category为0时必填，为其他时传空)") @RequestParam(required = false) String coverimg,//帖子封面
                                 @ApiParam(value = "内容") @RequestParam String postcontent,//帖子内容
                                 @ApiParam(value = "标签id") @RequestParam(required = false) String labelid,
                                 @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,

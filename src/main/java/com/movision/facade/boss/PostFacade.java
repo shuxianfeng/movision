@@ -798,7 +798,9 @@ public class PostFacade {
                 post.setSubtitle(subtitle);//帖子副标题
             }
             post.setCircleid(circleid);//圈子id
-            post.setCoverimg(coverimg);//帖子封面
+            if (StringUtil.isNotEmpty(coverimg)) {
+                post.setCoverimg(coverimg);//帖子封面
+            }
             post.setIsactive("0");//设置状态为帖子
             post.setCategory(Integer.parseInt(category));
             Map con = null;
