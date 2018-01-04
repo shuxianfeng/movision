@@ -200,6 +200,7 @@ public class AppPostController {
                                         @ApiParam(value = "用户id") @RequestParam String userid,
                                         @ApiParam(value = "所属圈子id") @RequestParam String circleid,
                                         @ApiParam(value = "帖子主标题(限18个字以内)") @RequestParam String title,
+                                        @ApiParam(value = "说说关于你拍摄的故事--帖子副标题（限制500字符或汉字）") @RequestParam(required = false) String subtitle,
                                         @ApiParam(value = "帖子内容") @RequestParam String postcontent,
                                         @ApiParam(value = "帖子封面(category为0时必填，为其他时为空)") @RequestParam(required = false) String coverimg,
                                         @ApiParam(value = "标签id 多个以逗号分隔") @RequestParam(required = false) String labelid,
@@ -207,7 +208,7 @@ public class AppPostController {
                                         @ApiParam(value = "发帖类型0长图文，1纯图文，2视频") @RequestParam(required = false) String category) {
         Response response = new Response();
 
-        Map count = facadePost.releasePostByPCTest(request, userid, circleid, title, postcontent, coverimg, labelid, proids, category);
+        Map count = facadePost.releasePostByPCTest(request, userid, circleid, title, subtitle, postcontent, coverimg, labelid, proids, category);
 
         if (count.get("flag").equals(-2)) {
             response.setCode(300);

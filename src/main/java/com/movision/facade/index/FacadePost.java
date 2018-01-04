@@ -707,7 +707,7 @@ public class FacadePost {
 
     @Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
-    public Map releasePostByPCTest(HttpServletRequest request, String userid, String circleid, String title,
+    public Map releasePostByPCTest(HttpServletRequest request, String userid, String circleid, String title, String subtitle,
                                    String postcontent, String coverimg, String labelid, String proids, String category) {
         Map map = new HashMap();
 
@@ -729,7 +729,7 @@ public class FacadePost {
             try {
                 log.info("APP前端用户开始请求发帖");
 
-                Post post = preparePost4PC(request, userid, circleid, title, postcontent, coverimg, category);
+                Post post = preparePost4PC(request, userid, circleid, title, subtitle, postcontent, coverimg, category);
                 //插入帖子
                 postService.releasePost(post);
 
@@ -780,10 +780,13 @@ public class FacadePost {
      * @param coverimg
      * @return
      */
-    private Post preparePost4PC(HttpServletRequest request, String userid, String circleid, String title, String postcontent, String coverimg, String category) {
+    private Post preparePost4PC(HttpServletRequest request, String userid, String circleid, String title, String subtitle, String postcontent, String coverimg, String category) {
         Post post = new Post();
         post.setCircleid(Integer.parseInt(circleid));
         post.setTitle(title);
+        if (StringUtil.isNotEmpty(subtitle)){
+            post.setSubtitle(subtitle);
+        }
         Map con = null;
         if (StringUtil.isNotEmpty(postcontent)) {
             //内容转换
