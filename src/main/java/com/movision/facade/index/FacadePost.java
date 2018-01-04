@@ -1044,7 +1044,7 @@ public class FacadePost {
      * @param activeid
      * @return
      */
-    public Map postUnderZk(HttpServletRequest request, String userid, String circleid, String title,
+    public Map postUnderZk(HttpServletRequest request, String userid, String circleid, String title, String subtitle,
                            String postcontent, String isactive, String coverimg, String proids, String labellist,
                            String activeid, Integer mark, String category) {
         DistributedLock lock = null;
@@ -1054,7 +1054,7 @@ public class FacadePost {
             //加锁
             lock.lock();
             //发帖操作
-            return releaseModularPost(request, userid, circleid, title, postcontent, isactive, coverimg, proids, labellist, activeid, category);
+            return releaseModularPost(request, userid, circleid, title, subtitle, postcontent, isactive, coverimg, proids, labellist, activeid, category);
 
         } catch (Exception e) {
             log.error("执行异常>>>", e);
@@ -1083,7 +1083,7 @@ public class FacadePost {
      */
     @Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
-    public Map releaseModularPost(HttpServletRequest request, String userid, String circleid, String title,
+    public Map releaseModularPost(HttpServletRequest request, String userid, String circleid, String title, String subtitle,
                                   String postcontent, String isactive, String coverimg, String proids, String labellist,
                                   String activeid, String category) {
         Map map = new HashMap();
@@ -1121,7 +1121,7 @@ public class FacadePost {
                 log.info("APP前端用户开始请求发帖");
                 Map contentMap = null;
                 //封装帖子实体
-                Post post = preparePostJavaBean(request, uid, cid, title, postcontent, isactive, coverimg, contentMap, activeid, category);
+                Post post = preparePostJavaBean(request, uid, cid, title, subtitle, postcontent, isactive, coverimg, contentMap, activeid, category);
                 //1 插入帖子
                 postService.releaseModularPost(post);
                 //返回的主键--帖子id
@@ -1507,11 +1507,14 @@ public class FacadePost {
      * @return
      */
     private Post preparePostJavaBean(HttpServletRequest request, Integer userid, Integer circleid, String title,
-                                     String postcontent, String isactive,
+                                     String subtitle, String postcontent, String isactive,
                                      String coverimg, Map contentMap, String activeid, String category) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         Post post = new Post();
         post.setCircleid(circleid);
         post.setTitle(title);
+        if (StringUtil.isNotEmpty(subtitle)){
+            post.setSubtitle(subtitle);
+        }
 
         contentMap = setPostContent(request, postcontent, contentMap, post);
         post.setZansum(0);//新发帖全部默认为0次

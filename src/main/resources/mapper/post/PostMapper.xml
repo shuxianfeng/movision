@@ -428,16 +428,16 @@
             select LAST_INSERT_ID()
         </selectKey>
         INSERT INTO yw_post (
-        circleid, title,
+        circleid, title, subtitle,
         postcontent, zansum, commentsum, forwardsum,
         collectsum, isactive, ishot, isessence,
         isessencepool, coverimg, intime, totalpoint, isdel, essencedate, userid,oprtime, activeid, city,
         heat_value,category
         )
         VALUES (
-        #{circleid,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{postcontent,jdbcType=LONGVARCHAR},
-        #{zansum,jdbcType=INTEGER},#{commentsum,jdbcType=INTEGER},#{forwardsum,jdbcType=INTEGER},
-        #{collectsum,jdbcType=INTEGER},#{isactive,jdbcType=INTEGER},
+        #{circleid,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{subtitle,jdbcType=VARCHAR},
+        #{postcontent,jdbcType=LONGVARCHAR},#{zansum,jdbcType=INTEGER},#{commentsum,jdbcType=INTEGER},
+        #{forwardsum,jdbcType=INTEGER},#{collectsum,jdbcType=INTEGER},#{isactive,jdbcType=INTEGER},
         #{ishot,jdbcType=INTEGER},#{isessence,jdbcType=INTEGER},#{isessencepool,jdbcType=INTEGER},
         #{coverimg,jdbcType=VARCHAR},now(),#{totalpoint,jdbcType=INTEGER},#{isdel,jdbcType=INTEGER},
         #{essencedate,jdbcType=DATE},#{userid,jdbcType=INTEGER},#{oprtime,jdbcType=TIMESTAMP},
