@@ -201,7 +201,7 @@ public class AppPostController {
                                         @ApiParam(value = "所属圈子id") @RequestParam String circleid,
                                         @ApiParam(value = "帖子主标题(限18个字以内)") @RequestParam String title,
                                         @ApiParam(value = "帖子内容") @RequestParam String postcontent,
-                                        @ApiParam(value = "帖子封面") @RequestParam String coverimg,
+                                        @ApiParam(value = "帖子封面(category为0时必填，为其他时为空)") @RequestParam(required = false) String coverimg,
                                         @ApiParam(value = "标签id 多个以逗号分隔") @RequestParam(required = false) String labelid,
                                         @ApiParam(value = "分享的产品id(多个商品用英文逗号,隔开)") @RequestParam(required = false) String proids,
                                         @ApiParam(value = "发帖类型0长图文，1纯图文，2视频") @RequestParam(required = false) String category) {
