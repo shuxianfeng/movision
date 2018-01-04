@@ -1205,9 +1205,8 @@ public class FacadePost {
      */
     @Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
-    public Map releaseModularVideoPost(HttpServletRequest request, String userid, String circleid, String title,
-                                  String subtitle, String postcontent, String isactive, String proids,
-                                  String labellist, String activeid) {
+    public Map releaseModularVideoPost(HttpServletRequest request, String userid, String circleid, String activeid, String title,
+                                       String subtitle, String postcontent, String isactive, String labellist, String proids) {
         Map map = new HashMap();
         validateNotNullUseridAndCircleid(userid, circleid);
 
