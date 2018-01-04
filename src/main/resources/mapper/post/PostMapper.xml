@@ -432,7 +432,7 @@
         postcontent, zansum, commentsum, forwardsum,
         collectsum, isactive, ishot, isessence,
         isessencepool, coverimg, intime, totalpoint, isdel, essencedate, userid,oprtime, activeid, city,
-        heat_value,category,
+        heat_value,category
         )
         VALUES (
         #{circleid,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{postcontent,jdbcType=LONGVARCHAR},
