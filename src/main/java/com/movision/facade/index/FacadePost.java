@@ -2635,16 +2635,37 @@ public class FacadePost {
     public List retuenList(List<PostVo> lists, String userid, int type, String device, int labelid) {
         List<PostVo> list = null;
         if (lists != null) {
-            //代码分页
             list = pageFacade.getPageList(lists, 1, 10);
-
-            findUser(list);
             findPostLabel(list);    //查询帖子的标签（不好合并）
             findHotComment(list);   //查询帖子的最热评论（不好合并）
-            countView(list);
-            findAllCircleName(list);
             insertmongo(list, userid, type, device, labelid);   //刷新出来的帖子，依次插入mongoDB中
-            zanIsPost(Integer.parseInt(userid), list);  //查询用户有没有点赞该帖子
+            zanIsPost(Integer.parseInt(userid), list);
+            category(list);
+        }
+        return list;
+    }
+
+    /**
+     * 视频封面
+     * @param list
+     * @return
+     */
+    public List category(List<PostVo> list){
+        if(list!=null){
+            for (int i=0;i<list.size();i++){
+               try {
+                   String str = list.get(i).getPostcontent();
+                   JSONArray jsonArray = JSONArray.fromObject(str);
+
+                   //因为视频封面会有播放权限失效限制，过期失效，所以这里每请求一次都需要对帖子内容中包含的视频封面重新请求
+                   //增加这个工具类 videoCoverURL.getVideoCover(jsonArray); 进行封面url重新请求
+                   jsonArray = videoCoverURL.getVideoCover(jsonArray);
+                   //-----将转换完的数据封装返回
+                   list.get(i).setPostcontent(jsonArray.toString());
+               }catch (Exception e){
+                   e.printStackTrace();
+               }
+            }
         }
         return list;
     }
@@ -2660,12 +2681,11 @@ public class FacadePost {
         List<PostVo> list = null;
         if (lists != null) {
             list = pageFacade.getPageList(lists, 1, 10);
-            findUser(list); //根据userid查询作者信息
             findPostLabel(list);    //根据postid查询标签信息
             findHotComment(list);   //根据postid查询所有评论
-            countView(list);    //根据postid查询帖子的浏览量
-            findAllCircleName(list);
             insertmongo(list, "", type, device, labelid);
+            category(list);
+
         }
         return list;
     }
@@ -4198,6 +4218,7 @@ public class FacadePost {
             findPostLabel(postVo);
             findHotComment(postVo);
             countView(postVo);
+            category(postVo);
         }
         return postVo;
     }
@@ -4310,6 +4331,7 @@ public class FacadePost {
             findPostLabel(postVo);
             findHotComment(postVo);
             countView(postVo);
+            category(postVo);
         }
         return postVo;
     }
@@ -4404,6 +4426,7 @@ public class FacadePost {
             findHotComment(postVo);
             countView(postVo);
             zanIsPost(Integer.parseInt(userid), postVo);
+            category(postVo);
         }
         return postVo;
     }
@@ -4566,6 +4589,7 @@ public class FacadePost {
             findHotComment(postVo);
             countView(postVo);
             zanIsPost(Integer.parseInt(userid), postVo);
+            category(postVo);
         }
         return postVo;
     }
