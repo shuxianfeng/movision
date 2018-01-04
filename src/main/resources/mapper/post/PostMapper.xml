@@ -565,7 +565,7 @@
             <if test="oprtime != null">
                 oprtime,
             </if>
-            <if test="heat_value != null">
+            <if test="heatvalue != null">
                 heat_value,
             </if>
             <if test="isheatoperate != null">
@@ -669,8 +669,8 @@
             <if test="oprtime !=null">
                 #{oprtime,jdbcType=TIMESTAMP},
             </if>
-            <if test="heat_value != null">
-                #{heat_value,jdbcType=INTEGER},
+            <if test="heatvalue != null">
+                #{heatvalue,jdbcType=INTEGER},
             </if>
             <if test="isheatoperate != null">
                 #{isheatoperate,jdbcType=INTEGER},
