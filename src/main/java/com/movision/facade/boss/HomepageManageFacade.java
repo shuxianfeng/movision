@@ -183,14 +183,14 @@ public class HomepageManageFacade {
     /**
      * 根据条件查询广告列表
      *
-     * @param name
+     * @param position
      * @param type
      * @param pager
      * @return
      */
-    public List<HomepageManageVo> queryAdvertisementLike(String name, String type, Paging<HomepageManageVo> pager) {
+    public List<HomepageManageVo> queryAdvertisementLike(String position, String type, Paging<HomepageManageVo> pager) {
         Map map = new HashedMap();
-        map.put("name", name);
+        map.put("position", position);
         map.put("type", type);
         return homepageManageService.queryAdvertisementLike(map, pager);
     }

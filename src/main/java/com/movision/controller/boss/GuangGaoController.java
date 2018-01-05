@@ -46,7 +46,7 @@ public class GuangGaoController {
     /**
      * 根据条件查询广告列表
      *
-     * @param name
+     * @param position
      * @param type
      * @param pageNo
      * @param pageSize
@@ -54,13 +54,13 @@ public class GuangGaoController {
      */
     @ApiOperation(value = "模糊查询广告列表", notes = "用于条件查询广告接口", response = Response.class)
     @RequestMapping(value = "query_guang_gao_like", method = RequestMethod.POST)
-    public Response queryAdvertisementLike(@ApiParam(value = "广告位置") @RequestParam(required = false) String name,
+    public Response queryAdvertisementLike(@ApiParam(value = "广告位置") @RequestParam(required = false) String position,
                                            @ApiParam(value = "排序（传1按时间正序，默认倒叙)") @RequestParam(required = false) String type,
                                            @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                            @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<HomepageManageVo> pager = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<HomepageManageVo> list = homepageManageFacade.queryAdvertisementLike(name, type, pager);
+        List<HomepageManageVo> list = homepageManageFacade.queryAdvertisementLike(position, type, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
