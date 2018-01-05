@@ -135,13 +135,11 @@ public class HomepageManageFacade {
     /**
      * 根据条件查询广告类型名称
      *
-     * @param name
      * @param pager
      * @return
      */
-    public List<ManageType> queryAdvertisementTypeLikeName(String name, String type, Paging<ManageType> pager) {
+    public List<ManageType> queryAdvertisementTypeLikeName(String type, Paging<ManageType> pager) {
         Map map = new HashedMap();
-        map.put("name", name);
         map.put("type", type);
         return manageTypeService.queryAdvertisementTypeLikeName(map, pager);
     }
@@ -183,14 +181,12 @@ public class HomepageManageFacade {
     /**
      * 根据条件查询广告列表
      *
-     * @param position
      * @param type
      * @param pager
      * @return
      */
-    public List<HomepageManageVo> queryAdvertisementLike(String position, String type, Paging<HomepageManageVo> pager) {
+    public List<HomepageManageVo> queryAdvertisementLike(String type, Paging<HomepageManageVo> pager) {
         Map map = new HashedMap();
-        map.put("position", position);
         map.put("type", type);
         return homepageManageService.queryAdvertisementLike(map, pager);
     }

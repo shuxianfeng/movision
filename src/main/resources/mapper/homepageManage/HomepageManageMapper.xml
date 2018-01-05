@@ -332,15 +332,10 @@
         select m.*,t.name,t.type,(SELECT p.title FROM yw_post p WHERE p.id = m.postid) AS postTitle
         from yw_homepage_manage m LEFT JOIN yw_homepage_manage_type t ON m.topictype=t.type
         WHERE m.isdel=0
-        <if test="position != null">
-            AND t.type = #{position,jdbcType=INTEGER}
+        <if test="type != null">
+            AND t.type = #{type,jdbcType=INTEGER}
         </if>
-        <if test="type==1">
-            ORDER BY m.intime ASC
-        </if>
-        <if test="type==null">
-            ORDER BY t.name ASC
-        </if>
+        ORDER BY m.intime ASC
     </select>
 
     <select id="queryAdvertisementLocation" resultType="java.lang.Integer" parameterType="java.lang.String">
