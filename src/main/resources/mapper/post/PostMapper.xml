@@ -1083,14 +1083,14 @@
         (SELECT COALESCE(SUM(r.points),0) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
         (SELECT COALESCE(SUM(ac.num),0) FROM yw_post_accusation ac WHERE ac.postid =p.id) AS accusation,
         (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS circlename,
-        (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS category
+        (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS circlecategory
         FROM yw_post AS p
         WHERE p.isdel <![CDATA[<>]]> 1 AND p.isactive=0
         AND p.circleid in (SELECT circleid FROM yw_circle_manager WHERE userid=(SELECT id FROM yw_user WHERE phone
         =(SELECT phone FROM yw_admin_user WHERE id=#{loginid,jdbcType=INTEGER})))
         AND p.isdel <![CDATA[<>]]> 1
         <if test="uid!=null">
-            AND u.id=#{uid,jdbcType=INTEGER}
+            AND p.userid=#{uid,jdbcType=INTEGER}
         </if>
         <if test="price==5">
             AND p.isactive=0
@@ -1116,10 +1116,13 @@
         <if test="essencedate!=null">
             AND p.essencedate=#{essencedate,jdbcType=DATE}
         </if>
+        <if test="category != null">
+            AND p.category = #{category,jdbcType=INTEGER}
+        </if>
         OR p.circleid IN (SELECT id FROM yw_circle WHERE phone=(SELECT phone FROM yw_admin_user WHERE
-        id=#{loginid,jdbcType=INTEGER})) AND isdel =0
+        id=#{loginid,jdbcType=INTEGER} AND status = 0) AND isdel =0)
         <if test="uid!=null">
-            AND u.id=#{uid,jdbcType=INTEGER}
+            AND p.userid=#{uid,jdbcType=INTEGER}
         </if>
         <if test="price==5">
             AND p.isactive=0
@@ -1144,6 +1147,9 @@
         </if>
         <if test="essencedate!=null">
             AND p.essencedate=#{essencedate,jdbcType=DATE}
+        </if>
+        <if test="category != null">
+            AND p.category = #{category,jdbcType=INTEGER}
         </if>
         <if test="pai==0">
             ORDER BY p.intime DESC
@@ -1711,6 +1717,9 @@
         </if>
         <if test="essencedate!=null">
             AND p.essencedate=#{essencedate,jdbcType=DATE}
+        </if>
+        <if test="category != null">
+            AND p.category = #{category,jdbcType=INTEGER}
         </if>
         <if test="pai==0">
             ORDER BY p.intime DESC

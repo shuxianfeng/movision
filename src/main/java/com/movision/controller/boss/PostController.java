@@ -811,10 +811,11 @@ public class PostController {
                                @ApiParam(value = "用户id") @RequestParam(required = false) String uid,
                                @ApiParam(value = "用户列表跳转传值：5 帖子 6 精贴") @RequestParam(required = false) String price,
                                @ApiParam(value = "精选日期（yyyy-MM-dd）") @RequestParam(required = false) String essencedate,
+                               @ApiParam(value = "帖子类型0图文贴1纯图片贴2视频贴") @RequestParam(required = false) String category,
                                @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
         Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<PostList> list = postFacade.postSearch(title, circleid, userid, postcontent, intime, pai, essencedate, uid, price, loginid, pager);
+        List<PostList> list = postFacade.postSearch(title, circleid, userid, postcontent, intime, pai, essencedate, uid, price, category, loginid, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

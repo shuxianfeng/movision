@@ -1826,11 +1826,11 @@ public class PostFacade {
      * @param circleid
      * @param postcontent
      * @param essencedate
-     * @param
+     * @param category
      * @return
      */
     public List<PostList> postSearch(String title, String circleid, String userid, String postcontent, String intime,
-                                     String pai, String essencedate, String uid, String price, String loginid, Paging<PostList> pager) {
+                                     String pai, String essencedate, String uid, String price, String category, String loginid, Paging<PostList> pager) {
         Map map = new HashedMap();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date end = null;
@@ -1854,6 +1854,9 @@ public class PostFacade {
         }
         map.put("endtime", end);
         map.put("begintime", beg);
+        if (StringUtil.isNotEmpty(category)) {
+            map.put("category", Integer.parseInt(category));
+        }
         if (StringUtil.isNotEmpty(uid)) {
             map.put("uid", uid);//从用户列表跳转过来传参
         }
