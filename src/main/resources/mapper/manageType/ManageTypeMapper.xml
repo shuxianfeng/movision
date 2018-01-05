@@ -175,7 +175,7 @@
     </select>
 
     <select id="findAllQueryAdvertisementTypeLikeName" resultType="com.movision.mybatis.manageType.entity.ManageType"
-            parameterType="java.lang.String">
+            parameterType="com.movision.mybatis.manageType.entity.ManageType">
         SELECT * FROM yw_homepage_manage_type WHERE 1
         <if test="type!=null">
             AND type = #{type,jdbcType=VARCHAR}

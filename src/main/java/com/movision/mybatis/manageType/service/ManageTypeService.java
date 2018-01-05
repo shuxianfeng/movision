@@ -90,7 +90,7 @@ public class ManageTypeService {
      * @param map
      * @return
      */
-    public List<ManageType> queryAdvertisementTypeLikeName(Map map, Paging<ManageType> pager) {
+    public List<ManageType> queryAdvertisementTypeLikeName(ManageType map, Paging<ManageType> pager) {
         try {
             logge.info("根据广告名称模糊查询广告类型列表");
             return manageTypeMapper.findAllQueryAdvertisementTypeLikeName(map, pager.getRowBounds());

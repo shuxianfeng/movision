@@ -328,7 +328,7 @@
     </update>
 
     <select id="findAllQueryAdvertisementLike" resultType="com.movision.mybatis.homepageManage.entity.HomepageManageVo"
-            parameterType="java.util.Map">
+            parameterType="com.movision.mybatis.manageType.entity.ManageType">
         select m.*,t.name,t.type,(SELECT p.title FROM yw_post p WHERE p.id = m.postid) AS postTitle
         from yw_homepage_manage m LEFT JOIN yw_homepage_manage_type t ON m.topictype=t.type
         WHERE m.isdel=0

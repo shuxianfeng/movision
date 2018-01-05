@@ -139,9 +139,11 @@ public class HomepageManageFacade {
      * @return
      */
     public List<ManageType> queryAdvertisementTypeLikeName(String type, Paging<ManageType> pager) {
-        Map map = new HashedMap();
-        map.put("type", type);
-        return manageTypeService.queryAdvertisementTypeLikeName(map, pager);
+        ManageType manageType = new ManageType();
+        if (StringUtil.isNotEmpty(type)) {
+            manageType.setType(Integer.parseInt(type));
+        }
+        return manageTypeService.queryAdvertisementTypeLikeName(manageType, pager);
     }
 
     /**
@@ -186,9 +188,11 @@ public class HomepageManageFacade {
      * @return
      */
     public List<HomepageManageVo> queryAdvertisementLike(String type, Paging<HomepageManageVo> pager) {
-        Map map = new HashedMap();
-        map.put("type", type);
-        return homepageManageService.queryAdvertisementLike(map, pager);
+        ManageType manageType = new ManageType();
+        if (StringUtil.isNotEmpty(type)) {
+            manageType.setType(Integer.parseInt(type));
+        }
+        return homepageManageService.queryAdvertisementLike(manageType, pager);
     }
 
     /**

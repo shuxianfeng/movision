@@ -119,7 +119,7 @@ public class HomepageManageService {
      * @param pager
      * @return
      */
-    public List<HomepageManageVo> queryAdvertisementLike(Map map, Paging<HomepageManageVo> pager) {
+    public List<HomepageManageVo> queryAdvertisementLike(ManageType map, Paging<HomepageManageVo> pager) {
         try {
             log.info("根据条件查询广告列表");
             return homepageManageMapper.findAllQueryAdvertisementLike(map, pager.getRowBounds());

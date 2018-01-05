@@ -2,6 +2,7 @@ package com.movision.mybatis.homepageManage.mapper;
 
 import com.movision.mybatis.homepageManage.entity.HomepageManage;
 import com.movision.mybatis.homepageManage.entity.HomepageManageVo;
+import com.movision.mybatis.manageType.entity.ManageType;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
 
@@ -37,7 +38,7 @@ public interface HomepageManageMapper {
 
     int updateAdvertisement(HomepageManage manage);
 
-    List<HomepageManageVo> findAllQueryAdvertisementLike(Map map, RowBounds rowBounds);
+    List<HomepageManageVo> findAllQueryAdvertisementLike(ManageType map, RowBounds rowBounds);
 
     List<Integer> queryAdvertisementLocation(String type);
 
