@@ -7,9 +7,10 @@
     <result column="device" property="device" jdbcType="VARCHAR" />
     <result column="intime" property="intime" jdbcType="TIMESTAMP" />
     <result column="activeid" property="activeid" jdbcType="INTEGER" />
+    <result column="num" property="num" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, postid, device, intime,activeid
+    id, postid, device, intime,activeid,num
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -108,6 +109,9 @@
        <if test="activeid != null" >
          activeid,
        </if>
+       <if test="num != null" >
+         num,
+       </if>
      </trim>
      <trim prefix="values (" suffix=")" suffixOverrides="," >
        <if test="id != null" >
@@ -124,6 +128,9 @@
        </if>
        <if test="activeid != null" >
          #{activeid,jdbcType=INTEGER},
+       </if>
+       <if test="num != null" >
+         #{num,jdbcType=INTEGER},
        </if>
      </trim>
   </insert>

@@ -5103,6 +5103,7 @@ public class FacadePost {
                 activeTake.setPostid(Integer.parseInt(postid));
                 activeTake.setIntime(new Date());
                 activeTake.setActiveid(activeid);
+                activeTake.setNum(num);
                 ok = activeTakeService.takeActive(activeTake);
             }
         }
