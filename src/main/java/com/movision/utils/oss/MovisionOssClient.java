@@ -410,6 +410,8 @@ public class MovisionOssClient {
                     Transparency.TRANSLUCENT);
             g2d.dispose();
             g2d = to.createGraphics();
+            System.out.println("==============================================================================" + outputx);
+            System.out.println("==============================================================================" + outputy);
             @SuppressWarnings("static-access")
             //Image from = bi2.getScaledInstance(newWidth, newHeight, bi2.SCALE_AREA_AVERAGING);
                     Image from = bi2.getSubimage(outputx, outputy, newWidth, newHeight);
