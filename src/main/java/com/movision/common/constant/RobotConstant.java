@@ -14,7 +14,8 @@ public class RobotConstant {
         zan_post(1),
         collect_post(2),
         comment_post(3),
-        follow_user(4);
+        follow_user(4),
+        vote_post(5);
 
         public final int code;
 

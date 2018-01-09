@@ -729,13 +729,13 @@ public class RobotFacade {
      * @param num
      * @param postid
      * @param theme  需要评论的帖子的主题。1：人像， 2：风光
-     * @param type   任务类型。1：点赞，2：收藏，3：评论，4：关注
+     * @param type   任务类型。1：点赞，2：收藏，3：评论，4：关注，5：投票
      * @param userid
      */
     public void addSingleRobotJobProcess(int num, int postid, Integer theme, int type, int userid) {
         //1 校验参数
         if (num < 1) {
-            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "机器人数量至少是1个");
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "输入数量至少是1个");
         }
         //2 获取最大批次--根据postid/userid 和 type 来判断
         int batch = getBatch(postid, type, userid);

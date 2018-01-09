@@ -137,4 +137,17 @@ public class RobotPostController {
 //        facadePost.updateOnlinePostHeatvalue();
 //        return response;
 //    }
+
+    /**
+     * 新增机器人对帖子刷票任务
+     */
+    @ApiOperation(value = "新增机器人对帖子刷票任务", notes = "新增机器人对帖子刷票任务", response = Response.class)
+    @RequestMapping(value = "/single_post_vote", method = RequestMethod.POST)
+    public Response robotVotePost(@ApiParam(value = "管理员输入的刷票总数") @RequestParam Integer num,
+                                  @ApiParam(value = "帖子id") @RequestParam Integer postid) throws IOException {
+        Response response = new Response();
+        robotFacade.addSingleRobotJobProcess(num, postid, null, RobotConstant.ROBOT_JOB_TYPE.vote_post.getCode(), 0);
+        response.setMessage("操作成功");
+        return response;
+    }
 }
