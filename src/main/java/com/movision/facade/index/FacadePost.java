@@ -5084,30 +5084,6 @@ public class FacadePost {
         return map2;
     }
 
-    /**
-     * 机器人刷票
-     * @param postid
-     * @param num
-     * @return
-     */
-    public Integer Brushvotes(String postid,Integer num){
-        //根据帖子id查活动
-        int ok=0;
-       int activeid= activeTakeService.activeid(Integer.parseInt(postid));
-        if(num<1){
-            ok=-1;
-        }else {
-            for (int i = 0; i < num; i++) {
-                ActiveTake activeTake = new ActiveTake();
-                activeTake.setDevice(UUID.randomUUID().toString().replaceAll("\\-", ""));
-                activeTake.setPostid(Integer.parseInt(postid));
-                activeTake.setIntime(new Date());
-                activeTake.setActiveid(activeid);
-                ok = activeTakeService.takeActive(activeTake);
-            }
-        }
-        return ok;
-    }
 
 
     /**
