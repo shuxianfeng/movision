@@ -174,7 +174,16 @@ public class DateUtils {
      * @return
      * @throws ParseException
      */
-    public static int activeEndDays(Date now, Date begin, Date end) {
+    public static int activeEndDays(Date now, Date begin, Date end) throws ParseException {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar cal = Calendar.getInstance();
+
+        //第一步先给这个结束时间的日加1天----因为数据中存的时间默认为00:00:00结束，所以加1天，这样可以修正正常结束日期的晚上24点才结束
+        cal.setTime(sdf.parse(sdf.format(end)));
+        cal.add(Calendar.DAY_OF_MONTH, 1);
+        end = cal.getTime();
+
         int enddays = 0;
         if (now.before(begin)) {
             log.info("活动还未开始");
@@ -185,10 +194,8 @@ public class DateUtils {
         } else if (begin.before(now) && now.before(end)) {
             try {
                 log.info("计算活动剩余结束天数");
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 Date a = sdf.parse(sdf.format(now));
                 Date b = sdf.parse(sdf.format(end));
-                Calendar cal = Calendar.getInstance();
                 cal.setTime(a);
                 long time1 = cal.getTimeInMillis();
                 cal.setTime(b);
