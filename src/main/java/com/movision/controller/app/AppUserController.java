@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -65,7 +66,7 @@ public class AppUserController {
     @RequestMapping(value = "personActive", method = RequestMethod.POST)
     public Response personActive(@ApiParam(value = "用户id") @RequestParam String userid,
                                  @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                 @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+                                 @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) throws ParseException {
         Response response = new Response();
 
         Paging<ActiveVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));

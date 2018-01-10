@@ -48,6 +48,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -130,7 +131,7 @@ public class UserFacade {
         return userService.personPost(pager, Integer.parseInt(userid));
     }
 
-    public List<ActiveVo> personActive(Paging<ActiveVo> pager, String userid) {
+    public List<ActiveVo> personActive(Paging<ActiveVo> pager, String userid) throws ParseException {
 
         List<ActiveVo> activeVoList = userService.personActive(pager, Integer.parseInt(userid));
 
@@ -716,7 +717,7 @@ public class UserFacade {
      * @param paging
      * @return
      */
-    public List<PostVo> mineBottle(int type, String userid, Paging<PostVo> paging) {
+    public List<PostVo> mineBottle(int type, String userid, Paging<PostVo> paging) throws ParseException {
         try {
             List<PostVo> list = null;
             if (type == 0) {//帖子

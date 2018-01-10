@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +42,7 @@ public class AppNewDiscoverController {
 
     @ApiOperation(value = "美番2.0发现页上半部分数据返回接口", notes = "用于返回发现页首页的全版数据", response = Response.class)
     @RequestMapping(value = "index", method = RequestMethod.POST)
-    public Response getDiscoverIndex(){
+    public Response getDiscoverIndex() throws ParseException {
         Response response = new Response();
 
         Map<String, Object> map = facadeDiscover.queryDiscoverIndexData2Up();

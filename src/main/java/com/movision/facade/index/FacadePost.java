@@ -103,6 +103,7 @@ import java.io.*;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -326,7 +327,7 @@ public class FacadePost {
         return vo;
     }
 
-    public PostVo queryPostDetail_20171226(String postid, String userid, String device) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
+    public PostVo queryPostDetail_20171226(String postid, String userid, String device) throws NoSuchAlgorithmException, InvalidKeyException, IOException, ParseException {
         //通过userid、postid查询该用户有没有关注该圈子的权限
         Map<String, Object> parammap = new HashMap<>();
         parammap.put("postid", Integer.parseInt(postid));
@@ -503,7 +504,7 @@ public class FacadePost {
 
     }
 
-    public ActiveVo queryActiveDetail(String postid, String userid, String activetype) {
+    public ActiveVo queryActiveDetail(String postid, String userid, String activetype) throws ParseException {
 
         //告知类活动
         Map<String, Object> parammap = new HashMap<>();

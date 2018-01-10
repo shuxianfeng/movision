@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -272,7 +273,7 @@ public class AppWaterfallController {
     public Response mineBottle(@ApiParam(value = "类型 0 帖子 1活动 2 收藏（必填）") @RequestParam int type,
                                @ApiParam(value = "用户id（必填，被查看的这个人的userid，被被被！！！）") @RequestParam String userid,
                                @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
-                               @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+                               @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) throws ParseException {
         Response response = new Response();
         Paging<PostVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
         List list = userFacade.mineBottle(type, userid, pager);

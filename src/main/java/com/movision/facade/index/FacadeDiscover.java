@@ -33,6 +33,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -116,7 +117,7 @@ public class FacadeDiscover {
         return pmap;
     }
 
-    public Map<String, Object> queryDiscoverIndexData2Up() {
+    public Map<String, Object> queryDiscoverIndexData2Up() throws ParseException {
 
         Map<String, Object> map = new HashMap<>();
         List<HomepageManage> homepageManageList = homepageManageService.queryBannerList(1);//查询发现页顶部banner轮播图

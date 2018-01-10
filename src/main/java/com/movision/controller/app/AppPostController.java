@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -76,7 +77,7 @@ public class AppPostController {
     @RequestMapping(value = "detail_20171226", method = RequestMethod.POST)
     public Response queryPostDetail_20171226(@ApiParam(value = "帖子id") @RequestParam String postid,
                                              @ApiParam(value = "用户id(登录状态下不可为空)") @RequestParam(required = false) String userid,
-                                             @ApiParam(value = "设备号(APP必填，H5可不填)") @RequestParam(required = false) String device) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
+                                             @ApiParam(value = "设备号(APP必填，H5可不填)") @RequestParam(required = false) String device) throws NoSuchAlgorithmException, InvalidKeyException, IOException, ParseException {
         Response response = new Response();
         PostVo post = facadePost.queryPostDetail_20171226(postid, userid, device);
 
@@ -109,7 +110,7 @@ public class AppPostController {
     @RequestMapping(value = "activeDetail", method = RequestMethod.POST)
     public Response queryActiveDetail(@ApiParam(value = "活动id") @RequestParam String postid,
                                       @ApiParam(value = "用户id(登录状态下不可为空)") @RequestParam(required = false) String userid,
-                                      @ApiParam(value = "活动类型:0 告知类活动 1 商城促销类活动") @RequestParam String activetype) {
+                                      @ApiParam(value = "活动类型:0 告知类活动 1 商城促销类活动") @RequestParam String activetype) throws ParseException {
 
         Response response = new Response();
 
