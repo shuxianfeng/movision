@@ -167,8 +167,8 @@
             <if test="name != null">
                 name = #{name,jdbcType=VARCHAR},
             </if>
-            <if test="heatvalue != null">
-                heat_value = #{heatvalue,jdbcType=INTEGER},
+            <if test="heatValue != null">
+                heat_value = #{heatValue,jdbcType=INTEGER},
             </if>
             <if test="userid != null">
                 userid = #{userid,jdbcType=INTEGER},
