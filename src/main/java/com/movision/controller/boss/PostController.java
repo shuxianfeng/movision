@@ -751,8 +751,6 @@ public class PostController {
      * @param orderid
      * @param activefee
      * @param activetype
-     * @param begintime
-     * @param endtime
      * @param essencedate
      * @return
      */
