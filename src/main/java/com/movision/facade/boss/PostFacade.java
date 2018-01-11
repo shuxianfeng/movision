@@ -1436,6 +1436,8 @@ public class PostFacade {
                         e.printStackTrace();
                     }
                 }
+                period.setBegintime(bstime);
+                period.setEndtime(enstime);
                 if (enstime != null && bstime != null) {
                     //删除活动周期
                     periodService.deleteActiveePostPer(period);
@@ -1443,8 +1445,6 @@ public class PostFacade {
                     periodService.insertActivePostPer(period);
                 }
             }
-            period.setBegintime(bstime);
-            period.setEndtime(enstime);
 
             if (!StringUtils.isEmpty(goodsid)) {
                 String[] lg = goodsid.split(",");//以逗号分隔
