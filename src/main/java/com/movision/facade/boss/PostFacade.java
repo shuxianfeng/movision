@@ -158,6 +158,9 @@ public class PostFacade {
     @Autowired
     private SysNoticeUtil sysNoticeUtil;
 
+    @Autowired
+    private ImgSortUtil imgSortUtil;
+
 
     private static Logger log = LoggerFactory.getLogger(PostFacade.class);
 
@@ -810,6 +813,12 @@ public class PostFacade {
                 System.out.println(con);
                 if ((int) con.get("code") == 200) {
                     String str = con.get("content").toString();
+                    //帖子内容图片排序操作
+                    try {
+                        str = imgSortUtil.mergePicture(postcontent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     post.setPostcontent(str);//帖子内容
                 } else {
                     logger.error("帖子内容转换异常");
@@ -1736,6 +1745,12 @@ public class PostFacade {
                     if ((int) con.get("code") == 200) {
                         System.out.println(con);
                         String str = con.get("content").toString();
+                        //帖子内容图片排序操作
+                        try {
+                            str = imgSortUtil.mergePicture(postcontent);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         post.setPostcontent(str);//帖子内容
                     } else {
                         logger.error("帖子内容转换异常");
