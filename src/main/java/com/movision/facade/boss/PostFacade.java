@@ -1428,7 +1428,7 @@ public class PostFacade {
                 String[] date = intime.split(",");
                 String begintime = date[0];
                 String endtime = date[1];
-                if (StringUtil.isEmpty(begintime) && StringUtil.isNotEmpty(endtime)) {
+                if (StringUtil.isNotEmpty(begintime) && StringUtil.isNotEmpty(endtime)) {
                     try {
                         bstime = format.parse(begintime);
                         enstime = format.parse(endtime);

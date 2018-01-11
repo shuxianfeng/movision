@@ -2,6 +2,7 @@ package com.movision.controller.app;
 
 import com.movision.common.Response;
 import com.movision.facade.upload.UploadFacade;
+import com.movision.utils.ImgSortUtil;
 import com.movision.utils.SysNoticeUtil;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -27,6 +28,9 @@ public class TestController {
     @Autowired
     private SysNoticeUtil sysNoticeUtil;
 
+    @Autowired
+    private ImgSortUtil imgSortUtil;
+
     @ApiOperation(value = "测试配置文件加载", notes = "测试配置文件加载", response = Response.class)
     @RequestMapping(value = "app/test_PropertiesLoader", method = RequestMethod.GET)
     public Response testPropertiesLoader() {
@@ -42,6 +46,21 @@ public class TestController {
                                              @ApiParam(value = "通知的用户id") @RequestParam String userid,
                                              @ApiParam(value = "定向给用户发送任意内容：如中奖通知等（type为6是不为空）") @RequestParam(required = false) String template){
         Response response  = sysNoticeUtil.sendSysNotice(Integer.parseInt(type), circlename, Integer.parseInt(userid), template);
+        return response;
+    }
+
+    @ApiOperation(value = "测试发帖时，帖子内容对图片排序拼接", notes = "图片排序", response = Response.class)
+    @RequestMapping(value = "boss/test_img_picture_merge", method = RequestMethod.POST)
+    public Response testPostContentMergePicture(@ApiParam(value = "帖子内容") @RequestParam String postcontent) {
+        Response response = new Response();
+        String str = null;
+        try {
+            str = imgSortUtil.mergePicture(postcontent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        response.setMessage("操作成功");
+        response.setData(str);
         return response;
     }
 }
