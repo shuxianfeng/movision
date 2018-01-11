@@ -24,7 +24,7 @@ public class ImgSortUtil {
                 Double rate = Double.valueOf(tmp.toString());
                 if (rate != null) {
                     //长图或宽图 数字为图片的宽高比例
-                    if (rate >= 2 || rate <= 0.5) {
+                    if (rate >= 2 || rate <= 0.5 || rate == 0.0) {
                         JSONObject jso = setJsonObject(jsonObject, 1);
                         ja.add(jso);
                         k = 0;
@@ -41,10 +41,14 @@ public class ImgSortUtil {
                         }
                     }
                 } else {
-                    return content;
+                    JSONObject jso = setJsonObject(jsonObject, 1);
+                    ja.add(jso);
+                    k = 0;
                 }
             } else {
-                return content;
+                JSONObject jso = setJsonObject(jsonObject, 1);
+                ja.add(jso);
+                k = 0;
             }
         }
         return ja.toString();

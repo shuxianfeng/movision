@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @Date 2017/6/8 11:34
  */
 @RestController
-@RequestMapping("/boss/")
 public class TestController {
 
     @Autowired
@@ -29,8 +28,6 @@ public class TestController {
     @Autowired
     private SysNoticeUtil sysNoticeUtil;
 
-    @Autowired
-    private ImgSortUtil imgSortUtil;
 
     @ApiOperation(value = "测试配置文件加载", notes = "测试配置文件加载", response = Response.class)
     @RequestMapping(value = "app/test_PropertiesLoader", method = RequestMethod.GET)
@@ -50,18 +47,4 @@ public class TestController {
         return response;
     }
 
-    @ApiOperation(value = "测试发帖时，帖子内容对图片排序拼接", notes = "图片排序", response = Response.class)
-    @RequestMapping(value = "boss/test_img_picture_merge", method = RequestMethod.POST)
-    public Response testPostContentMergePicture(@ApiParam(value = "帖子内容") @RequestParam String postcontent) {
-        Response response = new Response();
-        String str = null;
-        try {
-            str = imgSortUtil.mergePicture(postcontent);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        response.setMessage("操作成功");
-        response.setData(str);
-        return response;
-    }
 }

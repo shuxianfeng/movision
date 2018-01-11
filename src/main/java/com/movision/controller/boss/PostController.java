@@ -20,6 +20,7 @@ import com.movision.mybatis.share.entity.SharesVo;
 import com.movision.mybatis.submission.entity.SubmissionVo;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserLike;
+import com.movision.utils.ImgSortUtil;
 import com.movision.utils.file.FileUtil;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
@@ -62,6 +63,9 @@ public class PostController {
 
     @Autowired
     private FacadePost facadePost;
+
+    @Autowired
+    private ImgSortUtil imgSortUtil;
 
     /**
      * 后台管理-查询帖子列表
@@ -1445,4 +1449,18 @@ public class PostController {
     }
 
 
+    @ApiOperation(value = "测试发帖时，帖子内容对图片排序拼接", notes = "图片排序", response = Response.class)
+    @RequestMapping(value = "test_img_picture_merge", method = RequestMethod.POST)
+    public Response testPostContentMergePicture(@ApiParam(value = "帖子内容") @RequestParam String postcontent) {
+        Response response = new Response();
+        String str = null;
+        try {
+            str = imgSortUtil.mergePicture(postcontent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        response.setMessage("操作成功");
+        response.setData(str);
+        return response;
+    }
 }
