@@ -813,11 +813,13 @@ public class PostFacade {
                 System.out.println(con);
                 if ((int) con.get("code") == 200) {
                     String str = con.get("content").toString();
-                    //帖子内容图片排序操作
-                    try {
-                        str = imgSortUtil.mergePicture(postcontent);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    if (category.equals("1")) {
+                        //帖子内容图片排序操作
+                        try {
+                            str = imgSortUtil.mergePicture(postcontent);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                     post.setPostcontent(str);//帖子内容
                 } else {
@@ -1746,10 +1748,12 @@ public class PostFacade {
                         System.out.println(con);
                         String str = con.get("content").toString();
                         //帖子内容图片排序操作
-                        try {
-                            str = imgSortUtil.mergePicture(postcontent);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        if (category.equals("1")) {
+                            try {
+                                str = imgSortUtil.mergePicture(postcontent);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                         post.setPostcontent(str);//帖子内容
                     } else {
