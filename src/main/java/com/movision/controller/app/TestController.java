@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Date 2017/6/8 11:34
  */
 @RestController
+@RequestMapping("/boss/")
 public class TestController {
 
     @Autowired
