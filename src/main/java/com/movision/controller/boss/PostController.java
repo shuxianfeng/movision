@@ -770,8 +770,7 @@ public class PostController {
             @ApiParam(value = "费用") @RequestParam(required = false) String activefee,
             @ApiParam(value = "活动类型0 告知类活动 1 商城促销类活动 2 组织类活动") @RequestParam(required = false) String activetype,
             @ApiParam(value = "是否需要投稿 0,投,1不投") @RequestParam(required = false) String iscontribute,
-            @ApiParam(value = "开始时间") @RequestParam(required = false) String begintime,
-            @ApiParam(value = "结束时间") @RequestParam(required = false) String endtime,
+            @ApiParam(value = "活动时间") @RequestParam(required = false) String intime,
             @ApiParam(value = "方形图片url") @RequestParam(required = false) String hotimgurl,
             @ApiParam(value = "是否设为热门（0 否  1 是）") @RequestParam(required = false) String ishot,
             @ApiParam(value = "热门排序") @RequestParam(required = false) String ishotorder,
@@ -780,7 +779,8 @@ public class PostController {
             @ApiParam(value = "编辑商品") @RequestParam(required = false) String goodsid) {
         Response response = new Response();
 
-        Map<String, Integer> map = postFacade.updateActivePostById(id, title, subtitle, userid, coverimg, postcontent, isessence, orderid, activefee, activetype, iscontribute, begintime, endtime, hotimgurl, ishot, ishotorder, essencedate, partsumEnddays, goodsid);
+        Map<String, Integer> map = postFacade.updateActivePostById(id, title, subtitle, userid, coverimg, postcontent,
+                isessence, orderid, activefee, activetype, iscontribute, intime, hotimgurl, ishot, ishotorder, essencedate, partsumEnddays, goodsid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }

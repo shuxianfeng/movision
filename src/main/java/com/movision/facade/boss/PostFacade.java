@@ -1335,8 +1335,6 @@ public class PostFacade {
      * @param activefee
      * @param userid
      * @param coverimg
-     * @param begintime
-     * @param endtime
      * @param isessence
      * @param orderid
      * @param postcontent
@@ -1346,7 +1344,7 @@ public class PostFacade {
     @Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map<String, Integer> updateActivePostById(String id, String title, String subtitle, String userid, String coverimg, String postcontent, String isessence,
-                                                     String orderid, String activefee, String activetype, String iscontribute, String begintime, String endtime,
+                                                     String orderid, String activefee, String activetype, String iscontribute, String intime,
                                                      String hotimgurl, String ishot, String ishotorder, String essencedate, String partsumEnddays, String goodsid) {
         Post postActiveList = new Post();
         Map<String, Integer> map = new HashedMap();
@@ -1422,29 +1420,30 @@ public class PostFacade {
             Period period = new Period();
             period.setPostid(Integer.parseInt(id));
             Date bstime = null;
-            if (!StringUtil.isEmpty(begintime)) {
-                try {
-                    bstime = format.parse(begintime);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-            period.setBegintime(bstime);
             Date enstime = null;
-            if (!StringUtil.isEmpty(endtime)) {
-                try {
-                    enstime = format.parse(endtime);
-                } catch (ParseException e) {
-                    e.printStackTrace();
+            if (StringUtil.isNotEmpty(intime)) {
+                String[] date = intime.split(",");
+                String begintime = date[0];
+                String endtime = date[1];
+                if (StringUtil.isEmpty(begintime) && StringUtil.isNotEmpty(endtime)) {
+                    try {
+                        bstime = format.parse(begintime);
+                        enstime = format.parse(endtime);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+                period.setBegintime(bstime);
+                period.setEndtime(enstime);
+                if (enstime != null && bstime != null) {
+                    //删除活动周期
+                    periodService.deleteActiveePostPer(period);
+                    //更改活动周期
+                    periodService.insertActivePostPer(period);
                 }
             }
-            period.setEndtime(enstime);
-            if (enstime != null && bstime != null) {
-                //删除活动周期
-                periodService.deleteActiveePostPer(period);
-                //更改活动周期
-                periodService.insertActivePostPer(period);
-            }
+
+
             if (!StringUtils.isEmpty(goodsid)) {
                 String[] lg = goodsid.split(",");//以逗号分隔
                 int de = goodsService.deleteActivityByGoods(Integer.parseInt(id));//删除活动发表的商品
