@@ -978,14 +978,14 @@ public class FacadePost {
         for (int i = 0; i < activeList.size(); i++) {
 
             //遍历所有的活动开始时间和结束时间，计算活动距离结束的剩余天数
-            Date begin = activeList.get(i).getBegintime();//活动开始时间
-            Date end = activeList.get(i).getEndtime();//活动结束时间
-            Date now = new Date();//活动当前时间
-            if (now.before(begin)) {
+            long begin = activeList.get(i).getBegintime().getTime();//活动开始时间
+            long end = activeList.get(i).getEndtime().getTime() + (1000 * 3600 * 24);//活动结束时间
+            long now = new Date().getTime();//活动当前时间
+            if (now < begin) {
                 activeList.get(i).setEnddays(-1);//活动还未开始
-            } else if (end.before(now)) {
+            } else if (end < now) {
                 activeList.get(i).setEnddays(0);//活动已结束
-            } else if (begin.before(now) && now.before(end)) {
+            } else if (begin < now && now < end) {
                 try {
                     log.error("计算活动剩余结束天数");
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -996,7 +996,7 @@ public class FacadePost {
                     long time1 = cal.getTimeInMillis();
                     cal.setTime(b);
                     long time2 = cal.getTimeInMillis();
-                    long between_days = (time2 - time1) / (1000 * 3600 * 24);
+                    long between_days = ((time2 - time1)) / (1000 * 3600 * 24);
                     activeList.get(i).setEnddays(Integer.parseInt(String.valueOf(between_days)));
                 } catch (Exception e) {
                     log.error("计算活动剩余结束天数失败");
