@@ -2033,7 +2033,7 @@ public class PostFacade {
         for (int i = 0; i < list.size(); i++) {
             String activeStatue = "";
             long begin = list.get(i).getBegintime().getTime();
-            long en = list.get(i).getEndtime().getTime();
+            long en = list.get(i).getEndtime().getTime() + 86399999;
             if (str >= begin && str <= en) {
                 activeStatue = "报名中";
             } else if (str < begin) {
