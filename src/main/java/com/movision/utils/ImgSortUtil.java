@@ -1,5 +1,6 @@
 package com.movision.utils;
 
+import com.movision.fsearch.utils.StringUtil;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class ImgSortUtil {
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject jsonObject = JSONObject.fromObject(jsonArray.get(i));
             Object tmp = jsonObject.get("rate");
-            if (tmp != null) {
+            if (StringUtil.isNotEmpty(tmp.toString())) {
                 Double rate = Double.valueOf(tmp.toString());
                 if (rate != null) {
                     //长图或宽图 数字为图片的宽高比例
@@ -41,11 +42,14 @@ public class ImgSortUtil {
                         }
                         //判断下一张图片是否是正常尺寸图片，若不是正常尺寸图片则把此图片标记mark为1
                         if (i + 1 < jsonArray.size()) {
-                            if (k == 1 && (Double.parseDouble(JSONObject.fromObject(jsonArray.get(i + 1)).get("rate").toString()) <= 0.5
-                                    || Double.parseDouble(JSONObject.fromObject(jsonArray.get(i + 1)).get("rate").toString()) >= 2)) {
-                                JSONObject jso2 = setJsonObject(JSONObject.fromObject(jsonArray.get(i)), 1);
-                                ja.add(jso2);
-                                k = 0;
+                            String ss = JSONObject.fromObject(jsonArray.get(i + 1)).get("rate").toString();
+                            if (StringUtil.isNotEmpty(ss)) {
+                                if (k == 1 && (Double.parseDouble(ss) <= 0.5
+                                        || Double.parseDouble(ss) >= 2)) {
+                                    JSONObject jso2 = setJsonObject(JSONObject.fromObject(jsonArray.get(i)), 1);
+                                    ja.add(jso2);
+                                    k = 0;
+                                }
                             }
                         } else {
                             JSONObject jso2 = setJsonObject(JSONObject.fromObject(jsonArray.get(i)), 1);
