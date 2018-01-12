@@ -41,7 +41,7 @@ public class ImgSortUtil {
                             k = 0;
                         }
                         //判断下一张图片是否是正常尺寸图片，若不是正常尺寸图片则把此图片标记mark为1
-                        if (i + 1 < jsonArray.size()) {
+                        if (i + 1 < jsonArray.size()) {//判断是否是最后一条
                             String ss = JSONObject.fromObject(jsonArray.get(i + 1)).get("rate").toString();
                             if (StringUtil.isNotEmpty(ss)) {
                                 if (k == 1 && (Double.parseDouble(ss) <= 0.5
@@ -51,10 +51,6 @@ public class ImgSortUtil {
                                     k = 0;
                                 }
                             }
-                        } else {
-                            JSONObject jso2 = setJsonObject(JSONObject.fromObject(jsonArray.get(i)), 1);
-                            ja.add(jso2);
-                            k = 0;
                         }
                     }
                 } else {
