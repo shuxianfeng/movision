@@ -2034,7 +2034,7 @@ public class PostFacade {
             String activeStatue = "";
             long begin = list.get(i).getBegintime().getTime();
             long en = list.get(i).getEndtime().getTime();
-            if (str > begin && str < en) {
+            if (str >= begin && str <= en) {
                 activeStatue = "报名中";
             } else if (str < begin) {
                 activeStatue = "未开始";
