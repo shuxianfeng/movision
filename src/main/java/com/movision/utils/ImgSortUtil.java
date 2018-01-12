@@ -51,6 +51,10 @@ public class ImgSortUtil {
                                     k = 0;
                                 }
                             }
+                        } else if (ja.size() < jsonArray.size()) {
+                            JSONObject jso2 = setJsonObject(JSONObject.fromObject(jsonArray.get(i)), 1);
+                            ja.add(jso2);
+                            k = 0;
                         }
                     }
                 } else {
