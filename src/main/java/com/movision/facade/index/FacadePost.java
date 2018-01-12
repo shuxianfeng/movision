@@ -5063,7 +5063,7 @@ public class FacadePost {
      * @param
      * @return
      */
-    public Map takeActive(String device ,String postid){
+    public Map takeActive(String device ,String postid) throws ParseException {
         //根据帖子获取活动id
         int activeid= activeTakeService.activeid(Integer.parseInt(postid));
         //查询这个设备号有没有投过10次
@@ -5084,10 +5084,9 @@ public class FacadePost {
         Date beg=period.getBegintime();
         Date end=period.getEndtime();
         Date date = new Date();
-        long beding=beg.getTime();
-        long endtime=end.getTime();
-        long str= date.getTime();
-        if(str > beding && str < endtime) {
+        //int enddays=0;
+        int enddays = DateUtils.activeEndDays(date, beg, end);
+         if(enddays != 0 || enddays != -1) {
             if (count < 3) {
                 if (postidCoun == 0) {
                     ActiveTake activeTake = new ActiveTake();
