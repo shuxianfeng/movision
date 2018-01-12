@@ -219,6 +219,9 @@ public class FacadePost {
     @Autowired
     private FollowCircleService followCircleService;
 
+    @Autowired
+    private ImgSortUtil imgSortUtil;
+
     public PostVo queryPostDetail(String postid, String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         //通过userid、postid查询该用户有没有关注该圈子的权限
         Map<String, Object> parammap = new HashMap<>();
@@ -789,7 +792,18 @@ public class FacadePost {
             post.setSubtitle(subtitle);
         }
         Map con = null;
+
         if (StringUtil.isNotEmpty(postcontent)) {
+            //纯图片帖子中，图片位置排列，修改mark字段
+            if (StringUtil.isNotEmpty(category)) {
+                if (category.equals("1")) {
+                    try {
+                        postcontent = imgSortUtil.mergePicture(postcontent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
             //内容转换
             con = jsoupCompressImg.newCompressImg(request, postcontent);
             System.out.println(con);
@@ -1303,7 +1317,16 @@ public class FacadePost {
         post.setTitle(title);
         post.setSubtitle(subtitle); //帖子副标题（作品描述）
 
+        //纯图片帖子修改内容中mark字段，调整图片位置
+        if (category != null && category == 1) {
+            try {
+                postcontent = imgSortUtil.mergePicture(postcontent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         contentMap = setPostContent(request, postcontent, contentMap, post);
+
         post.setZansum(0);//新发帖全部默认为0次
         post.setCommentsum(0);//被评论次数
         post.setForwardsum(0);//被转发次数
@@ -1518,6 +1541,15 @@ public class FacadePost {
         post.setTitle(title);
         if (StringUtil.isNotEmpty(subtitle)){
             post.setSubtitle(subtitle);
+        }
+        if (StringUtil.isNotEmpty(category)) {
+            if (category.equals("1")) {
+                try {
+                    postcontent = imgSortUtil.mergePicture(postcontent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         contentMap = setPostContent(request, postcontent, contentMap, post);
