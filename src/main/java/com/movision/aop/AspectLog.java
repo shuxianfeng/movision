@@ -38,7 +38,7 @@ public class AspectLog {
 
     private static final Logger log = LoggerFactory.getLogger(AspectLog.class);
 
-    ThreadLocal<Long> time = new ThreadLocal<Long>();
+    ThreadLocal<Long> time = new ThreadLocal<>();
 
     @Pointcut("!execution(* com.movision.controller.boss.query*(..))")
 
