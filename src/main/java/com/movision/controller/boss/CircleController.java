@@ -70,7 +70,7 @@ public class CircleController {
      * @return
      */
     @ApiOperation(value = "查询圈子分类精贴列表", notes = "用于查询圈子分类中含有的精贴列表接口", response = Response.class)
-    @RequestMapping(value="/Isessence_list",method = RequestMethod.POST)
+    @RequestMapping(value = "/qeury_Isessence_list", method = RequestMethod.POST)
     public Response queryPostIsessenceByList(@ApiParam(value = "圈子分类(查询分类的使用)") @RequestParam(required = false) String categoryid,
                                              @ApiParam(value = "圈子id(查询单个圈子使用)") @RequestParam(required = false) String circleid,
                                              @RequestParam(required = false, defaultValue = "1") String pageNo,
