@@ -75,7 +75,8 @@ public class AspectLog {
             busitype = aa[4];    //第五个
         }
 
-        if (busitype.equals("boss")) {//暂时这边只记录BOSS端的所有请求记录--------------------shuxf 2018.01.15
+        //1.是BOSS端操作请求； 2.后台用户id!=1即除了admin账号之外的用户操作  （同时满足这两点才做记录）
+        if (busitype.equals("boss") && Integer.parseInt(String.valueOf(memberId)) != 1) {//暂时这边只记录BOSS端的所有请求记录--------------------shuxf 2018.01.15
             String logMode = PropertiesLoader.getValue("busi.log.mode");
             switch (logMode) {
                 case "db":
