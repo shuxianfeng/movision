@@ -175,7 +175,14 @@
 
 
     <!--AOP-->
-    <aop:config proxy-target-class="true"/>
+    <aop:config proxy-target-class="true">
+        <!--配置切面-拦截过滤规则：只用于拦截BOSS端的，除query前缀方法之外的方法 2018.01.15 shuxf-->
+        <aop:aspect id="SyslogAspect">
+            <!-- 描述切入点 -->
+            <aop:pointcut id="businessService"
+                          expression="!execution(* com.movision.controller.boss.query*(..)) and !execution(* com.movision.controller.boss.*.boss.*query*(..))"/>
+        </aop:aspect>
+    </aop:config>
 
     <!--swagger-->
     <bean id="apiConfig" class="com.movision.common.util.SwaggerConfig"/>
