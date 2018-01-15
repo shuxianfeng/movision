@@ -3,7 +3,6 @@ package com.movision.aop;
 import com.movision.mybatis.accessLog.entity.AccessLog;
 import com.movision.mybatis.accessLog.service.AccessLogService;
 import com.movision.shiro.realm.BossRealm;
-import com.movision.shiro.realm.ShiroRealm.ShiroUser;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -20,7 +19,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -40,8 +38,8 @@ public class AspectLog {
 
     ThreadLocal<Long> time = new ThreadLocal<>();
 
-    @Pointcut("!execution(* com.movision.controller.boss.*.query*(..))")
-    public void pointCut(){}
+//    @Pointcut("!execution(* com.movision.controller.boss.*.query*(..))")
+//    public void pointCut(){}
 
     @Around("@annotation(org.springframework.web.bind.annotation.RequestMapping)")
 //    @Around(value="!execution(* com.movision.controller.boss.*.query*(..))")
