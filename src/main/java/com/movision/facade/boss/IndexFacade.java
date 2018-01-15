@@ -1,6 +1,8 @@
 package com.movision.facade.boss;
 
 import com.movision.fsearch.utils.StringUtil;
+import com.movision.mybatis.accessLog.entity.AccessLog;
+import com.movision.mybatis.accessLog.service.AccessLogService;
 import com.movision.mybatis.bossIndex.entity.AboveStatistics;
 import com.movision.mybatis.bossIndex.entity.IndexTodayDetails;
 import com.movision.mybatis.bossIndex.entity.ProcessedGoodsOrders;
@@ -15,6 +17,8 @@ import com.movision.mybatis.userDauStatistics.service.UserDauStatisticsService;
 import com.movision.mybatis.userParticipate.entity.UserParticipate;
 import com.movision.mybatis.userParticipate.entity.UserParticipateVo;
 import com.movision.mybatis.userParticipate.service.UserParticipateService;
+import com.movision.utils.pagination.model.Paging;
+import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +46,9 @@ public class IndexFacade {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AccessLogService accessLogService;
 
     /**
      * 查询后台首页今日详情
@@ -179,5 +186,32 @@ public class IndexFacade {
         UserParticipateVo vo = userParticipateService.queryPostStatisticsGather(map);
         resault.put("gather", vo);
         return resault;
+    }
+
+
+    /**
+     * 调价查询平台访问日志
+     *
+     * @param memberId
+     * @param pager
+     * @return
+     */
+    public List<AccessLog> findAllPlatformAccess(String memberId, Paging<AccessLog> pager) {
+        List<AccessLog> list = new ArrayList<>();
+        AccessLog accessLog = new AccessLog();
+        if (StringUtil.isNotEmpty(memberId)) {
+            accessLog.setMemberid(Integer.parseInt(memberId));
+        }
+        list = accessLogService.findAllqueryPlatformAccess(accessLog, pager);
+        return list;
+    }
+
+    /**
+     * 查询平台访问用户列表
+     *
+     * @return
+     */
+    public List<User> queryPlatformAccessByUserList() {
+        return userService.queryPlatformAccessByUserList();
     }
 }

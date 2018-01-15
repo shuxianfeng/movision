@@ -1,6 +1,9 @@
 package com.movision.mybatis.accessLog.mapper;
 
 import com.movision.mybatis.accessLog.entity.AccessLog;
+import org.apache.ibatis.session.RowBounds;
+
+import java.util.List;
 
 public interface AccessLogMapper {
     int deleteByPrimaryKey(Integer id);
@@ -14,4 +17,6 @@ public interface AccessLogMapper {
     int updateByPrimaryKeySelective(AccessLog record);
 
     int updateByPrimaryKey(AccessLog record);
+
+    List<AccessLog> findAllqueryPlatformAccess(AccessLog accessLog, RowBounds rowBounds);
 }

@@ -1810,4 +1810,9 @@ SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
         SELECT COUNT(id) AS statistics,source FROM yw_user WHERE status = 0 AND id> 20000 or id < 10000 GROUP BY source
         ]]>
     </select>
+
+    <!-- boss 用户登录平台操作记录 -->
+    <select id="queryPlatformAccessByUserList" resultType="com.movision.mybatis.user.entity.User">
+        SELECT au.id,u.nickname FROM yw_accesslog l INNER JOIN yw_admin_user au ON au.id = l.memberId INNER JOIN yw_user u ON u.phone = au.phone WHERE au.isdel = 0 AND u.status = 0 GROUP BY l.memberId
+    </select>
 </mapper>

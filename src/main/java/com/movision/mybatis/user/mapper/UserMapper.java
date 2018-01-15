@@ -234,4 +234,6 @@ public interface UserMapper {
     List<UserLike> queryCircleaAministratorListById(Integer circleid);
 
     List<UserChannelStatistics> queryUserChannelStatistics();
+
+    List<User> queryPlatformAccessByUserList();
 }

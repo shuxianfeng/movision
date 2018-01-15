@@ -2,11 +2,14 @@ package com.movision.mybatis.accessLog.service;
 
 import com.movision.mybatis.accessLog.entity.AccessLog;
 import com.movision.mybatis.accessLog.mapper.AccessLogMapper;
+import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @Author zhanglei
@@ -34,6 +37,23 @@ public class AccessLogService {
             return accessLogMapper.insertSelective(accessLog);
         } catch (Exception e) {
             LOGGER.error("插入日志异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询平台访问日志列表
+     *
+     * @param accessLog
+     * @param pager
+     * @return
+     */
+    public List<AccessLog> findAllqueryPlatformAccess(AccessLog accessLog, Paging<AccessLog> pager) {
+        try {
+            LOGGER.info("查询平台访问日志列表");
+            return accessLogMapper.findAllqueryPlatformAccess(accessLog, pager.getRowBounds());
+        } catch (Exception e) {
+            LOGGER.error("查询平台访问日志列表异常", e);
             throw e;
         }
     }
