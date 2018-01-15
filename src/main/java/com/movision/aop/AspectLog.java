@@ -49,6 +49,7 @@ public class AspectLog {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if (null != session) {
+            //BOSS端session就ShiroBossUser类型；app端session类型就ShiroUser。
             BossRealm.ShiroBossUser principal = (BossRealm.ShiroBossUser) session.getAttribute("bossuser");//app端：appuser;boss端：bossuser//暂时这边只记录BOSS端的所有请求记录--------------------shuxf 2018.01.15
             if (null != principal) {
                 memberId = principal.getId();
