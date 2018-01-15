@@ -40,10 +40,11 @@ public class AspectLog {
 
     ThreadLocal<Long> time = new ThreadLocal<>();
 
-//    @Pointcut("!execution(* com.movision.controller.boss.query*(..))")
+    @Pointcut("!execution(* com.movision.controller.boss.query*(..))")
 
     @Around("@annotation(org.springframework.web.bind.annotation.RequestMapping)")
     public Object aroundLog(ProceedingJoinPoint pjp) throws Throwable {
+        log.info("测试是否进入AOP方法");
         time.set(System.currentTimeMillis());
         Object result = pjp.proceed();
         Long execTime = System.currentTimeMillis() - time.get();
