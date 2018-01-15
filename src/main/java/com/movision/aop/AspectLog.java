@@ -40,7 +40,7 @@ public class AspectLog {
 
     ThreadLocal<Long> time = new ThreadLocal<>();
 
-    @Pointcut("!execution(* com.movision.controller.boss.query*(..))")
+//    @Pointcut("!execution(* com.movision.controller.boss.query*(..))")
 
     @Around("@annotation(org.springframework.web.bind.annotation.RequestMapping)")
     public Object aroundLog(ProceedingJoinPoint pjp) throws Throwable {
