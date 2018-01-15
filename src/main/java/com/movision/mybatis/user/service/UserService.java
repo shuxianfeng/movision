@@ -1483,4 +1483,19 @@ public class UserService {
             throw e;
         }
     }
+
+    /**
+     * 查询平台访问用户列表
+     *
+     * @return
+     */
+    public List<User> queryPlatformAccessByUserList() {
+        try {
+            log.info("查询平台访问用户列表");
+            return userMapper.queryPlatformAccessByUserList();
+        } catch (Exception e) {
+            log.error("查询平台访问用户列表异常", e);
+            throw e;
+        }
+    }
 }

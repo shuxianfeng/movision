@@ -154,4 +154,16 @@
         intime = #{intime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+    <select id="findAllqueryPlatformAccess" resultType="com.movision.mybatis.accessLog.entity.AccessLog"
+            parameterType="com.movision.mybatis.accessLog.entity.AccessLog">
+        SELECT id,memberid,clientIP,httpMethod,requestURL,queryString,userAgent,busiType,intime
+        FROM yw_accesslog
+        <where>
+            <if test="memberid != null">
+                memberid = #{memberid,jdbcType=INTEGER}
+            </if>
+        </where>
+        ORDER BY intime DESC
+    </select>
 </mapper>
