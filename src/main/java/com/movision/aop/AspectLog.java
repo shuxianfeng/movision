@@ -2,6 +2,7 @@ package com.movision.aop;
 
 import com.movision.mybatis.accessLog.entity.AccessLog;
 import com.movision.mybatis.accessLog.service.AccessLogService;
+import com.movision.shiro.realm.BossRealm;
 import com.movision.shiro.realm.ShiroRealm.ShiroUser;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import org.apache.shiro.SecurityUtils;
@@ -48,7 +49,7 @@ public class AspectLog {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if (null != session) {
-            ShiroUser principal = (ShiroUser) session.getAttribute("bossuser");//app端：appuser;boss端：bossuser//暂时这边只记录BOSS端的所有请求记录--------------------shuxf 2018.01.15
+            BossRealm.ShiroBossUser principal = (BossRealm.ShiroBossUser) session.getAttribute("bossuser");//app端：appuser;boss端：bossuser//暂时这边只记录BOSS端的所有请求记录--------------------shuxf 2018.01.15
             if (null != principal) {
                 memberId = principal.getId();
             }
