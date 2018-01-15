@@ -48,7 +48,7 @@ public class AspectLog {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if (null != session) {
-            ShiroUser principal = (ShiroUser) session.getAttribute("appuser");
+            ShiroUser principal = (ShiroUser) session.getAttribute("bossuser");//app端：appuser;boss端：bossuser//暂时这边只记录BOSS端的所有请求记录--------------------shuxf 2018.01.15
             if (null != principal) {
                 memberId = principal.getId();
             }
