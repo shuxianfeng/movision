@@ -27,8 +27,8 @@ import java.util.Date;
  * @author zhuangyuhao@20160413
  */
 
-//@Component//临时屏蔽这两个注解，屏蔽这个切面日志，暂时用不到--20171213 shuxf
-//@Aspect
+@Component
+@Aspect
 public class AspectLog {
 
     @Autowired
@@ -75,31 +75,32 @@ public class AspectLog {
             busitype = aa[4];    //第五个
         }
 
-        String logMode = PropertiesLoader.getValue("busi.log.mode");
-        switch (logMode) {
-            case "db":
-                AccessLog accessLog = new AccessLog();
-                accessLog.setMemberid(Integer.parseInt(String.valueOf(memberId)));    //用户id
-                accessLog.setClientip(clientIP);    //客户端ip
-                accessLog.setHttpmethod(httpMethod);    //http请求方法
-                accessLog.setRequesturl(requestURL);    //请求url
-                accessLog.setQuerystring(queryString);  //请求参数
-                accessLog.setUseragent(userAgent);  //用户代理
-                accessLog.setExectime(Integer.parseInt(String.valueOf(execTime)));    //执行日期
-                accessLog.setBusitype(busitype);//业务类型
-                accessLog.setIntime(new Date());
-                int isAdd = accessLogService.insertSelective(accessLog);
-                log.debug("AspectLog增加访问日志->isAdd=" + isAdd);
-                break;
-            case "file":
-                log.trace("memberId:[{}]&clientIP:[{}]&httpMethod:[{}]&requestURL:[{}]&queryString[{}]&userAgent[{}]&execTime[{}]&busitype[{}]",
-                        new Object[]{memberId, clientIP, httpMethod, requestURL, queryString, userAgent, execTime, busitype});
-                break;
-            default:
-                log.error("业务日志配置不正确");
-                break;
+        if (busitype.equals("boss")) {//暂时这边只记录BOSS端的所有请求记录--------------------shuxf 2018.01.15
+            String logMode = PropertiesLoader.getValue("busi.log.mode");
+            switch (logMode) {
+                case "db":
+                    AccessLog accessLog = new AccessLog();
+                    accessLog.setMemberid(Integer.parseInt(String.valueOf(memberId)));    //用户id
+                    accessLog.setClientip(clientIP);    //客户端ip
+                    accessLog.setHttpmethod(httpMethod);    //http请求方法
+                    accessLog.setRequesturl(requestURL);    //请求url
+                    accessLog.setQuerystring(queryString);  //请求参数
+                    accessLog.setUseragent(userAgent);  //用户代理
+                    accessLog.setExectime(Integer.parseInt(String.valueOf(execTime)));    //执行日期
+                    accessLog.setBusitype(busitype);//业务类型
+                    accessLog.setIntime(new Date());
+                    int isAdd = accessLogService.insertSelective(accessLog);
+                    log.debug("AspectLog增加访问日志->isAdd=" + isAdd);
+                    break;
+                case "file":
+                    log.trace("memberId:[{}]&clientIP:[{}]&httpMethod:[{}]&requestURL:[{}]&queryString[{}]&userAgent[{}]&execTime[{}]&busitype[{}]",
+                            new Object[]{memberId, clientIP, httpMethod, requestURL, queryString, userAgent, execTime, busitype});
+                    break;
+                default:
+                    log.error("业务日志配置不正确");
+                    break;
+            }
         }
-
         return result;
     }
 
