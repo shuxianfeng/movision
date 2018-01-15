@@ -180,7 +180,7 @@
         <aop:aspect id="SyslogAspect">
             <!-- 描述切入点 -->
             <aop:pointcut id="businessService"
-                          expression="!execution(* com.movision.controller.boss.query*(..)) and !execution(* com.movision.controller.boss.*.boss.*query*(..))"/>
+                          expression="!execution(* com.movision.controller.boss.query*(..))"/>
         </aop:aspect>
     </aop:config>
 
