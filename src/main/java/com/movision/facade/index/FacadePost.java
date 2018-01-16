@@ -1263,7 +1263,7 @@ public class FacadePost {
                 log.info("APP前端用户开始请求发视频帖");
                 Map contentMap = null;
                 //封装帖子实体
-                Post post = preparePostJavaBeanNew(request, uid, cid, title, subtitle, postcontent, isactive, contentMap, activeid, 2);//最后一个入参category为2：视频贴
+                Post post = preparePostJavaBeanNew(request, uid, cid, title, subtitle, postcontent, isactive, contentMap, activeid, "2");//最后一个入参category为2：视频贴
                 //1 插入帖子
                 postService.insertSelective(post);
                 //返回的主键--帖子id
@@ -1312,21 +1312,21 @@ public class FacadePost {
      */
     private Post preparePostJavaBeanNew(HttpServletRequest request, Integer userid, Integer circleid, String title,
                                         String subtitle, String postcontent, String isactive,
-                                        Map contentMap, String activeid, Integer category) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+                                        Map contentMap, String activeid, String category) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         Post post = new Post();
         post.setCircleid(circleid);
         post.setTitle(title);
         post.setSubtitle(subtitle); //帖子副标题（作品描述）
 
         //纯图片帖子修改内容中mark字段，调整图片位置
-        if (category != null && category == 1) {
+        if (StringUtil.isNotBlank(category) && (category.equals("1") || category.equals(1))) {
             try {
                 postcontent = imgSortUtil.mergePicture(postcontent);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        contentMap = setPostContent(request, postcontent, contentMap, post);
+        contentMap = setPostContent(request, postcontent, contentMap, post, category);
 
         post.setZansum(0);//新发帖全部默认为0次
         post.setCommentsum(0);//被评论次数
@@ -1352,7 +1352,9 @@ public class FacadePost {
         if (StringUtils.isNotBlank(activeid)) {
             post.setActiveid(Integer.parseInt(activeid));
         }
-        post.setCategory(category);
+        if (StringUtil.isNotEmpty(category)) {
+            post.setCategory(Integer.parseInt(category));
+        }
         return post;
     }
 
@@ -1545,18 +1547,8 @@ public class FacadePost {
         }
 
         //帖子内容格式转换
-        contentMap = setPostContent(request, postcontent, contentMap, post);
+        contentMap = setPostContent(request, postcontent, contentMap, post, category);
 
-        if (StringUtil.isNotEmpty(category)) {
-            if (category.equals("1") || category.equals(1)) {
-                try {
-                    String str = imgSortUtil.mergePicture(contentMap.get("content").toString());
-                    post.setPostcontent(str);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
         post.setZansum(0);//新发帖全部默认为0次
         post.setCommentsum(0);//被评论次数
         post.setForwardsum(0);//被转发次数
@@ -1600,7 +1592,7 @@ public class FacadePost {
      * @param post
      * @return
      */
-    private Map setPostContent(HttpServletRequest request, String postcontent, Map contentMap, Post post) {
+    private Map setPostContent(HttpServletRequest request, String postcontent, Map contentMap, Post post, String category) {
         if (StringUtil.isNotEmpty(postcontent)) {
             //内容转换
             contentMap = jsoupCompressImg.newCompressImg(request, postcontent);
@@ -1608,6 +1600,15 @@ public class FacadePost {
             if ((int) contentMap.get("code") == 200) {
                 String str = contentMap.get("content").toString();
                 postcontent = str;
+                if (StringUtil.isNotEmpty(category)) {
+                    if (category.equals("1") || category.equals(1)) {
+                        try {
+                            postcontent = imgSortUtil.mergePicture(contentMap.get("content").toString());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
             } else {
                 log.error("APP端帖子图片内容转换异常");
             }
@@ -5239,7 +5240,7 @@ public class FacadePost {
                 log.info("APP前端用户开始请求发长图帖");
                 Map contentMap = null;
                 //封装帖子实体
-                Post post = preparePostJavaBeanNew(request, uid, cid, title, subtitle, postcontent, isactive, contentMap, activeid, 1);//最后一个入参category为1：长图贴
+                Post post = preparePostJavaBeanNew(request, uid, cid, title, subtitle, postcontent, isactive, contentMap, activeid, "1");//最后一个入参category为1：长图贴
                 //1 插入帖子
                 postService.insertSelective(post);
                 //返回的主键--帖子id
