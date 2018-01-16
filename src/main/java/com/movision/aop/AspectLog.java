@@ -41,8 +41,8 @@ public class AspectLog {
 //    @Pointcut("!execution(* com.movision.controller.boss.*.query*(..))")
 //    public void pointCut(){}
 
-    @Around("@annotation(org.springframework.web.bind.annotation.RequestMapping)")
 //    @Around(value="!execution(* com.movision.controller.boss.*.query*(..))")
+    @Around("@annotation(org.springframework.web.bind.annotation.RequestMapping)")//注解方式配置规则和这行冲突，所以只能在代码中逻辑过滤方法前缀
     public Object aroundLog(ProceedingJoinPoint pjp) throws Throwable {
         log.info("测试是否进入AOP方法");
         time.set(System.currentTimeMillis());
@@ -81,8 +81,10 @@ public class AspectLog {
             busitype = aa[4];    //第五个
         }
 
-        //1.是BOSS端操作请求； 2.后台用户id!=1即除了admin账号之外的用户操作  （同时满足这两点才做记录）
-        if (busitype.equals("boss") && Integer.parseInt(String.valueOf(memberId)) != 1) {//暂时这边只记录BOSS端的所有请求记录--------------------shuxf 2018.01.15
+        int index = requestURL.indexOf("query");//访问链接中包含的query所在的索引位置
+
+        //1.是BOSS端操作请求； 2.后台用户id!=1即除了admin账号之外的用户操作； 3.不是query类接口  （同时满足这三点才做记录）
+        if (busitype.equals("boss") && Integer.parseInt(String.valueOf(memberId)) != 1 && index == -1) {//暂时这边只记录BOSS端的所有请求记录--------------------shuxf 2018.01.15
             String logMode = PropertiesLoader.getValue("busi.log.mode");
             switch (logMode) {
                 case "db":
