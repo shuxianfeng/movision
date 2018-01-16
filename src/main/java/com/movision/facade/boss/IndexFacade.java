@@ -197,13 +197,11 @@ public class IndexFacade {
      * @return
      */
     public List<AccessLog> findAllPlatformAccess(String memberId, Paging<AccessLog> pager) {
-        List<AccessLog> list = new ArrayList<>();
         AccessLog accessLog = new AccessLog();
         if (StringUtil.isNotEmpty(memberId)) {
             accessLog.setMemberid(Integer.parseInt(memberId));
         }
-        list = accessLogService.findAllqueryPlatformAccess(accessLog, pager);
-        return list;
+        return accessLogService.findAllqueryPlatformAccess(accessLog, pager);
     }
 
     /**
