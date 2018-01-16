@@ -815,8 +815,9 @@ public class PostFacade {
                 System.out.println(con);
                 if ((int) con.get("code") == 200) {
                     String str = con.get("content").toString();
+                    System.out.println("categroy=================" + category);
                     if (StringUtil.isNotEmpty(category)) {
-                        if (category.equals("1")) {
+                        if (category.equals("1") || category.equals(1)) {
                             //帖子内容图片排序操作
                             try {
                                 str = imgSortUtil.mergePicture(postcontent);
