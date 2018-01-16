@@ -739,7 +739,7 @@ public class FacadePost {
 
                 //帖子使用的标签
                 if (StringUtil.isNotEmpty(labelid)) {
-                    String[] str = labelid.split(",");
+                   /* String[] str = labelid.split(",");
                     Map postlabelrelationMap = new HashMap();
                     List<Integer> newLabelIdList = new ArrayList<>();
                     for (int i = 0; i < str.length; i++) {
@@ -748,7 +748,8 @@ public class FacadePost {
                     postlabelrelationMap.put("postid", post.getId());
                     postlabelrelationMap.put("labelids", newLabelIdList.toArray());
                     //批量新增帖子、标签关系
-                    postLabelRelationService.batchAdd(postlabelrelationMap);
+                    postLabelRelationService.batchAdd(postlabelrelationMap);*/
+                    addLabelProcess(labelid, post.getId());
                 }
 
                 int flag = post.getId();//返回的主键--帖子id
