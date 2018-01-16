@@ -1543,17 +1543,20 @@ public class FacadePost {
         if (StringUtil.isNotEmpty(subtitle)){
             post.setSubtitle(subtitle);
         }
+
+        //帖子内容格式转换
+        contentMap = setPostContent(request, postcontent, contentMap, post);
+
         if (StringUtil.isNotEmpty(category)) {
-            if (category.equals("1")) {
+            if (category.equals("1") || category.equals(1)) {
                 try {
-                    postcontent = imgSortUtil.mergePicture(postcontent);
+                    String str = imgSortUtil.mergePicture(contentMap.get("content").toString());
+                    post.setPostcontent(str);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }
-
-        contentMap = setPostContent(request, postcontent, contentMap, post);
         post.setZansum(0);//新发帖全部默认为0次
         post.setCommentsum(0);//被评论次数
         post.setForwardsum(0);//被转发次数
