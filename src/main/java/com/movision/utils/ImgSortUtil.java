@@ -14,6 +14,7 @@ public class ImgSortUtil {
 
     public String mergePicture(String content) throws Exception {
         //转换帖子内容为数组格式
+        System.out.println("内容转换时，纯图片排序公共方法" + content);
         JSONArray jsonArray = JSONArray.fromObject(content);
         //标记，用于记录两张图片是否连贯
         int k = 0;
