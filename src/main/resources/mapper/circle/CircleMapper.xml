@@ -687,6 +687,9 @@
         <if test="categoryid != null">
             AND c.category=#{categoryid,jdbcType=INTEGER}
         </if>
+        <if test="categoryid == null">
+            AND cc.categoryname IS NOT NULL
+        </if>
         AND c.status = 1
         <if test="type == 5">
             GROUP BY c.category

@@ -1375,7 +1375,7 @@
     </select>
 
     <select id="queryUserIsVip" resultType="java.lang.Integer" parameterType="java.lang.Integer">
-        SELECT level FROM yw_user WHERE id=#{loginid,jdbcType=INTEGER}
+        SELECT isdv FROM yw_user WHERE id=#{loginid,jdbcType=INTEGER}
     </select>
 
     <select id="queryUserRole" resultType="com.movision.mybatis.user.entity.UserRole" parameterType="java.lang.Integer">

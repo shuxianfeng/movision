@@ -7,6 +7,7 @@ import com.movision.common.constant.PointConstant;
 import com.movision.common.util.ShiroUtil;
 import com.movision.exception.BusinessException;
 import com.movision.facade.index.FacadeHeatValue;
+import com.movision.facade.index.FacadePost;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.activePart.entity.ActivePartList;
@@ -69,6 +70,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
@@ -842,7 +844,7 @@ public class PostFacade {
 
             //帖子使用的标签
             if (StringUtil.isNotEmpty(label)) {
-                String[] str = label.split(",");
+               /* String[] str = label.split(",");
                 Map postlabelrelationMap = new HashMap();
                 List<Integer> newLabelIdList = new ArrayList<>();
                 for (int i = 0; i < str.length; i++) {
@@ -851,7 +853,17 @@ public class PostFacade {
                 postlabelrelationMap.put("postid", post.getId());
                 postlabelrelationMap.put("labelids", newLabelIdList.toArray());
                 //批量新增帖子、标签关系
-                postLabelRelationService.batchAdd(postlabelrelationMap);
+                postLabelRelationService.batchAdd(postlabelrelationMap);*/
+                //FacadePost.addLabelProcess(label, post.getId());
+                try {
+                    String classname = "com.movision.facade.index.FacadePost";
+                    Class obj = Class.forName(classname);
+                    Object object = obj.newInstance();
+                    Method method = obj.getDeclaredMethod("addLabelProcess", String.class, Integer.class);
+                    method.invoke(object, label, post.getId());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             //查询圈子名称
