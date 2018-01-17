@@ -830,10 +830,9 @@ public class FacadePost {
         post.setIsessencepool(0);//是否设为精选池中的帖子
         post.setIntime(new Date());//帖子发布时间
         post.setTotalpoint(0);//帖子综合评分
-        if (StringUtil.isNotEmpty(category)) {
-            //0图文发帖1纯图片发帖2视频贴
-            post.setCategory(Integer.parseInt(category));
-        }
+        //0图文发帖1纯图片发帖2视频贴
+        post.setCategory(Integer.parseInt(category));
+
         if ((int) con.get("flag") != 0) {
             post.setIsdel(2);//视频
         } else {
