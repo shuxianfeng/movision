@@ -256,6 +256,8 @@ public class JsoupCompressImg {
                 String value = (String) moduleobj.get("value");
                 String wh = (String) moduleobj.get("wh");
                 String dir = (String) moduleobj.get("dir");
+                String jrate = (String) moduleobj.get("rate");
+                Integer mark = (Integer) moduleobj.get("mark");
                 //0 文字 1 图片 2 视频
                 if (type == 1) {
 
@@ -352,6 +354,8 @@ public class JsoupCompressImg {
                                 res.put("value", newimgurl);
                                 res.put("wh", wh);
                                 res.put("dir", dir);
+                                res.put("mark", mark);
+                                res.put("rate", jrate);
                                 moduleArray.add(i, res);
                                 log.info("测试替换后的json字符串>>>>>>>"+moduleArray.toString());
 
