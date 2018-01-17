@@ -257,7 +257,7 @@ public class JsoupCompressImg {
                 String wh = (String) moduleobj.get("wh");
                 String dir = (String) moduleobj.get("dir");
                 String jrate = (String) moduleobj.get("rate");
-                Integer mark = (Integer) moduleobj.get("mark");
+                String mark = moduleobj.getString("mark");
                 //0 文字 1 图片 2 视频
                 if (type == 1) {
 
