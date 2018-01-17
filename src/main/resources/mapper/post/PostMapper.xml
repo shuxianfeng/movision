@@ -1006,10 +1006,13 @@
                 userid = #{userid,jdbcType=INTEGER},
             </if>
             <if test="oprtime!=null">
-                oprtime=#{oprtime,jdbcType=TIMESTAMP}
+                oprtime=#{oprtime,jdbcType=TIMESTAMP},
             </if>
             <if test="heatvalue != null">
-                heat_value=#{heatvalue}
+                heat_value=#{heatvalue},
+            </if>
+            <if test="category != null">
+                category = #{category,jdbcType=INTEGER}
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
