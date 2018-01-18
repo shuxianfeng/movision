@@ -4,6 +4,7 @@ import com.movision.common.Response;
 import com.movision.facade.boss.IndexFacade;
 import com.movision.facade.boss.SystemSettingFacade;
 import com.movision.mybatis.accessLog.entity.AccessLog;
+import com.movision.mybatis.accessLog.entity.AccessLogVo;
 import com.movision.mybatis.logisticsfeeCalculateRule.entity.LogisticsfeeCalculateRule;
 import com.movision.mybatis.user.entity.User;
 import com.movision.utils.pagination.model.Paging;
@@ -90,8 +91,8 @@ public class SystemSettingController {
                                             @ApiParam(value = "当前页") @RequestParam(defaultValue = "1") String pageNo,
                                             @ApiParam(value = "每页几条") @RequestParam(defaultValue = "10") String pageSize) {
         Response response = new Response();
-        Paging<AccessLog> pager = new Paging<AccessLog>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<AccessLog> logs = indexFacade.findAllPlatformAccess(memberId, pager);
+        Paging<AccessLogVo> pager = new Paging<AccessLogVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<AccessLogVo> logs = indexFacade.findAllPlatformAccess(memberId, pager);
         pager.result(logs);
         response.setMessage("查询成功");
         response.setData(pager);

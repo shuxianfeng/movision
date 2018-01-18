@@ -2,6 +2,7 @@ package com.movision.facade.boss;
 
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.accessLog.entity.AccessLog;
+import com.movision.mybatis.accessLog.entity.AccessLogVo;
 import com.movision.mybatis.accessLog.service.AccessLogService;
 import com.movision.mybatis.bossIndex.entity.AboveStatistics;
 import com.movision.mybatis.bossIndex.entity.IndexTodayDetails;
@@ -196,7 +197,7 @@ public class IndexFacade {
      * @param pager
      * @return
      */
-    public List<AccessLog> findAllPlatformAccess(String memberId, Paging<AccessLog> pager) {
+    public List<AccessLogVo> findAllPlatformAccess(String memberId, Paging<AccessLogVo> pager) {
         AccessLog accessLog = new AccessLog();
         if (StringUtil.isNotEmpty(memberId)) {
             accessLog.setMemberid(Integer.parseInt(memberId));

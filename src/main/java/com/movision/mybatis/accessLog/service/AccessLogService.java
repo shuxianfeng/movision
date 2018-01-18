@@ -1,6 +1,7 @@
 package com.movision.mybatis.accessLog.service;
 
 import com.movision.mybatis.accessLog.entity.AccessLog;
+import com.movision.mybatis.accessLog.entity.AccessLogVo;
 import com.movision.mybatis.accessLog.mapper.AccessLogMapper;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
@@ -48,7 +49,7 @@ public class AccessLogService {
      * @param pager
      * @return
      */
-    public List<AccessLog> findAllqueryPlatformAccess(AccessLog accessLog, Paging<AccessLog> pager) {
+    public List<AccessLogVo> findAllqueryPlatformAccess(AccessLog accessLog, Paging<AccessLogVo> pager) {
         try {
             LOGGER.info("查询平台访问日志列表");
             return accessLogMapper.findAllqueryPlatformAccess(accessLog, pager.getRowBounds());
