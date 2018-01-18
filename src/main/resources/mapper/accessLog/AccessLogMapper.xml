@@ -160,12 +160,12 @@
         SELECT
         a.id,memberid,a.clientIP,a.httpMethod,a.requestURL,a.queryString,a.userAgent,a.busiType,a.intime,au.username AS
         nickname
-        FROM yw_accesslog a INNER JOIN yw_admin_user au ON au.id = a.userid
+        FROM yw_accesslog a INNER JOIN yw_admin_user au ON au.id = a.memberId
         <where>
             <if test="memberid != null">
                 memberid = #{memberid,jdbcType=INTEGER}
             </if>
         </where>
-        ORDER BY intime DESC
+
     </select>
 </mapper>
