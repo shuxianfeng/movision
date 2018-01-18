@@ -156,7 +156,7 @@
   </update>
 
     <select id="findAllqueryPlatformAccess" resultType="com.movision.mybatis.accessLog.entity.AccessLogVo"
-            parameterType="com.movision.mybatis.accessLog.entity.AccessLogVo">
+            parameterType="com.movision.mybatis.accessLog.entity.AccessLog">
         SELECT
         a.id,memberid,a.clientIP,a.httpMethod,a.requestURL,a.queryString,a.userAgent,a.busiType,a.intime,au.username AS
         nickname
