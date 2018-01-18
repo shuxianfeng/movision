@@ -158,14 +158,15 @@
     <select id="findAllqueryPlatformAccess" resultType="com.movision.mybatis.accessLog.entity.AccessLogVo"
             parameterType="com.movision.mybatis.accessLog.entity.AccessLog">
         SELECT
-        a.id,memberid,a.clientIP,a.httpMethod,a.requestURL,a.queryString,a.userAgent,a.busiType,a.intime,au.username AS
+        a.id,a.memberid,a.clientIP,a.httpMethod,a.requestURL,a.queryString,a.userAgent,a.busiType,a.intime,au.username
+        AS
         nickname
         FROM yw_accesslog a LEFT JOIN yw_admin_user au ON au.id = a.memberId
         <where>
             <if test="memberid != null">
-                memberid = #{memberid,jdbcType=INTEGER}
+                a.memberid = #{memberid,jdbcType=INTEGER}
             </if>
         </where>
-
+        ORDER BY a.intime DESC
     </select>
 </mapper>
