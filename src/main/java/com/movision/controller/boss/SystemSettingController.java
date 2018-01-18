@@ -1,8 +1,12 @@
 package com.movision.controller.boss;
 
 import com.movision.common.Response;
+import com.movision.facade.boss.IndexFacade;
 import com.movision.facade.boss.SystemSettingFacade;
+import com.movision.mybatis.accessLog.entity.AccessLog;
 import com.movision.mybatis.logisticsfeeCalculateRule.entity.LogisticsfeeCalculateRule;
+import com.movision.mybatis.user.entity.User;
+import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 系统设置
@@ -23,6 +29,9 @@ public class SystemSettingController {
 
     @Autowired
     private SystemSettingFacade systemSettingFacade;
+
+    @Autowired
+    private IndexFacade indexFacade;
 
     /**
      * 运费计算规则
@@ -64,6 +73,43 @@ public class SystemSettingController {
             response.setMessage("操作成功");
         }
         response.setData(logisticsfeeCalculateRule);
+        return response;
+    }
+
+    /**
+     * 条件查询平台访问日志
+     *
+     * @param memberId
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @RequestMapping(value = "query_platform_access_list", method = RequestMethod.POST)
+    @ApiOperation(value = "查询平台访问日志", notes = "平台访问日志", response = Response.class)
+    public Response queryPlatformAccessList(@ApiParam(value = "用户id") @RequestParam String memberId,
+                                            @ApiParam(value = "当前页") @RequestParam(defaultValue = "1") String pageNo,
+                                            @ApiParam(value = "每页几条") @RequestParam(defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<AccessLog> pager = new Paging<AccessLog>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<AccessLog> logs = indexFacade.findAllPlatformAccess(memberId, pager);
+        pager.result(logs);
+        response.setMessage("查询成功");
+        response.setData(pager);
+        return response;
+    }
+
+    /**
+     * 查询平台访问用户列表
+     *
+     * @return
+     */
+    @RequestMapping(value = "query_platform_access_user", method = RequestMethod.POST)
+    @ApiOperation(value = "查询平台访问用户列表", notes = "查询平台访问用户列表", response = Response.class)
+    public Response queryPlatformAccessByUserList() {
+        Response response = new Response();
+        List<User> users = indexFacade.queryPlatformAccessByUserList();
+        response.setMessage("查询成功");
+        response.setData(users);
         return response;
     }
 }
