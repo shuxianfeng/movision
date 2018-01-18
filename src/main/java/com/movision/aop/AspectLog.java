@@ -83,8 +83,10 @@ public class AspectLog {
 
         int index = requestURL.indexOf("query");//访问链接中包含的query所在的索引位置
 
-        //1.是BOSS端操作请求； 2.后台用户id!=1即除了admin账号之外的用户操作； 3.不是query类接口  （同时满足这三点才做记录）
-        if (busitype.equals("boss") && Integer.parseInt(String.valueOf(memberId)) != 1 && index == -1) {//暂时这边只记录BOSS端的所有请求记录--------------------shuxf 2018.01.15
+        int id = Integer.parseInt(String.valueOf(memberId));
+
+        //1.是BOSS端操作请求； 2.后台用户id!=1和0即除了admin账号和未知账号(session为空)之外的用户操作； 3.不是query类接口  （同时满足这三点才做记录）
+        if (busitype.equals("boss") && id != 1 && id != 0 && index == -1) {//暂时这边只记录BOSS端的所有请求记录--------------------shuxf 2018.01.15
             String logMode = PropertiesLoader.getValue("busi.log.mode");
             switch (logMode) {
                 case "db":
