@@ -156,9 +156,11 @@
   </update>
 
     <select id="findAllqueryPlatformAccess" resultType="com.movision.mybatis.accessLog.entity.AccessLog"
-            parameterType="com.movision.mybatis.accessLog.entity.AccessLog">
-        SELECT id,memberid,clientIP,httpMethod,requestURL,queryString,userAgent,busiType,intime
-        FROM yw_accesslog
+            parameterType="com.movision.mybatis.accessLog.entity.AccessLogVo">
+        SELECT
+        a.id,memberid,a.clientIP,a.httpMethod,a.requestURL,a.queryString,a.userAgent,a.busiType,a.intime,au.username AS
+        nickname
+        FROM yw_accesslog a INNER JOIN yw_admin_user au ON au.id = a.userid
         <where>
             <if test="memberid != null">
                 memberid = #{memberid,jdbcType=INTEGER}
