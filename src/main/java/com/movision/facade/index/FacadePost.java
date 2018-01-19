@@ -806,7 +806,7 @@ public class FacadePost {
                 }
             }
             //内容转换
-            con = jsoupCompressImg.newCompressImg(request, postcontent);
+            con = jsoupCompressImg.newCompressImg(request, postcontent, category);
             System.out.println(con);
             if ((int) con.get("code") == 200) {
                 String str = con.get("content").toString();
@@ -1594,7 +1594,7 @@ public class FacadePost {
     private Map setPostContent(HttpServletRequest request, String postcontent, Map contentMap, Post post, String category) {
         if (StringUtil.isNotEmpty(postcontent)) {
             //内容转换
-            contentMap = jsoupCompressImg.newCompressImg(request, postcontent);
+            contentMap = jsoupCompressImg.newCompressImg(request, postcontent, category);
             log.debug("转换后的帖子内容是：" + contentMap);
             if ((int) contentMap.get("code") == 200) {
                 String str = contentMap.get("content").toString();

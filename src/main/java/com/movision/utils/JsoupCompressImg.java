@@ -226,7 +226,7 @@ public class JsoupCompressImg {
      * @output [{"orderid":0,"type":0,"value":"测试发帖","wh":"","dir":""},{"wh":"750x440","orderid":1,"type":1,"dir":"/var/temp/fime0/tewsdvsd/test.jpg","value":"http://pic.mofo.shop/upload/postCompressImg/img/nowuIRJV1497527940181.jpg"},{"orderid":2,"type":2,"value":"36e7fea5ddc347588fc19c0b75d7930c","wh":"","dir":"/var/temp/fime0/tewsdvsd/test.mov"}]
      * @return
      */
-    public Map<String, Object> newCompressImg(HttpServletRequest request, String content) {//content为存储帖子正文的josn字符串
+    public Map<String, Object> newCompressImg(HttpServletRequest request, String content, String categroy) {//content为存储帖子正文的josn字符串
 
         log.info("帖子内图片压缩工具接收到的正文json内容>>>>>>>>" + content);
         //转json字符串为json对象
@@ -256,8 +256,14 @@ public class JsoupCompressImg {
                 String value = (String) moduleobj.get("value");
                 String wh = (String) moduleobj.get("wh");
                 String dir = (String) moduleobj.get("dir");
-                String jrate = (String) moduleobj.get("rate");
-                String mark = moduleobj.getString("mark");
+                String jrate = "";
+                String mark = "";
+                if (StringUtils.isNotEmpty(categroy)) {
+                    if (categroy.equals("1") || categroy.equals(1)) {
+                        jrate = (String) moduleobj.get("rate");
+                        mark = moduleobj.getString("mark");
+                    }
+                }
                 //0 文字 1 图片 2 视频
                 if (type == 1) {
 
@@ -354,8 +360,12 @@ public class JsoupCompressImg {
                                 res.put("value", newimgurl);
                                 res.put("wh", wh);
                                 res.put("dir", dir);
-                                res.put("mark", mark);
-                                res.put("rate", jrate);
+                                if (StringUtils.isNotEmpty(categroy)) {
+                                    if (categroy.equals("1") || categroy.equals(1)) {
+                                        res.put("mark", mark);
+                                        res.put("rate", jrate);
+                                    }
+                                }
                                 moduleArray.add(i, res);
                                 log.info("测试替换后的json字符串>>>>>>>"+moduleArray.toString());
 
