@@ -234,14 +234,23 @@ public class AppLoginController {
         try {
             User originUser = appRegisterFacade.queryExistThirdAccountAppUser(flag, account);
             if (null == originUser) {
-                log.warn("qq账号不存在,请先注册");
+                log.warn("第三方账号不存在,请先注册");
                 response.setCode(400);
-                response.setMessage("qq账号不存在,请先注册");
-                response.setMsgCode(MsgCodeConstant.app_account_by_qq_not_exist);
+                response.setMessage("账号不存在,请先注册");
+                response.setMsgCode(MsgCodeConstant.app_account_by_not_exist);
             } else {
-                String ip = IpUtil.getRequestClientIp(request);
-                log.info("获取的ip=" + ip);
-                appRegisterFacade.handleLoginProcess(appToken, response, originUser, ip, longitude, latitude, source);
+                int status = originUser.getStatus();
+                if (status == 0) {
+                    String ip = IpUtil.getRequestClientIp(request);
+                    log.info("获取的ip=" + ip);
+                    appRegisterFacade.handleLoginProcess(appToken, response, originUser, ip, longitude, latitude, source);
+                }else if (status == 1){
+                    //账号被查封
+                    log.warn("该账号涉嫌违规已被管理员查封>>" + originUser.getId());
+                    response.setCode(201);
+                    response.setMessage("账号被冻结");
+                    response.setMsgCode(MsgCodeConstant.app_account_status_error);
+                }
             }
 
         } catch (Exception e) {

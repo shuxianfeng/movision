@@ -175,9 +175,9 @@ public interface MsgCodeConstant {
 	int boss_username_is_exist = 10304;
 
     /**
-     * qq账号不存在
+     * 第三方账号不存在
      */
-    int app_account_by_qq_not_exist = 10305;
+    int app_account_by_not_exist = 10305;
 
     /**
      * app用户编辑我的地址失败
