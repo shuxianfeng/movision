@@ -286,9 +286,18 @@ public class AppLoginController {
                 response.setMessage("手机号不存在,请发送短信验证码登录");
                 response.setMsgCode(MsgCodeConstant.app_user_not_exist);
             } else {
-                String ip = IpUtil.getRequestClientIp(request);
-                log.info("获取的ip=" + ip);
-                appRegisterFacade.handleLoginProcess(appToken, response, user, ip, longitude, latitude, source);
+                int status = user.getStatus();
+                if (status == 0) {
+                    String ip = IpUtil.getRequestClientIp(request);
+                    log.info("获取的ip=" + ip);
+                    appRegisterFacade.handleLoginProcess(appToken, response, user, ip, longitude, latitude, source);
+                }else if (status == 1){
+                    //账号被查封
+                    log.warn("该账号涉嫌违规已被管理员查封>>" + user.getId());
+                    response.setCode(201);
+                    response.setMessage("账号被冻结");
+                    response.setMsgCode(MsgCodeConstant.app_account_status_error);
+                }
             }
 
         } catch (Exception e) {
