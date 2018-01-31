@@ -44,7 +44,6 @@ public class AspectLog {
 //    @Around(value="!execution(* com.movision.controller.boss.*.query*(..))")
     @Around("@annotation(org.springframework.web.bind.annotation.RequestMapping)")//注解方式配置规则和这行冲突，所以只能在代码中逻辑过滤query前缀的方法名
     public Object aroundLog(ProceedingJoinPoint pjp) throws Throwable {
-        log.info("测试是否进入AOP方法");
         time.set(System.currentTimeMillis());
         Object result = pjp.proceed();
         Long execTime = System.currentTimeMillis() - time.get();
