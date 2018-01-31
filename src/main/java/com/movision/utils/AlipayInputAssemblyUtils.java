@@ -84,7 +84,6 @@ public class AlipayInputAssemblyUtils {
         contentstr.append(charset);
         contentstr.append("&sign_type");
         contentstr.append(sign_type);
-
         contentstr.append("&biz_content=");
         contentstr.append(biz_content);
         contentstr.append("&timestamp=");
