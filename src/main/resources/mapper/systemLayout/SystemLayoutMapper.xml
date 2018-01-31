@@ -91,6 +91,11 @@
     where id = #{id,jdbcType=INTEGER}
     </update>
 
+    <!--查询系统配置参数（根据key查询value）-->
+    <select id="getValue" parameterType="java.lang.String" resultType="java.lang.String" >
+        SELECT value FROM yw_system_layout WHERE type = #{key,jdbcType=VARCHAR}
+    </select>
+
     <select id="queryRobotSeparate" parameterType="java.lang.String" resultType="java.lang.Integer">
         SELECT value FROM yw_system_layout WHERE type = #{separate,jdbcType=VARCHAR} AND module = 'robot'
     </select>

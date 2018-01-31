@@ -2,10 +2,12 @@ package com.movision.mybatis.systemLayout.mapper;
 
 import com.movision.mybatis.systemLayout.entity.SystemLayout;
 import org.apache.ibatis.session.RowBounds;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
 
+@Repository
 public interface SystemLayoutMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -18,6 +20,8 @@ public interface SystemLayoutMapper {
     int updateByPrimaryKeySelective(SystemLayout record);
 
     int updateByPrimaryKey(SystemLayout record);
+
+    String getValue(String key);
 
     Integer queryRobotSeparate(String separate);
 

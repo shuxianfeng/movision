@@ -24,6 +24,22 @@ public class SystemLayoutService {
     private SystemLayoutMapper systemLayoutMapper;
 
     /**
+     * 获取系统配置参数方法
+     *
+     * @param key
+     * @return
+     */
+    public String getValue(String key){
+        try {
+            log.info("获取系统配置参数");
+            return systemLayoutMapper.getValue(key);
+        }catch (Exception e){
+            log.error("获取系统参数失败", e);
+            throw e;
+        }
+    }
+
+    /**
      * 查询机器人分隔数量
      *
      * @param separate
