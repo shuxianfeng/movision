@@ -4,6 +4,8 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.movision.mybatis.pay.AlipayContent;
 import com.movision.utils.propertiesLoader.AlipayPropertiesLoader;
+import com.movision.utils.propertiesLoader.PropertiesDBLoader;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
@@ -19,7 +21,8 @@ import java.util.List;
 @Service
 public class AlipayInputAssemblyUtils {
 
-
+    @Autowired
+    private PropertiesDBLoader propertiesDBLoader;
     /**
      * @param totalamount 总金额
      * @param body        订单号
@@ -33,6 +36,7 @@ public class AlipayInputAssemblyUtils {
         String app_id = AlipayPropertiesLoader.getValue("app_id");//获取配置文件中的APPID
         String appprivatekey = AlipayPropertiesLoader.getValue("private_key");//应用私钥（商户的私钥）
         String seller_id = AlipayPropertiesLoader.getValue("seller_id");//收款支付宝用户号UID
+        String notify_url = propertiesDBLoader.getValue("notify_url");//支付宝支付的回调地址
         List<AlipayContent> alipayContentList = new ArrayList<>();//alipay返回content实体列表
 
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
@@ -62,7 +66,7 @@ public class AlipayInputAssemblyUtils {
                 "}";
 
         String charset = "GBK";
-        String format = "json";
+        String format = "JSON";
         String method = "alipay.trade.app.pay";//App支付接口  alipay.trade.app.pay
         String sign_type = "RSA2";
         String timestamp = df.format(new Date());
@@ -72,14 +76,17 @@ public class AlipayInputAssemblyUtils {
         StringBuffer contentstr = new StringBuffer();
         contentstr.append("app_id=");
         contentstr.append(app_id);
-        contentstr.append("&biz_content=");
-        contentstr.append(biz_content);
-        contentstr.append("&charset=");
-        contentstr.append(charset);
         contentstr.append("&method=");
         contentstr.append(method);
+        contentstr.append("format=");
+        contentstr.append(format);
+        contentstr.append("&charset=");
+        contentstr.append(charset);
         contentstr.append("&sign_type");
         contentstr.append(sign_type);
+
+        contentstr.append("&biz_content=");
+        contentstr.append(biz_content);
         contentstr.append("&timestamp=");
         contentstr.append(timestamp);
         contentstr.append("&version=");
@@ -93,12 +100,14 @@ public class AlipayInputAssemblyUtils {
         AlipayContent alipayContent = new AlipayContent();
         alipayContent.setApp_id(app_id);
         alipayContent.setMethod(method);
+        alipayContent.setFormat(format);
         alipayContent.setCharset(charset);
         alipayContent.setSign_type(sign_type);
-        alipayContent.setTimestamp(timestamp);
-        alipayContent.setBiz_content(biz_content);
         alipayContent.setSign(sign);
+        alipayContent.setTimestamp(timestamp);
         alipayContent.setVersion(version);
+        alipayContent.setNotify_url(notify_url);
+        alipayContent.setBiz_content(biz_content);
         alipayContentList.add(alipayContent);
         return alipayContentList;
     }
