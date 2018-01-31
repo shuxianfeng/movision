@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -35,8 +34,7 @@ public class WepayController {
     public Response packageWePayParam(@ApiParam(value = "订单id（多个用英文逗号隔开）") @RequestParam String ordersid) throws UnsupportedEncodingException, AlipayApiException {
         Response response = new Response();
 
-//        Map<String, Object> parammap = wepayFacade.packagePayParam(ordersid);
-        Map<String, Object> parammap = new HashMap<>();
+        Map<String, Object> parammap = wepayFacade.packageWePayParam(ordersid);
 
         if (response.getCode() == 200 && (int) parammap.get("code") == 200) {
             response.setMessage("拼参及微信签名生成成功");
