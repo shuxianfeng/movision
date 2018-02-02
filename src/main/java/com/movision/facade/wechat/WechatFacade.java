@@ -3,7 +3,11 @@ package com.movision.facade.wechat;
 import com.movision.common.Response;
 import com.movision.utils.HttpClientUtils;
 import com.movision.utils.propertiesLoader.PropertiesDBLoader;
+import com.movision.utils.wechat.WechatUtils;
 import net.sf.json.JSONObject;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,14 +49,25 @@ public class WechatFacade {
 
         Map<String, String> resmap = HttpClientUtils.doGet(requrl, params, "utf-8");
 
-        log.info(resmap.get("status"));
-        log.info(resmap.get("result"));
+        log.debug(resmap.get("status"));
+        log.debug(resmap.get("result"));
         JSONObject json = JSONObject.fromObject(resmap.get("result"));
 
         if (resmap.get("status").equals("200")){
             response.setCode(200);
             try {
-                response.setData(json.getString("openid"));
+                String key = WechatUtils.get3rdstr();
+                String openid = json.getString("openid");
+                String session_key = json.getString("session_key");
+
+                //将session_key和openid存入session中
+                Subject currentUser = SecurityUtils.getSubject();
+                Session session = currentUser.getSession();
+                session.setAttribute(key, session_key + "+" + openid);
+                log.debug("key:" + key);
+                log.debug("session_key+openid:" + session_key + "+" + openid);
+
+                response.setData(key);
             }catch (Exception e){
                 response.setCode(40029);
                 response.setMessage("invalid code!");
