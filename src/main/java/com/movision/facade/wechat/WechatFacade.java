@@ -51,7 +51,12 @@ public class WechatFacade {
 
         if (resmap.get("status").equals("200")){
             response.setCode(200);
-            response.setData(json.getString("openid"));
+            try {
+                response.setData(json.getString("openid"));
+            }catch (Exception e){
+                response.setCode(40029);
+                response.setMessage("invalid code!");
+            }
         }
 
         return response;

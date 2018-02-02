@@ -34,8 +34,6 @@ public class WxLoginController {
 
         if (response.getCode()==200){
             response.setMessage("获取成功");
-        }else {
-            response.setMessage("获取失败");
         }
         return response;
     }
