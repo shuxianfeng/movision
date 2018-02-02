@@ -1,11 +1,5 @@
 package com.movision.utils.ali;
 
-import org.apache.commons.codec.binary.Base64;
-
-import javax.crypto.Mac;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-import javax.xml.crypto.dsig.SignatureMethod;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
