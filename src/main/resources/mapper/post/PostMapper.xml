@@ -2246,7 +2246,7 @@
 
     <select id="findAllHotCommentPostInAll" resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT p.id, p.title, p.commentsum, p.coverimg,
-        p.userid, u.nickname, u.photo, p.circleid, p.activeid,
+        p.userid,p.category, u.nickname, u.photo, p.circleid, p.activeid,
         c.name AS circlename
         FROM yw_post p
         LEFT JOIN yw_user u ON p.userid = u.id
@@ -2271,7 +2271,7 @@
 
     <select id="findAllMostZanPostInAll" resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT p.id, p.title, p.coverimg, p.zansum,
-        p.userid, u.nickname, u.photo, p.circleid, p.activeid,
+        p.userid,p.category, u.nickname, u.photo, p.circleid, p.activeid,
         ci.name AS circlename
         FROM yw_post p
         LEFT JOIN yw_user u ON p.userid = u.id
@@ -2294,7 +2294,7 @@
 
     <select id="findAllMostCollectInAll" resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT p.id, p.title, p.coverimg, p.collectsum,
-        p.userid, u.nickname, u.photo, p.circleid, p.activeid,
+        p.userid,p.category, u.nickname, u.photo, p.circleid, p.activeid,
         ci.name AS circlename
         FROM yw_post p
         LEFT JOIN yw_user u ON p.userid = u.id
@@ -2316,7 +2316,7 @@
     </select>
 
     <select id="queryPostInAll" resultType="com.movision.mybatis.post.entity.PostVo" parameterType="java.util.Map">
-        SELECT p.id, p.title, p.coverimg,p.userid, u.nickname, u.photo, p.circleid, p.activeid,
+        SELECT p.id, p.title, p.coverimg,p.userid,p.category, u.nickname, u.photo, p.circleid, p.activeid,
         ci.name AS circlename, p.countview
         FROM yw_post p
         LEFT JOIN yw_user u ON p.userid = u.id
