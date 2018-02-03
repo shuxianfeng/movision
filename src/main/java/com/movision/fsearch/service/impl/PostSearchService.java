@@ -261,6 +261,7 @@ public class PostSearchService implements IPostSearchService {
         postSearchEntity.setCoverimg(FormatUtil.parseString(itemAsMap.get("coverimg")));
         postSearchEntity.setUserid(FormatUtil.parseInteger(itemAsMap.get("userid")));
         postSearchEntity.setNickname(FormatUtil.parseString(itemAsMap.get("nickname")));
+        postSearchEntity.setNickname(FormatUtil.parseString(itemAsMap.get("category")));
     }
 
     /**

@@ -46,6 +46,16 @@ public class PostSearchEntity implements Serializable {
 
     private String nickname;
 
+    private Integer category;
+
+    public Integer getCategory() {
+        return category;
+    }
+
+    public void setCategory(Integer category) {
+        this.category = category;
+    }
+
     public void setUserid(Integer userid) {
         this.userid = userid;
     }
@@ -229,6 +239,7 @@ public class PostSearchEntity implements Serializable {
                 ", partsum=" + partsum +
                 ", userid=" + userid +
                 ", nickname='" + nickname + '\'' +
+                ", category=" + category +
                 '}';
     }
 }
