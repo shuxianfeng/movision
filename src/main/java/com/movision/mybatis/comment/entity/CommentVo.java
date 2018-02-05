@@ -65,6 +65,16 @@ public class CommentVo implements Serializable {
 
     private Integer isdv;//是不是大V 1是 0否
 
+    private Integer category;
+
+    public Integer getCategory() {
+        return category;
+    }
+
+    public void setCategory(Integer category) {
+        this.category = category;
+    }
+
     public Integer getIsdv() {
         return isdv;
     }
