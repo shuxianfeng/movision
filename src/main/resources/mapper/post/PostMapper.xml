@@ -362,7 +362,7 @@
 
     <!--根据作者用户id查询当前作者最新发的三篇未删除的帖子-->
     <select id="querPostListByUser" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.Post" >
-        SELECT id, title, subtitle, postcontent, coverimg
+        SELECT id, title, subtitle, postcontent, coverimg,category
         FROM yw_post WHERE userid = #{userid,jdbcType=INTEGER} AND isdel = '0' ORDER BY intime DESC limit 3
     </select>
 
