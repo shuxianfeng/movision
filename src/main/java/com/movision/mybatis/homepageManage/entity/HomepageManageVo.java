@@ -43,6 +43,16 @@ public class HomepageManageVo implements Serializable {
 
     private String postTitle;//帖子或活动标题
 
+    private Integer category;
+
+    public Integer getCategory() {
+        return category;
+    }
+
+    public void setCategory(Integer category) {
+        this.category = category;
+    }
+
     public String getPostTitle() {
         return postTitle;
     }

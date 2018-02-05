@@ -36,7 +36,7 @@ public class HomepageManageService {
         }
     }
 
-    public List<HomepageManage> queryBannerList(int topictype) {
+    public List<HomepageManageVo> queryBannerList(int topictype) {
         try {
             log.info("根据类型查询banner图列表");
             return homepageManageMapper.queryBannerList(topictype);

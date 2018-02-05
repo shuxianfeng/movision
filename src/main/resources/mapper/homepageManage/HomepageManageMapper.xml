@@ -32,8 +32,8 @@
         SELECT * FROM yw_homepage_manage WHERE topictype = #{type,jdbcType=INTEGER}
     </select>
 
-    <select id="queryBannerList" parameterType="java.lang.Integer" resultType="com.movision.mybatis.homepageManage.entity.HomepageManage">
-        SELECT * FROM yw_homepage_manage WHERE topictype = #{topictype,jdbcType=INTEGER} ORDER BY orderid
+    <select id="queryBannerList" parameterType="java.lang.Integer" resultType="com.movision.mybatis.homepageManage.entity.HomepageManageVo">
+        SELECT m.*,p.category,p.title AS postTitle FROM yw_homepage_manage m LEFT JOIN yw_post p ON p.id=m.postid WHERE m.topictype = #{topictype,jdbcType=INTEGER} ORDER BY m.orderid
     </select>
 
     <select id="myinvite" parameterType="java.lang.Integer" resultType="java.lang.String" >
