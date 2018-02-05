@@ -29,14 +29,15 @@ import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.user.entity.*;
 import com.movision.mybatis.user.service.UserService;
-import com.movision.mybatis.userRefreshRecord.entity.UserReflushCount;
 import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
 import com.movision.utils.DateUtils;
 import com.movision.utils.ListUtil;
 import com.movision.utils.UserBadgeUtil;
+import com.movision.utils.VideoCoverURL;
 import com.movision.utils.im.CheckSumBuilder;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
+import net.sf.json.JSONArray;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -48,6 +49,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.*;
 
@@ -102,6 +105,9 @@ public class UserFacade {
 
     @Autowired
     private ImDeviceService imDeviceService;
+
+    @Autowired
+    private VideoCoverURL videoCoverURL;
 
     /**
      * 判断是否存在该手机号的app用户
@@ -717,7 +723,7 @@ public class UserFacade {
      * @param paging
      * @return
      */
-    public List<PostVo> mineBottle(int type, String userid, Paging<PostVo> paging) throws ParseException {
+    public List<PostVo> mineBottle(int type, String userid, Paging<PostVo> paging) throws ParseException, NoSuchAlgorithmException, InvalidKeyException, IOException {
         try {
             List<PostVo> list = null;
             if (type == 0) {//帖子
@@ -725,6 +731,16 @@ public class UserFacade {
                 list = postService.findAllUserPostList(Integer.parseInt(userid), paging);//MYSQL数据库查询出来的帖子列表
                 if (list.size() == 0){
                     list = null;
+                } else {
+                    //获取视频贴的有效封面
+                    for (int i = 0; i < list.size(); i++) {
+                        PostVo vo = list.get(i);
+                        String str = vo.getPostcontent();
+                        JSONArray jsonArray = JSONArray.fromObject(str);
+                        jsonArray = videoCoverURL.getVideoCover(jsonArray);
+                        vo.setPostcontent(jsonArray.toString());
+                        list.set(i, vo);
+                    }
                 }
             } else if (type == 1) {//活动
                 //活动帖子
@@ -751,6 +767,16 @@ public class UserFacade {
                 list = postService.findAllCollectPostByUser(Integer.parseInt(userid), paging);
                 if (list.size() == 0) {
                     list = null;
+                } else {
+                    //获取视频贴的有效封面
+                    for (int i = 0; i < list.size(); i++) {
+                        PostVo vo = list.get(i);
+                        String str = vo.getPostcontent();
+                        JSONArray jsonArray = JSONArray.fromObject(str);
+                        jsonArray = videoCoverURL.getVideoCover(jsonArray);
+                        vo.setPostcontent(jsonArray.toString());
+                        list.set(i, vo);
+                    }
                 }
             }
             return list;
