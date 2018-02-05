@@ -2245,7 +2245,7 @@
     </select>
 
     <select id="findAllHotCommentPostInAll" resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT p.id, p.title, p.commentsum, p.coverimg,p.postcontent
+        SELECT p.id, p.title, p.commentsum, p.coverimg,p.postcontent,
         p.userid,p.category, u.nickname, u.photo, p.circleid, p.activeid,
         c.name AS circlename
         FROM yw_post p
