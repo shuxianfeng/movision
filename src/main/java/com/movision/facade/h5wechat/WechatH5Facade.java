@@ -679,7 +679,7 @@ public class WechatH5Facade extends JPanel {
             //最后一个参数用来设置字体的大小
             Font f = new Font("苹方 中等", Font.BOLD, 40);
             Font f1 = new Font("苹方 中等", Font.BOLD, 42);
-            Font f2 = new Font("PingFang Bold", Font.BOLD, 50);
+            Font f2 = new Font("PingFang Bold", Font.BOLD, 65);
             Color color = new Color(51, 51, 51);
             Color[] mycolor = {color, Color.BLACK};
             // g.setColor(mycolor);
@@ -694,11 +694,19 @@ public class WechatH5Facade extends JPanel {
                 g.rotate(0 * Math.PI / 180, 0, 0);
                 g.setPaint(mycolor[i % 2]);
                 g.setFont(f);
-                g.drawString(newnickname, 410, 510);//昵称
+                // 抗锯齿g
+                g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                // 计算文字长度，计算居中的x点坐标
+                FontMetrics fm = g.getFontMetrics(f);
+                int textWidth = fm.stringWidth(newnickname);
+                int widthX = (1125 - textWidth) / 2;
+                // 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
+                g.drawString(newnickname,widthX,100);//昵称
+                //g.drawString(newnickname, 410, 510);//昵称
                 g.setFont(f1);
                 g.drawString(zhufu, 380, 610);//祝福
                 g.setFont(f2);
-                g.drawString(money, 450, 838);//金额
+                g.drawString(money, 430, 838);//金额
              }
             g.dispose();
 
