@@ -631,7 +631,6 @@ public class WechatH5Facade extends JPanel {
             String nickname=robotNicknameService.queryNickname();
             String newnickname=nickname+"的红包";
             String zhufu="恭喜发财，大吉大利";
-            String mark="已存入零钱，可用于发红包";
             String newurl = propertiesDBLoader.getValue("iphonex_wechat_newh5_domain");//新图片地址
             String newurl2 = propertiesDBLoader.getValue("domain_name");//测试前缀
            // String iphone = systemLayoutService.queryIphonexUrl("iphonex_wechat_iphone_domain");//iphone二维码
