@@ -629,6 +629,9 @@ public class WechatH5Facade extends JPanel {
             String urls=userPhotoList.getUrl();
             //查询随机昵称
             String nickname=robotNicknameService.queryNickname();
+            String newnickname=nickname+"的红包";
+            String zhufu="恭喜发财，大吉大利";
+            String mark="已存入零钱，可用于发红包";
             String newurl = propertiesDBLoader.getValue("iphonex_wechat_newh5_domain");//新图片地址
             String newurl2 = propertiesDBLoader.getValue("domain_name");//测试前缀
            // String iphone = systemLayoutService.queryIphonexUrl("iphonex_wechat_iphone_domain");//iphone二维码
@@ -670,7 +673,7 @@ public class WechatH5Facade extends JPanel {
             for (int i = 0; i < 1; i++) {
                 g.rotate(0 * Math.PI / 180, 0, 0);
                 g.setPaint(mycolor[i % 2]);
-                g.drawString(nickname, 138, 132);
+                g.drawString(newnickname, 138, 132);
                 g.drawString(urls, 138, 132);
              }
             g.dispose();
