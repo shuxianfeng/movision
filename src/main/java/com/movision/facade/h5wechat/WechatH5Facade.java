@@ -665,10 +665,10 @@ public class WechatH5Facade extends JPanel {
             g.setColor(Color.BLACK);
 
             //最后一个参数用来设置字体的大小
-            Font f = new Font("苹方 细体", Font.BOLD, 20);
-            Font f1 = new Font("苹方 细体", Font.BOLD, 30);
-            Font f2 = new Font("苹方 细体", Font.BOLD, 40);
-            Color color = new Color(127, 127, 127);
+            Font f = new Font("苹方 细体", Font.BOLD, 40);
+            Font f1 = new Font("苹方 细体", Font.BOLD, 42);
+            Font f2 = new Font("苹方 细体", Font.BOLD, 160);
+            Color color = new Color(51, 51, 51);
             Color[] mycolor = {color, Color.BLACK};
             // g.setColor(mycolor);
 
@@ -737,38 +737,5 @@ public class WechatH5Facade extends JPanel {
         }
         return map;
     }
-
-
-    public void saveToFile(String destUrl) {
-        FileOutputStream fos = null;
-        BufferedInputStream bis = null;
-        HttpURLConnection httpUrl = null;
-        URL url = null;
-        int BUFFER_SIZE = 1024;
-        byte[] buf = new byte[BUFFER_SIZE];
-        int size = 0;
-        try {
-            url = new URL(destUrl);
-            httpUrl = (HttpURLConnection) url.openConnection();
-            httpUrl.connect();
-            bis = new BufferedInputStream(httpUrl.getInputStream());
-            fos = new FileOutputStream("c:\\haha.gif");
-            while ((size = bis.read(buf)) != -1) {
-                fos.write(buf, 0, size);
-            }
-            fos.flush();
-        } catch (IOException e) {
-        } catch (ClassCastException e) {
-        } finally {
-            try {
-                fos.close();
-                bis.close();
-                httpUrl.disconnect();
-            } catch (IOException e) {
-            } catch (NullPointerException e) {
-            }
-        }
-    }
-
 
 }
