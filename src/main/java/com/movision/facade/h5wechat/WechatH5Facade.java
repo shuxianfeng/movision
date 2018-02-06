@@ -652,6 +652,7 @@ public class WechatH5Facade extends JPanel {
             String nickname=robotNicknameService.queryNickname();
             String newnickname=nickname+"的红包";
             String zhufu="恭喜发财，大吉大利";
+            String most="识别图中二维码，获取您的红包数额";
             String newurl2 = propertiesDBLoader.getValue("domain_name");//测试前缀
            // String iphone = systemLayoutService.queryIphonexUrl("iphonex_wechat_iphone_domain");//iphone二维码
             //通过JPEG图象流创建JPEG数据流解码器
@@ -679,7 +680,8 @@ public class WechatH5Facade extends JPanel {
             //最后一个参数用来设置字体的大小
             Font f = new Font("苹方 中等", Font.BOLD, 40);
             Font f1 = new Font("苹方 中等", Font.BOLD, 42);
-            Font f2 = new Font("PingFang Bold", Font.BOLD, 80);
+            Font f2 = new Font("PingFang Bold", Font.PLAIN, 80);
+            Font f3= new Font("PingFang Regular", Font.PLAIN, 20);
             Color color = new Color(51, 51, 51);
             Color[] mycolor = {color, Color.BLACK};
             // g.setColor(mycolor);
@@ -705,11 +707,16 @@ public class WechatH5Facade extends JPanel {
                 g.setFont(f1);
                 // 计算文字长度，计算居中的x点坐标
                 FontMetrics fm1 = g.getFontMetrics(f1);
-                int textWidth1 = fm.stringWidth(zhufu);
+                int textWidth1 = fm1.stringWidth(zhufu);
                 int widthX1 = (1125 - textWidth1) / 2;
                 g.drawString(zhufu, widthX1, 630);//祝福
                 g.setFont(f2);
-                g.drawString(money, 385, 840);//金额
+                g.drawString(money, 370, 840);//金额
+                g.setFont(f3);
+                FontMetrics fm2 = g.getFontMetrics(f3);
+                int textWidth2 = fm2.stringWidth(most);
+                int widthX2 = (1125 - textWidth2) / 2;
+                g.drawString(most,widthX2,2100);//最后一句话
              }
             g.dispose();
 
