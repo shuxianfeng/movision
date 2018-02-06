@@ -27,6 +27,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.List;
@@ -630,7 +631,28 @@ public class WechatH5Facade extends JPanel {
             //查询随机头像
             UserPhoto userPhotoList=userPhotoService.queryUserPhotos();
             String urls=userPhotoList.getUrl();
-            File file = new File(urls);
+            String aas= System.currentTimeMillis() + ".jpg";
+            String bendi="d:\\image\\";
+            try {
+                download(urls,aas,"d:\\image\\");
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+            String xin=bendi+aas;
+            File file=new File(xin);
+            InputStream iss = null;
+            try {
+                iss = new FileInputStream(file);
+            } catch (FileNotFoundException e) {
+                 e.printStackTrace();
+            }
+            BufferedImage bi = null;
+            try {
+                bi = ImageIO.read(is);
+            } catch (IOException e) {
+                 e.printStackTrace();
+            }
+            Image im=(Image)bi;
 
             //随机生成金额
             Random r = new Random();
@@ -653,12 +675,12 @@ public class WechatH5Facade extends JPanel {
             Graphics2D g = (Graphics2D) buffImg.getGraphics();
             //创建你要附加的图象。//-----------------------------------------------这一段是将小图片合成到大图片上的代码
             //小图片的路径
-            ImageIcon imgIcon = new ImageIcon(urls);
+            //ImageIcon imgIcon = new ImageIcon(urls);
             //得到Image对象。
-            Image img = imgIcon.getImage();
+            //Image img = imgIcon.getImage();
             //将小图片绘到大图片上。
             //5,300 .表示你的小图片在大图片上的位置。
-            g.drawImage(img, 400, 15, null);
+            g.drawImage(im, 400, 15, null);
             g.fillRect(0, 0, getWidth(), getHeight());
             g.rotate(0, 900, 15);
            // g.drawImage(img, 740, 655, this);
@@ -740,4 +762,39 @@ public class WechatH5Facade extends JPanel {
         return map;
     }
 
+    /**
+     *
+     * @param urlString
+     * @param filename
+     * @param savePath
+     * @throws Exception
+     */
+    public static void download(String urlString, String filename,String savePath) throws Exception {
+        // 构造URL
+        URL url = new URL(urlString);
+        // 打开连接
+        URLConnection con = url.openConnection();
+        //设置请求超时为5s
+        con.setConnectTimeout(5*1000);
+        // 输入流
+        InputStream is = con.getInputStream();
+
+        // 1K的数据缓冲
+        byte[] bs = new byte[1024];
+        // 读取到的数据长度
+        int len;
+        // 输出的文件流
+        File sf=new File(savePath);
+        if(!sf.exists()){
+            sf.mkdirs();
+        }
+        OutputStream os = new FileOutputStream(sf.getPath()+"\\"+filename);
+        // 开始读取
+        while ((len = is.read(bs)) != -1) {
+            os.write(bs, 0, len);
+        }
+        // 完毕，关闭所有链接
+        os.close();
+        is.close();
+    }
 }
