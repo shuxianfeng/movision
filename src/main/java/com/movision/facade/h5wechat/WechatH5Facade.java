@@ -25,6 +25,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.List;
 
@@ -627,6 +628,11 @@ public class WechatH5Facade extends JPanel {
             //查询随机头像
             UserPhoto userPhotoList=userPhotoService.queryUserPhotos();
             String urls=userPhotoList.getUrl();
+            //随机生成金额
+            Random r = new Random();
+            Double tmp=Double.valueOf( 1 + Math.floor(r.nextFloat() * 99999 % (99999 - 1 + 1)));
+            DecimalFormat df=new DecimalFormat("0.00");
+            String money=df.format(tmp);
             //查询随机昵称
             String nickname=robotNicknameService.queryNickname();
             String newnickname=nickname+"的红包";
@@ -675,6 +681,7 @@ public class WechatH5Facade extends JPanel {
                 g.drawString(newnickname, 500, 150);
                 g.drawString(urls, 495, 140);
                 g.drawString(zhufu, 470, 170);
+                g.drawString(money, 490, 220);
              }
             g.dispose();
 
