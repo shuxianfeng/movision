@@ -4662,7 +4662,7 @@ public class FacadePost {
      * @param postid
      * @return
      */
-    public List activePostDetailHot_20171220(int type, String postid, Paging<PostVo> paging,String device) {
+    public List activePostDetailHot_20171220(int type, String postid, Paging<PostVo> paging, String device) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         List<PostVo> list = null;
         if (type == 0) {//最热
             list = postService.findAllActivePost_20171220(postid, paging,device);
@@ -4680,7 +4680,7 @@ public class FacadePost {
             findPostLabel(list);
             findAllCircleName(list);
         }
-        return list;
+        return videoCoverURL.getVideoCoverByList(list);
     }
 
 

@@ -412,7 +412,7 @@ public class AppWaterfallController {
                                         @ApiParam(value = "活动id") @RequestParam String postid,
                                         @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                         @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize,
-                                        @ApiParam(value = "设备号") @RequestParam String device) {
+                                        @ApiParam(value = "设备号") @RequestParam String device) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         Response response = new Response();
         Paging<PostVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
         List result = facadePost.activePostDetailHot_20171220(type, postid, pager,device);
