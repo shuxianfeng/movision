@@ -20,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
 
@@ -83,7 +85,7 @@ public class AppIndexController {
 
     @RequestMapping(value = {"search_all"}, method = RequestMethod.GET)
     @ApiOperation(value = "搜索全部", notes = "搜索全部", response = Response.class)
-    public Response searchAll(@ApiParam @ModelAttribute NormalSearchSpec spec) throws IOException, ServiceException {
+    public Response searchAll(@ApiParam @ModelAttribute NormalSearchSpec spec) throws IOException, ServiceException, InvalidKeyException, NoSuchAlgorithmException {
         Response response = new Response();
         spec.setQ(StringUtil.emptyToNull(spec.getQ()));
         if (spec.getQ() == null) {

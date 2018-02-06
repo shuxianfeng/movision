@@ -30,6 +30,7 @@ import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
 import com.movision.utils.DateUtils;
 import com.movision.utils.VideoCoverURL;
 import com.movision.utils.pagination.model.Paging;
+import net.sf.json.JSONArray;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -450,7 +451,7 @@ public class FacadeDiscover {
 
     }
 
-    public List<Map<String, Object>> searchAll(NormalSearchSpec spec) throws ServiceException {
+    public List<Map<String, Object>> searchAll(NormalSearchSpec spec) throws ServiceException, NoSuchAlgorithmException, InvalidKeyException, IOException {
         List<Map<String, Object>> list = new ArrayList<>();
         String name = spec.getQ();
         //帖子/活动
@@ -465,8 +466,17 @@ public class FacadeDiscover {
         return list;
     }
 
-    private void getPosts(NormalSearchSpec spec, List<Map<String, Object>> list) throws ServiceException {
+    private void getPosts(NormalSearchSpec spec, List<Map<String, Object>> list) throws ServiceException, NoSuchAlgorithmException, InvalidKeyException, IOException {
         List<PostSearchEntity> postList = postSearchService.searchForPost(spec);
+        for (int i = 0; i < postList.size(); i++) {
+            PostSearchEntity pe = postList.get(i);
+            String postcontent = pe.getPostcontent();
+            JSONArray jsonArray = JSONArray.fromObject(postcontent);
+            jsonArray = videoCoverURL.getVideoCover(jsonArray);
+            //-----将转换完的数据封装返回
+            pe.setPostcontent(jsonArray.toString());
+            postList.set(i, pe);
+        }
         Map postMap = new HashMap();
         postMap.put("name", "帖子");
         if (postList.size() > 3) {
