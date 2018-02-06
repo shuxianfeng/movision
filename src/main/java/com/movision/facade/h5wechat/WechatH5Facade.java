@@ -630,6 +630,8 @@ public class WechatH5Facade extends JPanel {
             //查询随机头像
             UserPhoto userPhotoList=userPhotoService.queryUserPhotos();
             String urls=userPhotoList.getUrl();
+            File coverFile = new File(urls); //覆盖层
+            BufferedImage coverImg = ImageIO.read(coverFile);
             //随机生成金额
             Random r = new Random();
             Double tmp=Double.valueOf( 1 + Math.floor(r.nextFloat() * 99999 % (99999 - 1 + 1)));
@@ -656,7 +658,7 @@ public class WechatH5Facade extends JPanel {
             //Image img = imgIcon.getImage();
             //将小图片绘到大图片上。
             //5,300 .表示你的小图片在大图片上的位置。
-            //g.drawImage(img, 400, 15, null);
+            g.drawImage(coverImg, 400, 15, null);
             g.fillRect(0, 0, getWidth(), getHeight());
             g.rotate(0, 900, 15);
            // g.drawImage(img, 740, 655, this);
