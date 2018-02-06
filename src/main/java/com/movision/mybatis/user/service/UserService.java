@@ -1353,6 +1353,20 @@ public class UserService {
     }
 
     /**
+     * 随机查询头像
+     * @return
+     */
+    public UserPhoto queryUserPhotos() {
+        try {
+            log.info("随机查询头像");
+            return userPhotoMapper.queryUserPhotos();
+        } catch (Exception e) {
+            log.error("随机查询用户头像异常", e);
+            throw e;
+        }
+    }
+
+    /**
      * 更新机器人信息
      *
      * @param user
