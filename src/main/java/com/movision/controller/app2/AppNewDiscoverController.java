@@ -9,14 +9,15 @@ import com.movision.mybatis.user.entity.Author;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
@@ -136,7 +137,7 @@ public class AppNewDiscoverController {
                                    @ApiParam("统计类型。总排行：0， 月排行：1") @RequestParam(required = false, defaultValue = "0") int type,
                                    @ApiParam("统计标题。帖子评论最多：0， 帖子浏览最多：1， 帖子点赞最多：2， 帖子收藏最多：3，" +
                                            "作者粉丝最多：4， 作者评论最多：5， 作者发帖最多：6")
-                                   @RequestParam(required = false, defaultValue = "0") int title) {
+                                       @RequestParam(required = false, defaultValue = "0") int title) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
 
         Response response = new Response();
 

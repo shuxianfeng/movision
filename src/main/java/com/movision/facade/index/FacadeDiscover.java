@@ -13,7 +13,6 @@ import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.circleCategory.entity.CircleCategory;
 import com.movision.mybatis.circleCategory.service.CircleCategoryService;
-import com.movision.mybatis.homepageManage.entity.HomepageManage;
 import com.movision.mybatis.homepageManage.entity.HomepageManageVo;
 import com.movision.mybatis.homepageManage.service.HomepageManageService;
 import com.movision.mybatis.post.entity.ActiveVo;
@@ -29,11 +28,15 @@ import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userRefreshRecord.entity.UserReflushCount;
 import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
 import com.movision.utils.DateUtils;
+import com.movision.utils.VideoCoverURL;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.*;
 
@@ -73,6 +76,9 @@ public class FacadeDiscover {
 
     @Autowired
     private PostSearchService postSearchService;
+
+    @Autowired
+    private VideoCoverURL videoCoverURL;
 
     public Map<String, Object> queryDiscoverIndexData(String userid) {
 
@@ -323,7 +329,7 @@ public class FacadeDiscover {
     }
 
 
-    public Paging<?> searchHotRange(String pageNo, String pageSize, int title, int type) {
+    public Paging<?> searchHotRange(String pageNo, String pageSize, int title, int type) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         //总排行
         if (DiscoverConstant.HOT_RANGE_TYPE.total_range.getCode() == type) {
 
@@ -331,28 +337,28 @@ public class FacadeDiscover {
 
                 Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
                 List<PostVo> list = searchHotCommentPostInAll(pager);
-                pager.result(list);
+                pager.result(videoCoverURL.getVideoCoverByList(list));
                 return pager;
 
             } else if (DiscoverConstant.HOT_RANGE_TITLE.post_view_list.getCode() == title) {
 
                 Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
                 List<PostVo> list = searchMostViewPost(pager, "year");
-                pager.setRows(list);
+                pager.setRows(videoCoverURL.getVideoCoverByList(list));
                 return pager;
 
             } else if (DiscoverConstant.HOT_RANGE_TITLE.post_zan_list.getCode() == title) {
 
                 Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
                 List<PostVo> list = searchMostZanPostListInAll(pager);
-                pager.result(list);
+                pager.result(videoCoverURL.getVideoCoverByList(list));
                 return pager;
 
             } else if (DiscoverConstant.HOT_RANGE_TITLE.post_collect_list.getCode() == title) {
 
                 Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
                 List<PostVo> list = searchMostCollectPostListInAll(pager);
-                pager.result(list);
+                pager.result(videoCoverURL.getVideoCoverByList(list));
                 return pager;
 
             } else if (DiscoverConstant.HOT_RANGE_TITLE.author_fans_list.getCode() == title) {
@@ -389,28 +395,28 @@ public class FacadeDiscover {
 
                 Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
                 List<PostVo> list = searchHotCommentPostInCurrentMonth(pager);
-                pager.result(list);
+                pager.result(videoCoverURL.getVideoCoverByList(list));
                 return pager;
 
             } else if (DiscoverConstant.HOT_RANGE_TITLE.post_view_list.getCode() == title) {
 
                 Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
                 List<PostVo> list = searchMostViewPost(pager, "month");
-                pager.setRows(list);
+                pager.setRows(videoCoverURL.getVideoCoverByList(list));
                 return pager;
 
             } else if (DiscoverConstant.HOT_RANGE_TITLE.post_zan_list.getCode() == title) {
 
                 Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
                 List<PostVo> list = searchMostZanPostListInCurrentMonth(pager);
-                pager.result(list);
+                pager.result(videoCoverURL.getVideoCoverByList(list));
                 return pager;
 
             } else if (DiscoverConstant.HOT_RANGE_TITLE.post_collect_list.getCode() == title) {
 
                 Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
                 List<PostVo> list = searchMostCollectPostListInCurrentMonth(pager);
-                pager.result(list);
+                pager.result(videoCoverURL.getVideoCoverByList(list));
                 return pager;
 
             } else if (DiscoverConstant.HOT_RANGE_TITLE.author_fans_list.getCode() == title) {
