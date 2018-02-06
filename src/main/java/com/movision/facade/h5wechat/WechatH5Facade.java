@@ -25,6 +25,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.List;
@@ -664,7 +666,7 @@ public class WechatH5Facade extends JPanel {
             g.setColor(Color.BLACK);
 
             //最后一个参数用来设置字体的大小
-            Font f = new Font("苹方 细体", Font.PLAIN, 14);
+            Font f = new Font("苹方 细体", Font.PLAIN, 20);
             Color color = new Color(127, 127, 127);
             Color[] mycolor = {color, Color.BLACK};
             // g.setColor(mycolor);
@@ -678,10 +680,10 @@ public class WechatH5Facade extends JPanel {
             for (int i = 0; i < 1; i++) {
                 g.rotate(0 * Math.PI / 180, 0, 0);
                 g.setPaint(mycolor[i % 2]);
-                g.drawString(newnickname, 500, 150);
-                g.drawString(urls, 495, 140);
-                g.drawString(zhufu, 470, 170);
-                g.drawString(money, 490, 220);
+                g.drawString(newnickname, 500, 500);
+                g.drawString(urls, 495, 300);
+                g.drawString(zhufu, 470, 600);
+                g.drawString(money, 490, 700);
              }
             g.dispose();
 
@@ -733,6 +735,36 @@ public class WechatH5Facade extends JPanel {
     }
 
 
+    public void saveToFile(String destUrl) {
+        FileOutputStream fos = null;
+        BufferedInputStream bis = null;
+        HttpURLConnection httpUrl = null;
+        URL url = null;
+        int BUFFER_SIZE = 1024;
+        byte[] buf = new byte[BUFFER_SIZE];
+        int size = 0;
+        try {
+            url = new URL(destUrl);
+            httpUrl = (HttpURLConnection) url.openConnection();
+            httpUrl.connect();
+            bis = new BufferedInputStream(httpUrl.getInputStream());
+            fos = new FileOutputStream("c:\\haha.gif");
+            while ((size = bis.read(buf)) != -1) {
+                fos.write(buf, 0, size);
+            }
+            fos.flush();
+        } catch (IOException e) {
+        } catch (ClassCastException e) {
+        } finally {
+            try {
+                fos.close();
+                bis.close();
+                httpUrl.disconnect();
+            } catch (IOException e) {
+            } catch (NullPointerException e) {
+            }
+        }
+    }
 
 
 }
