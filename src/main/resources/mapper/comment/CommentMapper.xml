@@ -625,7 +625,7 @@ SELECT u.photo,u.nickname,u.id FROM yw_user u LEFT JOIN yw_post_comment c ON c.u
             resultType="com.movision.mybatis.comment.entity.CommentVo">
     SELECT c.id, c.content, c.intime, c.userid, c.postid,
     u.nickname, u.photo,
-    p.title, p.coverimg,p.category
+        p.title, p.coverimg,p.category,p.postcontent
     FROM yw_post_comment c
     LEFT JOIN yw_user u ON c.userid = u.id
     LEFT JOIN yw_post p ON c.postid = p.id

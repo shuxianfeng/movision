@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 /**
@@ -62,7 +65,7 @@ public class AppMsgCenterController {
     @RequestMapping(value = "get_msg_center_instant_info_list", method = RequestMethod.POST)
     public Response getMsgCenterInstantInfoList(@ApiParam(value = "用户id") @RequestParam(required = false) String userid,
                                                 @ApiParam @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                                @ApiParam @RequestParam(required = false, defaultValue = "10") String pageSize) {
+                                                @ApiParam @RequestParam(required = false, defaultValue = "10") String pageSize) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         Response response = new Response();
 
         ServicePaging<InstantInfo> pager = new ServicePaging<InstantInfo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));

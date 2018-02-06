@@ -2,10 +2,8 @@ package com.movision.facade.msgCenter;
 
 import com.mongodb.DBObject;
 import com.movision.common.constant.MsgCenterConstant;
-import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.pojo.InstantInfo;
 import com.movision.common.util.ShiroUtil;
-import com.movision.exception.BusinessException;
 import com.movision.facade.paging.PageFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.PostZanRecord.entity.ZanRecordVo;
@@ -23,13 +21,18 @@ import com.movision.mybatis.postCommentZanRecord.service.PostCommentZanRecordSer
 import com.movision.mybatis.systemInformReadRecord.entity.SystemInformReadRecord;
 import com.movision.mybatis.systemInformReadRecord.service.SystemInformReadRecordService;
 import com.movision.mybatis.user.entity.User;
+import com.movision.utils.VideoCoverURL;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.model.ServicePaging;
+import net.sf.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -65,13 +68,16 @@ public class MsgCenterFacade {
     @Autowired
     private FollowUserService followUserService;
 
+    @Autowired
+    private VideoCoverURL videoCoverURL;
+
     /**
      * 获取消息中心-动态消息, 动态消息全部置为已读
      *
      * @param paging
      * @return
      */
-    public List getInstantInfo(String userid, ServicePaging<InstantInfo> paging) {
+    public List getInstantInfo(String userid, ServicePaging<InstantInfo> paging) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         List<InstantInfo> list = new ArrayList<>();
         //代码层分页操作
         List<InstantInfo> resultList = null;
@@ -97,7 +103,7 @@ public class MsgCenterFacade {
      * @param curid
      * @return
      */
-    private List<InstantInfo> getCurrentUserInstantInfos(ServicePaging<InstantInfo> paging, List<InstantInfo> list, int curid) {
+    private List<InstantInfo> getCurrentUserInstantInfos(ServicePaging<InstantInfo> paging, List<InstantInfo> list, int curid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         List<InstantInfo> resultList;
         /**
          * 一 评论：
@@ -165,7 +171,7 @@ public class MsgCenterFacade {
      *
      * @param list
      */
-    private void handleCommentlist(List<InstantInfo> list) {
+    private void handleCommentlist(List<InstantInfo> list) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         //查询当前用户所发的帖子评论，时间倒序
         List<CommentVo> commentList = commentService.selectPostComment(ShiroUtil.getAppUserID());
         int len = commentList.size();
@@ -180,7 +186,7 @@ public class MsgCenterFacade {
      *
      * @param list
      */
-    private void handleZanlist(List<InstantInfo> list) {
+    private void handleZanlist(List<InstantInfo> list) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         //获取被点赞的消息，时间倒序
         List<ZanRecordVo> zanlist = findZan(ShiroUtil.getAppUserID());
         int zanLength = zanlist.size();
@@ -213,9 +219,17 @@ public class MsgCenterFacade {
      * @param commentVoList
      * @param i
      */
-    private void getInstantInfoFromCommentlist(List<InstantInfo> list, List<CommentVo> commentVoList, int i) {
+    private void getInstantInfoFromCommentlist(List<InstantInfo> list, List<CommentVo> commentVoList, int i) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         InstantInfo instantInfo = new InstantInfo();
-        instantInfo.setObject(commentVoList.get(i));
+        //如果是视频贴的话，实时请求阿里的视频封面
+        CommentVo cmvo = commentVoList.get(i);
+        if (cmvo.getCategory() == 2) {//2为视频贴
+            String postcontent = cmvo.getPostcontent();
+            JSONArray jsonArray = JSONArray.fromObject(postcontent);
+            jsonArray = videoCoverURL.getVideoCover(jsonArray);
+            cmvo.setPostcontent(jsonArray.toString());
+        }
+        instantInfo.setObject(cmvo);
         instantInfo.setIntime(commentVoList.get(i).getIntime());
         instantInfo.setType(MsgCenterConstant.INSTANT_INFO_TYPE.comment.getCode());
         list.add(instantInfo);
@@ -407,7 +421,7 @@ public class MsgCenterFacade {
      * @param
      * @return
      */
-    public List<ZanRecordVo> findZan(Integer userid) {
+    public List<ZanRecordVo> findZan(Integer userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         //获取被点赞的消息
         List<ZanRecordVo> zanRecordVos = postCommentZanRecordService.findZan(userid);
 
@@ -455,7 +469,7 @@ public class MsgCenterFacade {
      * @param i
      * @param postid
      */
-    private void wrapBeZanPostInfo(List<ZanRecordVo> zanRecordVos, int i, Integer postid) {
+    private void wrapBeZanPostInfo(List<ZanRecordVo> zanRecordVos, int i, Integer postid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
 
         zanRecordVos.get(i).setCtype(2);    //点赞帖子
 
@@ -463,6 +477,14 @@ public class MsgCenterFacade {
         for (int j = 0; j < post.size(); j++) {
 
             String str = post.get(j).getPostcontent();
+
+            //如果是视频贴需要实时请求阿里视频封面
+            if (post.get(j).getCategory() == 2) {
+                JSONArray jsonArray = JSONArray.fromObject(str);
+                jsonArray = videoCoverURL.getVideoCover(jsonArray);
+                post.get(j).setPostcontent(jsonArray.toString());
+            }
+
             String a = MsgCenterFacade.removeHtmlTag(str);
             String b = a.replaceAll("  ", "");
             if (StringUtil.isBlank(b)) {
