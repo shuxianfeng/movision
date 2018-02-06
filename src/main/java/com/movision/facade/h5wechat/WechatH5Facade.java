@@ -668,7 +668,7 @@ public class WechatH5Facade extends JPanel {
             //Image img = imgIcon.getImage();
             //将小图片绘到大图片上。
             //5,300 .表示你的小图片在大图片上的位置。
-            g.drawImage(im, 415, 35,150,150, null);
+            g.drawImage(im, 440, 100,150,150, null);
             g.fillRect(0, 0, getWidth(), getHeight());
             g.rotate(0, 900, 15);
            // g.drawImage(img, 740, 655, this);
@@ -677,9 +677,9 @@ public class WechatH5Facade extends JPanel {
             g.setColor(Color.BLACK);
 
             //最后一个参数用来设置字体的大小
-            Font f = new Font("PingFang Medium", Font.BOLD, 40);
-            Font f1 = new Font("PingFang Medium", Font.BOLD, 42);
-            Font f2 = new Font("PingFang Bold", Font.BOLD, 160);
+            Font f = new Font("苹方 中等", Font.BOLD, 40);
+            Font f1 = new Font("苹方 中等", Font.BOLD, 42);
+            Font f2 = new Font("PingFang Bold", Font.BOLD, 50);
             Color color = new Color(51, 51, 51);
             Color[] mycolor = {color, Color.BLACK};
             // g.setColor(mycolor);
