@@ -627,33 +627,22 @@ public class WechatH5Facade extends JPanel {
      */
     public Map Chunjie(InputStream is) {
         Map map = new HashMap();
+        String newurl = propertiesDBLoader.getValue("iphonex_wechat_newh5_domain");//新图片地址
         try {
             //查询随机头像
             UserPhoto userPhotoList=userPhotoService.queryUserPhotos();
             String urls=userPhotoList.getUrl();
-            String aas= System.currentTimeMillis() + ".jpg";
-            String bendi="/WWW/tomcat-8080/apache-tomcat-7.0.73/webapps/upload/wechat/";
-            try {
-                download(urls,aas,"/WWW/tomcat-8080/apache-tomcat-7.0.73/webapps/upload/wechat/");
+             String ourl="";
+             try {
+                 Map map1=download(urls);
+                 ourl=map1.get("oldurl").toString();
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
-            String xin=bendi+aas;
-            File file=new File(xin);
-            InputStream iss = null;
-            try {
-                iss = new FileInputStream(file);
-            } catch (FileNotFoundException e) {
-                 e.printStackTrace();
-            }
-            BufferedImage bi = null;
-            try {
-                bi = ImageIO.read(iss);
-            } catch (IOException e) {
-                 e.printStackTrace();
-            }
+             File file=new File(ourl);
+            InputStream iss = new FileInputStream(file);
+            BufferedImage  bi = ImageIO.read(iss);
             Image im=(Image)bi;
-
             //随机生成金额
             Random r = new Random();
             Double tmp=Double.valueOf( 1 + Math.floor(r.nextFloat() * 99999 % (99999 - 1 + 1)));
@@ -663,7 +652,6 @@ public class WechatH5Facade extends JPanel {
             String nickname=robotNicknameService.queryNickname();
             String newnickname=nickname+"的红包";
             String zhufu="恭喜发财，大吉大利";
-            String newurl = propertiesDBLoader.getValue("iphonex_wechat_newh5_domain");//新图片地址
             String newurl2 = propertiesDBLoader.getValue("domain_name");//测试前缀
            // String iphone = systemLayoutService.queryIphonexUrl("iphonex_wechat_iphone_domain");//iphone二维码
             //通过JPEG图象流创建JPEG数据流解码器
@@ -796,5 +784,73 @@ public class WechatH5Facade extends JPanel {
         // 完毕，关闭所有链接
         os.close();
         is.close();
+    }
+
+    /**
+     * 下载文件
+     *
+     * @param str
+     */
+    public Map download(String str) {
+        String newurl = propertiesDBLoader.getValue("iphonex_wechat_newh5_domain");//新图片地址
+        InputStream is = null;
+        OutputStream os = null;
+        Map map = null;
+        boolean flg = true;
+        try {
+            String s = null;
+            try {
+                String url = str;
+                URL u = new URL(url);
+                //获取文件名
+                String[] filename = url.split("/");
+                s = filename[filename.length - 1];
+                is = u.openStream();
+            } catch (IOException e) {
+                flg = false;
+            }
+            if (flg) {
+                map = new HashMap();
+                os = new FileOutputStream(newurl + s);
+                int buff = 0;
+                while ((buff = is.read()) != -1) {
+                    os.write(buff);
+                }
+
+                if (os != null) {
+                    try {
+                        os.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (is != null) {
+                    try {
+                        is.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                map.put("oldurl", newurl + s);
+             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (os != null) {
+                try {
+                    os.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return map;
     }
 }
