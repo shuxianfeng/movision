@@ -702,11 +702,14 @@ public class WechatH5Facade extends JPanel {
                 int widthX = (1125 - textWidth) / 2;
                 // 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
                 g.drawString(newnickname,widthX,510);//昵称
-                //g.drawString(newnickname, 410, 510);//昵称
                 g.setFont(f1);
-                g.drawString(zhufu, 380, 610);//祝福
+                // 计算文字长度，计算居中的x点坐标
+                FontMetrics fm1 = g.getFontMetrics(f1);
+                int textWidth1 = fm.stringWidth(zhufu);
+                int widthX1 = (1125 - textWidth1) / 2;
+                g.drawString(zhufu, widthX1, 610);//祝福
                 g.setFont(f2);
-                g.drawString(money, 410, 838);//金额
+                g.drawString(money, 390, 838);//金额
              }
             g.dispose();
 
