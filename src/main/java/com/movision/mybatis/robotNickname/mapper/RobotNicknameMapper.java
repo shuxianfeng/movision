@@ -18,4 +18,6 @@ public interface RobotNicknameMapper {
     int updateByPrimaryKey(RobotNickname record);
 
     List<String> queryRoboltNickname(Integer number);
+
+    String queryNickname();
 }

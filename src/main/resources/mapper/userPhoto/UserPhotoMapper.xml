@@ -62,5 +62,10 @@
          ORDER BY RAND() LIMIT 0,#{number,jdbcType=INTEGER}
     </select>
 
-    
+    <select id="queryUserPhotos" resultType="com.movision.mybatis.userPhoto.entity.UserPhoto"
+            parameterType="java.lang.Integer">
+        SELECT * FROM yw_user_photo
+        ORDER BY RAND() LIMIT 0,1
+    </select>
+
 </mapper>

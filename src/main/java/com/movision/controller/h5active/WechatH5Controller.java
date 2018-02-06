@@ -113,4 +113,19 @@ public class WechatH5Controller {
         return response;
     }
 
+
+
+
+    @ApiOperation(value = "春节转账", notes = "春节转账", response = Response.class)
+    @RequestMapping(value = "imgCunjie", method = RequestMethod.POST)
+    public Response imgCunjie() {
+        Response response = new Response();
+        Map access = wechatH5Facade.imgCunjie();
+        if (response.getCode() == 200) {
+            response.setMessage("成功");
+            response.setData(access);
+        }
+        return response;
+    }
+
 }

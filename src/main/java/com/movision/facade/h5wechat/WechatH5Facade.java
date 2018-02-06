@@ -1,29 +1,32 @@
 package com.movision.facade.h5wechat;
 
-import com.movision.mybatis.count.entity.Count;
+
 import com.movision.mybatis.count.service.CountService;
-import com.movision.mybatis.post.service.PostService;
+
+import com.movision.mybatis.robotNickname.service.RobotNicknameService;
 import com.movision.mybatis.systemLayout.service.SystemLayoutService;
-import com.movision.utils.oss.MovisionOssClient;
+import com.movision.mybatis.user.service.UserService;
+import com.movision.mybatis.userPhoto.entity.UserPhoto;
+
+import com.movision.mybatis.userPhoto.service.UserPhotoService;
+import com.movision.utils.propertiesLoader.PropertiesDBLoader;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.sun.image.codec.jpeg.ImageFormatException;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageDecoder;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
 
 /**
  * @Author shuxf
@@ -35,6 +38,15 @@ public class WechatH5Facade extends JPanel {
 
     @Autowired
     private SystemLayoutService systemLayoutService;
+
+    @Autowired
+    private UserService userPhotoService;
+
+    @Autowired
+    private RobotNicknameService robotNicknameService;
+    @Autowired
+    private PropertiesDBLoader propertiesDBLoader;
+
     //下面是模板图片的路径
     String timgurl = PropertiesLoader.getValue("wechat.h5.domain");
     // String newurl = PropertiesLoader.getValue("wechat.newh5.domain");//新图片路径
@@ -596,6 +608,121 @@ public class WechatH5Facade extends JPanel {
         }
         return map;
     }
+
+
+
+    //---------------------------------------------------------------------------------------------------------------------------------
+
+
+    /**
+     * 春节转账
+     *
+     * @param is
+     * @param
+     * @return
+     */
+    public Map Chunjie(InputStream is) {
+        Map map = new HashMap();
+        try {
+            //查询随机头像
+            UserPhoto userPhotoList=userPhotoService.queryUserPhotos();
+            String urls=userPhotoList.getUrl();
+            //查询随机昵称
+            String nickname=robotNicknameService.queryNickname();
+            String newurl = propertiesDBLoader.getValue("iphonex_wechat_newh5_domain");//新图片地址
+            String newurl2 = propertiesDBLoader.getValue("domain_name");//测试前缀
+           // String iphone = systemLayoutService.queryIphonexUrl("iphonex_wechat_iphone_domain");//iphone二维码
+            //通过JPEG图象流创建JPEG数据流解码器
+            JPEGImageDecoder jpegDecoder = JPEGCodec.createJPEGDecoder(is);
+            //解码当前JPEG数据流，返回BufferedImage对象
+            BufferedImage buffImg = jpegDecoder.decodeAsBufferedImage();
+            //得到画笔对象
+            //Graphics g = buffImg.getGraphics();
+            Graphics2D g = (Graphics2D) buffImg.getGraphics();
+            //创建你要附加的图象。//-----------------------------------------------这一段是将小图片合成到大图片上的代码
+            //小图片的路径
+            //ImageIcon imgIcon = new ImageIcon(iphone);
+            //得到Image对象。
+            //Image img = imgIcon.getImage();
+            //将小图片绘到大图片上。
+            //5,300 .表示你的小图片在大图片上的位置。
+            //g.drawImage(img, 400, 15, null);
+
+            g.fillRect(0, 0, getWidth(), getHeight());
+            g.rotate(0, 900, 15);
+           // g.drawImage(img, 740, 655, this);
+            //g.rotate(30);
+            //设置颜色。
+            g.setColor(Color.BLACK);
+
+            //最后一个参数用来设置字体的大小
+            Font f = new Font("苹方 细体", Font.PLAIN, 14);
+            Color color = new Color(127, 127, 127);
+            Color[] mycolor = {color, Color.BLACK};
+            // g.setColor(mycolor);
+            g.setFont(f);
+            //   平移原点到图形环境的中心
+            g.translate(this.getWidth() / 2, this.getHeight() / 2);
+            //10,20 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
+            //g.drawString(msex, 160, 610);//合成男的名字new String(message.getBytes("utf8"),"gbk");
+            //g.drawString(manname, 650, 1500);//合成女的名字
+            // g.setColor(color);
+            for (int i = 0; i < 1; i++) {
+                g.rotate(0 * Math.PI / 180, 0, 0);
+                g.setPaint(mycolor[i % 2]);
+                g.drawString(nickname, 138, 132);
+                g.drawString(urls, 138, 132);
+             }
+            g.dispose();
+
+            //OutputStream os;
+
+            //os = new FileOutputStream("d:/union.jpg");
+            String shareFileName = System.currentTimeMillis() + ".jpg";
+
+            map.put("status", 200);
+            map.put("url", shareFileName);
+            String url = newurl + shareFileName;
+            //  os = new FileOutputStream(shareFileName);
+            //创键编码器，用于编码内存中的图象数据。
+            //JPEGImageEncoder en = JPEGCodec.createJPEGEncoder(os);
+            // en.encode(buffImg);
+            ImageIO.write(buffImg, "png", new File(url));//图片的输出路径
+            map.put("newurl", newurl2 + "/upload/wechat/" + shareFileName);
+            is.close();
+            //修改参与次数
+            //int ta = updateTake(1077);
+            //map.put("ta", ta);
+            //  os.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (ImageFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return map;
+
+    }
+
+
+    public Map<String, Object> imgCunjie() {
+        Map<String, Object> map = new HashMap<>();
+        String chunjie=propertiesDBLoader.getValue("chunjie_wechat_iphoneUrl_domain");//春节模板
+        try {
+            InputStream is = new FileInputStream(chunjie);
+            map = Chunjie(is);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (ImageFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return map;
+    }
+
+
 
 
 }

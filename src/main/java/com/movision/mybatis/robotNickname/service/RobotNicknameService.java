@@ -35,4 +35,16 @@ public class RobotNicknameService {
             throw e;
         }
     }
+
+
+    public String queryNickname() {
+        try {
+            log.info("随机查询机器人昵称");
+            return robotNicknameMapper.queryNickname();
+        } catch (Exception e) {
+            log.error("随机查询机器人昵称异常", e);
+            throw e;
+        }
+    }
+
 }

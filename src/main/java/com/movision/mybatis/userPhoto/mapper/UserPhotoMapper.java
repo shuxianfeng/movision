@@ -20,4 +20,6 @@ public interface UserPhotoMapper {
     int updateByPrimaryKey(UserPhoto record);
 
     List<UserPhoto> queryUserPhonts(Integer number);
+
+    UserPhoto queryUserPhotos();
 }
