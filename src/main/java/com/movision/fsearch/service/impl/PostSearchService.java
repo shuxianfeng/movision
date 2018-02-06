@@ -14,12 +14,17 @@ import com.movision.mybatis.post.entity.PostSearchEntity;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postAndUserRecord.service.PostAndUserRecordService;
 import com.movision.utils.DateUtils;
+import com.movision.utils.VideoCoverURL;
+import net.sf.json.JSONArray;
 import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 /**
@@ -45,6 +50,9 @@ public class PostSearchService implements IPostSearchService {
 
     @Autowired
     private CommonSearchService commonSearchService;
+
+    @Autowired
+    private VideoCoverURL videoCoverURL;
 
     /**
      * 查看更多-搜索帖子
@@ -92,6 +100,26 @@ public class PostSearchService implements IPostSearchService {
         } else {
 
             List<PostSearchEntity> products = makeProducts(list);
+
+            //搜索的帖子列表中视频贴动态请求视频封面
+            for (int i = 0; i < products.size(); i++) {
+                PostSearchEntity pe = products.get(i);
+                String postcontent = pe.getPostcontent();
+                JSONArray jsonArray = JSONArray.fromObject(postcontent);
+                try {
+                    jsonArray = videoCoverURL.getVideoCover(jsonArray);
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (InvalidKeyException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                //-----将转换完的数据封装返回
+                pe.setPostcontent(jsonArray.toString());
+                products.set(i, pe);
+            }
+
             @SuppressWarnings("unchecked")
             List<ProductGroup> productGroups = (List<ProductGroup>) psAsMap.get("groups");
 
