@@ -632,9 +632,9 @@ public class WechatH5Facade extends JPanel {
             UserPhoto userPhotoList=userPhotoService.queryUserPhotos();
             String urls=userPhotoList.getUrl();
             String aas= System.currentTimeMillis() + ".jpg";
-            String bendi="d:\\image\\";
+            String bendi="/WWW/tomcat-8080/apache-tomcat-7.0.73/webapps/upload/wechat/";
             try {
-                download(urls,aas,"d:\\image\\");
+                download(urls,aas,"/WWW/tomcat-8080/apache-tomcat-7.0.73/webapps/upload/wechat/");
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
