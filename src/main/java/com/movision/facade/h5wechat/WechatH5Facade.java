@@ -630,8 +630,6 @@ public class WechatH5Facade extends JPanel {
             //查询随机头像
             UserPhoto userPhotoList=userPhotoService.queryUserPhotos();
             String urls=userPhotoList.getUrl();
-            File coverFile = new File(urls); //覆盖层
-            BufferedImage coverImg = ImageIO.read(coverFile);
             //随机生成金额
             Random r = new Random();
             Double tmp=Double.valueOf( 1 + Math.floor(r.nextFloat() * 99999 % (99999 - 1 + 1)));
@@ -653,12 +651,12 @@ public class WechatH5Facade extends JPanel {
             Graphics2D g = (Graphics2D) buffImg.getGraphics();
             //创建你要附加的图象。//-----------------------------------------------这一段是将小图片合成到大图片上的代码
             //小图片的路径
-            //ImageIcon imgIcon = new ImageIcon(iphone);
+            ImageIcon imgIcon = new ImageIcon(urls);
             //得到Image对象。
-            //Image img = imgIcon.getImage();
+            Image img = imgIcon.getImage();
             //将小图片绘到大图片上。
             //5,300 .表示你的小图片在大图片上的位置。
-            g.drawImage(coverImg, 400, 15, null);
+            g.drawImage(img, 400, 15, null);
             g.fillRect(0, 0, getWidth(), getHeight());
             g.rotate(0, 900, 15);
            // g.drawImage(img, 740, 655, this);
