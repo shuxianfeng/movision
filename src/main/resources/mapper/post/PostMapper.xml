@@ -2433,7 +2433,7 @@
         SELECT heat_value FROM  yw_user WHERE id=#{userid,jdbcType=INTEGER}
     </select>
     <select id="queryPost" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT  * FROM  yw_post WHERE  id=#{postid,jdbcType=INTEGER}
+        SELECT  * FROM  yw_post WHERE  id=#{postid,jdbcType=INTEGER} AND isdel=0
     </select>
 
     <select id="queryPostListByHeatValue" resultType="com.movision.mybatis.post.entity.PostVo">
