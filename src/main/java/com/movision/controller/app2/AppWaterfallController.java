@@ -499,7 +499,7 @@ public class AppWaterfallController {
     public Response queryRelatedPosts(
             @ApiParam(value = "帖子id ") @RequestParam String postid,
             @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
-            @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+            @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         Response response = new Response();
         ServicePaging<PostVo> pager = new ServicePaging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
         List result = facadePost.queryRelatedPosts(postid, pager);

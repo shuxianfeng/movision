@@ -92,6 +92,15 @@ public class VideoCoverURL {
         return jsonArray;
     }
 
+    /**
+     * 整个帖子列表中的所有视频帖统一获取封面
+     *
+     * @param list
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     * @throws IOException
+     */
     public List<PostVo> getVideoCoverByList(List<PostVo> list) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         for (int j = 0; j < list.size(); j++) {
             PostVo vo = list.get(j);

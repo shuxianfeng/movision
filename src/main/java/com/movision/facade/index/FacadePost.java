@@ -35,7 +35,6 @@ import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.compressImg.entity.CompressImg;
 import com.movision.mybatis.compressImg.service.CompressImgService;
-import com.movision.mybatis.followCircle.entity.FollowCircle;
 import com.movision.mybatis.followCircle.service.FollowCircleService;
 import com.movision.mybatis.followUser.entity.FollowUser;
 import com.movision.mybatis.followUser.service.FollowUserService;
@@ -49,10 +48,6 @@ import com.movision.mybatis.labelSearchTerms.service.LabelSearchTermsService;
 import com.movision.mybatis.opularSearchTerms.service.OpularSearchTermsService;
 import com.movision.mybatis.pageHelper.entity.Datagrid;
 import com.movision.mybatis.period.entity.Period;
-import com.movision.mybatis.post.entity.ActiveVo;
-import com.movision.mybatis.post.entity.Post;
-import com.movision.mybatis.post.entity.PostReturnAll;
-import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postAndUserRecord.entity.PostAndUserRecord;
@@ -477,7 +472,7 @@ public class FacadePost {
      *
      * @return
      */
-    public List queryRelatedPosts(String postid, ServicePaging<PostVo> paging) {
+    public List queryRelatedPosts(String postid, ServicePaging<PostVo> paging) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         //根据帖子查询发帖用户
         int postuserid = postService.postUserId(Integer.parseInt(postid));
         //根据帖子id查询圈子
@@ -503,7 +498,7 @@ public class FacadePost {
         chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
         Collections.sort(ps, chain);
         List<PostVo> finpost = NotLoginretuenListPo(ps, paging);
-        return finpost;
+        return videoCoverURL.getVideoCoverByList(finpost);
 
     }
 
