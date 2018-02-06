@@ -630,6 +630,8 @@ public class WechatH5Facade extends JPanel {
             //查询随机头像
             UserPhoto userPhotoList=userPhotoService.queryUserPhotos();
             String urls=userPhotoList.getUrl();
+            File file = new File(urls);
+
             //随机生成金额
             Random r = new Random();
             Double tmp=Double.valueOf( 1 + Math.floor(r.nextFloat() * 99999 % (99999 - 1 + 1)));
@@ -667,7 +669,7 @@ public class WechatH5Facade extends JPanel {
             //最后一个参数用来设置字体的大小
             Font f = new Font("苹方 细体", Font.BOLD, 40);
             Font f1 = new Font("苹方 细体", Font.BOLD, 42);
-            Font f2 = new Font("苹方 细体", Font.BOLD, 160);
+            Font f2 = new Font("苹方 细体", Font.BOLD, 45);
             Color color = new Color(51, 51, 51);
             Color[] mycolor = {color, Color.BLACK};
             // g.setColor(mycolor);
@@ -682,12 +684,12 @@ public class WechatH5Facade extends JPanel {
                 g.rotate(0 * Math.PI / 180, 0, 0);
                 g.setPaint(mycolor[i % 2]);
                 g.setFont(f);
-                g.drawString(newnickname, 500, 500);//昵称
+                g.drawString(newnickname, 430, 500);//昵称
                 g.drawString(urls, 495, 300);//头像
                 g.setFont(f1);
-                g.drawString(zhufu, 420, 600);//祝福
+                g.drawString(zhufu, 410, 600);//祝福
                 g.setFont(f2);
-                g.drawString(money, 490, 830);//金额
+                g.drawString(money, 450, 830);//金额
              }
             g.dispose();
 
