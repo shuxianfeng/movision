@@ -24,6 +24,7 @@ import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userDontLike.entity.UserDontLike;
 import com.movision.mybatis.userDontLike.service.UserDontLikeService;
 import com.movision.utils.DateUtils;
+import com.movision.utils.VideoCoverURL;
 import com.movision.utils.baidu.SnCal;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
@@ -38,8 +39,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
@@ -70,6 +73,8 @@ public class LabelFacade {
     private FollowUserService followUserService;
     @Autowired
     private AddressFacade addressFacade;
+    @Autowired
+    private VideoCoverURL videoCoverURL;
 
     /**
      * 我的--关注--关注的标签，点击关注调用的关注的标签列表返回接口
@@ -126,8 +131,8 @@ public class LabelFacade {
      * @param labelid
      * @return
      */
-    public List postLabelList(int type, Paging<PostVo> paging, int labelid) {
-        List list = null;
+    public List<PostVo> postLabelList(int type, Paging<PostVo> paging, int labelid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
+        List<PostVo> list = null;
         //根据标签id查询帖子
         List<Integer> postid = postLabelRelationService.postList(labelid);
         if (type == 1) {//推荐
@@ -148,7 +153,7 @@ public class LabelFacade {
                 list = labelResult(list);
             }
         }
-        return list;
+        return videoCoverURL.getVideoCoverByList(list);
     }
 
 
@@ -287,7 +292,7 @@ public class LabelFacade {
      * @param circleid
      * @return
      */
-    public List queryCircleBotton(int type, Paging<PostVo> paging, String circleid, String labelid) {
+    public List<PostVo> queryCircleBotton(int type, Paging<PostVo> paging, String circleid, String labelid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         List<PostVo> list = null;
         Map map = new HashMap();
         map.put("circleid", circleid);
@@ -319,7 +324,7 @@ public class LabelFacade {
                 list = labelResult(list);
             }
         }
-        return list;
+        return videoCoverURL.getVideoCoverByList(list);
     }
 
 

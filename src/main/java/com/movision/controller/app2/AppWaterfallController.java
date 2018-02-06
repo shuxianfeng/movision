@@ -357,7 +357,7 @@ public class AppWaterfallController {
     public Response postLabelList(@ApiParam(value = "标签id") @RequestParam int labelid,
                                   @ApiParam(value = "类型 1 推荐 2 最新 3精华 ") @RequestParam int type,
                                   @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                  @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+                                  @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         Response response = new Response();
         Paging<PostVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
         List result = labelFacade.postLabelList(type, pager, labelid);
@@ -463,7 +463,7 @@ public class AppWaterfallController {
                                       @ApiParam(value = "类型 1 推荐 2 最新 3精华 ") @RequestParam int type,
                                       @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                       @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize,
-                                      @ApiParam(value = "标签id") @RequestParam(required = false) String labelid) {
+                                      @ApiParam(value = "标签id") @RequestParam(required = false) String labelid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         Response response = new Response();
         Paging<PostVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
         List result = labelFacade.queryCircleBotton(type, pager, circleid, labelid);
