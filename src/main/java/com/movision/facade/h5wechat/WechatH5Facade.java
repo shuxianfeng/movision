@@ -668,7 +668,7 @@ public class WechatH5Facade extends JPanel {
             //Image img = imgIcon.getImage();
             //将小图片绘到大图片上。
             //5,300 .表示你的小图片在大图片上的位置。
-            g.drawImage(im, 470, 280,180,150, null);
+            g.drawImage(im, 470, 280,182,160, null);
             g.fillRect(0, 0, getWidth(), getHeight());
             g.rotate(0, 900, 15);
            // g.drawImage(img, 740, 655, this);
@@ -701,15 +701,15 @@ public class WechatH5Facade extends JPanel {
                 int textWidth = fm.stringWidth(newnickname);
                 int widthX = (1125 - textWidth) / 2;
                 // 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
-                g.drawString(newnickname,widthX,510);//昵称
+                g.drawString(newnickname,widthX,530);//昵称
                 g.setFont(f1);
                 // 计算文字长度，计算居中的x点坐标
                 FontMetrics fm1 = g.getFontMetrics(f1);
                 int textWidth1 = fm.stringWidth(zhufu);
                 int widthX1 = (1125 - textWidth1) / 2;
-                g.drawString(zhufu, widthX1, 610);//祝福
+                g.drawString(zhufu, widthX1, 630);//祝福
                 g.setFont(f2);
-                g.drawString(money, 390, 838);//金额
+                g.drawString(money, 385, 840);//金额
              }
             g.dispose();
 
