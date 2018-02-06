@@ -680,7 +680,7 @@ public class WechatH5Facade extends JPanel {
             //OutputStream os;
 
             //os = new FileOutputStream("d:/union.jpg");
-            String shareFileName = System.currentTimeMillis() + ".png";
+            String shareFileName = System.currentTimeMillis() + ".jpg";
 
             map.put("status", 200);
             map.put("url", shareFileName);
