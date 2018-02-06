@@ -657,7 +657,6 @@ public class WechatH5Facade extends JPanel {
             //将小图片绘到大图片上。
             //5,300 .表示你的小图片在大图片上的位置。
             //g.drawImage(img, 400, 15, null);
-
             g.fillRect(0, 0, getWidth(), getHeight());
             g.rotate(0, 900, 15);
            // g.drawImage(img, 740, 655, this);
@@ -666,11 +665,13 @@ public class WechatH5Facade extends JPanel {
             g.setColor(Color.BLACK);
 
             //最后一个参数用来设置字体的大小
-            Font f = new Font("苹方 细体", Font.PLAIN, 20);
+            Font f = new Font("苹方 细体", Font.BOLD, 20);
+            Font f1 = new Font("苹方 细体", Font.BOLD, 30);
+            Font f2 = new Font("苹方 细体", Font.BOLD, 40);
             Color color = new Color(127, 127, 127);
             Color[] mycolor = {color, Color.BLACK};
             // g.setColor(mycolor);
-            g.setFont(f);
+
             //   平移原点到图形环境的中心
             g.translate(this.getWidth() / 2, this.getHeight() / 2);
             //10,20 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
@@ -680,10 +681,13 @@ public class WechatH5Facade extends JPanel {
             for (int i = 0; i < 1; i++) {
                 g.rotate(0 * Math.PI / 180, 0, 0);
                 g.setPaint(mycolor[i % 2]);
-                g.drawString(newnickname, 500, 500);
-                g.drawString(urls, 495, 300);
-                g.drawString(zhufu, 470, 600);
-                g.drawString(money, 490, 700);
+                g.setFont(f);
+                g.drawString(newnickname, 500, 500);//昵称
+                g.drawString(urls, 495, 300);//头像
+                g.setFont(f1);
+                g.drawString(zhufu, 460, 600);//祝福
+                g.setFont(f2);
+                g.drawString(money, 490, 800);//金额
              }
             g.dispose();
 
