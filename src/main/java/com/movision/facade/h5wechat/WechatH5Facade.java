@@ -685,9 +685,9 @@ public class WechatH5Facade extends JPanel {
                 g.drawString(newnickname, 500, 500);//昵称
                 g.drawString(urls, 495, 300);//头像
                 g.setFont(f1);
-                g.drawString(zhufu, 460, 600);//祝福
+                g.drawString(zhufu, 420, 600);//祝福
                 g.setFont(f2);
-                g.drawString(money, 490, 800);//金额
+                g.drawString(money, 490, 830);//金额
              }
             g.dispose();
 
