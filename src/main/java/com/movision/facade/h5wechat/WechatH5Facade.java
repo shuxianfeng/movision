@@ -648,7 +648,7 @@ public class WechatH5Facade extends JPanel {
             }
             BufferedImage bi = null;
             try {
-                bi = ImageIO.read(is);
+                bi = ImageIO.read(iss);
             } catch (IOException e) {
                  e.printStackTrace();
             }
