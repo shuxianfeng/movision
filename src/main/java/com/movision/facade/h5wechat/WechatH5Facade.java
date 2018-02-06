@@ -681,7 +681,7 @@ public class WechatH5Facade extends JPanel {
             Font f = new Font("苹方 中等", Font.BOLD, 40);
             Font f1 = new Font("苹方 中等", Font.BOLD, 42);
             Font f2 = new Font("PingFang Bold", Font.PLAIN, 80);
-            Font f3= new Font("苹方 常规", Font.PLAIN, 40);
+            Font f3= new Font("苹方 常规", Font.PLAIN, 42);
             Color color = new Color(51, 51, 51);
             Color[] mycolor = {color, Color.BLACK};
             // g.setColor(mycolor);
@@ -716,7 +716,7 @@ public class WechatH5Facade extends JPanel {
                 FontMetrics fm2 = g.getFontMetrics(f3);
                 int textWidth2 = fm2.stringWidth(most);
                 int widthX2 = (1125 - textWidth2) / 2;
-                g.drawString(most,widthX2,2100);//最后一句话
+                g.drawString(most,widthX2,1900);//最后一句话
              }
             g.dispose();
 
