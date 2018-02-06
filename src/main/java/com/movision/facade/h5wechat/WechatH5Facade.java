@@ -668,7 +668,7 @@ public class WechatH5Facade extends JPanel {
             //Image img = imgIcon.getImage();
             //将小图片绘到大图片上。
             //5,300 .表示你的小图片在大图片上的位置。
-            g.drawImage(im, 400, 15, null);
+            g.drawImage(im, 400, 15,300,300, null);
             g.fillRect(0, 0, getWidth(), getHeight());
             g.rotate(0, 900, 15);
            // g.drawImage(img, 740, 655, this);
@@ -695,11 +695,10 @@ public class WechatH5Facade extends JPanel {
                 g.setPaint(mycolor[i % 2]);
                 g.setFont(f);
                 g.drawString(newnickname, 430, 500);//昵称
-                g.drawString(urls, 495, 300);//头像
                 g.setFont(f1);
                 g.drawString(zhufu, 410, 600);//祝福
                 g.setFont(f2);
-                g.drawString(money, 450, 830);//金额
+                g.drawString(money, 450, 835);//金额
              }
             g.dispose();
 
@@ -749,44 +748,7 @@ public class WechatH5Facade extends JPanel {
         }
         return map;
     }
-
-    /**
-     *
-     * @param urlString
-     * @param filename
-     * @param savePath
-     * @throws Exception
-     */
-    public static void download(String urlString, String filename,String savePath) throws Exception {
-        // 构造URL
-        URL url = new URL(urlString);
-        // 打开连接
-        URLConnection con = url.openConnection();
-        //设置请求超时为5s
-        con.setConnectTimeout(5*1000);
-        // 输入流
-        InputStream is = con.getInputStream();
-
-        // 1K的数据缓冲
-        byte[] bs = new byte[1024];
-        // 读取到的数据长度
-        int len;
-        // 输出的文件流
-        File sf=new File(savePath);
-        if(!sf.exists()){
-            sf.mkdirs();
-        }
-        OutputStream os = new FileOutputStream(sf.getPath()+"\\"+filename);
-        // 开始读取
-        while ((len = is.read(bs)) != -1) {
-            os.write(bs, 0, len);
-        }
-        // 完毕，关闭所有链接
-        os.close();
-        is.close();
-    }
-
-    /**
+     /**
      * 下载文件
      *
      * @param str
