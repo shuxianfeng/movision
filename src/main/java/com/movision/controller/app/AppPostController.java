@@ -213,7 +213,7 @@ public class AppPostController {
 
         if (count.get("flag").equals(-2)) {
             response.setCode(300);
-            response.setMessage("系统异常，APP发帖失败");
+            response.setMessage("系统异常，发帖失败");
         } else if (count.get("flag").equals(-1)) {
             response.setCode(201);
             response.setMessage("用户不具备发帖权限");
