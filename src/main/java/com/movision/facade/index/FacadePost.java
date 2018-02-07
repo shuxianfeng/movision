@@ -48,6 +48,16 @@ import com.movision.mybatis.labelSearchTerms.service.LabelSearchTermsService;
 import com.movision.mybatis.opularSearchTerms.service.OpularSearchTermsService;
 import com.movision.mybatis.pageHelper.entity.Datagrid;
 import com.movision.mybatis.period.entity.Period;
+import com.movision.mybatis.photo.entity.Photo;
+import com.movision.mybatis.photo.entity.PhotoVo;
+import com.movision.mybatis.photo.service.PhotoService;
+import com.movision.mybatis.photoOrder.entity.PhotoOrder;
+import com.movision.mybatis.photoOrder.entity.PhotoOrderVo;
+import com.movision.mybatis.photoOrder.service.PhotoOrderService;
+import com.movision.mybatis.post.entity.ActiveVo;
+import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.post.entity.PostReturnAll;
+import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postAndUserRecord.entity.PostAndUserRecord;
@@ -127,6 +137,7 @@ public class FacadePost {
 
     @Autowired
     private GoodsService goodsService;
+
 
     @Autowired
     private CircleService circleService;
@@ -1373,7 +1384,7 @@ public class FacadePost {
      * @param labellist
      * @param flag
      */
-    private void addLabelProcess(String labellist, int flag) {
+    public void addLabelProcess(String labellist, int flag) {
         //1 解析数据
         Gson gson = new Gson();
         List<PostLabel> postLabelList = gson.fromJson(labellist, new TypeToken<List<PostLabel>>() {
@@ -5134,7 +5145,7 @@ public class FacadePost {
     public List indexHomeList_20180102(String userid){
         //查询用户关注的圈子
         List<Circle> list=null;
-        if(userid!=null){
+        if(StringUtil.isNotEmpty(userid)){
             list=followCircleService.queryUserFollowCircle(Integer.parseInt(userid));
         }else {
             list=null;
@@ -5267,7 +5278,6 @@ public class FacadePost {
             return map;
         }
     }
-
 
 
 }
