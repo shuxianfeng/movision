@@ -712,7 +712,7 @@ public class WechatH5Facade extends JPanel {
                 g.drawString(zhufu, widthX1, 630);//祝福
                 g.setFont(f2);
                 FontMetrics fm3 = g.getFontMetrics(f2);
-                int textWidth3 = fm3.stringWidth(money);
+                int textWidth3 = fm3.stringWidth(xmoney);
                 int widthX3 = (1125 - textWidth3) / 2;
                 g.drawString(xmoney, widthX3, 840);//金额
              }
