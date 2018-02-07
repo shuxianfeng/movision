@@ -653,7 +653,6 @@ public class WechatH5Facade extends JPanel {
             String nickname=robotNicknameService.queryNickname();
             String newnickname=nickname+"的红包";
             String zhufu="恭喜发财，大吉大利";
-            String most="识别图中二维码，获取您的红包数额";
             String newurl2 = propertiesDBLoader.getValue("domain_name");//测试前缀
            // String iphone = systemLayoutService.queryIphonexUrl("iphonex_wechat_iphone_domain");//iphone二维码
             //通过JPEG图象流创建JPEG数据流解码器
@@ -716,11 +715,6 @@ public class WechatH5Facade extends JPanel {
                 int textWidth3 = fm3.stringWidth(money);
                 int widthX3 = (1125 - textWidth3) / 2;
                 g.drawString(xmoney, widthX3, 840);//金额
-                g.setFont(f3);
-                FontMetrics fm2 = g.getFontMetrics(f3);
-                int textWidth2 = fm2.stringWidth(most);
-                int widthX2 = (1125 - textWidth2) / 2;
-                g.drawString(most,widthX2,2000);//最后一句话
              }
             g.dispose();
 
