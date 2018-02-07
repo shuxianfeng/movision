@@ -644,8 +644,13 @@ public class WechatH5Facade extends JPanel {
             BufferedImage  bi = ImageIO.read(iss);
             Image im=(Image)bi;
             //随机生成金额
-            Random r = new Random();
-            Double tmp=Double.valueOf( 1 + Math.floor(r.nextFloat() * 99999 % (99999 - 1 + 1)));
+           /* Random r = new Random();
+            Double tmp=Double.valueOf( 1 + Math.floor(r.nextFloat() * 99999 % (99999 - 1 + 1)));*/
+            int[] arr={520, 1314, 999,2333, 666,888,10000,8888,18888,333,419,404,648};
+            int len = arr.length;//获取数组长度给变量len
+            Random random = new Random();//创建随机对象
+            int arrIdx = random.nextInt(len-1);//随机数组索引，nextInt(len-1)表示随机整数[0,(len-1)]之间的值
+            int tmp = arr[arrIdx];//获取数组值
             DecimalFormat df=new DecimalFormat("0.00");
             String money=df.format(tmp);
             String xmoney=money+"元";
