@@ -3,10 +3,11 @@ package com.movision.mybatis.photo.mapper;
 import com.movision.mybatis.photo.entity.Photo;
 import com.movision.mybatis.photo.entity.PhotoVo;
 import org.apache.ibatis.session.RowBounds;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
-
+@Repository
 public interface PhotoMapper {
     int deleteByPrimaryKey(Integer id);
 
