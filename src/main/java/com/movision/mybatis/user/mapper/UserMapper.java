@@ -129,6 +129,8 @@ public interface UserMapper {
 
     LoginUser selectLoginuserByUserid(@Param("id") Integer id);
 
+    LoginUser getLoginuserByOpenid(String openid);
+
     Integer countByNickname(Map map);
 
     Integer queryUserIsVip(Integer loginid);

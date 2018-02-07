@@ -69,6 +69,28 @@ public class ShiroUtil {
     }
 
     /**
+     * 获取小程序当前登录人信息
+     *
+     * @return
+     */
+    public static ShiroRealm.ShiroUser getWechatUser() {
+        ShiroRealm.ShiroUser member = null;
+        try {
+            Subject currentUser = SecurityUtils.getSubject();
+            Session session = currentUser.getSession(false);
+            if (session != null) {
+                member = (ShiroRealm.ShiroUser) session.getAttribute(SessionConstant.WECHAT_USER);
+            }
+        } catch (Exception e) {
+            log.error("从session中获取当前登录的wechat用户失败!", e);
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.un_login)));
+
+        }
+        return member;
+
+    }
+
+    /**
      * 获取APP当前登录人id
      * @return
      */

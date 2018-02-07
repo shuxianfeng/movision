@@ -726,6 +726,7 @@ public class AppRegisterFacade {
                 Session session = currentUser.getSession();
                 //6 清除session中的boss用户信息
                 session.removeAttribute(SessionConstant.BOSS_USER);
+                session.removeAttribute(SessionConstant.WECHAT_USER);
                 ShiroRealm.ShiroUser appuser = (ShiroRealm.ShiroUser) currentUser.getPrincipal();
                 log.debug("当前登录的LoginUser信息=" + appuser.toString());
                 session.setAttribute(SessionConstant.APP_USER, appuser);

@@ -256,6 +256,13 @@ public class UserFacade {
     }
 
     /**
+     * 根据openid获取Loginuser
+     */
+    public LoginUser getLoginuserByOpenid(String openid) {
+        return userService.getLoginuserByOpenid(openid);
+    }
+
+    /**
      * 测试使用
      *
      * @param user

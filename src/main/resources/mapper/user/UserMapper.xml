@@ -1366,6 +1366,10 @@
             </if>
         </where>
     </select>
+    
+    <select id="getLoginuserByOpenid" parameterType="java.lang.String" resultType="com.movision.mybatis.user.entity.LoginUser" >
+        SELECT * FROM yw_user u WHERE openid = #{openid,jdbcType=VARCHAR}
+    </select>
 
     <select id="countByNickname" parameterType="java.util.HashMap" resultType="java.lang.Integer">
         select count(1)

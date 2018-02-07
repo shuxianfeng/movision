@@ -96,6 +96,7 @@ public class BossLoginController {
             //2 session中存入当前用户信息
             session.setAttribute(SessionConstant.BOSS_USER, shiroBossUser);
             session.removeAttribute(SessionConstant.APP_USER);
+            session.removeAttribute(SessionConstant.WECHAT_USER);
 
             log.debug("session中的boss用户信息：" + ShiroUtil.getBossUser());
 

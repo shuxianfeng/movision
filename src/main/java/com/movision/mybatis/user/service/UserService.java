@@ -806,6 +806,16 @@ public class UserService {
         }
     }
 
+    public LoginUser getLoginuserByOpenid(String openid) {
+        try {
+            log.info("根据openid查询LoginUser");
+            return userMapper.getLoginuserByOpenid(openid);
+        }catch (Exception e) {
+            log.error("根据openid查询LoginUser失败", e);
+            throw e;
+        }
+    }
+
     public User selectByPrimaryKey(Integer userid) {
         try {
             log.info("根据id查询用户信息User");

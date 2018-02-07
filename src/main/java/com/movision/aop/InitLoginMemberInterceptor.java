@@ -77,7 +77,8 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                 //session配置3小时
                 BossRealm.ShiroBossUser bossUser = (BossRealm.ShiroBossUser) session.getAttribute(SessionConstant.BOSS_USER);
                 ShiroUser appuser = (ShiroUser) session.getAttribute(SessionConstant.APP_USER);
-                if (bossUser != null && appuser == null) {
+                ShiroUser wechatuser = (ShiroUser) session.getAttribute(SessionConstant.WECHAT_USER);
+                if (bossUser != null && appuser == null && wechatuser == null) {
                     // 判断是否拥有当前点击菜单的权限（内部过滤,防止通过url进入跳过菜单权限）
                     /**
                      * 根据点击的菜单中的URL去匹配，当匹配到了此菜单，判断是否有此菜单的权限，没有的话跳转到404页面
@@ -124,10 +125,14 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
 //                response.sendRedirect(request.getContextPath() + "rest/exception/error_401");
                     bossLoginFacade.handleNoPermission(response);
                     return false;
-                } else if (bossUser == null && appuser != null) {
+                } else if (bossUser == null && appuser != null && wechatuser == null) {
                     log.debug("拦截器，进入app登录分支");
                     //app端不做菜单控制, 所以该分支永远不会进入
 //                    this.initAppUserInfo(currentUser, session);
+                    return true;
+                } else if (bossUser == null && appuser == null && wechatuser != null) {
+                    log.debug("拦截器，进入小程序登录分支");
+                    //和app分支整体逻辑基本一致，不做登录强过滤
                     return true;
                 } else {
                     return reLogin(response);
