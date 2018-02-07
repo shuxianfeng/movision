@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.photo.mapper.PhotoMapper" >
+  <resultMap id="BaseResultMap" type="com.movision.mybatis.photo.entity.Photo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="isdel" property="isdel" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="intime" property="intime" jdbcType="TIMESTAMP" />
+    <result column="money" property="money" jdbcType="DOUBLE" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="returnmap" property="returnmap" jdbcType="INTEGER" />
+    <result column="personnal" property="personnal" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="subjectmatter" property="subjectmatter" jdbcType="VARCHAR" />
+    <result column="personnalnumber" property="personnalnumber" jdbcType="INTEGER" />
+    <result column="userid" property="userid" jdbcType="INTEGER" />
+    <result column="pubdate" property="pubdate" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, isdel, title, intime, money, city, returnmap, personnal, content, subjectmatter, 
+    personnalnumber, userid,pubdate,status
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yw_photo
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yw_photo
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.movision.mybatis.photo.entity.Photo" >
+    insert into yw_photo (id, isdel, title, 
+      intime, money, city, 
+      returnmap, personnal, content, 
+      subjectmatter, personnalnumber, userid,pubdate
+      )
+    values (#{id,jdbcType=INTEGER}, #{isdel,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
+      #{intime,jdbcType=TIMESTAMP}, #{money,jdbcType=DOUBLE}, #{city,jdbcType=VARCHAR}, 
+      #{returnmap,jdbcType=INTEGER}, #{personnal,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, 
+      #{subjectmatter,jdbcType=VARCHAR}, #{personnalnumber,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER},#{pubdate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.movision.mybatis.photo.entity.Photo" >
+    <selectKey keyProperty="id" order="AFTER" resultType="Integer">
+      select LAST_INSERT_ID()
+    </selectKey>
+    insert into yw_photo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="isdel != null" >
+        isdel,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="intime != null" >
+        intime,
+      </if>
+      <if test="money != null" >
+        money,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="returnmap != null" >
+        returnmap,
+      </if>
+      <if test="personnal != null" >
+        personnal,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="subjectmatter != null" >
+        subjectmatter,
+      </if>
+      <if test="personnalnumber != null" >
+        personnalnumber,
+      </if>
+      <if test="userid != null" >
+        userid,
+      </if>
+      <if test="pubdate != null" >
+        pubdate,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="isdel != null" >
+        #{isdel,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="intime != null" >
+        #{intime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="money != null" >
+        #{money,jdbcType=DOUBLE},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="returnmap != null" >
+        #{returnmap,jdbcType=INTEGER},
+      </if>
+      <if test="personnal != null" >
+        #{personnal,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectmatter != null" >
+        #{subjectmatter,jdbcType=VARCHAR},
+      </if>
+      <if test="personnalnumber != null" >
+        #{personnalnumber,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="pubdate != null" >
+        #{pubdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.photo.entity.Photo" >
+    update yw_photo
+    <set >
+      <if test="isdel != null" >
+        isdel = #{isdel,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="intime != null" >
+        intime = #{intime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="money != null" >
+        money = #{money,jdbcType=DOUBLE},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="returnmap != null" >
+        returnmap = #{returnmap,jdbcType=INTEGER},
+      </if>
+      <if test="personnal != null" >
+        personnal = #{personnal,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectmatter != null" >
+        subjectmatter = #{subjectmatter,jdbcType=VARCHAR},
+      </if>
+      <if test="personnalnumber != null" >
+        personnalnumber = #{personnalnumber,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        userid = #{userid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.photo.entity.Photo" >
+    update yw_photo
+    set isdel = #{isdel,jdbcType=INTEGER},
+      title = #{title,jdbcType=VARCHAR},
+      intime = #{intime,jdbcType=TIMESTAMP},
+      money = #{money,jdbcType=DOUBLE},
+      city = #{city,jdbcType=VARCHAR},
+      returnmap = #{returnmap,jdbcType=INTEGER},
+      personnal = #{personnal,jdbcType=INTEGER},
+      content = #{content,jdbcType=VARCHAR},
+      subjectmatter = #{subjectmatter,jdbcType=VARCHAR},
+      personnalnumber = #{personnalnumber,jdbcType=INTEGER},
+      userid = #{userid,jdbcType=INTEGER},
+      pubdate = #{pubdate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="queryPhotoDetails" parameterType="java.lang.Integer" resultType="com.movision.mybatis.photo.entity.PhotoVo">
+SELECT p.*,u.nickname,u.photo,u.city FROM yw_photo p LEFT JOIN yw_user u ON u.id=p.userid WHERE p.isdel=0 AND p.id=#{id,jdbcType=INTEGER}
+  </select>
+  <select id="findAllPhoto" resultType="com.movision.mybatis.photo.entity.PhotoVo">
+    SELECT p.*,u.nickname,u.photo,u.city FROM yw_photo p LEFT JOIN yw_user u ON u.id=p.userid WHERE p.isdel=0
+     <if test="p.title!=null">
+       AND p.title LIKE concat('%',#{title,jdbcType=VARCHAR},'%')
+     </if>
+    <if test="p.money!=null">
+      AND p.money BETWEEN #{money,jdbcType=DOUBLE} AND #{money,jdbcType=DOUBLE}
+    </if>
+    <if test="p.city!=null">
+      AND p.city LIKE concat('%',#{city,jdbcType=VARCHAR},'%')
+    </if>
+     ORDER BY p.pubdate DESC
+  </select>
+  <select id="selectCreditScore" parameterType="java.lang.Integer" resultType="com.movision.mybatis.photo.entity.Photo">
+    SELECT * FROM yw_photo WHERE id=#{id,jdbcType=INTEGER}
+  </select>
+  <update id="updateCreditScore" parameterType="java.util.Map">
+    UPDATE yw_user SET creditscore=creditscore+#{money,jdbcType=INTEGER}  WHERE id=#{userid,jdbcType=INTEGER}
+  </update>
+  <update id="updatePhotoMoney" parameterType="java.util.Map">
+    UPDATE yw_photo SET money=#{money,jdbcType=DOUBLE} WHERE id=#{id,jdbcType=INTEGER}
+  </update>
+  <update id="updatePhotoStatus" parameterType="java.util.Map">
+    UPDATE yw_photo SET status=#{status,jdbcType=INTEGER} WHERE id=#{photoid,jdbcType=INTEGER}
+  </update>
+</mapper>

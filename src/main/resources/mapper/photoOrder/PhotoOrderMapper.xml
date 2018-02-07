@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.photoOrder.mapper.PhotoOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.movision.mybatis.photoOrder.entity.PhotoOrder" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="userid" property="userid" jdbcType="INTEGER" />
+    <result column="money" property="money" jdbcType="DOUBLE" />
+    <result column="photoid" property="photoid" jdbcType="INTEGER" />
+    <result column="isselect" property="isselect" jdbcType="INTEGER" />
+    <result column="intime" property="intime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, userid, money, photoid,intime,isselect
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yw_photo_order
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yw_photo_order
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.movision.mybatis.photoOrder.entity.PhotoOrder" >
+    insert into yw_photo_order (id, userid, money, 
+      photoid)
+    values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{money,jdbcType=DOUBLE}, 
+      #{photoid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.movision.mybatis.photoOrder.entity.PhotoOrder" >
+    insert into yw_photo_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userid != null" >
+        userid,
+      </if>
+      <if test="money != null" >
+        money,
+      </if>
+      <if test="photoid != null" >
+        photoid,
+      </if>
+      <if test="isselect != null" >
+        isselect,
+      </if>
+      <if test="intime != null" >
+        intime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="money != null" >
+        #{money,jdbcType=DOUBLE},
+      </if>
+      <if test="photoid != null" >
+        #{photoid,jdbcType=INTEGER},
+      </if>
+      <if test="isselect != null" >
+        #{isselect,jdbcType=INTEGER},
+      </if>
+      <if test="intime != null" >
+        #{intime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.photoOrder.entity.PhotoOrder" >
+    update yw_photo_order
+    <set >
+      <if test="userid != null" >
+        userid = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="money != null" >
+        money = #{money,jdbcType=DOUBLE},
+      </if>
+      <if test="photoid != null" >
+        photoid = #{photoid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.photoOrder.entity.PhotoOrder" >
+    update yw_photo_order
+    set userid = #{userid,jdbcType=INTEGER},
+      money = #{money,jdbcType=DOUBLE},
+      photoid = #{photoid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="queryAllPhotoOrder" parameterType="java.lang.Integer" resultType="com.movision.mybatis.photoOrder.entity.PhotoOrderVo">
+    select p.*,u.nickname,u.photo from yw_photo_order p LEFT JOIN yw_user u ON u.id=p.userid WHERE p.photoid=#{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectOrderUserid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    SELECT userid FROM  yw_photo_order WHERE isselect=1 AND photoid=#{id,jdbcType=INTEGER}
+  </select>
+  <update id="updateOrder" parameterType="java.util.Map">
+    UPDATE yw_photo_order SET isselect=1 WHERE photoid=#{id,jdbcType=INTEGER} AND userid=#{userid,jdbcType=INTEGER}
+  </update>
+</mapper>
