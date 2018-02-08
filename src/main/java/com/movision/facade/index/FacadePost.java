@@ -801,16 +801,15 @@ public class FacadePost {
                     try {
                         postcontent = imgSortUtil.mergePicture(postcontent);
                     } catch (Exception e) {
+                        log.info("APP端图片排列计算异常");
                         e.printStackTrace();
                     }
                 }
             }
             //内容转换
             con = jsoupCompressImg.newCompressImg(request, postcontent, category);
-            System.out.println(con);
             if ((int) con.get("code") == 200) {
-                String str = con.get("content").toString();
-                postcontent = str;
+                postcontent = con.get("content").toString();
             } else {
                 log.error("APP端帖子图片内容转换异常");
             }
@@ -1597,12 +1596,11 @@ public class FacadePost {
             contentMap = jsoupCompressImg.newCompressImg(request, postcontent, category);
             log.debug("转换后的帖子内容是：" + contentMap);
             if ((int) contentMap.get("code") == 200) {
-                String str = contentMap.get("content").toString();
-                postcontent = str;
+                postcontent = contentMap.get("content").toString();
                 if (StringUtil.isNotEmpty(category)) {
                     if (category.equals("1") || category.equals(1)) {
                         try {
-                            postcontent = imgSortUtil.mergePicture(contentMap.get("content").toString());
+                            postcontent = imgSortUtil.mergePicture(postcontent);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

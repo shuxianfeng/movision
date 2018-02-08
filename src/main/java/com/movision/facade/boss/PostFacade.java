@@ -810,22 +810,24 @@ public class PostFacade {
             post.setCategory(Integer.parseInt(category));
             Map con = null;
             if (StringUtil.isNotEmpty(postcontent)) {
-                //内容转换
-                con = jsoupCompressImg.newCompressImg(request, postcontent, category);
-                System.out.println(con);
-                if ((int) con.get("code") == 200) {
-                    String str = con.get("content").toString();
-                    System.out.println("categroy=================" + category);
-                    if (StringUtil.isNotEmpty(category)) {
-                        if (category.equals("1") || category.equals(1)) {
-                            //帖子内容图片排序操作
-                            try {
-                                str = imgSortUtil.mergePicture(postcontent);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+
+                if (StringUtil.isNotEmpty(category)) {
+                    if (category.equals("1") || category.equals(1)) {
+                        //帖子内容图片排序操作
+                        try {
+                            postcontent = imgSortUtil.mergePicture(postcontent);
+                        } catch (Exception e) {
+                            logger.info("帖子计算图片排列出现异常");
+                            e.printStackTrace();
                         }
                     }
+                }
+
+                //内容转换
+                con = jsoupCompressImg.newCompressImg(request, postcontent, category);
+                if ((int) con.get("code") == 200) {
+                    String str = con.get("content").toString();
+
                     post.setPostcontent(str);//帖子内容
                 } else {
                     logger.error("帖子内容转换异常");
