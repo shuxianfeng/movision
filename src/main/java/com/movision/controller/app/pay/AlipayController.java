@@ -32,7 +32,7 @@ public class AlipayController {
      */
     @ApiOperation(value = "支付入参拼装", notes = "支付宝支付请求入参拼装签名和加密", response = Response.class)
     @RequestMapping(value = "packagePayParam", method = RequestMethod.POST)
-    public Response packagePayParam(@ApiParam(value = "订单id（多个用英文逗号隔开）") @RequestParam String ordersid) throws UnsupportedEncodingException, AlipayApiException {
+    public Response packagePayParam(@ApiParam(value = "订单id（订单表的主键id，非订单编号；多个用英文逗号隔开）") @RequestParam String ordersid) throws UnsupportedEncodingException, AlipayApiException {
         Response response = new Response();
 
         Map<String, Object> parammap = alipayFacade.packagePayParam(ordersid);
@@ -56,7 +56,7 @@ public class AlipayController {
      */
     @ApiOperation(value = "交易退款接口", notes = "用于支付宝退款接口", response = Response.class)
     @RequestMapping(value = "tradingARefund", method = RequestMethod.POST)
-    public Response tradingARefund(@ApiParam(value = "订单id（单个订单，一次只能退一个订单）") @RequestParam String orderid) throws AlipayApiException {
+    public Response tradingARefund(@ApiParam(value = "订单id（订单表的主键id，非订单编号；单个订单，一次只能退一个订单）") @RequestParam String orderid) throws AlipayApiException {
         Response response = new Response();
         Map<String, Object> refund = alipayFacade.tradingARefund(orderid);
         if (response.getCode() == 200 && (int) refund.get("code") == 200) {
@@ -78,7 +78,7 @@ public class AlipayController {
      */
     @ApiOperation(value = "支付宝支付订单的查询", notes = "支付宝支付订单的查询", response = Response.class)
     @RequestMapping(value = "alipay_trade_query", method = RequestMethod.POST)
-    public Response alipayTradeQuery(@ApiParam(value = "订单号（单个订单号）") @RequestParam String orderid) throws AlipayApiException {
+    public Response alipayTradeQuery(@ApiParam(value = "订单号（订单表的主键id，非订单编号；单个订单号）") @RequestParam String orderid) throws AlipayApiException {
         Response response = new Response();
         Map map = alipayFacade.alipayTradeQuery(orderid);
         if (response.getCode() == 200 && (int) map.get("code") == 200) {
@@ -99,7 +99,7 @@ public class AlipayController {
      */
     @ApiOperation(value = "支付宝交易退款查询", notes = "用于支付宝交易退款查询接口", response = Response.class)
     @RequestMapping(value = "trading_refund_query", method = RequestMethod.POST)
-    public Response tradingRefundQuery(@ApiParam(value = "订单号（单个订单号）") @RequestParam String orderid) throws AlipayApiException {
+    public Response tradingRefundQuery(@ApiParam(value = "订单号（订单表的主键id，非订单编号；单个订单号）") @RequestParam String orderid) throws AlipayApiException {
         Response response = new Response();
         Map map = alipayFacade.tradingRefundQuery(orderid);
         if (response.getCode() == 200 && (int) map.get("code") == 200) {

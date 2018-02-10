@@ -17,6 +17,7 @@ import java.util.List;
 /**
  * @Author zhurui
  * @Date 2018/1/31 10:13
+ * 封装APP端支付宝支付的请求入参（支付宝支付）
  */
 @Service
 public class AlipayInputAssemblyUtils {

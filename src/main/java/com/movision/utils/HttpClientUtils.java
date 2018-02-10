@@ -289,6 +289,66 @@ public class HttpClientUtils {
             return rspMap;
         }
     }
+
+    /**
+     * HTTP Post 获取内容
+     *
+     * @param url     请求的url地址 ?之前的地址
+     * @param xml     请求的参数
+     * @param charset 编码格式
+     * @return 页面内容
+     */
+    public static Map<String, String> doPostByXML(String url, String xml, String charset) {
+        if (StringUtils.isBlank(url)) {
+            logger.error("请求地址为空！");
+            return null;
+        }
+        Map<String, String> rspMap = new HashMap<String, String>();
+        CloseableHttpClient httpClient;
+        try {
+            RequestConfig config = RequestConfig
+                    .custom()
+                    .setConnectTimeout(60000)
+                    .setSocketTimeout(15000)
+                    .build();
+
+            httpClient = HttpClientBuilder
+                    .create()
+                    .setDefaultRequestConfig(config)
+                    .build();
+
+            HttpPost httpPost = new HttpPost(url);
+            httpPost.setEntity(new StringEntity(xml, charset));
+            //执行httpClient请求
+            CloseableHttpResponse response = httpClient.execute(httpPost);
+            //解析返回结果response
+            int statusCode = response.getStatusLine().getStatusCode();
+            if (statusCode != 200) {
+                httpPost.abort();
+                rspMap.put("status", String.valueOf(statusCode));
+                rspMap.put("result", "HTTP POST ERROR! ");
+                return rspMap;
+//                throw new RuntimeException("HttpClient,error status code :" + statusCode);
+            }
+            HttpEntity entity = response.getEntity();
+            String result = null;
+            if (entity != null) {
+                result = EntityUtils.toString(entity, "utf-8");
+            }
+            EntityUtils.consume(entity);
+            response.close();
+
+            rspMap.put("status", String.valueOf(statusCode));
+            rspMap.put("result", result);
+
+            return rspMap;
+        } catch (Exception e) {
+            logger.error("HTTP POST 请求异常：" + e);
+            rspMap.put("status", String.valueOf(500));
+            rspMap.put("result", "HTTP POST ERROR! " + e.getMessage());
+            return rspMap;
+        }
+    }
     
     /**
      * 

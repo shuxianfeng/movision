@@ -29,6 +29,7 @@ import java.util.Map;
 /**
  * @Author shuxf
  * @Date 2018/2/1 16:42
+ * 小程序注册/登录相关接口
  */
 @RestController
 @RequestMapping("/app/wechat/")
@@ -63,7 +64,7 @@ public class WxLoginController {
     @ApiOperation(value = "小程序登录接口", notes = "小程序登录接口", response = Response.class)
     @RequestMapping(value = "getWechatLogin", method = RequestMethod.POST)
     public Response getWechatLogin(@ApiParam(value = "code换取的unionid") @RequestParam String unionid,
-                                   @ApiParam(value = "weixin（填对应的openid）") @RequestParam String account,
+                                   @ApiParam(value = "这里和unionid传同一个值") @RequestParam String account,
                                    @ApiParam(value = "注册时服务器返回的token") @RequestParam String appToken){
 
         Response response  = new Response();

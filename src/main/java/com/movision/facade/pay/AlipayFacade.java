@@ -109,7 +109,7 @@ public class AlipayFacade {
 
                 //根据订单id查询订单中的所有子订单列表（商品列表）
                 List<SubOrder> subOrderList = orderService.queryAllSubOrderList(ids[j]);
-
+                //将子订单中的商品ID用,号连接成字符串
                 StringBuffer subjectstr = new StringBuffer();
                 for (int i = 0; i < subOrderList.size(); i++) {
                     subjectstr.append(subOrderList.get(i).getGoodsid() + ",");

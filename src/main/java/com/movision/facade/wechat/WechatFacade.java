@@ -163,6 +163,11 @@ public class WechatFacade {
                     response.setData(unionid);
                 }
             }
+        }else {
+            log.info("appToken和serverToken不相等");
+            response.setCode(203);
+            response.setMessage("appToken和serverToken不相等,请传入正确的token！");
+            response.setData(unionid);
         }
         return response;
     }

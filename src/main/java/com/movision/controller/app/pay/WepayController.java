@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * @Author shuxf
  * @Date 2018/1/31 9:34
- * 微信支付相关接口
+ * 小程序支付相关接口
  */
 @RestController
 @RequestMapping("/app/wepay/")
@@ -27,21 +27,22 @@ public class WepayController {
     private WepayFacade wepayFacade;
 
     /**
-     * 微信支付入参拼装（微信支付请求入参拼装签名和加密）
+     * 微信支付：统一下单接口
      */
-    @ApiOperation(value = "微信支付入参拼装", notes = "微信支付请求入参拼装签名和加密", response = Response.class)
-    @RequestMapping(value = "packageWePayParam", method = RequestMethod.POST)
-    public Response packageWePayParam(@ApiParam(value = "订单id（多个用英文逗号隔开）") @RequestParam String ordersid) throws UnsupportedEncodingException, AlipayApiException {
+    @ApiOperation(value = "微信支付统一下单接口", notes = "微信支付统一下单接口", response = Response.class)
+    @RequestMapping(value = "getWePay", method = RequestMethod.POST)
+    public Response getWePay(@ApiParam(value = "微信openid") @RequestParam String openid,
+                             @ApiParam(value = "订单id（订单表的主键id，非订单编号）") @RequestParam String ordersid) throws UnsupportedEncodingException, AlipayApiException {
         Response response = new Response();
 
-        Map<String, Object> parammap = wepayFacade.packageWePayParam(ordersid);
+        Map<String, Object> parammap = wepayFacade.getWePay(openid, ordersid);
 
         if (response.getCode() == 200 && (int) parammap.get("code") == 200) {
-            response.setMessage("拼参及微信签名生成成功");
+            response.setMessage("统一下单接口请求成功");
             response.setData(parammap);
         } else if ((int) parammap.get("code") == 300) {
             response.setCode(300);
-            response.setMessage("请求的订单号中有订单被取消或订单不存在");
+            response.setMessage("请求的订单被取消或订单不存在");
         } else if (response.getCode() != 200) {
             response.setMessage("拼参及微信签名生成失败");
         }
