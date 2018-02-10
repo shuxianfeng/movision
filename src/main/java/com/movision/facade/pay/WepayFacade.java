@@ -79,7 +79,7 @@ public class WepayFacade {
             Map<String, String> resmap = HttpClientUtils.doPostByXML(url, xml, "UTF-8");
             if (resmap.get("status").equals("200")) {
                 map.put("code", 200);//请求成功
-                map.put("data", "");//返回客户端需要的数据
+                map.put("data", resmap.get("result"));//返回客户端需要的数据
             }
 
         }else {
