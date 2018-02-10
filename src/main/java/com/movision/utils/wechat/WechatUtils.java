@@ -97,7 +97,7 @@ public class WechatUtils {
     public static Map<String, String> getMap(Map<String, String> parammap, String nonce_str, String sign, String ordersid, double totalamount, String notify_url, String openid, String appid, String mchid){
         parammap.put("appid", appid);//appid
         parammap.put("mch_id", mchid);//商户号
-        parammap.put("device_info ", "WEB");//设备号
+//        parammap.put("device_info ", "WEB");//设备号
         parammap.put("nonce_str", nonce_str);//随机字符串
         parammap.put("sign", sign);//支付签名
         parammap.put("sign_type", "MD5");//目前只支持MD5
@@ -121,7 +121,7 @@ public class WechatUtils {
         strb.append("appid=" + appid);
         strb.append("&attach=自定义数据区，可原样返回");
         strb.append("&body=美番小程序-摄影设备租赁");
-        strb.append("&device_info=WEB");
+//        strb.append("&device_info=WEB");
         strb.append("&fee_type=CNY");
         strb.append("&mch_id=" + mchid);
         strb.append("&nonce_str=" + nonce_str);
