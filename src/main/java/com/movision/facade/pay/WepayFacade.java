@@ -44,7 +44,7 @@ public class WepayFacade {
         //根据订单id查询所有主订单列表
         List<Orders> ordersList = orderService.queryOrdersListByIds(ids);
 
-        if (null != ordersList) {//传入的订单存在
+        if (ordersList.size() >0) {//传入的订单存在
 
             String url = propertiesDBLoader.getValue("unifiedorder");//---------------1.微信统一下单接口
 
