@@ -50,6 +50,7 @@
         <foreach collection="array" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>
+        AND status = '0'
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
