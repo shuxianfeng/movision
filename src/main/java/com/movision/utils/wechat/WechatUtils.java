@@ -125,7 +125,7 @@ public class WechatUtils {
         strb.append("&fee_type=CNY");
         strb.append("&mch_id=" + mchid);
         strb.append("&nonce_str=" + nonce_str);
-        strb.append("&notify_url=" + notify_url);//-------------------------------------------待完善
+        strb.append("&notify_url=" + notify_url);
         strb.append("&openid=" + openid);
         strb.append("&out_trade_no" + ordersid);
         strb.append("&sign_type=MD5");
