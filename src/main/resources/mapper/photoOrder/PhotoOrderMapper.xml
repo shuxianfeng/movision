@@ -8,9 +8,14 @@
     <result column="photoid" property="photoid" jdbcType="INTEGER" />
     <result column="isselect" property="isselect" jdbcType="INTEGER" />
     <result column="intime" property="intime" jdbcType="TIMESTAMP" />
+    <result column="paytype" property="paytype" jdbcType="INTEGER" />
+    <result column="paycode" property="paycode" jdbcType="INTEGER" />
+    <result column="paytime" property="paytime" jdbcType="TIMESTAMP" />
+    <result column="paymoney" property="paymoney" jdbcType="DOUBLE" />
+    <result column="ismian" property="ismian" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, userid, money, photoid,intime,isselect
+    id, userid, money, photoid,intime,isselect,paytype,paycode,paytime,paymoney,ismian
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -49,6 +54,22 @@
       <if test="intime != null" >
         intime,
       </if>
+      <if test="paytype != null" >
+        paytype,
+      </if>
+      <if test="paycode != null" >
+        paycode,
+      </if>
+      <if test="paytime != null" >
+        paytime,
+      </if>
+      <if test="paymoney != null" >
+        paymoney,
+      </if>
+      <if test="ismian != null" >
+        ismian,
+      </if>
+
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -69,6 +90,23 @@
       <if test="intime != null" >
         #{intime,jdbcType=TIMESTAMP},
       </if>
+
+      <if test="paytype != null" >
+        #{paytype,jdbcType=INTEGER},
+      </if>
+      <if test="paycode != null" >
+        #{paycode,jdbcType=INTEGER},
+      </if>
+      <if test="paytime != null" >
+        #{paytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymoney != null" >
+        #{paymoney,jdbcType=DOUBLE},
+      </if>
+      <if test="ismian != null" >
+        #{ismian,jdbcType=INTEGER},
+      </if>
+
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.photoOrder.entity.PhotoOrder" >
@@ -102,4 +140,21 @@
   <update id="updateOrder" parameterType="java.util.Map">
     UPDATE yw_photo_order SET isselect=1 WHERE photoid=#{id,jdbcType=INTEGER} AND userid=#{userid,jdbcType=INTEGER}
   </update>
+  <select id="selectOrderCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+    SELECT  COUNT(1) FROM  yw_photo_order WHERE userid=#{userid,jdbcType=INTEGER} AND photoid=#{id,jdbcType=INTEGER}
+  </select>
+  <update id="updateOrderType" parameterType="java.util.Map">
+    UPDATE yw_photo_order
+    SET paytype=#{type,jdbcType=INTEGER},
+    paycode=#{trade_no,jdbcType=INTEGER},
+    paytime=#{intime,jdbcType=TIMESTAMP},
+    paymoney=#{money,jdbcType=DOUBLE}
+    WHERE photoid=#{id,jdbcType=INTEGER} AND  isselect=1
+  </update>
+  <update id="updateMian" parameterType="java.util.Map">
+     UPDATE yw_photo_order SET ismian=1 WHERE userid=#{userid,jdbcType=INTEGER} AND photoid=#{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectOrder" parameterType="java.lang.Integer" resultType="com.movision.mybatis.photoOrder.entity.PhotoOrder">
+    SELECT  * FROM  yw_photo_order WHERE photoid=#{id,jdbcType=INTEGER} AND isselect=1
+  </select>
 </mapper>

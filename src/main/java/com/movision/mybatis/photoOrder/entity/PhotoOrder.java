@@ -14,6 +14,51 @@ public class PhotoOrder {
     private Date intime;
 
     private Integer isselect;
+    private Integer paytype;//1 支付宝  2微信
+    private Integer paycode;
+    private Date paytime;
+    private Double paymoney;
+    private Integer ismian;//1 免单 2不免单
+
+    public Integer getPaytype() {
+        return paytype;
+    }
+
+    public void setPaytype(Integer paytype) {
+        this.paytype = paytype;
+    }
+
+    public Integer getPaycode() {
+        return paycode;
+    }
+
+    public void setPaycode(Integer paycode) {
+        this.paycode = paycode;
+    }
+
+    public Date getPaytime() {
+        return paytime;
+    }
+
+    public void setPaytime(Date paytime) {
+        this.paytime = paytime;
+    }
+
+    public Double getPaymoney() {
+        return paymoney;
+    }
+
+    public void setPaymoney(Double paymoney) {
+        this.paymoney = paymoney;
+    }
+
+    public Integer getIsmian() {
+        return ismian;
+    }
+
+    public void setIsmian(Integer ismian) {
+        this.ismian = ismian;
+    }
 
     public Integer getIsselect() {
         return isselect;

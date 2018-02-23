@@ -11,22 +11,24 @@ import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayTradeFastpayRefundQueryResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.alipay.api.response.AlipayTradeRefundResponse;
+import com.movision.common.constant.PhotoConstant;
+import com.movision.facade.index.FacadePhoto;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.afterservice.entity.Afterservice;
 import com.movision.mybatis.afterservice.service.AfterServcieServcie;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.orders.service.OrderService;
 import com.movision.mybatis.pay.AlipayContent;
+import com.movision.mybatis.photo.service.PhotoService;
+import com.movision.mybatis.photoOrder.entity.PhotoOrder;
+import com.movision.mybatis.photoOrder.service.PhotoOrderService;
 import com.movision.mybatis.record.service.RecordService;
 import com.movision.mybatis.subOrder.entity.SubOrder;
-import com.movision.mybatis.systemLayout.service.SystemLayoutService;
-import com.movision.mybatis.user.service.UserService;
+ import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.AlipayInputAssemblyUtils;
-import com.movision.utils.L;
-import com.movision.utils.UpdateOrderPayBack;
+ import com.movision.utils.UpdateOrderPayBack;
 import org.apache.commons.collections.map.HashedMap;
-import org.apache.commons.collections.map.IdentityMap;
-import org.slf4j.Logger;
+ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,6 +66,11 @@ public class AlipayFacade {
     @Autowired
     private AlipayInputAssemblyUtils alipayInputAssemblyUtils;
 
+    @Autowired
+    private PhotoOrderService photoOrderService;
+
+    @Autowired
+    private FacadePhoto facadePhoto;
 
     /**
      * 拼装支付宝支付请求入参
@@ -247,7 +254,7 @@ public class AlipayFacade {
                     "\"out_trade_no\":\"" + body + "\"," +  //订单支付时传入的商户订单号,不能和 trade_no同时为空。
                     "\"trade_no\":\"" + transactionNumber + "\"," +  //支付宝交易号，和商户订单号不能同时为空
                     "\"refund_amount\":" + totalamount + "," +  //需要退款的金额，该金额不能大于订单金额,单位为元，支持两位小数
-                    "\"refund_reason\":\"\"," +  //退款的原因说明
+                    "\"refund_reas on\":\"\"," +  //退款的原因说明
                     "\"out_request_no\":\"\"," +  //标识一次退款请求，同一笔交易多次退款需要保证唯一，如需部分退款，则此参数必传。
                     "\"operator_id\":\"\"," +  //商户的操作员编号
                     "\"store_id\":\"\"," +  //商户的门店编号
@@ -430,4 +437,116 @@ public class AlipayFacade {
         }
         return map;
     }
+
+
+    /**
+     * 支付宝拼装参数（约拍）
+     * @param ordersid
+     * @return
+     * @throws UnsupportedEncodingException
+     * @throws AlipayApiException
+     */
+    public Map<String, Object> packagePhotoPayParam(String ordersid) throws UnsupportedEncodingException, AlipayApiException {
+        Map<String,Object> map = new HashMap();
+        PhotoOrder photoOrder=photoOrderService.selectOrder(Integer.parseInt(ordersid));
+        if(photoOrder!=null){
+            String alipaygateway = AlipayPropertiesLoader.getValue("alipay_gateway");//支付宝请求网关
+            //String alipublickey = AlipayPropertiesLoader.getValue("alipay_public_key");//支付宝公钥（请求接口入参目前未用到）
+
+            List<AlipayContent> alipayContentList = new ArrayList<>();//alipay返回content实体列表
+
+
+                double totalamount = photoOrder.getMoney();//当前订单的实际支付总金额
+
+                log.info("打印订单号为：" + ordersid + "的实际需要支付的总金额=================================>" + totalamount);
+
+
+                //拼接支付宝入参 参数一：支付的总金额，参数二：订单号，参数三：商品id逗号分隔
+                alipayContentList = alipayInputAssemblyUtils.assembleAlipayIintoGinseng(totalamount, ordersid, null);
+
+
+            map.put("code", 200);
+            map.put("URL", alipaygateway);
+            map.put("METHOD", "POST");
+            map.put("CONTENT", alipayContentList);
+
+        } else if (null == ordersid) {
+
+            map.put("code", 300);
+
+        }
+        return map;
+
+    }
+
+
+    /**
+     * 支付宝支付后，APP前台同步通知接口(约拍)
+     */
+    public int alipaybackPhoto(String resultStatus, String result) throws AlipayApiException, ParseException {
+        int flag = 0;//设置标志位
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+
+        if (resultStatus.equals("9000") || resultStatus.equals("8000") || resultStatus.equals("4000") || resultStatus.equals("6001") ||
+                resultStatus.equals("6002") || resultStatus.equals("6004")) {
+            //解析json
+            JSONObject jSONObject = JSONObject.parseObject(result);
+            String sign = (String) jSONObject.get("sign");//签名（用于验签）
+            String sign_type = (String) jSONObject.get("sign_type");//签名类型
+            String alipay_trade_app_pay_response = jSONObject.getString("biz_content");//签名原始字符串
+            String alipublickey = AlipayPropertiesLoader.getValue("alipay_public_key");//支付宝公钥
+            String charsets = "GBK";
+            log.info(alipay_trade_app_pay_response);
+            //校验签名
+            boolean signVerified = AlipaySignature.rsaCheck(alipay_trade_app_pay_response, sign, alipublickey, charsets, sign_type);
+
+            if (signVerified) {
+                //验签通过
+                //解析原始字符串，持久化存储处理结果
+                JSONObject jObject = JSONObject.parseObject(alipay_trade_app_pay_response);
+                String code = (String) jObject.get("code");//结果码
+                String msg = (String) jObject.get("msg");//处理结果的描述
+                String app_id = (String) jObject.get("app_id");//支付宝分配给开发者的应用Id（未使用）
+                String out_trade_no = (String) jObject.get("out_trade_no");//商户网站唯一订单号
+                String trade_no = (String) jObject.get("trade_no");//该交易在支付宝系统中的交易流水号,最长64位
+                String total_amount = (String) jObject.get("total_amount");//该笔订单的资金总额，单位为RMB-Yuan。取值范围为[0.01,100000000.00]，精确到小数点后两位。
+                String seller_id = (String) jObject.get("seller_id");//收款支付宝账号对应的支付宝唯一用户号。以2088开头的纯16位数字（未使用）
+                String charset = (String) jObject.get("charset");//编码格式（未使用）
+                String timestamp = (String) jObject.get("timestamp");//时间
+
+                Date intime = df.parse(timestamp);//转化后的时间
+
+                if (code.equals("10000")) {
+                    //接口调用成功,持久化存储
+                    log.info("返回码code>>>>>>>>>>>" + code + ",处理结果>>>>>>>>>>>>>>" + msg);
+                    log.info("订单实付总金额>>>>>>>>>>>>>>>>>>>>>>>>" + total_amount);
+                    int tradenoarray = Integer.parseInt(out_trade_no);//获取主订单号
+
+                    //更改订单状态，记录流水号、实际支付金额、交易时间、支付方式
+                    int type = 1;//支付宝类型为1  微信为2
+                    facadePhoto.updateOrderType(tradenoarray, trade_no, intime, type, total_amount);//公共方法（微信支付宝支付公用）
+                } else if (code.equals("20000")) {
+                    log.info("返回码code>>>>>>>>>>>" + code + ",处理结果>>>>>>>>>>>>>>" + msg);
+                } else if (code.equals("20001")) {
+                    log.info("返回码code>>>>>>>>>>>" + code + ",处理结果>>>>>>>>>>>>>>" + msg);
+                } else if (code.equals("40001")) {
+                    log.info("返回码code>>>>>>>>>>>" + code + ",处理结果>>>>>>>>>>>>>>" + msg);
+                } else if (code.equals("40002")) {
+                    log.info("返回码code>>>>>>>>>>>" + code + ",处理结果>>>>>>>>>>>>>>" + msg);
+                } else if (code.equals("40004")) {
+                    log.info("返回码code>>>>>>>>>>>" + code + ",处理结果>>>>>>>>>>>>>>" + msg);
+                } else if (code.equals("40006")) {
+                    log.info("返回码code>>>>>>>>>>>" + code + ",处理结果>>>>>>>>>>>>>>" + msg);
+                }
+                flag = 1;
+            } else {
+                //验签失败
+                flag = -1;
+            }
+        }
+
+        return flag;
+    }
+
 }

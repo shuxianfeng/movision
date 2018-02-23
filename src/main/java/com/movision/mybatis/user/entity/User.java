@@ -75,6 +75,16 @@ public class User implements Serializable {
 
     private Integer source;
 
+    private Integer creditscore;//约拍信用分
+
+    public Integer getCreditscore() {
+        return creditscore;
+    }
+
+    public void setCreditscore(Integer creditscore) {
+        this.creditscore = creditscore;
+    }
+
     public void setSource(Integer source) {
         this.source = source;
     }

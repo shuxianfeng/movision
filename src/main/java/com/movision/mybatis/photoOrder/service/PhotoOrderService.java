@@ -100,4 +100,38 @@ public class PhotoOrderService {
         }
     }
 
+    /**
+     * 查询该用户有没有竞拍过
+     * @param map
+     * @return
+     */
+    public int selectOrderCount(Map map) {
+        try {
+            log.info("查询该用户有没有竞拍过");
+            return photoOrderMapper.selectOrderCount(map);
+        }catch (Exception e){
+            log.error("查询该用户有没有竞拍过失败",e);
+            throw e;
+        }
+    }
+
+    public void updateOrderType(Map<String, Object> parammap) {
+        try {
+            log.info("修改约拍订单");
+            photoOrderMapper.updateOrderType(parammap);
+        }catch (Exception e){
+            log.error("修改约拍订单失败",e);
+            throw e;
+        }
+    }
+
+    public int updateMian(Map map) {
+        try {
+            log.info("修改免单");
+            return photoOrderMapper.updateMian(map);
+        }catch (Exception e){
+            log.error("修改免单失败",e);
+            throw e;
+        }
+    }
 }

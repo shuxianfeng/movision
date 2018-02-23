@@ -26,4 +26,10 @@ public interface PhotoOrderMapper {
     int updateOrder(Map map);
 
     PhotoOrder selectOrder(int id);
+
+    int selectOrderCount(Map map);
+
+    void updateOrderType(Map<String, Object> parammap);
+
+    int updateMian(Map map);
 }

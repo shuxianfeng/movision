@@ -219,6 +219,6 @@ SELECT p.*,u.nickname,u.photo,u.city FROM yw_photo p LEFT JOIN yw_user u ON u.id
     UPDATE yw_photo SET money=#{money,jdbcType=DOUBLE} WHERE id=#{id,jdbcType=INTEGER}
   </update>
   <update id="updatePhotoStatus" parameterType="java.util.Map">
-    UPDATE yw_photo SET status=#{status,jdbcType=INTEGER} WHERE id=#{photoid,jdbcType=INTEGER}
+    UPDATE yw_photo SET status=#{status,jdbcType=INTEGER} WHERE id=#{id,jdbcType=INTEGER}
   </update>
 </mapper>
