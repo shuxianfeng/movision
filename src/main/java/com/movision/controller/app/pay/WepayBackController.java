@@ -34,6 +34,7 @@ public class WepayBackController {
     @ApiOperation(value = "微信支付回调接口", notes = "微信支付回调接口", response = Response.class)
     @RequestMapping(value = "getWePayBack", method = RequestMethod.POST)
     public static Map<String, String> parseXml(HttpServletRequest request) throws Exception {
+        System.out.println("微信调起微信支付统一下单回调接口");
         // 将解析结果存储在HashMap中
         Map<String, String> map = new HashMap<>();
 
