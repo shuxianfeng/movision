@@ -55,8 +55,7 @@ public class WechatUtils {
         }
         sb.append("</xml>");
         xmlResult = sb.toString();
-        return new String(xmlResult.getBytes(), "ISO8859-1");
-//        return xmlResult;
+        return xmlResult;
     }
 
     /**
@@ -101,8 +100,8 @@ public class WechatUtils {
         parammap.put("nonce_str", nonce_str);//随机字符串
         parammap.put("sign", sign);//支付签名
         parammap.put("sign_type", "MD5");//目前只支持MD5
-        parammap.put("body", "xiaochengxu");//美番小程序-摄影设备租赁
-        parammap.put("attach", "zidingyi");//自定义数据区，可原样返回
+        parammap.put("body", "美番小程序-摄影设备租赁");//美番小程序-摄影设备租赁
+        parammap.put("attach", "自定义数据区，可原样返回");//自定义数据区，可原样返回
         parammap.put("out_trade_no", ordersid);//商户订单号
         parammap.put("fee_type", "CNY");//标价币种
         parammap.put("total_fee", (int)(totalamount*100));//订单总金额，单位为分
@@ -119,8 +118,8 @@ public class WechatUtils {
         StringBuffer strb = new StringBuffer();//拼装参数字符串（sign除外）
 
         strb.append("appid=" + appid);
-        strb.append("&attach=zidingyi");//自定义数据区，可原样返回
-        strb.append("&body=xiaochengxu");//美番小程序-摄影设备租赁
+        strb.append("&attach=自定义数据区，可原样返回");//自定义数据区，可原样返回
+        strb.append("&body=美番小程序-摄影设备租赁");//美番小程序-摄影设备租赁
 //        strb.append("&device_info=WEB");
         strb.append("&fee_type=CNY");
         strb.append("&mch_id=" + mchid);
