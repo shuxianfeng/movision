@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +37,7 @@ public class WepayFacade {
      * @param ordersid
      * @return
      */
-    public Map<String, Object> getWePay(String openid, String ordersid) {
+    public Map<String, Object> getWePay(String openid, String ordersid) throws UnsupportedEncodingException {
 
         Map<String, Object> map = new HashMap<>();//用于返回结果的map
 
@@ -66,17 +67,20 @@ public class WepayFacade {
             String appid = propertiesDBLoader.getValue("appid");
             String mchid = propertiesDBLoader.getValue("mchid");
             String notify_url = propertiesDBLoader.getValue("wepay_notify_url");
-            String key = propertiesDBLoader.getValue("secret");
+            String key = propertiesDBLoader.getValue("secret");//一定要注意这里，这个不是小程序的secret，而是商户号平台中自己手动设置的秘钥
             String nonce_str = UUIDGenerator.genUUIDRemoveSep(1)[0];//生成32位UUID随机字符串
+
             String sign = WechatUtils.getSign(nonce_str, ordersid, totalamount, notify_url, openid, appid, mchid, key);
 
             //-------------------------------------------------------------------------4.封装入参xml
-            Map<String, String> parammap = new HashMap<>();
+            Map<String, Object> parammap = new HashMap<>();
             parammap = WechatUtils.getMap(parammap, nonce_str, sign, ordersid, totalamount, notify_url, openid, appid, mchid);//封装入参map对象
             String xml = WechatUtils.map2XmlString(parammap);//转为微信服务器需要的xml格式
 
+            log.info("xml>>>>>>>" + xml);
+
             //-------------------------------------------------------------------------5.请求支付
-            Map<String, String> resmap = HttpClientUtils.doPostByXML(url, xml, "UTF-8");
+            Map<String, String> resmap = HttpClientUtils.doPostByXML(url, xml, "utf-8");
             if (resmap.get("status").equals("200")) {
                 map.put("code", 200);//请求成功
                 map.put("data", resmap.get("result"));//返回客户端需要的数据

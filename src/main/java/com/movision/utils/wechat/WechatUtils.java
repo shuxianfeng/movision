@@ -41,7 +41,7 @@ public class WechatUtils {
         return hexString.toString();
     }
 
-    public static String map2XmlString(Map<String, String> map) {
+    public static String map2XmlString(Map<String, Object> map) throws UnsupportedEncodingException {
         String xmlResult;
 
         StringBuffer sb = new StringBuffer();
@@ -55,8 +55,8 @@ public class WechatUtils {
         }
         sb.append("</xml>");
         xmlResult = sb.toString();
-
-        return xmlResult;
+        return new String(xmlResult.getBytes(), "ISO8859-1");
+//        return xmlResult;
     }
 
     /**
@@ -94,21 +94,21 @@ public class WechatUtils {
      * @param mchid
      * @return
      */
-    public static Map<String, String> getMap(Map<String, String> parammap, String nonce_str, String sign, String ordersid, double totalamount, String notify_url, String openid, String appid, String mchid){
+    public static Map<String, Object> getMap(Map<String, Object> parammap, String nonce_str, String sign, String ordersid, double totalamount, String notify_url, String openid, String appid, String mchid){
         parammap.put("appid", appid);//appid
         parammap.put("mch_id", mchid);//商户号
 //        parammap.put("device_info ", "WEB");//设备号
         parammap.put("nonce_str", nonce_str);//随机字符串
         parammap.put("sign", sign);//支付签名
         parammap.put("sign_type", "MD5");//目前只支持MD5
-        parammap.put("body", "美番小程序-摄影设备租赁");//商品描述
-        parammap.put("attach", "自定义数据区，可原样返回");
+        parammap.put("body", "xiaochengxu");//美番小程序-摄影设备租赁
+        parammap.put("attach", "zidingyi");//自定义数据区，可原样返回
         parammap.put("out_trade_no", ordersid);//商户订单号
         parammap.put("fee_type", "CNY");//标价币种
-        parammap.put("total_fee", (totalamount+""));//订单总金额，单位为分
+        parammap.put("total_fee", (int)(totalamount*100));//订单总金额，单位为分
         parammap.put("spbill_create_ip", "192.168.0.3");//APP和网页支付提交用户端ip（具体看客户端能否获取）
-        parammap.put("time_start", "20180210095030");//交易起始时间
-        parammap.put("time_expire", "20180210181930");//交易结束时间
+//        parammap.put("time_start", "20180210095030");//交易起始时间
+//        parammap.put("time_expire", "20180210181930");//交易结束时间
         parammap.put("notify_url", notify_url);//异步接收微信支付结果通知的回调地址，通知url必须为外网可访问的url，不能携带参数。
         parammap.put("trade_type", "JSAPI");
         parammap.put("openid", openid);//用户标识
@@ -119,20 +119,20 @@ public class WechatUtils {
         StringBuffer strb = new StringBuffer();//拼装参数字符串（sign除外）
 
         strb.append("appid=" + appid);
-        strb.append("&attach=自定义数据区，可原样返回");
-        strb.append("&body=美番小程序-摄影设备租赁");
+        strb.append("&attach=zidingyi");//自定义数据区，可原样返回
+        strb.append("&body=xiaochengxu");//美番小程序-摄影设备租赁
 //        strb.append("&device_info=WEB");
         strb.append("&fee_type=CNY");
         strb.append("&mch_id=" + mchid);
         strb.append("&nonce_str=" + nonce_str);
         strb.append("&notify_url=" + notify_url);
         strb.append("&openid=" + openid);
-        strb.append("&out_trade_no" + ordersid);
+        strb.append("&out_trade_no=" + ordersid);
         strb.append("&sign_type=MD5");
         strb.append("&spbill_create_ip=192.168.0.3");//---------------------------------------待完善
-        strb.append("&time_expire=20180210181930");//-----------------------------------------待完善
-        strb.append("&time_start=20180210095030");//------------------------------------------待完善
-        strb.append("&total_fee=" + (totalamount+""));
+//        strb.append("&time_expire=20180210181930");
+//        strb.append("&time_start=20180210095030");
+        strb.append("&total_fee=" + (int)(totalamount*100));
         strb.append("&trade_type=JSAPI");
         strb.append("&key=" + key);//商户平台设置的密钥secret
 
