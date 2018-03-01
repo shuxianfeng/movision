@@ -125,6 +125,7 @@ public class WepayFacade {
         String mchid = propertiesDBLoader.getValue("mchid");//商户号
         String transaction_id = transactionid;//微信订单号
         String out_trade_no = ordersid;//商户订单号，即美番平台中的订单号主键
+        String key = propertiesDBLoader.getValue("secret");//一定要注意这里，这个不是小程序的secret，而是商户号平台中自己手动设置的秘钥
         String nonce_str = UUIDGenerator.genUUIDRemoveSep(1)[0];//生成32位UUID随机字符串
 
         //拼接签名前字符串
@@ -136,6 +137,7 @@ public class WepayFacade {
             strb.append("&out_trade_no=" + out_trade_no);
         if (StringUtil.isNotEmpty(transactionid))
             strb.append("&transaction_id=" + transaction_id);
+        strb.append("&key=" + key);
 
 
         String sign = WechatUtils.getSign(strb.toString());
@@ -160,6 +162,8 @@ public class WepayFacade {
         if (resmap.get("status").equals("200")) {
             map.put("code", 200);//请求成功
             map.put("data", resmap.get("result"));//返回客户端需要的数据
+
+            //---------------------------------------------------------------------6.后续补充查询之后的，信息刷新和业务接口
         }
 
         return map;
