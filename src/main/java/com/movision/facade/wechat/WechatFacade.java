@@ -72,7 +72,7 @@ public class WechatFacade {
 
         //调用微信官方接口：code换openid
         String appid = propertiesDBLoader.getValue("appid");//小程序的appid（参数配置表）
-        String secret = propertiesDBLoader.getValue("secret");//小程序的appsecret（参数配置表）
+        String secret = propertiesDBLoader.getValue("appsecret");//小程序的appsecret（参数配置表）
         String grant_type = propertiesDBLoader.getValue("grant_type");//grant_type填写为 authorization_code（参数配置表）
         String requrl = "https://api.weixin.qq.com/sns/jscode2session";
         Map<String, String> params = new HashMap<>();

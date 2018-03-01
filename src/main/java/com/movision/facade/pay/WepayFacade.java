@@ -1,5 +1,6 @@
 package com.movision.facade.pay;
 
+import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.orders.service.OrderService;
 import com.movision.utils.HttpClientUtils;
@@ -70,7 +71,24 @@ public class WepayFacade {
             String key = propertiesDBLoader.getValue("secret");//一定要注意这里，这个不是小程序的secret，而是商户号平台中自己手动设置的秘钥
             String nonce_str = UUIDGenerator.genUUIDRemoveSep(1)[0];//生成32位UUID随机字符串
 
-            String sign = WechatUtils.getSign(nonce_str, ordersid, totalamount, notify_url, openid, appid, mchid, key);
+            //拼接签名前字符串
+            StringBuffer strb = new StringBuffer();
+            strb.append("appid=" + appid);
+            strb.append("&attach=自定义数据区，可原样返回");//自定义数据区，可原样返回
+            strb.append("&body=美番小程序-摄影设备租赁");//美番小程序-摄影设备租赁
+            strb.append("&fee_type=CNY");
+            strb.append("&mch_id=" + mchid);
+            strb.append("&nonce_str=" + nonce_str);
+            strb.append("&notify_url=" + notify_url);
+            strb.append("&openid=" + openid);
+            strb.append("&out_trade_no=" + ordersid);
+            strb.append("&sign_type=MD5");
+            strb.append("&spbill_create_ip=192.168.0.3");//---------------------------------------待完善
+            strb.append("&total_fee=" + (int)(totalamount*100));
+            strb.append("&trade_type=JSAPI");
+            strb.append("&key=" + key);//商户平台设置的密钥secret
+
+            String sign = WechatUtils.getSign(strb.toString());
 
             //-------------------------------------------------------------------------4.封装入参xml
             Map<String, Object> parammap = new HashMap<>();
@@ -92,5 +110,58 @@ public class WepayFacade {
         return map;
     }
 
+    /**
+     * 订单查询接口（微信支付）
+     * @param ordersid
+     * @return
+     */
+    public Map<String, Object> queryOrderInfo(String transactionid, String ordersid) throws UnsupportedEncodingException {
 
+        Map<String, Object> map = new HashMap<>();//用于返回结果的map
+
+        String url = propertiesDBLoader.getValue("orderquery");//---------------1.微信查询订单接口
+
+        String appid = propertiesDBLoader.getValue("appid");//小程序ID
+        String mchid = propertiesDBLoader.getValue("mchid");//商户号
+        String transaction_id = transactionid;//微信订单号
+        String out_trade_no = ordersid;//商户订单号，即美番平台中的订单号主键
+        String nonce_str = UUIDGenerator.genUUIDRemoveSep(1)[0];//生成32位UUID随机字符串
+
+        //拼接签名前字符串
+        StringBuffer strb = new StringBuffer();
+        strb.append("appid=" + appid);
+        strb.append("&mch_id=" + mchid);
+        strb.append("&nonce_str=" + nonce_str);
+        if (StringUtil.isNotEmpty(ordersid))
+            strb.append("&out_trade_no=" + out_trade_no);
+        if (StringUtil.isNotEmpty(transactionid))
+            strb.append("&transaction_id=" + transaction_id);
+
+
+        String sign = WechatUtils.getSign(strb.toString());
+
+        //-------------------------------------------------------------------------4.封装入参xml
+        Map<String, Object> parammap = new HashMap<>();
+        parammap.put("appid", appid);
+        parammap.put("mch_id", mchid);
+        parammap.put("nonce_str", nonce_str);
+        if (StringUtil.isNotEmpty(ordersid))
+            parammap.put("out_trade_no", out_trade_no);
+        parammap.put("sign", sign);//支付签名
+        if (StringUtil.isNotEmpty(transactionid))
+            parammap.put("transaction_id", transaction_id);
+
+        String xml = WechatUtils.map2XmlString(parammap);//转为微信服务器需要的xml格式
+
+        log.info("xml>>>>>>>" + xml);
+
+        //-------------------------------------------------------------------------5.请求支付
+        Map<String, String> resmap = HttpClientUtils.doPostByXML(url, xml, "utf-8");
+        if (resmap.get("status").equals("200")) {
+            map.put("code", 200);//请求成功
+            map.put("data", resmap.get("result"));//返回客户端需要的数据
+        }
+
+        return map;
+    }
 }

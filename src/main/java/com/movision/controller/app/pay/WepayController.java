@@ -48,4 +48,27 @@ public class WepayController {
         }
         return response;
     }
+
+    /**
+     * 微信支付：查询订单接口
+     */
+    @ApiOperation(value = "微信支付查询订单接口", notes = "微信支付查询订单接口", response = Response.class)
+    @RequestMapping(value = "queryOrderInfo", method = RequestMethod.POST)
+    public Response queryOrderInfo(@ApiParam(value = "微信订单号（微信的订单号，优先使用 ）") @RequestParam(required = false) String transactionid,
+                                   @ApiParam(value = "订单id（订单表的主键id，非订单编号）") @RequestParam(required = false) String ordersid) throws UnsupportedEncodingException {
+        Response response = new Response();
+
+        Map<String, Object> parammap = wepayFacade.queryOrderInfo(transactionid, ordersid);
+
+        if (response.getCode() == 200 && (int) parammap.get("code") == 200) {
+            response.setMessage("订单查询成功");
+            response.setData(parammap);
+        } else if ((int) parammap.get("code") == 300) {
+            response.setCode(300);
+            response.setMessage("请求的订单被取消或订单不存在");
+        } else if (response.getCode() != 200) {
+            response.setMessage("订单查询失败");
+        }
+        return response;
+    }
 }

@@ -114,28 +114,9 @@ public class WechatUtils {
         return parammap;
     }
 
-    public static String getSign(String nonce_str, String ordersid, double totalamount, String notify_url, String openid, String appid, String mchid, String key){
-        StringBuffer strb = new StringBuffer();//拼装参数字符串（sign除外）
+    public static String getSign(String str){
 
-        strb.append("appid=" + appid);
-        strb.append("&attach=自定义数据区，可原样返回");//自定义数据区，可原样返回
-        strb.append("&body=美番小程序-摄影设备租赁");//美番小程序-摄影设备租赁
-//        strb.append("&device_info=WEB");
-        strb.append("&fee_type=CNY");
-        strb.append("&mch_id=" + mchid);
-        strb.append("&nonce_str=" + nonce_str);
-        strb.append("&notify_url=" + notify_url);
-        strb.append("&openid=" + openid);
-        strb.append("&out_trade_no=" + ordersid);
-        strb.append("&sign_type=MD5");
-        strb.append("&spbill_create_ip=192.168.0.3");//---------------------------------------待完善
-//        strb.append("&time_expire=20180210181930");
-//        strb.append("&time_start=20180210095030");
-        strb.append("&total_fee=" + (int)(totalamount*100));
-        strb.append("&trade_type=JSAPI");
-        strb.append("&key=" + key);//商户平台设置的密钥secret
-
-        String sign = MyUtils.getMD5(strb.toString()).toUpperCase();
+        String sign = MyUtils.getMD5(str).toUpperCase();
 
         return sign;
     }
