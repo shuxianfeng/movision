@@ -1,8 +1,14 @@
 package com.movision.utils;
 
 import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayClient;
+import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.internal.util.AlipaySignature;
+import com.alipay.api.request.AlipayTradeAppPayRequest;
+import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.movision.mybatis.pay.AlipayContent;
+import com.movision.mybatis.photoOrder.entity.PhotoOrder;
 import com.movision.utils.propertiesLoader.AlipayPropertiesLoader;
 import com.movision.utils.propertiesLoader.PropertiesDBLoader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,32 +89,33 @@ public class AlipayInputAssemblyUtils {
         contentstr.append(format);
         contentstr.append("&charset=");
         contentstr.append(charset);
-        contentstr.append("&sign_type");
-        contentstr.append(sign_type);
         contentstr.append("&biz_content=");
         contentstr.append(biz_content);
         contentstr.append("&timestamp=");
         contentstr.append(timestamp);
         contentstr.append("&version=");
         contentstr.append(version);
+        contentstr.append("&sign_type=");
+        contentstr.append(sign_type);
         String content = contentstr.toString();
-
+        System.out.print(content);
         //根据签名规则，请求签名（手动签名需要的参数：app_id, biz_content, charset, method, sign_type, timestamp, version, appprivatekey, charset, sign_type）
-        String sign = AlipaySignature.rsaSign(content, appprivatekey, charset, sign_type);
-
-        //拼装返回数据结构
+        String sign = AlipaySignature.rsaSign(content, appprivatekey, charset,sign_type);
+         //拼装返回数据结构
         AlipayContent alipayContent = new AlipayContent();
         alipayContent.setApp_id(app_id);
         alipayContent.setMethod(method);
         alipayContent.setFormat(format);
         alipayContent.setCharset(charset);
-        alipayContent.setSign_type(sign_type);
         alipayContent.setSign(sign);
         alipayContent.setTimestamp(timestamp);
         alipayContent.setVersion(version);
         alipayContent.setNotify_url(notify_url);
         alipayContent.setBiz_content(biz_content);
+        alipayContent.setSign_type(sign_type);
         alipayContentList.add(alipayContent);
         return alipayContentList;
     }
-}
+
+
+  }

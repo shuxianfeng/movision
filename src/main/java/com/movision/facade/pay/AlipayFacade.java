@@ -5,12 +5,16 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
+import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.request.AlipayTradeFastpayRefundQueryRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayTradeFastpayRefundQueryResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.alipay.api.response.AlipayTradeRefundResponse;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.movision.common.constant.PhotoConstant;
 import com.movision.facade.index.FacadePhoto;
 import com.movision.fsearch.utils.StringUtil;
@@ -34,6 +38,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.movision.utils.propertiesLoader.AlipayPropertiesLoader;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -478,30 +483,30 @@ public class AlipayFacade {
         return map;
 
     }
-
-
-    /**
+      /**
      * 支付宝支付后，APP前台同步通知接口(约拍)
      */
     public int alipaybackPhoto(String resultStatus, String result) throws AlipayApiException, ParseException {
         int flag = 0;//设置标志位
-
+//        Map<String, String> params = new HashMap<String, String>();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-
-        if (resultStatus.equals("9000") || resultStatus.equals("8000") || resultStatus.equals("4000") || resultStatus.equals("6001") ||
+         if (resultStatus.equals("9000") || resultStatus.equals("8000") || resultStatus.equals("4000") || resultStatus.equals("6001") ||
                 resultStatus.equals("6002") || resultStatus.equals("6004")) {
             //解析json
             JSONObject jSONObject = JSONObject.parseObject(result);
             String sign = (String) jSONObject.get("sign");//签名（用于验签）
             String sign_type = (String) jSONObject.get("sign_type");//签名类型
-            String alipay_trade_app_pay_response = jSONObject.getString("biz_content");//签名原始字符串
+            String alipay_trade_app_pay_response = jSONObject.getString("alipay_trade_app_pay_response");//签名原始字符串
             String alipublickey = AlipayPropertiesLoader.getValue("alipay_public_key");//支付宝公钥
             String charsets = "GBK";
             log.info(alipay_trade_app_pay_response);
-            //校验签名
-            boolean signVerified = AlipaySignature.rsaCheck(alipay_trade_app_pay_response, sign, alipublickey, charsets, sign_type);
+//             params.put("alipay_trade_app_pay_response",alipay_trade_app_pay_response);
+//            params.put("sign",sign);
 
-            if (signVerified) {
+             //校验签名
+            boolean signVerified = AlipaySignature.rsaCheck(alipay_trade_app_pay_response, sign, alipublickey, charsets, sign_type);
+            //boolean signVerified =AlipaySignature.rsaCheckV2(params, alipublickey,charsets);
+               if (signVerified) {
                 //验签通过
                 //解析原始字符串，持久化存储处理结果
                 JSONObject jObject = JSONObject.parseObject(alipay_trade_app_pay_response);
@@ -548,5 +553,7 @@ public class AlipayFacade {
 
         return flag;
     }
+
+
 
 }
