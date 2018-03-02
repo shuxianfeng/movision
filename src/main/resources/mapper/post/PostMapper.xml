@@ -2503,6 +2503,11 @@
     <update id="updateCountView" parameterType="java.lang.Integer">
         UPDATE  yw_post SET  countview=countview+1 WHERE id=#{postid,jdbcType=INTEGER} AND isdel=0
     </update>
+
+    <update id="updateRobotCountView" parameterType="java.lang.Integer">
+        UPDATE  yw_post SET  countview=countview+#{count,jdbcType=INTEGER} WHERE id=#{postid,jdbcType=INTEGER} AND isdel=0
+    </update>
+
     <select id="postReAll" resultType="com.movision.mybatis.post.entity.PostReturnAll" parameterType="java.util.Map">
         SELECT u.id,u.nickname,u.photo,u.isdv,c.name AS cirlename ,p.countview
         <if test="userid!=null">

@@ -332,6 +332,8 @@ public interface PostMapper {
 
     int updateCountView(int postid);
 
+    int updateRobotCountView(Map map);
+
     List<Post> queryAllPageHelper();
 
     PostReturnAll postReAll(Map map);

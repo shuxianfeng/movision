@@ -1991,6 +1991,17 @@ public class PostService {
         }
     }
 
+    public int updateRobotCountView(Map map) {
+        try {
+            log.info("修改帖子浏览机器人");
+            return postMapper.updateRobotCountView(map);
+        } catch (Exception e) {
+            log.error("修改帖子浏览机器人失败", e);
+            throw e;
+        }
+    }
+
+
     public Datagrid queryAllPageHelper(int pageNo, int pageSize){
 
         PageHelper.startPage(pageNo, pageSize);

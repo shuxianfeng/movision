@@ -991,6 +991,11 @@ public class RobotFacade {
                 userRefreshRecord.setLabelid(-1);
                 userRefreshRecordService.insert(userRefreshRecord);
             }
+            //修改帖子浏览量
+        Map map = new HashMap();
+        map.put("count",num);
+        map.put("postid",postid);
+            postService.updateRobotCountView(map);
 
     }
 
