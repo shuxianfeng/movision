@@ -51,6 +51,15 @@ public class PostService {
         }
     }
 
+    public void switchSensitive(int isdel){
+        try {
+            log.info("屏蔽敏感帖");
+            postMapper.switchSensitive(isdel);
+        }catch (Exception e){
+            log.error("屏蔽敏感帖失败");
+            throw e;
+        }
+    }
 
     public List<PostVo> queryTodayEssence() {
         return postMapper.queryTodayEssence();

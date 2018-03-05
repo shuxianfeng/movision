@@ -1075,6 +1075,15 @@
         WHERE id=#{postid,jdbcType=INTEGER}
     </update>
 
+    <update id="switchSensitive" parameterType="java.lang.Integer">
+        UPDATE yw_post
+        SET isdel = #{isdel,jdbcType=INTEGER}
+        WHERE id IN (
+            SELECT DISTINCT postid FROM yw_post_label_relation WHERE labelid = (
+                SELECT id FROM yw_post_label WHERE name='私房'
+            )
+        )
+    </update>
 
     <!-- 圈子管理员/圈主 -->
     <select id="findAllqueryPostByManageByList" parameterType="java.util.List"

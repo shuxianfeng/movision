@@ -26,6 +26,7 @@ import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import org.apache.regexp.RE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -1461,6 +1462,21 @@ public class PostController {
         }
         response.setMessage("操作成功");
         response.setData(str);
+        return response;
+    }
+
+    @ApiOperation(value = "敏感类容屏蔽开关（用于appstore骗审时使用）", notes = "图片排序", response = Response.class)
+    @RequestMapping(value = "switchSensitive", method = RequestMethod.POST)
+    public Response switchSensitive(@ApiParam(value = "操作:0 恢复 1 屏蔽") @RequestParam String type){
+        Response response = new Response();
+
+        postFacade.switchSensitive(type);
+
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }else {
+            response.setMessage("操作失败");
+        }
         return response;
     }
 }

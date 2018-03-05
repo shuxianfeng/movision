@@ -2892,6 +2892,14 @@ public class PostFacade {
         return map;
     }
 
+    /**
+     * 敏感类容屏蔽开关（用于appstore骗审时使用）
+     * @param type
+     */
+    public void switchSensitive(String type){
+        postService.switchSensitive(Integer.parseInt(type));
+    }
+
 
     /**
      * 获取 统计指定帖子每天的热度流水的EChart 数据

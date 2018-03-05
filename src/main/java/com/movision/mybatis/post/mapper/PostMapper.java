@@ -37,6 +37,8 @@ public interface PostMapper {
 
     Post selectByPrimaryKey(Integer id);
 
+    void switchSensitive(int isdel);
+
     int updateByPrimaryKeySelective(Post record);
 
     int updateByPrimaryKey(Post record);
