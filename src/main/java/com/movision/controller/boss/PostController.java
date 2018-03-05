@@ -1465,7 +1465,7 @@ public class PostController {
         return response;
     }
 
-    @ApiOperation(value = "敏感类容屏蔽开关（用于appstore骗审时使用）", notes = "图片排序", response = Response.class)
+    @ApiOperation(value = "敏感类容屏蔽开关（用于appstore骗审时使用）", notes = "敏感类容屏蔽开关（用于appstore骗审时使用）", response = Response.class)
     @RequestMapping(value = "switchSensitive", method = RequestMethod.POST)
     public Response switchSensitive(@ApiParam(value = "操作:0 恢复 1 屏蔽") @RequestParam String type){
         Response response = new Response();
