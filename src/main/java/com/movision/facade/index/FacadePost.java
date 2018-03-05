@@ -1146,7 +1146,7 @@ public class FacadePost {
                 //2 再保存帖子中分享的商品列表(如果商品id字段不为空)
                 insertPostShareGoods(proids, flag);
                 //3 标签业务逻辑处理
-                if (StringUtils.isNotBlank(labellist)) {
+                if (StringUtils.isNotEmpty(labellist)) {
                     addLabelProcess(labellist, flag);
                 }
                 //4 积分处理
@@ -1269,7 +1269,7 @@ public class FacadePost {
                 //2 再保存帖子中分享的商品列表(如果商品id字段不为空)
                 insertPostShareGoods(proids, flag);
                 //3 标签业务逻辑处理
-                if (StringUtils.isNotEmpty(labellist)) {
+                if (StringUtils.isNotBlank(labellist)) {
                     addLabelProcess(labellist, flag);
                 }
                 //4 积分处理
