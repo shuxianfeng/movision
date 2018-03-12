@@ -12,16 +12,25 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.net.ssl.SSLContext;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.SocketTimeoutException;
+import java.security.*;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +47,7 @@ public class HttpClientUtils {
         CloseableHttpClient httpclient = HttpClients.createDefault();
 
         RequestConfig requestConfig = RequestConfig.DEFAULT;
-        
+
         try {
             URIBuilder uriBuilder = new URIBuilder(url);
             List<String> keyList = new ArrayList<String>(params.keySet());
@@ -104,7 +113,7 @@ public class HttpClientUtils {
                                 .getPropertyValue("connectionRequestTimeout")))
                 .build();
 */
-        RequestConfig requestConfig =RequestConfig.DEFAULT;
+        RequestConfig requestConfig = RequestConfig.DEFAULT;
 
         try {
             URIBuilder uriBuilder = new URIBuilder(url);
@@ -186,7 +195,7 @@ public class HttpClientUtils {
                 url += "?" + EntityUtils.toString(new UrlEncodedFormEntity(pairs, charset));
             }
             HttpGet httpGet = new HttpGet(url);
-            logger.info("【GET请求的URL】="+url);
+            logger.info("【GET请求的URL】=" + url);
             CloseableHttpResponse response = httpClient.execute(httpGet);
             int statusCode = response.getStatusLine().getStatusCode();
             if (statusCode != 200) {
@@ -217,7 +226,7 @@ public class HttpClientUtils {
         }
     }
 
-    
+
     /**
      * HTTP Post 获取内容
      *
@@ -349,9 +358,92 @@ public class HttpClientUtils {
             return rspMap;
         }
     }
-    
+
     /**
-     * 
+     * HTTP Post 获取内容（http post基础上集成微信支付证书验证功能）
+     *
+     * @param url     请求的url地址 ?之前的地址
+     * @param xml     请求的参数
+     * @param charset 编码格式
+     * @return 页面内容
+     */
+    public static Map<String, String> doPostByXMLVeryCert(String url, String xml, String charset, String sslpath, String mchid) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
+        if (StringUtils.isBlank(url)) {
+            logger.error("请求地址为空！");
+            return null;
+        }
+        KeyStore keyStore = KeyStore.getInstance("PKCS12");
+        FileInputStream instream = new FileInputStream(new File(sslpath));
+        try {
+            //指定PKCS12的密码(商户ID)
+            keyStore.load(instream, mchid.toCharArray());
+        } finally {
+            instream.close();
+        }
+
+        // Trust own CA and all self-signed certs
+        SSLContext sslcontext = SSLContexts.custom()
+                .loadKeyMaterial(keyStore, "10016225".toCharArray())
+                .build();
+        // Allow TLSv1 protocol only
+        SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
+                sslcontext,
+                new String[]{"TLSv1"},
+                null,
+                SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
+
+        Map<String, String> rspMap = new HashMap<String, String>();
+        CloseableHttpClient httpClient;
+        try {
+            RequestConfig config = RequestConfig
+                    .custom()
+                    .setConnectTimeout(60000)
+                    .setSocketTimeout(15000)
+                    .build();
+
+//            httpClient = HttpClientBuilder
+//                    .create()
+//                    .setDefaultRequestConfig(config)
+//                    .build();
+            httpClient = HttpClients.custom()
+                    .setDefaultRequestConfig(config)
+                    .setSSLSocketFactory(sslsf)
+                    .build();
+
+            HttpPost httpPost = new HttpPost(url);
+            httpPost.setEntity(new StringEntity(xml, charset));
+            //执行httpClient请求
+            CloseableHttpResponse response = httpClient.execute(httpPost);
+            //解析返回结果response
+            int statusCode = response.getStatusLine().getStatusCode();
+            if (statusCode != 200) {
+                httpPost.abort();
+                rspMap.put("status", String.valueOf(statusCode));
+                rspMap.put("result", "HTTP POST ERROR! ");
+                return rspMap;
+//                throw new RuntimeException("HttpClient,error status code :" + statusCode);
+            }
+            HttpEntity entity = response.getEntity();
+            String result = null;
+            if (entity != null) {
+                result = EntityUtils.toString(entity, "utf-8");
+            }
+            EntityUtils.consume(entity);
+            response.close();
+
+            rspMap.put("status", String.valueOf(statusCode));
+            rspMap.put("result", result);
+
+            return rspMap;
+        } catch (Exception e) {
+            logger.error("HTTP POST 请求异常：" + e);
+            rspMap.put("status", String.valueOf(500));
+            rspMap.put("result", "HTTP POST ERROR! " + e.getMessage());
+            return rspMap;
+        }
+    }
+
+    /**
      * @param url
      * @param params
      * @param charset
@@ -378,12 +470,12 @@ public class HttpClientUtils {
             //实例化httpPost
             HttpPost httpPost = new HttpPost(url);
             //处理传参的格式，现在以XML形式传输
-    		String requestXml = XmlUtil.getRequestXml(params);//生成Xml格式的字符串
-    		System.out.println("xmlStr>>>"+requestXml);
-    		//请求实体
-            HttpEntity requestEntity = new StringEntity(requestXml, charset);  
-            httpPost.setEntity(requestEntity);  
-            
+            String requestXml = XmlUtil.getRequestXml(params);//生成Xml格式的字符串
+            System.out.println("xmlStr>>>" + requestXml);
+            //请求实体
+            HttpEntity requestEntity = new StringEntity(requestXml, charset);
+            httpPost.setEntity(requestEntity);
+
             //执行
             CloseableHttpResponse response = httpClient.execute(httpPost);
             int statusCode = response.getStatusLine().getStatusCode();
@@ -413,7 +505,7 @@ public class HttpClientUtils {
             return rspMap;
         }
     }
-    
+
     /**
      * 发送https请求
      * @param requestUrl 请求地址
@@ -469,5 +561,5 @@ public class HttpClientUtils {
         return null;
     }
     */
-    
+
 }

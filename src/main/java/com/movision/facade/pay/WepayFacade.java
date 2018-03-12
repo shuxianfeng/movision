@@ -12,7 +12,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +40,7 @@ public class WepayFacade {
 
     /**
      * 用户拼装微信支付的请求入参（仅适用于小程序的租赁业务）
+     *
      * @param openid
      * @param ordersid
      * @return
@@ -46,7 +53,7 @@ public class WepayFacade {
         //根据订单id查询所有主订单列表
         List<Orders> ordersList = orderService.queryOrdersListByIds(ids);
 
-        if (ordersList.size() >0) {//传入的订单存在
+        if (ordersList.size() > 0) {//传入的订单存在
 
             String url = propertiesDBLoader.getValue("unifiedorder");//---------------1.微信统一下单接口
 
@@ -84,7 +91,7 @@ public class WepayFacade {
             strb.append("&out_trade_no=" + ordersid);
             strb.append("&sign_type=MD5");
             strb.append("&spbill_create_ip=192.168.0.3");//---------------------------------------待完善
-            strb.append("&total_fee=" + (int)(totalamount*100));
+            strb.append("&total_fee=" + (int) (totalamount * 100));
             strb.append("&trade_type=JSAPI");
             strb.append("&key=" + key);//商户平台设置的密钥secret
 
@@ -104,7 +111,7 @@ public class WepayFacade {
                 map.put("data", resmap.get("result"));//返回客户端需要的数据
             }
 
-        }else {
+        } else {
             map.put("code", 300);//订单号不存在或已取消
         }
         return map;
@@ -112,6 +119,7 @@ public class WepayFacade {
 
     /**
      * 订单查询接口（微信支付）
+     *
      * @param ordersid
      * @return
      */
@@ -171,11 +179,12 @@ public class WepayFacade {
 
     /**
      * 申请退款接口
+     *
      * @param ordersid
      * @param amount
      * @return
      */
-    public Map<String, Object> getRefund(String ordersid, String transactionid, String amount) throws UnsupportedEncodingException {
+    public Map<String, Object> getRefund(String ordersid, String transactionid, String amount) throws IOException, CertificateException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
 
         Map<String, Object> map = new HashMap<>();//用于返回结果的map
 
@@ -245,17 +254,18 @@ public class WepayFacade {
             log.info("xml>>>>>>>" + xml);
 
             //-------------------------------------------------------------------------5.请求退款
-            Map<String, String> resmap = HttpClientUtils.doPostByXML(url, xml, "utf-8");
+            String sslpath = propertiesDBLoader.getValue("sslpath");//获取微信支付证书的存储路径
+            Map<String, String> resmap = HttpClientUtils.doPostByXMLVeryCert(url, xml, "utf-8", sslpath, mchid);
             if (resmap.get("status").equals("200")) {
                 map.put("code", 200);//请求成功
                 map.put("data", resmap.get("result"));//返回客户端需要的数据
 
                 //---------------------------------------------------------------------6.后续补充退款之后的，信息刷新和业务接口
-            }else if (resmap.get("status").equals("500")) {
+            } else if (resmap.get("status").equals("500")) {
                 map.put("code", 500);//请求成功
                 map.put("data", resmap.get("result"));//返回客户端需要的数据
             }
-        }else {
+        } else {
             map.put("code", 300);//请求成功
         }
 
