@@ -224,13 +224,13 @@ public class WepayFacade {
             strb.append("appid=" + appid);
             strb.append("&mch_id=" + mchid);
             strb.append("&nonce_str=" + nonce_str);
+            strb.append("&out_refund_no=" + out_refund_no);
             if (StringUtil.isNotEmpty(ordersid))
                 strb.append("&out_trade_no=" + out_trade_no);
+            strb.append("&refund_fee=" + refund_fee);
+            strb.append("&total_fee=" + total_fee);
             if (StringUtil.isNotEmpty(transactionid))
                 strb.append("&transaction_id=" + transaction_id);
-            strb.append("&out_refund_no=" + out_refund_no);
-            strb.append("&total_fee=" + total_fee);
-            strb.append("&refund_fee=" + refund_fee);
             strb.append("&key=" + key);
 
             String sign = WechatUtils.getSign(strb.toString());
@@ -240,14 +240,14 @@ public class WepayFacade {
             parammap.put("appid", appid);
             parammap.put("mch_id", mchid);
             parammap.put("nonce_str", nonce_str);
+            parammap.put("out_refund_no", out_refund_no);
             if (StringUtil.isNotEmpty(ordersid))
                 parammap.put("out_trade_no", out_trade_no);
+            parammap.put("refund_fee", refund_fee);
             parammap.put("sign", sign);//支付签名
+            parammap.put("total_fee", total_fee);
             if (StringUtil.isNotEmpty(transactionid))
                 parammap.put("transaction_id", transaction_id);
-            parammap.put("out_refund_no", out_refund_no);
-            parammap.put("total_fee", total_fee);
-            parammap.put("refund_fee", refund_fee);
 
             String xml = WechatUtils.map2XmlString(parammap);//转为微信服务器需要的xml格式
 
