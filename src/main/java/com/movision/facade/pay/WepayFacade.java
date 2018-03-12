@@ -251,6 +251,9 @@ public class WepayFacade {
                 map.put("data", resmap.get("result"));//返回客户端需要的数据
 
                 //---------------------------------------------------------------------6.后续补充退款之后的，信息刷新和业务接口
+            }else if (resmap.get("status").equals("500")) {
+                map.put("code", 500);//请求成功
+                map.put("data", resmap.get("result"));//返回客户端需要的数据
             }
         }else {
             map.put("code", 300);//请求成功

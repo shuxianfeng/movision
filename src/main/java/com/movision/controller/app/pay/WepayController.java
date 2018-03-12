@@ -94,6 +94,9 @@ public class WepayController {
             }else if ((int) parammap.get("code") == 300){
                 response.setCode(300);
                 response.setMessage("该订单状态并非已支付状态");
+            }else if ((int) parammap.get("code") == 500){
+                response.setCode(500);
+                response.setMessage("HTTP POST ERROR!");
             }
         } else if ((int) parammap.get("code") == 300) {
             response.setCode(300);
