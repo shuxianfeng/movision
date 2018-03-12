@@ -11,7 +11,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.Map;
 
 /**
@@ -79,7 +85,7 @@ public class WepayController {
     @RequestMapping(value = "getRefund", method = RequestMethod.POST)
     public Response getRefund(@ApiParam(value = "订单id（订单表的主键id，非订单编号，前两个参数二选一）") @RequestParam(required = false) String ordersid,
                               @ApiParam(value = "微信订单号（微信的订单号，优先使用，前两个参数二选一）") @RequestParam(required = false) String transactionid,
-                              @ApiParam(value = "退款金额（<=订单总额，默认退订单全额）") @RequestParam(required = false) String amount) throws UnsupportedEncodingException {
+                              @ApiParam(value = "退款金额（<=订单总额，默认退订单全额）") @RequestParam(required = false) String amount) throws IOException, CertificateException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyManagementException, KeyStoreException {
         Response response = new Response();
 
         Map<String, Object> parammap = wepayFacade.getRefund(ordersid, transactionid, amount);
