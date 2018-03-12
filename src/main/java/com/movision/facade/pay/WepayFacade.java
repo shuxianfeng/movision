@@ -200,6 +200,8 @@ public class WepayFacade {
             if (StringUtil.isNotEmpty(amount)) {
                 refund_fee = (int) (double) Double.parseDouble(amount) * 100;//实际退款金额
                 //如果输入的退款金额超过订单实付总额，不允许退款
+                log.info("订单总实付金额" + total_fee);
+                log.info("实际退款金额" + refund_fee);
                 if (refund_fee > total_fee) {
                     map.put("code", 400);
                     return map;
