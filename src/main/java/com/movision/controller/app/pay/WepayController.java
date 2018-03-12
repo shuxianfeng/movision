@@ -71,4 +71,36 @@ public class WepayController {
         }
         return response;
     }
+
+    /**
+     * 微信支付：申请退款接口
+     */
+    @ApiOperation(value = "微信支付申请退款接口", notes = "微信支付申请退款接口", response = Response.class)
+    @RequestMapping(value = "getRefund", method = RequestMethod.POST)
+    public Response getRefund(@ApiParam(value = "订单id（订单表的主键id，非订单编号，前两个参数二选一）") @RequestParam(required = false) String ordersid,
+                              @ApiParam(value = "微信订单号（微信的订单号，优先使用，前两个参数二选一）") @RequestParam(required = false) String transactionid,
+                              @ApiParam(value = "退款金额（<=订单总额，默认退订单全额）") @RequestParam(required = false) String amount) throws UnsupportedEncodingException {
+        Response response = new Response();
+
+        Map<String, Object> parammap = wepayFacade.getRefund(ordersid, transactionid, amount);
+
+        if (response.getCode() == 200) {
+            if ((int) parammap.get("code") == 200) {
+                response.setMessage("退款成功");
+                response.setData(parammap);
+            }else if ((int) parammap.get("code") == 400){
+                response.setCode(400);
+                response.setMessage("输入的退款金额超过订单实付总金额");
+            }else if ((int) parammap.get("code") == 300){
+                response.setCode(300);
+                response.setMessage("该订单状态并非已支付状态");
+            }
+        } else if ((int) parammap.get("code") == 300) {
+            response.setCode(300);
+            response.setMessage("请求的订单被取消或订单不存在");
+        } else if (response.getCode() != 200) {
+            response.setMessage("退款失败");
+        }
+        return response;
+    }
 }

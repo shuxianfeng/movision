@@ -168,4 +168,92 @@ public class WepayFacade {
 
         return map;
     }
+
+    /**
+     * 申请退款接口
+     * @param ordersid
+     * @param amount
+     * @return
+     */
+    public Map<String, Object> getRefund(String ordersid, String transactionid, String amount) throws UnsupportedEncodingException {
+
+        Map<String, Object> map = new HashMap<>();//用于返回结果的map
+
+        Orders orders = orderService.getOrderById(Integer.parseInt(ordersid));//根据订单id查询订单
+
+        int status = orders.getStatus();//获取订单状态
+
+        if (status == 1 || status == 2 || status == 4 || status == 5) {//订单状态：已经支付状态
+
+            String url = propertiesDBLoader.getValue("refund");//---------------1.微信申请退款接口
+
+            String appid = propertiesDBLoader.getValue("appid");//小程序ID
+            String mchid = propertiesDBLoader.getValue("mchid");//商户号
+            String key = propertiesDBLoader.getValue("secret");//一定要注意这里，这个不是小程序的secret，而是商户号平台中自己手动设置的秘钥
+            String nonce_str = UUIDGenerator.genUUIDRemoveSep(1)[0];//生成32位UUID随机字符串
+            String transaction_id = transactionid;//微信订单号
+            String out_trade_no = ordersid;//商户订单号，即美番平台中的订单号主键
+            String out_refund_no = orders.getOrdernumber();//商户退款单号：此处暂时用主订单编号代替
+            int total_fee = (int) (double) orders.getRealmoney() * 100;//订单总实付金额
+            int refund_fee;
+            //不为空时是实际退款金额，为空时默认退订单全额----------------------------2.获取订单退款金额
+            if (StringUtil.isNotEmpty(amount)) {
+                refund_fee = (int) (double) Double.parseDouble(amount) * 100;//实际退款金额
+                //如果输入的退款金额超过订单实付总额，不允许退款
+                if (refund_fee > total_fee) {
+                    map.put("code", 400);
+                    return map;
+                }
+            } else {
+                refund_fee = total_fee;
+            }
+
+            //-------------------------------------------------------------------------3.拼接签名前字符串
+            StringBuffer strb = new StringBuffer();
+            strb.append("appid=" + appid);
+            strb.append("&mch_id=" + mchid);
+            strb.append("&nonce_str=" + nonce_str);
+            if (StringUtil.isNotEmpty(ordersid))
+                strb.append("&out_trade_no=" + out_trade_no);
+            if (StringUtil.isNotEmpty(transactionid))
+                strb.append("&transaction_id=" + transaction_id);
+            strb.append("&out_refund_no=" + out_refund_no);
+            strb.append("&total_fee=" + total_fee);
+            strb.append("&refund_fee=" + refund_fee);
+            strb.append("&key=" + key);
+
+            String sign = WechatUtils.getSign(strb.toString());
+
+            //-------------------------------------------------------------------------4.封装入参xml
+            Map<String, Object> parammap = new HashMap<>();
+            parammap.put("appid", appid);
+            parammap.put("mch_id", mchid);
+            parammap.put("nonce_str", nonce_str);
+            if (StringUtil.isNotEmpty(ordersid))
+                parammap.put("out_trade_no", out_trade_no);
+            parammap.put("sign", sign);//支付签名
+            if (StringUtil.isNotEmpty(transactionid))
+                parammap.put("transaction_id", transaction_id);
+            parammap.put("out_refund_no", out_refund_no);
+            parammap.put("total_fee", total_fee);
+            parammap.put("refund_fee", refund_fee);
+
+            String xml = WechatUtils.map2XmlString(parammap);//转为微信服务器需要的xml格式
+
+            log.info("xml>>>>>>>" + xml);
+
+            //-------------------------------------------------------------------------5.请求退款
+            Map<String, String> resmap = HttpClientUtils.doPostByXML(url, xml, "utf-8");
+            if (resmap.get("status").equals("200")) {
+                map.put("code", 200);//请求成功
+                map.put("data", resmap.get("result"));//返回客户端需要的数据
+
+                //---------------------------------------------------------------------6.后续补充退款之后的，信息刷新和业务接口
+            }
+        }else {
+            map.put("code", 300);//请求成功
+        }
+
+        return map;
+    }
 }
