@@ -112,4 +112,40 @@ public class WepayController {
         }
         return response;
     }
+
+    /**
+     * 微信支付：退款查询接口
+     */
+    @ApiOperation(value = "微信支付退款查询接口", notes = "使用优先级：refund_id > out_refund_no > transaction_id > out_trade_no", response = Response.class)
+    @RequestMapping(value = "refundQuery", method = RequestMethod.POST)
+    public Response refundQuery(@ApiParam(value = "微信订单号（微信订单号，前四个参数四选一）") @RequestParam(required = false) String transaction_id,
+                                @ApiParam(value = "商户订单号（商户订单号即订单表主键id，前四个参数四选一）") @RequestParam(required = false) String out_trade_no,
+                                @ApiParam(value = "商户退款单号（订单表订单编号ordernumber，前四个参数四选一）") @RequestParam(required = false) String out_refund_no,
+                                @ApiParam(value = "微信退款单号（调用退款接口时微信返回的退款单号，前四个参数四选一）") @RequestParam(required = false) String refund_id) throws IOException, CertificateException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyManagementException, KeyStoreException {
+        Response response = new Response();
+
+        Map<String, Object> parammap = wepayFacade.refundQuery(transaction_id, out_trade_no, out_refund_no, refund_id);
+
+        if (response.getCode() == 200) {
+            if ((int) parammap.get("code") == 200) {
+                response.setMessage("退款成功");
+                response.setData(parammap);
+            }else if ((int) parammap.get("code") == 400){
+                response.setCode(400);
+                response.setMessage("输入的退款金额超过订单实付总金额");
+            }else if ((int) parammap.get("code") == 300){
+                response.setCode(300);
+                response.setMessage("该订单状态并非已支付状态");
+            }else if ((int) parammap.get("code") == 500){
+                response.setCode(500);
+                response.setMessage("HTTP POST ERROR!");
+            }
+        } else if ((int) parammap.get("code") == 300) {
+            response.setCode(300);
+            response.setMessage("请求的订单被取消或订单不存在");
+        } else if (response.getCode() != 200) {
+            response.setMessage("退款失败");
+        }
+        return response;
+    }
 }

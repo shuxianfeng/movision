@@ -48,6 +48,10 @@ public class Orders implements Serializable {
 
     private String logisticsid;
 
+    private String transactionid;//微信订单号
+
+    private String refundid;//微信退款单号
+
     public Integer getId() {
         return id;
     }
@@ -222,5 +226,21 @@ public class Orders implements Serializable {
 
     public void setLogisticsid(String logisticsid) {
         this.logisticsid = logisticsid;
+    }
+
+    public String getTransactionid() {
+        return transactionid;
+    }
+
+    public void setTransactionid(String transactionid) {
+        this.transactionid = transactionid;
+    }
+
+    public String getRefundid() {
+        return refundid;
+    }
+
+    public void setRefundid(String refundid) {
+        this.refundid = refundid;
     }
 }

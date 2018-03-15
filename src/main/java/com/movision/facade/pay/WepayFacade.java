@@ -271,4 +271,74 @@ public class WepayFacade {
 
         return map;
     }
+
+    /**
+     * 退款查询接口
+     * @param transaction_id
+     * @param out_trade_no
+     * @param out_refund_no
+     * @param refund_id
+     * @return
+     */
+    public Map<String, Object> refundQuery(String transaction_id, String out_trade_no, String out_refund_no, String refund_id) throws IOException, CertificateException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+
+        Map<String, Object> map = new HashMap<>();//用于返回结果的map
+
+        String url = propertiesDBLoader.getValue("refund");//---------------1.微信退款查询接口
+
+        String appid = propertiesDBLoader.getValue("appid");//小程序ID
+        String mchid = propertiesDBLoader.getValue("mchid");//商户号
+        String key = propertiesDBLoader.getValue("secret");//一定要注意这里，这个不是小程序的secret，而是商户号平台中自己手动设置的秘钥
+        String nonce_str = UUIDGenerator.genUUIDRemoveSep(1)[0];//生成32位UUID随机字符串
+
+        //-------------------------------------------------------------------------3.拼接签名前字符串
+        StringBuffer strb = new StringBuffer();
+        strb.append("appid=" + appid);
+        strb.append("&mch_id=" + mchid);
+        strb.append("&nonce_str=" + nonce_str);
+        if (StringUtil.isNotEmpty(out_refund_no))
+            strb.append("&out_refund_no=" + out_refund_no);
+        if (StringUtil.isNotEmpty(out_trade_no))
+            strb.append("&out_trade_no=" + out_trade_no);
+        if (StringUtil.isNotEmpty(refund_id))
+            strb.append("&refund_id=" + refund_id);
+        if (StringUtil.isNotEmpty(transaction_id))
+            strb.append("&transaction_id=" + transaction_id);
+        strb.append("&key=" + key);
+
+        String sign = WechatUtils.getSign(strb.toString());
+
+        //-------------------------------------------------------------------------4.封装入参xml
+        Map<String, Object> parammap = new HashMap<>();
+        parammap.put("appid", appid);
+        parammap.put("mch_id", mchid);
+        parammap.put("nonce_str", nonce_str);
+        if (StringUtil.isNotEmpty(out_refund_no))
+            parammap.put("out_refund_no", out_refund_no);
+        if (StringUtil.isNotEmpty(out_trade_no))
+            parammap.put("out_trade_no", out_trade_no);
+        if (StringUtil.isNotEmpty(refund_id))
+            parammap.put("refund_id", refund_id);
+        parammap.put("sign", sign);//支付签名
+        if (StringUtil.isNotEmpty(transaction_id))
+            parammap.put("transaction_id", transaction_id);
+
+        String xml = WechatUtils.map2XmlString(parammap);//转为微信服务器需要的xml格式
+
+        log.info("xml>>>>>>>" + xml);
+
+        //-------------------------------------------------------------------------5.退款查询
+        Map<String, String> resmap = HttpClientUtils.doPostByXML(url, xml, "utf-8");
+        if (resmap.get("status").equals("200")) {
+            map.put("code", 200);//请求成功
+            map.put("data", resmap.get("result"));//返回客户端需要的数据
+
+            //---------------------------------------------------------------------6.后续补充退款之后的，信息刷新和业务接口
+        } else if (resmap.get("status").equals("500")) {
+            map.put("code", 500);//请求成功
+            map.put("data", resmap.get("result"));//返回客户端需要的数据
+        }
+
+        return map;
+    }
 }
