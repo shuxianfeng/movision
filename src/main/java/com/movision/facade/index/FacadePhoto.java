@@ -180,6 +180,7 @@ public class FacadePhoto {
                     }
                     photoOrder.setIntime(new Date());
                     photoOrder.setIsselect(0);
+                    photoOrder.setIsmian(2);
                     int flag = photoOrderService.insertSelective(photoOrder);
                     //修改约拍的状态为1
                     int status = PhotoConstant.TYPE.pendingorder.getCode();
