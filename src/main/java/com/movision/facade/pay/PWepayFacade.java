@@ -56,7 +56,7 @@ public class PWepayFacade {
             String key=propertiesDBLoader.getValue("Pkey");//商户平台的秘钥
             Double money=photoOrder.getMoney();//订单金额
             String actualPay = (Math.round(money * 100) + "");
-            Map<String, Object> signParams = new HashMap<>();
+            SortedMap<String, Object> signParams = new TreeMap<>();
             putRequiredParameter(request, appid, mchid, notify_url, nonce_str, orderid, actualPay, signParams);
 
             String sign =createSign("UTF-8", signParams, key);//生成签名
@@ -80,7 +80,7 @@ public class PWepayFacade {
                 map.put("orderid", orderid);
                 map.put("timestamp",time);
                 //--------------------------------------------------------------------------------------------------二次签名
-                Map<String,Object> map1= new HashedMap();
+                SortedMap<String,Object> map1= new TreeMap<>();
                 map1.put("appid",appid);
                 map1.put("partnerid",mchid);
                 map1.put("prepayid",String.valueOf(maps.get("prepay_id")));
@@ -166,7 +166,7 @@ public class PWepayFacade {
     }
 
     //定义签名，微信根据参数字段的ASCII码值进行排序 加密签名,故使用SortMap进行参数排序
-    public static String createSign(String characterEncoding,Map<String,Object> parameters,String key){
+    public static String createSign(String characterEncoding,SortedMap<String,Object> parameters,String key){
         StringBuffer sb = new StringBuffer();
         Set es = parameters.entrySet();
         Iterator it = es.iterator();

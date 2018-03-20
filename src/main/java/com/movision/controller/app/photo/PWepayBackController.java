@@ -107,7 +107,7 @@ public class PWepayBackController {
         return true;
     }
     public String getSign(Map<String, String> map) {
-        Map<String ,Object> map1 = new HashedMap();
+        SortedMap<String ,Object> map1 = new TreeMap<>();
         for (Map.Entry<String, String> stringStringEntry : map.entrySet()) {
             map1.put(stringStringEntry.getKey(), stringStringEntry.getValue());
         }
