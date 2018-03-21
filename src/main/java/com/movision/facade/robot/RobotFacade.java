@@ -972,18 +972,18 @@ public class RobotFacade {
     public void insertMongoPostViewBy(Integer num,Integer postid){
         Random random = new Random();
              //1 随机取n个机器人
-            int n = random.nextInt(num + 1);
+            //int n = random.nextInt(num + 1);
             //根据帖子id查询属于哪个圈子
             int circleid=postService.queryPostByCircleid(postid.toString());
              //2 查出n个机器人的信息
-            List<User> robotArmy = userService.queryRandomUser(n);
+            //List<User> robotArmy = userService.queryRandomUser(n);
             //3 循环插入帖子浏览记录
-            for (int j = 0; j < robotArmy.size(); j++) {
-                int userid = robotArmy.get(j).getId();
+            for (int j = 0; j < num; j++) {
+                //int userid = robotArmy.get(j).getId();
 
                 UserRefreshRecord userRefreshRecord = new UserRefreshRecord();
                 userRefreshRecord.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
-                userRefreshRecord.setUserid(userid);
+                userRefreshRecord.setUserid(-1);
                 userRefreshRecord.setPostid(postid);
                 userRefreshRecord.setCrileid(String.valueOf(circleid));
                 userRefreshRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss:SSS"));
