@@ -28,11 +28,11 @@ public class PWepayController {
     @RequestMapping(value = "pwepayPhoto",method = RequestMethod.POST)
     public Response pwepayPhoto(@ApiParam(value = "订单编号") String orderid,HttpServletRequest request) throws  Exception{
         Response response = new Response();
-        Map map=pWepayFacade.getPWepay(orderid,request);
-        if(map.get("code")==200){
+        Map<String,Object> map=pWepayFacade.getPWepay(orderid,request);
+        if(response.getCode() == 200&&(int)map.get("code")==200){
             response.setMessage("查询订单成功");
             response.setData(map);
-        }else if(map.get("code")==300){
+        }else if((int)map.get("code")==300){
             response.setMessage("查询的订单不存在");
             response.setData(map);
         }
