@@ -447,12 +447,12 @@ public class WepayFacade {
 
         //-------------------------------------------------------------------------4.封装入参xml
         Map<String, Object> parammap = new HashMap<>();
+        parammap.put("account_type", accounttype);
         parammap.put("appid", appid);
+        parammap.put("bill_date", billdate);
         parammap.put("mch_id", mchid);
         parammap.put("nonce_str", nonce_str);
         parammap.put("sign", sign);//支付签名
-        parammap.put("bill_date", billdate);
-        parammap.put("account_type", accounttype);
         parammap.put("tar_type", "GZIP");
 
         String xml = WechatUtils.map2XmlString(parammap);//转为微信服务器需要的xml格式
