@@ -24,8 +24,8 @@ public class PWepayController {
     @Autowired
    private PWepayFacade pWepayFacade;
 
-    @ApiOperation(value = "" ,notes="",response = Response.class)
-    @RequestMapping(value = "",method = RequestMethod.POST)
+    @ApiOperation(value = "微信支付统一下单接口" ,notes="微信支付统一下单接口",response = Response.class)
+    @RequestMapping(value = "pwepayPhoto",method = RequestMethod.POST)
     public Response pwepayPhoto(@ApiParam(value = "订单编号") String orderid,HttpServletRequest request) throws  Exception{
         Response response = new Response();
         Map map=pWepayFacade.getPWepay(orderid,request);
