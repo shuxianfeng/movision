@@ -154,13 +154,50 @@ public class WepayController {
     /**
      * 微信支付：下载对账单接口
      */
-    @ApiOperation(value = "微信支付下载对账单接口", notes = "使用优先级：refund_id > out_refund_no > transaction_id > out_trade_no", response = Response.class)
+    @ApiOperation(value = "微信支付下载对账单接口", notes = "商户可以通过该接口下载历史交易清单。比如掉单、系统错误等导致商户侧和微信侧数据不一致，通过对账单核对后可校正支付状态。", response = Response.class)
     @RequestMapping(value = "downloadBill", method = RequestMethod.POST)
     public Response downloadBill(@ApiParam(value = "下载对账单的日期，格式：20180320") @RequestParam String billdate,
                                  @ApiParam(value = "账单类型:ALL，返回当日所有订单信息，默认值;SUCCESS，返回当日成功支付的订单;REFUND，返回当日退款订单;RECHARGE_REFUND，返回当日充值退款订单（相比其他对账单多一栏“返还手续费”）") @RequestParam String billtype) throws UnsupportedEncodingException, DocumentException {
         Response response = new Response();
 
         Map<String, Object> parammap = wepayFacade.downloadBill(billdate, billtype);
+
+        if (response.getCode() == 200) {
+            if ((int) parammap.get("code") == 200) {
+                response.setMessage("账单下载成功");
+                response.setData(parammap);
+            }else if ((int) parammap.get("code") == 20002){
+                response.setCode(20002);
+                response.setMessage("对账单不存在");
+            }else if ((int) parammap.get("code") == 20001){
+                response.setCode(20001);
+                response.setMessage("无效的对账单日期");
+            }else {
+                response.setCode(400);
+                response.setMessage("账单下载失败");
+            }
+        } else if ((int) parammap.get("code") == 300) {
+            response.setCode(300);
+            response.setMessage("账单不存在");
+        } else if (response.getCode() != 200) {
+            response.setMessage("账单下载失败");
+        }
+        return response;
+    }
+
+    /**
+     * 微信支付：下载资金账单接口
+     * @param billdate
+     * @param accounttype
+     * @return
+     */
+    @ApiOperation(value = "微信支付下载资金账单接口", notes = "商户可以通过该接口下载自2017年6月1日起 的历史资金流水账单。", response = Response.class)
+    @RequestMapping(value = "downloadFundflow", method = RequestMethod.POST)
+    public Response downloadFundflow(@ApiParam(value = "下载资金账单日期，格式：20180320") @RequestParam String billdate,
+                                     @ApiParam(value = "资金账户类型，账单的资金来源账户：Basic  基本账户;Operation 运营账户;Fees 手续费账户") @RequestParam String accounttype) throws IOException, DocumentException, CertificateException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyManagementException, KeyStoreException {
+        Response response = new Response();
+
+        Map<String, Object> parammap = wepayFacade.downloadFundflow(billdate, accounttype);
 
         if (response.getCode() == 200) {
             if ((int) parammap.get("code") == 200) {

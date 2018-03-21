@@ -415,4 +415,75 @@ public class WepayFacade {
 
         return map;
     }
+
+    /**
+     * 下载资金账单接口
+     * @param billdate
+     * @param accounttype
+     * @return
+     */
+    public Map<String, Object> downloadFundflow(String billdate, String accounttype) throws IOException, DocumentException, CertificateException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+
+        Map<String, Object> map = new HashMap<>();//用于返回结果的map
+
+        String url = propertiesDBLoader.getValue("downloadfundflow");//---------------1.微信下载资金账单接口
+
+        String appid = propertiesDBLoader.getValue("appid");//小程序ID
+        String mchid = propertiesDBLoader.getValue("mchid");//商户号
+        String key = propertiesDBLoader.getValue("secret");//一定要注意这里，这个不是小程序的secret，而是商户号平台中自己手动设置的秘钥
+        String nonce_str = UUIDGenerator.genUUIDRemoveSep(1)[0];//生成32位UUID随机字符串
+
+        //-------------------------------------------------------------------------3.拼接签名前字符串
+        StringBuffer strb = new StringBuffer();
+        strb.append("account_type=" + accounttype);
+        strb.append("&appid=" + appid);
+        strb.append("&bill_date=" + billdate);
+        strb.append("&mch_id=" + mchid);
+        strb.append("&nonce_str=" + nonce_str);
+        strb.append("&tar_type=GZIP");
+        strb.append("&key=" + key);
+
+        String sign = WechatUtils.getSign(strb.toString());
+
+        //-------------------------------------------------------------------------4.封装入参xml
+        Map<String, Object> parammap = new HashMap<>();
+        parammap.put("appid", appid);
+        parammap.put("mch_id", mchid);
+        parammap.put("nonce_str", nonce_str);
+        parammap.put("sign", sign);//支付签名
+        parammap.put("bill_date", billdate);
+        parammap.put("account_type", accounttype);
+        parammap.put("tar_type", "GZIP");
+
+        String xml = WechatUtils.map2XmlString(parammap);//转为微信服务器需要的xml格式
+
+        //-------------------------------------------------------------------------5.退款查询
+        String sslpath = propertiesDBLoader.getValue("sslpath");//获取微信支付证书的存储路径
+        Map<String, String> resmap = HttpClientUtils.doPostByXMLVeryCert(url, xml, "utf-8", sslpath, mchid);
+        if (resmap.get("status").equals("200")) {
+            map.put("code", 200);//请求成功
+            map.put("data", resmap.get("result"));//返回客户端需要的数据
+            log.info("获取到的result值为>>>>" + resmap.get("result"));
+
+//            //解析返回的result字符串
+//            Document document = DocumentHelper.parseText(resmap.get("result"));
+//            //获取根节点元素对象
+//            Element root = document.getRootElement();
+//            String  error_code=  root.elementText("error_code");//获取子节点的值
+//            log.info("获取到的error_code值为>>>>" + error_code);
+//
+//            if (error_code.equals("20002")){
+//                map.put("code", 20002);//对账单不存在
+//            }else if (error_code.equals("20001")){
+//                map.put("code", 20001);//无效的对账单日期
+//            }
+
+            //---------------------------------------------------------------------6.后续补充退款之后的，信息刷新和业务接口
+        } else if (resmap.get("status").equals("500")) {
+            map.put("code", 500);//请求成功
+            map.put("data", resmap.get("result"));//返回客户端需要的数据
+        }
+
+        return map;
+    }
 }
