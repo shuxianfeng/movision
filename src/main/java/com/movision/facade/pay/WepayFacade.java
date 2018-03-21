@@ -444,6 +444,7 @@ public class WepayFacade {
         strb.append("&key=" + key);
 
         String sign = WechatUtils.getSign(strb.toString());
+        log.info("服务端生成的签名字符串：" + sign);
 
         //-------------------------------------------------------------------------4.封装入参xml
         Map<String, Object> parammap = new HashMap<>();
