@@ -453,7 +453,7 @@ public class WepayFacade {
         parammap.put("mch_id", mchid);
         parammap.put("nonce_str", nonce_str);
         parammap.put("sign", sign);//支付签名
-        parammap.put("sign_type", "MD5");
+        parammap.put("sign_type", "HMAC-SHA256");
         parammap.put("tar_type", "GZIP");
 
         String xml = WechatUtils.map2XmlString(parammap);//转为微信服务器需要的xml格式
