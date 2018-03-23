@@ -443,7 +443,7 @@ public class WepayFacade {
         strb.append("&tar_type=GZIP");
         strb.append("&key=" + key);
 
-        String sign = WechatUtils.getSign(strb.toString());
+        String sign = WechatUtils.getSha256Sign(strb.toString(), key);
         log.info("服务端生成的签名字符串：" + sign);
 
         //-------------------------------------------------------------------------4.封装入参xml

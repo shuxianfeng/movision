@@ -111,4 +111,20 @@ public abstract class StringUtils {
         return sb.toString();
     }
 
+    /**
+     * 将加密后的字节数组转换成字符串
+     * @param bytes
+     * @return
+     */
+    public static String byteArrayToHexString(byte[] bytes){
+        StringBuilder hs = new StringBuilder();
+        String stmp;
+        for (int n = 0; bytes!=null && n < bytes.length; n++) {
+            stmp = Integer.toHexString(bytes[n] & 0XFF);
+            if (stmp.length() == 1)
+                hs.append('0');
+            hs.append(stmp);
+        }
+        return hs.toString().toLowerCase();
+    }
 }

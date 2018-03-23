@@ -114,11 +114,26 @@ public class WechatUtils {
         return parammap;
     }
 
+    /**
+     * MD5方式签名
+     * @param str
+     * @return
+     */
     public static String getSign(String str){
 
         String sign = MyUtils.getMD5(str).toUpperCase();
 
         return sign;
+    }
+
+    /**
+     * SHA256方式签名
+     * @param str
+     * @param key
+     * @return
+     */
+    public static String getSha256Sign(String str, String key){
+        return MyUtils.getSha256(str, key).toUpperCase();
     }
 
     public static void main(String[] args) throws UnsupportedEncodingException {

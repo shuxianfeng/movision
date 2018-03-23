@@ -1,5 +1,9 @@
 package com.movision.fsearch.utils;
 
+import com.movision.utils.pagination.util.StringUtils;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -138,6 +142,11 @@ public class MyUtils {
         return str;
     }
 
+    /**
+     * MD5加密
+     * @param s
+     * @return
+     */
     @SuppressWarnings("static-access")
     public static String getMD5(String s) {
         GenerateMD5 generateMD5 = new GenerateMD5();
@@ -148,6 +157,26 @@ public class MyUtils {
             builder.append(String.format("%02X", b));
         }
         return builder.toString();
+    }
+
+    /**
+     * SHA256加密
+     * @param s
+     * @param key
+     * @return
+     */
+    public static String getSha256(String s, String key){
+        String hash = "";
+        try {
+            Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
+            SecretKeySpec secret_key = new SecretKeySpec(key.getBytes(), "HmacSHA256");
+            sha256_HMAC.init(secret_key);
+            byte[] bytes = sha256_HMAC.doFinal(s.getBytes());
+            hash = StringUtils.byteArrayToHexString(bytes);
+        }catch (Exception e){
+            System.out.println("Error HmacSHA256 ===========" + e.getMessage());
+        }
+        return hash;
     }
 
     public static Double roundDouble(double val, int precision) {
