@@ -233,7 +233,8 @@ public class MsgCenterFacade {
             jsonArray = videoCoverURL.getVideoCover(jsonArray);
             cmvo.setPostcontent(jsonArray.toString());
 
-            String coverimg = (String) moduleobj.get("wh");
+            JSONObject module = JSONObject.parseObject(jsonArray.toString());
+            String coverimg = (String) module.get("wh");
             cmvo.setCoverimg(coverimg);
 
         }else if (cmvo.getCategory() == 1) {//1为纯图片贴
