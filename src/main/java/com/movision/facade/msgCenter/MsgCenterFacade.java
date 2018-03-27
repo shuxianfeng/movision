@@ -1,5 +1,6 @@
 package com.movision.facade.msgCenter;
 
+import com.alibaba.fastjson.JSONObject;
 import com.mongodb.DBObject;
 import com.movision.common.constant.MsgCenterConstant;
 import com.movision.common.pojo.InstantInfo;
@@ -223,11 +224,22 @@ public class MsgCenterFacade {
         InstantInfo instantInfo = new InstantInfo();
         //如果是视频贴的话，实时请求阿里的视频封面
         CommentVo cmvo = commentVoList.get(i);
+
+        String postcontent = cmvo.getPostcontent();
+        JSONArray jsonArray = JSONArray.fromObject(postcontent);
+        JSONObject moduleobj = JSONObject.parseObject(jsonArray.get(0).toString());
+
         if (cmvo.getCategory() == 2) {//2为视频贴
-            String postcontent = cmvo.getPostcontent();
-            JSONArray jsonArray = JSONArray.fromObject(postcontent);
             jsonArray = videoCoverURL.getVideoCover(jsonArray);
             cmvo.setPostcontent(jsonArray.toString());
+
+            String coverimg = (String) moduleobj.get("wh");
+            cmvo.setCoverimg(coverimg);
+
+        }else if (cmvo.getCategory() == 1) {//1为纯图片贴
+
+            String coverimg = (String) moduleobj.get("value");
+            cmvo.setCoverimg(coverimg);
         }
         instantInfo.setObject(cmvo);
         instantInfo.setIntime(commentVoList.get(i).getIntime());
