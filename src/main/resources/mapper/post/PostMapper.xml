@@ -2570,4 +2570,7 @@
         yw_circle c ON c.id=p.circleid WHERE
         p.activeid=#{postid,jdbcType=VARCHAR} AND p.isdel=0 ORDER BY takeCount DESC
     </select>
+    <select id="querycircle" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT  circleid FROM  yw_post WHERE postid=#{postid,jdbcType=INTEGER} AND isdel=0
+    </select>
 </mapper>

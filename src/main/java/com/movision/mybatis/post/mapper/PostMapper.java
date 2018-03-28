@@ -351,4 +351,6 @@ public interface PostMapper {
     List<PostVo> findAllActivePostIntime_20171220(@Param(value ="postid")String postid, RowBounds rowBounds,  @Param(value = "device")String device);
 
     List<PostVo> findAllActivePostTake_20171220(@Param(value ="postid")String postid, RowBounds rowBounds, @Param(value = "device")String device);
+
+    int querycircle(int postid);
 }

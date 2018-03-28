@@ -2095,4 +2095,14 @@ public class PostService {
 
     }
 
+    public int querycircle(int postid){
+        try {
+            log.info("根据帖子id查询圈子");
+            return postMapper.querycircle(postid);
+        }catch (Exception e){
+            log.error("根据帖子id查询圈子失败",e);
+            throw e;
+        }
+    }
+
 }

@@ -68,6 +68,7 @@ import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserAll;
 import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.user.service.UserService;
+import com.movision.mybatis.userDontLike.service.UserDontLikeService;
 import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
 import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecord;
@@ -201,6 +202,8 @@ public class FacadePost {
     private TestIntimeService testIntimeService;
     @Autowired
     private CityService cityService;
+    @Autowired
+    private UserDontLikeService userDontLikeService;
  /*
     @Autowired
     private UserBehaviorService userBehaviorService;
@@ -2289,6 +2292,8 @@ public class FacadePost {
                 posts.add(post);//把mongodb转为post实体
             }
             criclelist.removeAll(posts);//剩下的帖子
+            List ilk=IsX(userid);
+            criclelist.removeAll(ilk);
             list = retuenList(criclelist, userid, 1, device, -1);
             return list;
         } else {
@@ -2298,6 +2303,32 @@ public class FacadePost {
         }
     }
 
+    //查看用户是否点x
+    public List  IsX(String userid){
+        List listA= new ArrayList();
+        //查询用户有没有点x
+       List<DBObject> list= userDontLikeService.Isx(Integer.parseInt(userid));
+        if(list.size()!=0){
+            for (int i=0;i<list.size();i++){
+                //1 内容差 2 不喜欢作者 3 不喜欢圈子 4 就是不喜欢
+                int type=Integer.parseInt(list.get(i).get("type").toString());
+                int postid=Integer.parseInt(list.get(i).get("postid").toString());
+                if(type==2){
+                  //根据postid查询作者
+                   int uid= postService.queryPostByUser(String.valueOf(postid));
+                    List<PostVo> postVos= postService.findUserPost(uid);
+                    listA.addAll(postVos);
+                }else if(type==3){
+                   //根据postid查询圈子
+                  int circleid= postService.querycircle(postid);
+                   List<PostVo> list1 = postService.findAllPostCrile(circleid);
+                 listA.addAll(list1);
+                }
+            }
+        }
+        return listA;
+
+    }
     /**
      * mongodb的里面的刷新记录  小于1000  条记录的时候进行用户分析
      *
@@ -2320,6 +2351,8 @@ public class FacadePost {
             }
             //把看过的帖子过滤掉
             alllist.removeAll(posts);//alllist是剩余的帖子
+            List ik=IsX(userid);
+            alllist.removeAll(ik);
             list = retuenList(alllist, userid, 1, device, -1);
         } else {
             //登录情况下但是mongodb里面没有刷新记录
@@ -2411,6 +2444,8 @@ public class FacadePost {
                         posts.add(post);//把mongodb转为post实体
                     }
                     postVos.removeAll(posts);
+                    List il=IsX(userid);
+                    postVos.removeAll(il);
                     Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(postVos);
                     postVos = new ArrayList<PostVo>(linkedHashSet);
                     ComparatorChain chain = new ComparatorChain();
@@ -2476,6 +2511,8 @@ public class FacadePost {
                 //根据圈子id查询帖子
                 List<PostVo> postVos = postService.findAllPostCrile(circleid);
                 postVos.removeAll(posts);
+                List ils=IsX(userid);
+                postVos.removeAll(ils);
                 list = retuenList(postVos, userid, 4, device, -1);
             } else {
                 //登录但是刷新列表中没有帖子
@@ -2530,6 +2567,8 @@ public class FacadePost {
                     posts.add(post);    //把mongodb转为post实体
                 }
                 allList.removeAll(posts);   //过滤掉浏览过的帖子
+                List ilk=IsX(userid);
+                allList.removeAll(ilk);
                 list = retuenList(allList, userid, 2, device, -1);
             } else {
                 log.debug("该用户无浏览历史");
