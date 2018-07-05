@@ -729,7 +729,7 @@
         <repository>
             <id>workstation</id>
             <name>workstation</name>
-            <url>http://192.168.0.172:8081/nexus/content/groups/public</url>
+            <url>http://repo1.maven.org/maven2/</url>
         </repository>
         <!--上传凭证-->
         <repository>
